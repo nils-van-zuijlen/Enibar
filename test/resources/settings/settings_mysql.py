@@ -1,4 +1,4 @@
 HOST = "{IP}"
 USERNAME = "root"
-PASSWORD = "toor"
+PASSWORD = ""
 DBNAME = "enibar"

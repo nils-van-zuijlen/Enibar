@@ -35,7 +35,7 @@ if [[ $TEST == 1 ]]; then
 		echo "[ .... ] Waiting for db..."
 		sleep 10
 
-		mysql -h $IP -u root -p toor < ../db.sql
+		mysql -h $IP -u root < ../db.sql
 	fi
 
 	# -- TEST --
