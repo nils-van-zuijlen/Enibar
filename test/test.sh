@@ -2,7 +2,7 @@ TEST_FAILED=0
 APPLICATION_DIR="application"
 cd $APPLICATION_DIR
 
-TEMP=`getopt -o tp --long test,pep -- "$@"`
+TEMP=`getopt -o tp --long test,pep,no-docker -- "$@"`
 eval set -- "$TEMP"
 
 # == EXTRACT OPTIONS
@@ -14,6 +14,9 @@ while true ; do
 		-t|--test)
 			TEST=1
 			shift ;;
+		--no-docker)
+			NODOCKER=1
+			shift;;
 		--) shift ; break ;;
 		*) echo "Internal error!" ; exit 1 ;;
 	esac
@@ -21,8 +24,22 @@ done
 
 
 if [[ $TEST == 1 ]]; then
+	# -- BACKUP --
+	cp settings.py settings.py.bak
+
+	# -- MYSQL --
+	if [[ $NODOCKER != 1 ]]; then
+		DOCKER_MYSQL_ID=$(docker run -d eijebong/mariadb)
+		IP=$(docker inspect $DOCKER_MYSQL_ID | python -c 'import json,sys;obj=json.load(sys.stdin);print(obj[0]["NetworkSettings"]["IPAddress"])')
+		sed "s/{IP}/${IP}/" ../test/resources/settings/settings_mysql.py > settings.py
+		echo "[ .... ] Waiting for db..."
+		sleep 10
+	fi
+
 	# -- TEST --
 	python -m unittest discover ../test '*.py' -v || TEST_FAILED=1
+
+	mv settings.py.bak settings.py
 fi
 
 
