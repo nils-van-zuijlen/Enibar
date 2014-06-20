@@ -1,0 +1,37 @@
+CREATE DATABASE enibar;
+USE enibar;
+
+CREATE TABLE IF NOT EXISTS admins(
+	login VARCHAR(127) PRIMARY KEY,
+	password VARCHAR(127)
+	);
+
+
+CREATE TABLE IF NOT EXISTS notes(
+	id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+	name VARCHAR(127),
+	firstname VARCHAR(127),
+	surname VARCHAR(127),
+	birthdate INTEGER,
+	promo ENUM('1A', '2A', '3A', '3S', '4A', '5A', 'Ancien', 'Prof'),
+	note INTEGER UNSIGNED DEFAULT 0,
+	masque BOOLEAN DEFAULT 0
+	);
+
+CREATE TABLE IF NOT EXISTS consos(
+	id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+	name VARCHAR(127),
+	category ENUM('manger', 'soft', 'alcool'),
+	price_unit INTEGER UNSIGNED,
+	price_demi INTEGER UNSIGNED,
+	price_pint INTEGER UNSIGNED,
+	price_meter INTEGER UNSIGNED
+	);
+
+CREATE TABLE IF NOT EXISTS transactions_history(
+	id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+	note_id INTEGER UNSIGNED,
+	conso_id INTEGER UNSIGNED,
+	quantity INTEGER UNSIGNED
+	);
+
