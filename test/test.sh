@@ -34,6 +34,8 @@ if [[ $TEST == 1 ]]; then
 		sed "s/{IP}/${IP}/" ../test/resources/settings/settings_mysql.py > settings.py
 		echo "[ .... ] Waiting for db..."
 		sleep 10
+
+		mysql -h $IP -u root -p toor < ../db.sql
 	fi
 
 	# -- TEST --
