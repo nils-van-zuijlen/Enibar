@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS notes(
 	name VARCHAR(127),
 	firstname VARCHAR(127),
 	surname VARCHAR(127),
+	mail VARCHAR(255),
 	birthdate INTEGER,
 	promo ENUM('1A', '2A', '3A', '3S', '4A', '5A', 'Ancien', 'Prof'),
 	note INTEGER UNSIGNED DEFAULT 0,

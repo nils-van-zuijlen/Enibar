@@ -19,3 +19,26 @@ along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 """
 
+
+from PyQt5 import QtSql
+import settings
+
+
+def database_connect():
+    """
+    Open a connection to database.
+
+    :return: Database object.
+    :rtype: `QSqlDatabase`
+    """
+
+    database = QtSql.QSqlDatabase("QMYSQL")
+
+    database.setHostName(settings.HOST)
+    database.setUserName(settings.USERNAME)
+    database.setPassword(settings.PASSWORD)
+    database.setDatabaseName(settings.DBNAME)
+
+    database.open()
+
+    return database

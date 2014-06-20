@@ -19,3 +19,9 @@ along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 """
 
+
+HOST = "localhost"
+USERNAME = "root"
+PASSWORD = ""
+DBNAME = "test"
+
