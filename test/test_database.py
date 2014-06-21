@@ -16,6 +16,15 @@
 # You should have received a copy of the GNU General Public License
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
-"""
-This file is here only to use pylint correctly
-"""
+import basetest
+import unittest
+
+from database import Cursor
+
+
+class UtilsTest(unittest.TestCase):
+    def test_connected(self):
+        """ Test if the database connection works """
+        with Cursor() as cursor:
+            self.assertNotIn("not open", cursor.__repr__())
+
