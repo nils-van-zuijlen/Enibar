@@ -19,3 +19,13 @@
 """
 Main file of the Application
 """
+
+import sys
+import gui.mainwindow
+from PyQt5 import QtWidgets
+
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    myapp = gui.mainwindow.MainWindow()
+    myapp.show()
+    app.exec_()

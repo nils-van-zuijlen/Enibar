@@ -89,7 +89,7 @@ class UtilsTest(unittest.TestCase):
             '1A'
         )
         getted = notes.get_by_id(id_)
-        self.assertEqual(getted,{'id': id_,
+        self.assertEqual(getted, {'id': id_,
                                  'nickname': 'test1',
                                  'surname': 'test',
                                  'firstname': 'test',
@@ -129,7 +129,7 @@ class UtilsTest(unittest.TestCase):
             '1A'
         )
 
-        self.assertEqual(list(notes.get_by_nickname('test')),[{'id': i+1,
+        self.assertEqual(list(notes.get_by_nickname('test')), [{'id': i + 1,
                                  'nickname': 'test' + str(i),
                                  'surname': 'test',
                                  'firstname': 'test',
@@ -140,7 +140,7 @@ class UtilsTest(unittest.TestCase):
                                  'note': 0,
                                  'overdraft_time': 0,
                                  'ecocups': 0,
-                                 'hidden': 0} for i in range(2) ])
+                                 'hidden': 0} for i in range(2)])
 
     def test_get_by_minors(self):
         """ Testing get minors """
