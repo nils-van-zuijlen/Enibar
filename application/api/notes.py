@@ -32,14 +32,14 @@ NOTE_FIELDS = ['id', 'nickname', 'surname', 'firstname', 'mail', 'tel',
 
 
 # pylint: disable=too-many-arguments
-def create_note(nickname, surname, firstname, mail, tel, birthdate, promo):
+def add(nickname, surname, firstname, mail, tel, birthdate, promo):
     """ Create a note.
 
     :param str nickname: Nickname
     :param str surname: Surname
     :param str firstname: First name
     :param str mail: Mail
-    :param int tel: Phone number
+    :param str tel: Phone number
     :param int birthdate: Birthday (timestamp)
     :param str promo: Promo. One of '1A', '2A', '3A', '3S', '4A', '5A',\
     'Ancien', 'Prof'
@@ -59,6 +59,19 @@ def create_note(nickname, surname, firstname, mail, tel, birthdate, promo):
         if cursor.exec_():
             return cursor.lastInsertId()
         return -1
+
+
+def remove(id_):
+    """ Remove a note
+
+    :param int id_: The id of the note to delete
+
+    :return bool: True if success else False.
+    """
+    with Cursor() as cursor:
+        cursor.prepare("DELETE FROM notes WHERE id=:id")
+        cursor.bindValue(':id', id_)
+        return cursor.exec_()
 
 
 def change_nickname(id_, new_nickname):
@@ -191,8 +204,9 @@ def get_minors():
     :return list: List of note descriptions
     """
     with Cursor() as cursor:
-        cursor.exec("SELECT * FROM notes WHERE birthdate+567648000 < :time")
+        cursor.prepare("SELECT * FROM notes WHERE birthdate+567648000 > :time")
         cursor.bindValue(':time', time.time())
+        cursor.exec_()
 
         while cursor.next():
             yield {field: cursor.record().value(field) for field in
@@ -205,8 +219,9 @@ def get_majors():
     :return list: List of note descriptions
     """
     with Cursor() as cursor:
-        cursor.exec("SELECT * FROM notes WHERE birthdate+567648000 > :time")
+        cursor.prepare("SELECT * FROM notes WHERE birthdate+567648000 <= :time")
         cursor.bindValue(':time', time.time())
+        cursor.exec_()
 
         while cursor.next():
             yield {field: cursor.record().value(field) for field in
@@ -235,9 +250,7 @@ def hide(id_):
     """
     with Cursor() as cursor:
         cursor.prepare("UPDATE notes SET hidden=1 WHERE id=:id")
-
         cursor.bindValue(':id', id_)
-
         return cursor.exec_()
 
 
@@ -250,8 +263,6 @@ def show(id_):
     """
     with Cursor() as cursor:
         cursor.prepare("UPDATE notes SET hidden=0 WHERE id=:id")
-
         cursor.bindValue(':id', id_)
-
         return cursor.exec_()
 

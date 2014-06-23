@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS notes(
 	surname VARCHAR(127),
 	firstname VARCHAR(127),
 	mail VARCHAR(255),
-	tel INTEGER UNSIGNED,
+	tel VARCHAR(32),
 	birthdate INTEGER UNSIGNED,
 	promo ENUM('1A', '2A', '3A', '3S', '4A', '5A', 'Ancien', 'Prof'),
 	note FLOAT DEFAULT 0,
