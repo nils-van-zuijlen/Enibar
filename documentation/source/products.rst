@@ -1,3 +1,3 @@
-.. automodule:: api.users
+.. automodule:: api.products
     :members:
     :undoc-members:

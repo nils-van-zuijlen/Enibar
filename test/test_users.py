@@ -19,7 +19,7 @@
 import basetest
 import unittest
 
-import users
+import api.users as users
 from database import Cursor
 
 

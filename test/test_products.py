@@ -19,7 +19,7 @@
 import basetest
 import unittest
 
-import products
+import api.products as products
 from database import Cursor
 
 

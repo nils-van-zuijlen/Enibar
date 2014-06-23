@@ -12,6 +12,8 @@ Contents:
    :maxdepth: 2
 
    users
+   products
+   notes
    database
    settings
 

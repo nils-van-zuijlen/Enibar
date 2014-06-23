@@ -55,10 +55,24 @@ class Cursor:
         self.database.setDatabaseName(settings.DBNAME)
 
         self.database.open()
-        self.cursor = QtSql.QSqlQuery(self.database)
+        self.cursor = SqlQuery(self.database)
 
         return self.cursor
 
     def __exit__(self, type_, value, traceback):
         self.database.close()
 
+
+class SqlQuery(QtSql.QSqlQuery):
+    # pylint: disable=too-few-public-methods,invalid-name
+    """ Wrapper around QtSql.QSqlQuery to add multiple binding funcion """
+    def bindValues(self, kwargs):
+        """ Bind multiple values to the query
+
+        :param dict **kwargs: A dict formed like that: {":placeholder": value, }
+
+        :return None:
+        """
+
+        for key, value in kwargs.items():
+            self.bindValue(key, value)

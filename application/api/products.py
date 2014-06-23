@@ -25,8 +25,8 @@ Products management function
 from database import Cursor
 
 
-FIELDS = ['name', 'category', 'price_unit', 'price_demi', 'price_pint',
-          'price_meter']
+PRODUCT_FIELDS = ['name', 'category', 'price_unit', 'price_demi', 'price_pint',
+                  'price_meter']
 
 
 def add(name, category):
@@ -105,7 +105,8 @@ def get_by_category(category):
         cursor.exec_()
 
         while cursor.next():
-            yield {field: cursor.record().value(field) for field in FIELDS}
+            yield {field: cursor.record().value(field) for field in
+                   PRODUCT_FIELDS}
 
 
 def get_by_name(name):
@@ -122,7 +123,8 @@ def get_by_name(name):
         cursor.exec_()
 
         while cursor.next():
-            yield {field: cursor.record().value(field) for field in FIELDS}
+            yield {field: cursor.record().value(field) for field in
+                   PRODUCT_FIELDS}
 
 
 def get_by_id(id_):
@@ -139,7 +141,8 @@ def get_by_id(id_):
 
         cursor.exec_()
         if cursor.next():
-            return {field: cursor.record().value(field) for field in FIELDS}
+            return {field: cursor.record().value(field) for field in
+                    PRODUCT_FIELDS}
         else:
             return None
 
