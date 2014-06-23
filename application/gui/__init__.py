@@ -17,15 +17,5 @@
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-Main file of the Application
+This file is here only to use pylint correctly
 """
-
-import sys
-import gui.mainwindow
-from PyQt5 import QtWidgets
-
-if __name__ == "__main__":
-    APP = QtWidgets.QApplication(sys.argv)
-    MYAPP = gui.mainwindow.MainWindow()
-    MYAPP.show()
-    APP.exec_()
