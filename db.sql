@@ -1,3 +1,26 @@
+/*
+
+Copyright (C) 2014 Bastien Orivel <b2orivel@enib.fr>
+Copyright (C) 2014 Arnaud Levaufre <a2levauf@enib.fr>
+
+This file is part of Enibar.
+
+Enibar is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Enibar is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
+
 CREATE DATABASE enibar;
 USE enibar;
 
@@ -16,20 +39,20 @@ CREATE TABLE IF NOT EXISTS notes(
 	tel INTEGER UNSIGNED,
 	birthdate INTEGER UNSIGNED,
 	promo ENUM('1A', '2A', '3A', '3S', '4A', '5A', 'Ancien', 'Prof'),
-	note INTEGER UNSIGNED DEFAULT 0,
+	note FLOAT DEFAULT 0,
 	overdraft_time INTEGER UNSIGNED DEFAULT NULL,
 	ecocups INTEGER UNSIGNED DEFAULT 0,
 	hidden BOOLEAN DEFAULT 0
 	);
 
-CREATE TABLE IF NOT EXISTS consos(
+CREATE TABLE IF NOT EXISTS products(
 	id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
 	name VARCHAR(127),
 	category ENUM('manger', 'soft', 'alcool'),
-	price_unit INTEGER UNSIGNED,
-	price_demi INTEGER UNSIGNED,
-	price_pint INTEGER UNSIGNED,
-	price_meter INTEGER UNSIGNED
+	price_unit FLOAT UNSIGNED DEFAULT NULL,
+	price_demi FLOAT UNSIGNED DEFAULT NULL,
+	price_pint FLOAT UNSIGNED DEFAULT NULL,
+	price_meter FLOAT UNSIGNED DEFAULT NULL
 	);
 
 CREATE TABLE IF NOT EXISTS transactions_history(

@@ -38,7 +38,7 @@ def add(pseudo, password):
         cursor.prepare("INSERT INTO admins VALUES(:login, :pass)")
         cursor.bindValue(':login', pseudo)
         cursor.bindValue(':pass', bcrypt.hashpw(password.encode(),
-                                                bcrypt.gensalt()). decode())
+                                                bcrypt.gensalt()).decode())
 
         return cursor.exec_()
 
@@ -69,7 +69,7 @@ def change_password(pseudo, new_password):
         cursor.prepare("UPDATE admins SET password=:pass WHERE login=:login")
         cursor.bindValue(':login', pseudo)
         cursor.bindValue(':pass', bcrypt.hashpw(new_password.encode(),
-                                                bcrypt.gensalt()). decode())
+                                                bcrypt.gensalt()).decode())
 
         return cursor.exec_()
 
