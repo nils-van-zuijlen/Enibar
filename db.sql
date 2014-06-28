@@ -20,7 +20,7 @@ along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-
+DROP DATABASE IF EXISTS enibar;
 CREATE DATABASE enibar;
 USE enibar;
 
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS notes(
 	mail VARCHAR(255),
 	tel VARCHAR(32),
 	birthdate INTEGER UNSIGNED,
-	promo ENUM('1A', '2A', '3A', '3S', '4A', '5A', 'Ancien', 'Prof'),
+	promo ENUM('1A', '2A', '3A', '3S', '4A', '5A', 'Esiab', 'Externe', 'Ancien', 'Prof'),
 	note FLOAT DEFAULT 0,
 	overdraft_time INTEGER UNSIGNED DEFAULT NULL,
 	ecocups INTEGER UNSIGNED DEFAULT 0,
