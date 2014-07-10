@@ -23,7 +23,7 @@ import api.notes as notes
 from database import Cursor
 
 
-class UtilsTest(unittest.TestCase):
+class NotesTest(unittest.TestCase):
     def setUp(self):
         with Cursor() as cursor:
             cursor.exec("TRUNCATE TABLE notes")

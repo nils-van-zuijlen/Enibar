@@ -43,6 +43,7 @@ def ask_auth(func):
     def wrapper(*args, **kwargs):
         """ Wrapper """
         prompt = AuthPrompt()
+        prompt.exec()
         if prompt.is_authorized:
             func(*args, **kwargs)
         else:
@@ -81,8 +82,6 @@ class AuthPrompt(QtWidgets.QDialog):
 
         self.reject_button.clicked.connect(self.reject)
         self.accept_button.clicked.connect(self.accept)
-
-        self.exec()
 
     def accept(self):
         """ Called when "Login" is clicked """

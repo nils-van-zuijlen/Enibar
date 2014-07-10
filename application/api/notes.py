@@ -198,6 +198,36 @@ def get_by_promo(promo):
                    NOTE_FIELDS}
 
 
+def get_all_shown():
+    """ Get all shown notes
+
+    :return list: List of notes descriptions
+    """
+    with Cursor() as cursor:
+        cursor.prepare("SELECT * FROM notes WHERE hidden=0")
+
+        cursor.exec_()
+
+        while cursor.next():
+            yield {field: cursor.record().value(field) for field in
+                   NOTE_FIELDS}
+
+
+def get_all_hidden():
+    """ Get all hidden notes
+
+    :return list: List of notes descriptions
+    """
+    with Cursor() as cursor:
+        cursor.prepare("SELECT * FROM notes WHERE hidden=1")
+
+        cursor.exec_()
+
+        while cursor.next():
+            yield {field: cursor.record().value(field) for field in
+                   NOTE_FIELDS}
+
+
 def get_minors():
     """ Get minors notes
 
