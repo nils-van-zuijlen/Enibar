@@ -134,7 +134,8 @@ def get_by_nickname(nickname):
     :return list: List of note descriptions
     """
     with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM notes WHERE nickname LIKE :nickname")
+        cursor.prepare("SELECT * FROM notes WHERE nickname LIKE :nickname\
+                        ORDER BY nickname")
 
         cursor.bindValue(':nickname', "%{}%".format(nickname))
 
@@ -152,7 +153,8 @@ def get_by_first_name(firstname):
     :return list: List of note descriptions
     """
     with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM notes WHERE firstname LIKE :firstname")
+        cursor.prepare("SELECT * FROM notes WHERE firstname LIKE :firstname\
+                        ORDER BY nickname")
 
         cursor.bindValue(':firstname', "%{}%".format(firstname))
 
@@ -170,7 +172,8 @@ def get_by_surname(surname):
     :return list: List of note descriptions
     """
     with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM notes WHERE surname LIKE :surname")
+        cursor.prepare("SELECT * FROM notes WHERE surname LIKE :surname\
+                        ORDER BY nickname")
 
         cursor.bindValue(':surname', "%{}%".format(surname))
         cursor.exec_()
@@ -188,7 +191,8 @@ def get_by_promo(promo):
     :return list: List of note descriptions
     """
     with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM notes WHERE promo LIKE :promo")
+        cursor.prepare("SELECT * FROM notes WHERE promo LIKE :promo\
+                        ORDER BY nickname")
 
         cursor.bindValue(':promo', "%{}%".format(promo))
         cursor.exec_()
@@ -204,7 +208,7 @@ def get_all_shown():
     :return list: List of notes descriptions
     """
     with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM notes WHERE hidden=0")
+        cursor.prepare("SELECT * FROM notes WHERE hidden=0 ORDER BY nickname")
 
         cursor.exec_()
 
@@ -219,7 +223,7 @@ def get_all_hidden():
     :return list: List of notes descriptions
     """
     with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM notes WHERE hidden=1")
+        cursor.prepare("SELECT * FROM notes WHERE hidden=1 ORDER BY nickname")
 
         cursor.exec_()
 
@@ -234,7 +238,8 @@ def get_minors():
     :return list: List of note descriptions
     """
     with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM notes WHERE birthdate+567648000 > :time")
+        cursor.prepare("SELECT * FROM notes WHERE birthdate+567648000 > :time\
+                        ORDER BY nickname")
         cursor.bindValue(':time', time.time())
         cursor.exec_()
 
@@ -249,7 +254,8 @@ def get_majors():
     :return list: List of note descriptions
     """
     with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM notes WHERE birthdate+567648000 <= :time")
+        cursor.prepare("SELECT * FROM notes WHERE birthdate+567648000 <= :time\
+                        ORDER BY nickname")
         cursor.bindValue(':time', time.time())
         cursor.exec_()
 
@@ -264,7 +270,7 @@ def get_profs():
     :return list: List of note descriptions
     """
     with Cursor() as cursor:
-        cursor.exec("SELECT * FROM notes WHERE promo=Profs")
+        cursor.exec("SELECT * FROM notes WHERE promo=Profs ORDER BY nickname")
 
         while cursor.next():
             yield {field: cursor.record().value(field) for field in
