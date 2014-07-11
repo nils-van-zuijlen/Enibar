@@ -296,3 +296,18 @@ def show(id_):
         cursor.bindValue(':id', id_)
         return cursor.exec_()
 
+
+def transaction(id_, diff):
+    """ Change the note of a note.
+
+    :param int id_: The id of the note
+    :param float diff: Will add the diff to the note.
+
+    :return bool: True if success else False
+    """
+    with Cursor() as cursor:
+        cursor.prepare("UPDATE notes SET note=note+:diff WHERE id=:id")
+        cursor.bindValue(":diff", diff)
+        cursor.bindValue(":id", id_)
+        return cursor.exec_()
+

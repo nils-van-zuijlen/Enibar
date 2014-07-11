@@ -56,5 +56,5 @@ Database
 
 HOST = ""
 USERNAME = "root"
-PASSWORD = "toor"
+PASSWORD = ""
 DBNAME = "enibar"
