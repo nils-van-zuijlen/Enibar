@@ -37,8 +37,8 @@ def add(pseudo, password):
     with Cursor() as cursor:
         cursor.prepare("INSERT INTO admins VALUES(:login, :pass)")
         cursor.bindValue(':login', pseudo)
-        cursor.bindValue(':pass', bcrypt.hashpw(password.encode(),
-                                                bcrypt.gensalt()).decode())
+        cursor.bindValue(':pass', bcrypt.hashpw(password,
+                                                bcrypt.gensalt()))
 
         return cursor.exec_()
 
@@ -68,8 +68,8 @@ def change_password(pseudo, new_password):
     with Cursor() as cursor:
         cursor.prepare("UPDATE admins SET password=:pass WHERE login=:login")
         cursor.bindValue(':login', pseudo)
-        cursor.bindValue(':pass', bcrypt.hashpw(new_password.encode(),
-                                                bcrypt.gensalt()).decode())
+        cursor.bindValue(':pass', bcrypt.hashpw(new_password,
+                                                bcrypt.gensalt()))
 
         return cursor.exec_()
 
@@ -95,5 +95,5 @@ def is_authorized(pseudo, password):
             return False
 
         hashed = cursor.record().value("password").encode()
-        return bcrypt.hashpw(password.encode(), hashed) == hashed
+        return bcrypt.hashpw(password, hashed) == hashed
 
