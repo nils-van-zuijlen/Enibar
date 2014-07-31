@@ -94,6 +94,6 @@ def is_authorized(pseudo, password):
         if not cursor.next():
             return False
 
-        hashed = cursor.record().value("password").encode()
+        hashed = cursor.record().value("password")
         return bcrypt.hashpw(password, hashed) == hashed
 
