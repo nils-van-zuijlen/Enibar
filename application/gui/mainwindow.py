@@ -7,7 +7,6 @@ from PyQt5 import QtCore
 from PyQt5 import QtGui
 
 import api.notes
-import api.validator
 import time
 
 
@@ -79,7 +78,7 @@ class MenuBar(QtWidgets.QMenuBar):
 
         self.about = QtWidgets.QMenu("About")
 
-        #s elf.files.addAction("Add a note", self.add_note_fn)
+        # self.files.addAction("Add a note", self.add_note_fn)
         self.addMenu(self.files)
         self.addMenu(self.about)
 
