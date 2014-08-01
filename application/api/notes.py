@@ -42,7 +42,7 @@ def add(nickname, surname, firstname, mail, tel, birthdate, promo):
     :param str tel: Phone number
     :param int birthdate: Birthday (timestamp)
     :param str promo: Promo. One of '1A', '2A', '3A', '3S', '4A', '5A',\
-    'Ancien', 'Prof'
+    'Ancien', 'Prof', 'Externe', Esiab'
 
     :return bool: The id of the note created or -1.
     """
