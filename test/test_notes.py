@@ -210,3 +210,26 @@ class NotesTest(unittest.TestCase):
                                  'ecocups': 0,
                                  'hidden': 0}])
 
+    def test_transaction(self):
+        """ Testing transactions """
+        id1 = notes.add("test1",
+            "test",
+            "test",
+            "test@pouette.com",
+            "0600000000",
+            "0",
+            '1A'
+        )
+
+        notes.transaction(id1, 10)
+        self.assertEqual(notes.get_by_id(id1)['note'], 10)
+        notes.transaction(id1, 10)
+        self.assertEqual(notes.get_by_id(id1)['note'], 20)
+        notes.transaction(id1, -5)
+        self.assertEqual(notes.get_by_id(id1)['note'], 15)
+        notes.transaction(id1, -15)
+        self.assertEqual(notes.get_by_id(id1)['note'], 0)
+        notes.transaction(id1, 5)
+        notes.transaction(id1, -4.95)
+        self.assertEqual(notes.get_by_id(id1)['note'], 0.05)
+
