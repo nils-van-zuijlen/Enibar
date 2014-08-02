@@ -19,6 +19,7 @@
 import basetest
 import unittest
 import time
+import os.path
 import api.notes as notes
 from database import Cursor
 
@@ -91,7 +92,7 @@ class NotesTest(unittest.TestCase):
             "0600000000",
             0,
             '1A',
-            '/coucou.jpg'
+            '../test/resources/coucou.jpg'
         )
         getted = notes.get_by_id(id_)
         self.assertEqual(getted, {'id': id_,
@@ -105,8 +106,9 @@ class NotesTest(unittest.TestCase):
                                  'note': 0,
                                  'overdraft_time': 0,
                                  'ecocups': 0,
-                                 'photo_path': '/coucou.jpg',
+                                 'photo_path': 'img/coucou.jpg',
                                  'hidden': 0})
+        self.assertTrue(os.path.isfile("img/coucou.jpg"))
 
     def test_get_by_name(self):
         """ Testing get_by_name """

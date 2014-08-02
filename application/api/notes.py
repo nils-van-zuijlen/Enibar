@@ -23,7 +23,9 @@ Notes management functions
 """
 
 from database import Cursor
+import shutil
 import time
+import os.path
 
 
 NOTE_FIELDS = ['id', 'nickname', 'surname', 'firstname', 'mail', 'tel',
@@ -33,7 +35,7 @@ NOTE_FIELDS = ['id', 'nickname', 'surname', 'firstname', 'mail', 'tel',
 
 # pylint: disable=too-many-arguments
 def add(nickname, surname, firstname, mail, tel, birthdate, promo, photo_path):
-    """ Create a note.
+    """ Create a note. Copy the image from photo_path to img/
 
     :param str nickname: Nickname
     :param str surname: Surname
@@ -47,6 +49,11 @@ def add(nickname, surname, firstname, mail, tel, birthdate, promo, photo_path):
 
     :return bool: The id of the note created or -1.
     """
+    if photo_path:
+        name = os.path.split(photo_path)[1]
+        if name:
+            shutil.copyfile(photo_path, "img/" + name)
+
     with Cursor() as cursor:
         cursor.prepare("INSERT INTO notes (nickname, surname, firstname,\
                         mail, tel, birthdate, promo, photo_path)\
@@ -56,7 +63,7 @@ def add(nickname, surname, firstname, mail, tel, birthdate, promo, photo_path):
         cursor.bindValues({':nickname': nickname, ':surname': surname,
                            ':firstname': firstname, ':mail': mail, ':tel': tel,
                            ':birthdate': birthdate, ':promo': promo,
-                           ':photo_path': photo_path})
+                           ':photo_path': "img/" + name if photo_path else ""})
 
         if cursor.exec_():
             return cursor.lastInsertId()

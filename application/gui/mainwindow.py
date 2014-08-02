@@ -8,6 +8,7 @@ from PyQt5 import QtGui
 
 import api.notes
 import time
+from .add_note import AddNote
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -78,7 +79,14 @@ class MenuBar(QtWidgets.QMenuBar):
 
         self.about = QtWidgets.QMenu("About")
 
-        # self.files.addAction("Add a note", self.add_note_fn)
+        self.files.addAction("Add a note", add_note_fn)
         self.addMenu(self.files)
         self.addMenu(self.about)
+
+
+def add_note_fn():
+    """ Open an AddNote window
+    """
+    win = AddNote()
+    win.exec()
 

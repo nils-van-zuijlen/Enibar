@@ -18,10 +18,12 @@ class Input(QtWidgets.QLineEdit):
         """
         super().__init__(parent)
         # Red by default
+        self.parent = parent
         self.setStyleSheet("QLineEdit{border: 1px solid red;}")
         self.textChanged.connect(self.on_change)
         self.setValidator(validator)
         self.shadow = None
+        self.valid = False
 
     def event(self, event):
         """ Overwrite event management from qt to catch the focus of the input
@@ -44,8 +46,14 @@ class Input(QtWidgets.QLineEdit):
         self.shadow.setOffset(0, 0)
         if self.hasAcceptableInput():
             self.set_ok()
+            self.valid = True
+            try:
+                self.parent.on_change()
+            except NameError:
+                pass
         else:
             self.set_non_ok()
+            self.valid = False
 
     def set_ok(self):
         """ The input content is ok, color it in green
