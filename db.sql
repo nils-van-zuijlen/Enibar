@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS notes(
 	tel VARCHAR(32),
 	birthdate INTEGER UNSIGNED,
 	promo ENUM('1A', '2A', '3A', '3S', '4A', '5A', 'Esiab', 'Externe', 'Ancien', 'Prof'),
+	photo_path VARCHAR(255) DEFAULT NULL,
 	note FLOAT DEFAULT 0,
 	overdraft_time INTEGER UNSIGNED DEFAULT NULL,
 	ecocups INTEGER UNSIGNED DEFAULT 0,

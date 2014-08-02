@@ -27,12 +27,12 @@ import time
 
 
 NOTE_FIELDS = ['id', 'nickname', 'surname', 'firstname', 'mail', 'tel',
-               'birthdate', 'promo', 'note', 'overdraft_time', 'ecocups',
+               'birthdate', 'promo', 'note', 'photo_path', 'overdraft_time', 'ecocups',
                'hidden']
 
 
 # pylint: disable=too-many-arguments
-def add(nickname, surname, firstname, mail, tel, birthdate, promo):
+def add(nickname, surname, firstname, mail, tel, birthdate, promo, photo_path):
     """ Create a note.
 
     :param str nickname: Nickname
@@ -43,18 +43,20 @@ def add(nickname, surname, firstname, mail, tel, birthdate, promo):
     :param int birthdate: Birthday (timestamp)
     :param str promo: Promo. One of '1A', '2A', '3A', '3S', '4A', '5A',\
     'Ancien', 'Prof', 'Externe', Esiab'
+    :param str photo_path: The path of the photo to use. The root is img/
 
     :return bool: The id of the note created or -1.
     """
     with Cursor() as cursor:
         cursor.prepare("INSERT INTO notes (nickname, surname, firstname,\
-                        mail, tel, birthdate, promo)\
+                        mail, tel, birthdate, promo, photo_path)\
                         VALUES(:nickname, :surname, :firstname, :mail, :tel,\
-                        :birthdate, :promo)")
+                        :birthdate, :promo, :photo_path)")
 
         cursor.bindValues({':nickname': nickname, ':surname': surname,
                            ':firstname': firstname, ':mail': mail, ':tel': tel,
-                           ':birthdate': birthdate, ':promo': promo})
+                           ':birthdate': birthdate, ':promo': promo,
+                           ':photo_path': photo_path})
 
         if cursor.exec_():
             return cursor.lastInsertId()
@@ -102,6 +104,22 @@ def change_tel(id_, new_tel):
         cursor.prepare("UPDATE notes SET tel=:tel WHERE id=:id")
 
         cursor.bindValues({':tel': new_tel, ':id': id_})
+
+        return cursor.exec_()
+
+
+def change_photo(id_, new_photo):
+    """ Change a note photo.
+
+    :param int id_: The id of the note
+    :param str new_path: The new photo_path
+
+    :return bool: True if success else False
+    """
+    with Cursor() as cursor:
+        cursor.prepare("UPDATE notes SET photo_path=:photo_path WHERE id=:id")
+
+        cursor.bindValues({':photo_path': new_photo, ':id': id_})
 
         return cursor.exec_()
 

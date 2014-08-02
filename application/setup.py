@@ -14,6 +14,6 @@ for i in range(100):
                         FAK.email(), FAK.phone_number(),
                         random.randint(int(time.time() - 36 * 365 * 3600 * 24),
                                        int(time.time())),
-                        "1A")
+                        "1A", "")
     api.notes.transaction(id_, random.randint(-10, 10))
 

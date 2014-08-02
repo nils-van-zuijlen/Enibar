@@ -44,7 +44,8 @@ class NotesTest(unittest.TestCase):
             "test@pouette.com",
             "0600000000",
             0,
-            '1A'
+            '1A',
+            ''
         ), 1)
         self.assertEqual(notes.add("test2",
             "test2",
@@ -52,7 +53,8 @@ class NotesTest(unittest.TestCase):
             "test@pouette.com",
             "0600000000",
             0,
-            '1A'
+            '1A',
+            ''
         ), 2)
         self.assertEqual(notes.add("test2",
             15,
@@ -60,7 +62,8 @@ class NotesTest(unittest.TestCase):
             "test@pouette.com",
             "0600000000",
             0,
-            '1A'
+            '1A',
+            ''
         ), -1)
         self.assertEqual(self.count_notes(), 2)
 
@@ -72,7 +75,8 @@ class NotesTest(unittest.TestCase):
             "test@pouette.com",
             "0600000000",
             0,
-            '1A'
+            '1A',
+            ''
         )
 
         self.assertTrue(notes.remove(id_))
@@ -86,7 +90,8 @@ class NotesTest(unittest.TestCase):
             "test@pouette.com",
             "0600000000",
             0,
-            '1A'
+            '1A',
+            '/coucou.jpg'
         )
         getted = notes.get_by_id(id_)
         self.assertEqual(getted, {'id': id_,
@@ -100,6 +105,7 @@ class NotesTest(unittest.TestCase):
                                  'note': 0,
                                  'overdraft_time': 0,
                                  'ecocups': 0,
+                                 'photo_path': '/coucou.jpg',
                                  'hidden': 0})
 
     def test_get_by_name(self):
@@ -110,7 +116,8 @@ class NotesTest(unittest.TestCase):
             "test@pouette.com",
             "0600000000",
             0,
-            '1A'
+            '1A',
+            ''
         )
         id2 = notes.add("test1",
             "test",
@@ -118,7 +125,8 @@ class NotesTest(unittest.TestCase):
             "test@pouette.com",
             "0600000000",
             0,
-            '1A'
+            '1A',
+            ''
         )
         id3 = notes.add("pouette",
             "test",
@@ -126,7 +134,8 @@ class NotesTest(unittest.TestCase):
             "test@pouette.com",
             "0600000000",
             0,
-            '1A'
+            '1A',
+            ''
         )
 
         self.assertEqual(list(notes.get_by_nickname('test')), [{'id': i + 1,
@@ -140,6 +149,7 @@ class NotesTest(unittest.TestCase):
                                  'note': 0,
                                  'overdraft_time': 0,
                                  'ecocups': 0,
+                                 'photo_path': '',
                                  'hidden': 0} for i in range(2)])
 
     def test_get_by_minors(self):
@@ -152,7 +162,8 @@ class NotesTest(unittest.TestCase):
             "test@pouette.com",
             "0600000000",
             time0,
-            '1A'
+            '1A',
+            ''
         )
         id1 = notes.add("test1",
             "test",
@@ -160,7 +171,8 @@ class NotesTest(unittest.TestCase):
             "test@pouette.com",
             "0600000000",
             time1,
-            '1A'
+            '1A',
+            ''
         )
 
         self.assertEqual(list(notes.get_minors()), [{'id': id1,
@@ -174,6 +186,7 @@ class NotesTest(unittest.TestCase):
                                  'note': 0,
                                  'overdraft_time': 0,
                                  'ecocups': 0,
+                                 'photo_path': '',
                                  'hidden': 0}])
 
     def test_get_by_majors(self):
@@ -186,7 +199,8 @@ class NotesTest(unittest.TestCase):
             "test@pouette.com",
             "0600000000",
             time0,
-            '1A'
+            '1A',
+            ''
         )
         id1 = notes.add("test1",
             "test",
@@ -194,7 +208,8 @@ class NotesTest(unittest.TestCase):
             "test@pouette.com",
             "0600000000",
             time1,
-            '1A'
+            '1A',
+            ''
         )
 
         self.assertEqual(list(notes.get_majors()), [{'id': id0,
@@ -208,6 +223,7 @@ class NotesTest(unittest.TestCase):
                                  'note': 0,
                                  'overdraft_time': 0,
                                  'ecocups': 0,
+                                 'photo_path': '',
                                  'hidden': 0}])
 
     def test_transaction(self):
@@ -218,7 +234,8 @@ class NotesTest(unittest.TestCase):
             "test@pouette.com",
             "0600000000",
             "0",
-            '1A'
+            '1A',
+            ''
         )
 
         notes.transaction(id1, 10)
