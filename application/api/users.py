@@ -57,6 +57,18 @@ def remove(pseudo):
         return cursor.exec_()
 
 
+def get_list():
+    """ Get user list
+
+    :return list: list of users name
+    """
+    with Cursor() as cursor:
+        cursor.prepare("SELECT login FROM admins")
+        cursor.exec_()
+        while cursor.next():
+            yield cursor.record().value('login')
+
+
 def change_password(pseudo, new_password):
     """ Change password of an admin.
 
