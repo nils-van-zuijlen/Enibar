@@ -9,6 +9,8 @@ from PyQt5 import QtGui
 import api.notes
 import time
 from .add_note import AddNote
+import gui.usermanagment
+import gui.consumptionmanagment
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -76,12 +78,33 @@ class MenuBar(QtWidgets.QMenuBar):
     def __init__(self, parent):
         super().__init__(parent)
         self.files = QtWidgets.QMenu("Files")
+        self.cm_window = None
+        self.um_window = None
 
         self.about = QtWidgets.QMenu("About")
+        self.administration = QtWidgets.QMenu("Administration")
+        self.administration.addAction(
+            "Gestion des utilisateurs",
+            self.user_managment
+        )
+        self.administration.addAction(
+            "Gestion des consomations",
+            self.consumption_managment
+        )
 
         self.files.addAction("Add a note", add_note_fn)
         self.addMenu(self.files)
         self.addMenu(self.about)
+        self.addMenu(self.administration)
+
+    def user_managment(self):
+        """ Call user managment window """
+        self.um_window = gui.usermanagment.UserManagmentWindow()
+
+    def consumption_managment(self):
+        """ Call consumption managment window """
+        # Java style
+        self.cm_window = gui.consumptionmanagment.ConsumptionManagmentWindow()
 
 
 def add_note_fn():
