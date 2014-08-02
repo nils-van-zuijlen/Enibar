@@ -15,7 +15,11 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
+"""
+Provide differents windows
+"""
 
-"""
-This file is here only to use pylint correctly
-"""
+from .auth_prompt import ask_auth, AuthPrompt
+from .mainwindow import MainWindow
+from .input import Input
+
