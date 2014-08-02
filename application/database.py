@@ -36,6 +36,8 @@ You can use the DB class like that:
 
 
 from PyQt5 import QtSql
+from PyQt5 import QtWidgets
+import sys
 import settings
 
 
@@ -54,7 +56,11 @@ class Cursor:
         self.database.setPassword(settings.PASSWORD)
         self.database.setDatabaseName(settings.DBNAME)
 
-        self.database.open()
+        if not self.database.open():
+            errormessage = QtWidgets.QErrorMessage()
+            errormessage.showMessage("Can't join database", "Error")
+            errormessage.exec()
+            sys.exit(1)
         self.cursor = SqlQuery(self.database)
 
         return self.cursor
@@ -76,3 +82,4 @@ class SqlQuery(QtSql.QSqlQuery):
 
         for key, value in kwargs.items():
             self.bindValue(key, value)
+
