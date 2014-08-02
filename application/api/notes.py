@@ -27,8 +27,8 @@ import time
 
 
 NOTE_FIELDS = ['id', 'nickname', 'surname', 'firstname', 'mail', 'tel',
-               'birthdate', 'promo', 'note', 'photo_path', 'overdraft_time', 'ecocups',
-               'hidden']
+               'birthdate', 'promo', 'note', 'photo_path', 'overdraft_time',
+               'ecocups', 'hidden']
 
 
 # pylint: disable=too-many-arguments
