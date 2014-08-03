@@ -6,7 +6,7 @@ from PyQt5 import QtGui
 from PyQt5 import QtCore
 
 
-PHONE_NUMBER = QtGui.QRegExpValidator(QtCore.QRegExp("[0-9]{10}"))
+PHONE_NUMBER = QtGui.QRegExpValidator(QtCore.QRegExp(r"(?:\+[0-9])?[0-9]{10}"))
 NAME = QtGui.QRegExpValidator(QtCore.QRegExp(".+"))
 MAIL = QtGui.QRegExpValidator(QtCore.QRegExp(
     r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]{2,4}$"))
