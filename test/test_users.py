@@ -23,7 +23,7 @@ import api.users as users
 from database import Cursor
 
 
-class UtilsTest(unittest.TestCase):
+class UsersTest(unittest.TestCase):
     def setUp(self):
         with Cursor() as cursor:
             cursor.exec("TRUNCATE TABLE admins")
@@ -64,4 +64,12 @@ class UtilsTest(unittest.TestCase):
         self.assertTrue(users.is_authorized("test", "test"))
         self.assertFalse(users.is_authorized("test2", "test"))
         self.assertFalse(users.is_authorized("test", "test2"))
+
+    def test_get_lit(self):
+        """ Testing users.get_list """
+        users.add("test", "test")
+        users.add("test1", "test")
+        users.add("test2", "test")
+
+        self.assertEqual(list(users.get_list()), ["test", "test1", "test2"])
 
