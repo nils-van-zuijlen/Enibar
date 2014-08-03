@@ -4,6 +4,7 @@ User managment window
 
 from PyQt5 import QtWidgets
 from api import users
+import gui.utils
 
 
 class UserManagmentWindow(QtWidgets.QDialog):
@@ -21,22 +22,25 @@ class UserManagmentWindow(QtWidgets.QDialog):
         self.delete_button = QtWidgets.QPushButton("Supprimer l'utilisateur")
         self.delete_button.clicked.connect(self.delete)
 
+        self.rights = {
+            'manage_users': QtWidgets.QCheckBox("Gérer les utilisateurs"),
+            'manage_products': QtWidgets.QCheckBox("Gérer les consomations"),
+            'manage_notes': QtWidgets.QCheckBox("Gérer les notes"),
+        }
+
         self.user_list = UserList()
         try:
             self.selected = self.user_list.widgets[0]
+            self.update_form()
         except IndexError:
             self.selected = None
+            for right in self.rights:
+                right.setCheckable(False)
         self.user_list.itemSelectionChanged.connect(self.select_user)
 
-        self.rights = [
-            QtWidgets.QCheckBox("Ajouter des utilisateurs"),
-            QtWidgets.QCheckBox("Ajouter des consomations"),
-            QtWidgets.QCheckBox("Ajouter des notes"),
-        ]
-
         self.layout.addWidget(self.user_list, 0, 0, len(self.rights) + 1, 3)
-        for i in range(len(self.rights)):
-            self.layout.addWidget(self.rights[i], i, 3)
+        for index, key in enumerate(self.rights):
+            self.layout.addWidget(self.rights[key], index, 3)
         self.layout.addWidget(self.save_button, len(self.rights) + 1, 3)
         self.layout.addWidget(self.add_button, len(self.rights) + 1, 0, 1, 2)
         self.layout.addWidget(self.delete_button, len(self.rights) + 1, 2)
@@ -47,12 +51,18 @@ class UserManagmentWindow(QtWidgets.QDialog):
     def update_form(self):
         """ Fetch user rights of newly selected user
         """
-        pass
+        # May break if you touch it
+        rights = users.get_rights(self.selected.text())
+        if not rights:
+            return
+        for right in rights:
+            self.rights[right].setChecked(rights[right])
 
     def select_user(self):
         """ Callback for user selection in user list
         """
         self.selected = self.user_list.currentItem()
+        self.update_form()
 
     def delete(self):
         """ Callback to delete user when button is pushed
@@ -60,11 +70,10 @@ class UserManagmentWindow(QtWidgets.QDialog):
         if users.remove(self.selected.text()):
             self.user_list.refresh()
         else:
-            error = QtWidgets.QMessageBox()
-            error.setText("Impossible de supprimer cet utilisateur.")
-            error.setInformativeText("Aucune idée du pourquoi du comment.")
-            error.setIcon(QtWidgets.QMessageBox.Critical)
-            error.exec()
+            gui.utils.error(
+                "Impossible de supprimer cet utilisateur",
+                "Aucune idée du pourquoi du comment."
+            )
 
     def add(self):
         """ Callbock to add user when button is pushed
@@ -76,7 +85,18 @@ class UserManagmentWindow(QtWidgets.QDialog):
     def save(self):
         """ Callback to save user when button is pushed
         """
-        pass
+        if not self.selected:
+            gui.utils.error(
+                "Impossible de sauvegarder les droits",
+                "Aucun utilisateur n'est selectionné"
+            )
+            return
+        rights = {key: value.isChecked() for key, value in self.rights.items()}
+        if not users.set_rights(self.selected.text(), rights):
+            gui.utils.error(
+                "Impossible de sauvegarder les droits",
+                "erreur de communication avec la base de donnée."
+            )
 
 
 class UserList(QtWidgets.QListWidget):
@@ -102,7 +122,6 @@ class UserList(QtWidgets.QListWidget):
                 self.widgets.append(QtWidgets.QListWidgetItem(user, self))
 
         # Remove deleted users
-        print(user_list)
         for widget in self.widgets:
             if widget.text() not in user_list:
                 item = self.takeItem(self.row(widget))

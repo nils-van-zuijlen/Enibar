@@ -25,8 +25,11 @@ CREATE DATABASE enibar;
 USE enibar;
 
 CREATE TABLE IF NOT EXISTS admins(
-	login VARCHAR(127) PRIMARY KEY,
-	password VARCHAR(127)
+	login VARCHAR(127) PRIMARY KEY NOT NULL,
+	password VARCHAR(127) NOT NULL,
+	manage_notes BOOLEAN DEFAULT FALSE,
+	manage_users BOOLEAN DEFAULT FALSE,
+	manage_products BOOLEAN DEFAULT FALSE
 );
 
 INSERT INTO admins(login, password) VALUES("admin", "$2a$12$grLadAuopGdXxA7wEIehlO4BpMHTpJFweL3zJAHGaYFOIw1Gp.U5O");

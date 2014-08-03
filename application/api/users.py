@@ -35,7 +35,7 @@ def add(pseudo, password):
     :return bool: True if success else False.
     """
     with Cursor() as cursor:
-        cursor.prepare("INSERT INTO admins VALUES(:login, :pass)")
+        cursor.prepare("INSERT INTO admins VALUES(:login, :pass, 0, 0, 0)")
         cursor.bindValue(':login', pseudo)
         cursor.bindValue(':pass', bcrypt.hashpw(password,
                                                 bcrypt.gensalt()))
@@ -67,6 +67,51 @@ def get_list():
         cursor.exec_()
         while cursor.next():
             yield cursor.record().value('login')
+
+
+def get_rights(username):
+    """ Get user rights
+
+    :return dict: rights for given username
+    """
+    with Cursor() as cursor:
+        cursor.prepare("""SELECT
+            manage_users,
+            manage_notes,
+            manage_products
+            FROM admins WHERE login=:login
+            """)
+        cursor.bindValue(':login', username)
+        if cursor.exec_() and cursor.next():
+            return {
+                'manage_users': cursor.record().value('manage_users'),
+                'manage_notes': cursor.record().value('manage_notes'),
+                'manage_products': cursor.record().value('manage_products'),
+            }
+        else:
+            return {
+                'manage_users': False,
+                'manage_notes': False,
+                'manage_products': False,
+            }
+
+
+def set_rights(username, rights):
+    """ Set user rights
+
+    :return bool: Operation status
+    """
+    with Cursor() as cursor:
+        cursor.prepare("""UPDATE admins
+            SET manage_users=:manage_users,
+            manage_notes=:manage_notes,
+            manage_products=:manage_products
+            WHERE login=:login
+            """)
+        for right, value in rights.items():
+            cursor.bindValue(':{}'.format(right), value)
+        cursor.bindValue(':login', username)
+        return cursor.exec_()
 
 
 def change_password(pseudo, new_password):
