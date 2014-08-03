@@ -17,6 +17,7 @@
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 import basetest
+import datetime
 import unittest
 import time
 import os.path
@@ -44,7 +45,7 @@ class NotesTest(unittest.TestCase):
             "test1",
             "test@pouette.com",
             "0600000000",
-            0,
+            '12/12/2001',
             '1A',
             ''
         ), 1)
@@ -53,7 +54,7 @@ class NotesTest(unittest.TestCase):
             "test2",
             "test@pouette.com",
             "0600000000",
-            0,
+            '12/12/2001',
             '1A',
             ''
         ), 2)
@@ -62,7 +63,7 @@ class NotesTest(unittest.TestCase):
             "test2",
             "test@pouette.com",
             "0600000000",
-            0,
+            '12/12/2001',
             '1A',
             ''
         ), -1)
@@ -75,7 +76,7 @@ class NotesTest(unittest.TestCase):
             "test1",
             "test@pouette.com",
             "0600000000",
-            0,
+            '12/12/2001',
             '1A',
             ''
         )
@@ -90,7 +91,7 @@ class NotesTest(unittest.TestCase):
             "test",
             "test@pouette.com",
             "0600000000",
-            0,
+            '12/12/2001',
             '1A',
             '../test/resources/coucou.jpg'
         )
@@ -101,7 +102,7 @@ class NotesTest(unittest.TestCase):
                                  'firstname': 'test',
                                  'mail': 'test@pouette.com',
                                  'tel': '0600000000',
-                                 'birthdate': 0,
+                                 'birthdate': 1008111600,
                                  'promo': '1A',
                                  'note': 0,
                                  'overdraft_time': 0,
@@ -117,7 +118,7 @@ class NotesTest(unittest.TestCase):
             "test",
             "test@pouette.com",
             "0600000000",
-            0,
+            '12/12/2001',
             '1A',
             ''
         )
@@ -126,7 +127,7 @@ class NotesTest(unittest.TestCase):
             "test",
             "test@pouette.com",
             "0600000000",
-            0,
+            '12/12/2001',
             '1A',
             ''
         )
@@ -135,7 +136,7 @@ class NotesTest(unittest.TestCase):
             "test",
             "test@pouette.com",
             "0600000000",
-            0,
+            '12/12/2001',
             '1A',
             ''
         )
@@ -146,7 +147,7 @@ class NotesTest(unittest.TestCase):
                                  'firstname': 'test',
                                  'mail': 'test@pouette.com',
                                  'tel': '0600000000',
-                                 'birthdate': 0,
+                                 'birthdate': 1008111600,
                                  'promo': '1A',
                                  'note': 0,
                                  'overdraft_time': 0,
@@ -158,12 +159,13 @@ class NotesTest(unittest.TestCase):
         """ Testing get minors """
         time0 = round(time.time() - 19 * 365 * 24 * 3600)
         time1 = round(time.time() - 17 * 365 * 24 * 3600)
+        dt1 = int(datetime.datetime.fromtimestamp(time1).replace(hour=0, minute=0, second=0).timestamp())
         id0 = notes.add("test0",
             "test",
             "test",
             "test@pouette.com",
             "0600000000",
-            time0,
+            datetime.datetime.fromtimestamp(time0).strftime("%d/%m/%Y"),
             '1A',
             ''
         )
@@ -172,7 +174,7 @@ class NotesTest(unittest.TestCase):
             "test",
             "test@pouette.com",
             "0600000000",
-            time1,
+            datetime.datetime.fromtimestamp(time1).strftime("%d/%m/%Y"),
             '1A',
             ''
         )
@@ -183,7 +185,7 @@ class NotesTest(unittest.TestCase):
                                  'firstname': 'test',
                                  'mail': 'test@pouette.com',
                                  'tel': '0600000000',
-                                 'birthdate': time1,
+                                 'birthdate': dt1,
                                  'promo': '1A',
                                  'note': 0,
                                  'overdraft_time': 0,
@@ -195,12 +197,13 @@ class NotesTest(unittest.TestCase):
         """ Testing get majors """
         time0 = round(time.time() - 19 * 365 * 24 * 3600)
         time1 = round(time.time() - 17 * 365 * 24 * 3600)
+        dt0 = int(datetime.datetime.fromtimestamp(time0).replace(hour=0, minute=0, second=0).timestamp())
         id0 = notes.add("test0",
             "test",
             "test",
             "test@pouette.com",
             "0600000000",
-            time0,
+            datetime.datetime.fromtimestamp(time0).strftime("%d/%m/%Y"),
             '1A',
             ''
         )
@@ -209,7 +212,7 @@ class NotesTest(unittest.TestCase):
             "test",
             "test@pouette.com",
             "0600000000",
-            time1,
+            datetime.datetime.fromtimestamp(time1).strftime("%d/%m/%Y"),
             '1A',
             ''
         )
@@ -220,7 +223,7 @@ class NotesTest(unittest.TestCase):
                                  'firstname': 'test',
                                  'mail': 'test@pouette.com',
                                  'tel': '0600000000',
-                                 'birthdate': time0,
+                                 'birthdate': dt0,
                                  'promo': '1A',
                                  'note': 0,
                                  'overdraft_time': 0,
@@ -235,7 +238,7 @@ class NotesTest(unittest.TestCase):
             "test",
             "test@pouette.com",
             "0600000000",
-            "0",
+            '12/12/2001',
             '1A',
             ''
         )

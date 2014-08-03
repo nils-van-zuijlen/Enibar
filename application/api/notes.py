@@ -23,9 +23,10 @@ Notes management functions
 """
 
 from database import Cursor
+import datetime
+import os.path
 import shutil
 import time
-import os.path
 
 
 NOTE_FIELDS = ['id', 'nickname', 'surname', 'firstname', 'mail', 'tel',
@@ -42,7 +43,7 @@ def add(nickname, surname, firstname, mail, tel, birthdate, promo, photo_path):
     :param str firstname: First name
     :param str mail: Mail
     :param str tel: Phone number
-    :param int birthdate: Birthday (timestamp)
+    :param int birthdate: Birthday (DD/MM/YYYY)
     :param str promo: Promo. One of '1A', '2A', '3A', '3S', '4A', '5A',\
     'Ancien', 'Prof', 'Externe', Esiab'
     :param str photo_path: The path of the photo to use. The root is img/
@@ -59,6 +60,8 @@ def add(nickname, surname, firstname, mail, tel, birthdate, promo, photo_path):
                         mail, tel, birthdate, promo, photo_path)\
                         VALUES(:nickname, :surname, :firstname, :mail, :tel,\
                         :birthdate, :promo, :photo_path)")
+        birthdate = datetime.datetime.strptime(birthdate,
+                                               "%d/%m/%Y").timestamp()
 
         cursor.bindValues({':nickname': nickname, ':surname': surname,
                            ':firstname': firstname, ':mail': mail, ':tel': tel,
