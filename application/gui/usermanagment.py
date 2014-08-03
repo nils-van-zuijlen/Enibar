@@ -35,7 +35,7 @@ class UserManagmentWindow(QtWidgets.QDialog):
         except IndexError:
             self.selected = None
             for right in self.rights:
-                right.setCheckable(False)
+                self.rights[right].setCheckable(False)
         self.user_list.itemSelectionChanged.connect(self.select_user)
 
         self.layout.addWidget(self.user_list, 0, 0, len(self.rights) + 1, 3)
