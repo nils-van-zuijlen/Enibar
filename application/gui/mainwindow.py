@@ -1,3 +1,22 @@
+# Copyright (C) 2014 Bastien Orivel <b2orivel@enib.fr>
+# Copyright (C) 2014 Arnaud Levaufre <a2levauf@enib.fr>
+#
+# This file is part of Enibar.
+#
+# Enibar is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Enibar is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
+
+
 """
 Main Window description
 """
@@ -5,6 +24,7 @@ Main Window description
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import QtGui
+from PyQt5 import uic
 
 import api.notes
 import time
@@ -19,35 +39,28 @@ class MainWindow(QtWidgets.QMainWindow):
     """
     def __init__(self):
         super().__init__()
-        self.central_widget = CentralWidget(self)
-        self.menu_bar = MenuBar(self)
+        uic.loadUi('ui/mainwindow.ui', self)
 
-        self.setCentralWidget(self.central_widget)
-        self.setMenuBar(self.menu_bar)
-
-
-class CentralWidget(QtWidgets.QWidget):
-    """ Central widget of the MainWindow
-        This is where everithing will be. """
-    def __init__(self, parent):
-        super().__init__(parent)
-
-        self.layout = QtWidgets.QGridLayout(self)
-
-        self.notes_list = NotesList(self)
         self.notes_list.refresh(api.notes.get_all_shown())
-        self.layout.addWidget(self.notes_list, 0, 0)
+        self.notes_list.itemSelectionChanged.connect(self.select_note)
 
-        self.student_descr = RightContainer(self)
-        self.layout.addWidget(self.student_descr, 0, 1)
+    def select_note(self):
+        """
+        Called when a note is selected
+        """
+        widget = self.notes_list.currentItem()
+        infos = list(api.notes.get_by_nickname(widget.text()))[0]
+        self.note_name.setText(widget.text())
+        self.note_mail.setText(infos['mail'])
+        self.note_solde.setText("{:.2f} €".format(infos['note']))
+        self.note_promo.setText(infos['promo'])
+        self.note_phone.setText(infos['tel'])
 
-        self.setLayout(self.layout)
-
-
-class RightContainer(QtWidgets.QTabWidget):
-    """ Container on the right of the MainWindow """
-    def __init__(self, parent):
-        super().__init__(parent)
+        image = QtGui.QPixmap('img/coucou.jpg')
+        if not image.isNull():
+            self.note_photo.setPixmap(image.scaled(QtCore.QSize(120, 160)))
+        else:
+            self.note_photo.setPixmap(image)
 
 
 class NotesList(QtWidgets.QListWidget):
