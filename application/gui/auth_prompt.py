@@ -35,7 +35,7 @@ match a combination in database.
 """
 
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, uic
 
 
 def ask_auth(func):
@@ -52,36 +52,11 @@ def ask_auth(func):
 
 
 class AuthPrompt(QtWidgets.QDialog):
-    # pylint: disable=too-many-instance-attributes
     """ Authorization prompt class """
     def __init__(self):
         super().__init__()
+        uic.loadUi('ui/authprompt.ui', self)
         self.is_authorized = False
-
-        self.layout = QtWidgets.QGridLayout()
-        self.setStyleSheet("QPushButton{margin:0.5em 0 0 0;padding:0.25em 1em}")
-
-        self.login_label = QtWidgets.QLabel("Login:", self)
-        self.pass_label = QtWidgets.QLabel("Password:", self)
-        self.login_input = QtWidgets.QLineEdit(self)
-        self.pass_input = QtWidgets.QLineEdit(self)
-
-        self.pass_input.setEchoMode(QtWidgets.QLineEdit.Password)
-        self.reject_button = QtWidgets.QPushButton("Cancel", self)
-        self.accept_button = QtWidgets.QPushButton("Login", self)
-
-        self.layout.addWidget(self.login_label, 0, 0)
-        self.layout.addWidget(self.login_input, 1, 0, 1, 0)
-        self.layout.addWidget(self.pass_label, 2, 0)
-        self.layout.addWidget(self.pass_input, 3, 0, 1, 0)
-        self.layout.addWidget(self.accept_button, 4, 0)
-        self.layout.addWidget(self.reject_button, 4, 1)
-
-        self.reject_button.setAutoDefault(False)
-        self.setLayout(self.layout)
-
-        self.reject_button.clicked.connect(self.reject)
-        self.accept_button.clicked.connect(self.accept)
 
     def accept(self):
         """ Called when "Login" is clicked """
