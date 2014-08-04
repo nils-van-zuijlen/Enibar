@@ -79,8 +79,6 @@ class AddNote(QtWidgets.QDialog):
     def on_change(self):
         """ Called when an Input goes from red to green
         """
-        if not self.photo_selected:
-            return
         for _, obj in self.__dict__.items():
             if isinstance(obj, Input):
                 if not obj.valid:
