@@ -197,6 +197,7 @@
   <tabstop>promo_input</tabstop>
   <tabstop>mail_input</tabstop>
   <tabstop>phone_input</tabstop>
+  <tabstop>photo_button</tabstop>
   <tabstop>accept_button</tabstop>
   <tabstop>cancel_button</tabstop>
  </tabstops>
