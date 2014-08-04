@@ -73,3 +73,21 @@ class UsersTest(unittest.TestCase):
 
         self.assertEqual(list(users.get_list()), ["test", "test1", "test2"])
 
+    def test_rights(self):
+        """ Testing rights """
+
+        id1 = users.add("test", "test")
+        id2 = users.add("test2", "test")
+
+        self.assertTrue(users.set_rights("test", {'manage_users': True,
+                                  'manage_notes': False,
+                                  'manage_products': False}))
+
+        self.assertEqual(users.get_rights("test"), {'manage_users': True,
+                                                    'manage_notes': False,
+                                                    'manage_products': False})
+
+        self.assertEqual(users.get_rights("test2"), {'manage_users': False,
+                                                     'manage_notes': False,
+                                                     'manage_products': False})
+
