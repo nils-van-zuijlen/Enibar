@@ -42,7 +42,7 @@ class MainWindow(QtWidgets.QMainWindow):
         uic.loadUi('ui/mainwindow.ui', self)
 
         self.notes_list.refresh(api.notes.get(lambda x: x['hidden'] == 0))
-        self.notes_list.itemSelectionChanged.connect(self.select_note)
+        self.notes_list.currentRowChanged.connect(self.select_note)
 
     def select_note(self):
         """
