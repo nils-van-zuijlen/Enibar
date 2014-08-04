@@ -26,7 +26,6 @@ from database import Cursor
 import datetime
 import os.path
 import shutil
-import time
 
 
 NOTE_FIELDS = ['id', 'nickname', 'surname', 'firstname', 'mail', 'tel',
@@ -134,175 +133,23 @@ def change_photo(id_, new_photo):
         return cursor.exec_()
 
 
-def get_by_id(id_):
-    """ Get note by id
-
-    :param int id_: The id of the note
-
-    :return dict: Description of the note or None if not found
+def get(filter_=None):
+    """ Get notes with a filter. filter_ should be a function like
+            lamda x: x["id"] == 1
+        to keep only notes with the id 1
     """
     with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM notes WHERE id=:id")
-
-        cursor.bindValue(":id", id_)
-
-        cursor.exec_()
-        if cursor.next():
-            return {field: cursor.record().value(field) for field in
-                    NOTE_FIELDS}
+        cursor.prepare("SELECT * FROM notes")
+        rows = []
+        if cursor.exec_():
+            while cursor.next():
+                row = {field: cursor.record().value(field) for field in
+                       NOTE_FIELDS}
+                if filter_(row):
+                    rows.append(row)
+            return rows
         else:
             return None
-
-
-def get_by_nickname(nickname):
-    """ Get notes by nickname
-
-    :param str nickname: The nickname you want to search
-
-    :return list: List of note descriptions
-    """
-    with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM notes WHERE nickname LIKE :nickname\
-                        ORDER BY nickname")
-
-        cursor.bindValue(':nickname', "%{}%".format(nickname))
-
-        cursor.exec_()
-        while cursor.next():
-            yield {field: cursor.record().value(field) for field in
-                   NOTE_FIELDS}
-
-
-def get_by_first_name(firstname):
-    """ Get notes by first name
-
-    :param str firstname: The first name you want to search
-
-    :return list: List of note descriptions
-    """
-    with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM notes WHERE firstname LIKE :firstname\
-                        ORDER BY nickname")
-
-        cursor.bindValue(':firstname', "%{}%".format(firstname))
-
-        cursor.exec_()
-        while cursor.next():
-            yield {field: cursor.record().value(field) for field in
-                   NOTE_FIELDS}
-
-
-def get_by_surname(surname):
-    """ Get notes by surname
-
-    :param str surname: The surname you want to search
-
-    :return list: List of note descriptions
-    """
-    with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM notes WHERE surname LIKE :surname\
-                        ORDER BY nickname")
-
-        cursor.bindValue(':surname', "%{}%".format(surname))
-        cursor.exec_()
-
-        while cursor.next():
-            yield {field: cursor.record().value(field) for field in
-                   NOTE_FIELDS}
-
-
-def get_by_promo(promo):
-    """ Get notes by promo
-
-    :param str promo: The promo you want to search
-
-    :return list: List of note descriptions
-    """
-    with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM notes WHERE promo LIKE :promo\
-                        ORDER BY nickname")
-
-        cursor.bindValue(':promo', "%{}%".format(promo))
-        cursor.exec_()
-
-        while cursor.next():
-            yield {field: cursor.record().value(field) for field in
-                   NOTE_FIELDS}
-
-
-def get_all_shown():
-    """ Get all shown notes
-
-    :return list: List of notes descriptions
-    """
-    with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM notes WHERE hidden=0 ORDER BY nickname")
-
-        cursor.exec_()
-
-        while cursor.next():
-            yield {field: cursor.record().value(field) for field in
-                   NOTE_FIELDS}
-
-
-def get_all_hidden():
-    """ Get all hidden notes
-
-    :return list: List of notes descriptions
-    """
-    with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM notes WHERE hidden=1 ORDER BY nickname")
-
-        cursor.exec_()
-
-        while cursor.next():
-            yield {field: cursor.record().value(field) for field in
-                   NOTE_FIELDS}
-
-
-def get_minors():
-    """ Get minors notes
-
-    :return list: List of note descriptions
-    """
-    with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM notes WHERE birthdate+567648000 > :time\
-                        ORDER BY nickname")
-        cursor.bindValue(':time', time.time())
-        cursor.exec_()
-
-        while cursor.next():
-            yield {field: cursor.record().value(field) for field in
-                   NOTE_FIELDS}
-
-
-def get_majors():
-    """ Get majors notes
-
-    :return list: List of note descriptions
-    """
-    with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM notes WHERE birthdate+567648000 <= :time\
-                        ORDER BY nickname")
-        cursor.bindValue(':time', time.time())
-        cursor.exec_()
-
-        while cursor.next():
-            yield {field: cursor.record().value(field) for field in
-                   NOTE_FIELDS}
-
-
-def get_profs():
-    """ Get profs notes
-
-    :return list: List of note descriptions
-    """
-    with Cursor() as cursor:
-        cursor.exec("SELECT * FROM notes WHERE promo=Profs ORDER BY nickname")
-
-        while cursor.next():
-            yield {field: cursor.record().value(field) for field in
-                   NOTE_FIELDS}
 
 
 def hide(id_):

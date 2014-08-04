@@ -95,7 +95,7 @@ class NotesTest(unittest.TestCase):
             '1A',
             '../test/resources/coucou.jpg'
         )
-        getted = notes.get_by_id(id_)
+        getted = notes.get(lambda x: x['id'] == id_)[0]
         self.assertEqual(getted, {'id': id_,
                                  'nickname': 'test1',
                                  'surname': 'test',
@@ -141,7 +141,7 @@ class NotesTest(unittest.TestCase):
             ''
         )
 
-        self.assertEqual(list(notes.get_by_nickname('test')), [{'id': i + 1,
+        self.assertEqual(notes.get(lambda x: 'test' in x["nickname"]), [{'id': i + 1,
                                  'nickname': 'test' + str(i),
                                  'surname': 'test',
                                  'firstname': 'test',
@@ -179,7 +179,7 @@ class NotesTest(unittest.TestCase):
             ''
         )
 
-        self.assertEqual(list(notes.get_minors()), [{'id': id1,
+        self.assertEqual(notes.get(lambda x: x["birthdate"] > time.time() - 18 * 365 * 24 * 3600), [{'id': id1,
                                  'nickname': 'test1',
                                  'surname': 'test',
                                  'firstname': 'test',
@@ -217,7 +217,7 @@ class NotesTest(unittest.TestCase):
             ''
         )
 
-        self.assertEqual(list(notes.get_majors()), [{'id': id0,
+        self.assertEqual(notes.get(lambda x: x["birthdate"] < time.time() - 18 * 365 * 24 * 3600), [{'id': id0,
                                  'nickname': 'test0',
                                  'surname': 'test',
                                  'firstname': 'test',
@@ -244,14 +244,14 @@ class NotesTest(unittest.TestCase):
         )
 
         notes.transaction(id1, 10)
-        self.assertEqual(notes.get_by_id(id1)['note'], 10)
+        self.assertEqual(notes.get(lambda x: x["id"] == id1)[0]['note'], 10)
         notes.transaction(id1, 10)
-        self.assertEqual(notes.get_by_id(id1)['note'], 20)
+        self.assertEqual(notes.get(lambda x: x["id"] == id1)[0]['note'], 20)
         notes.transaction(id1, -5)
-        self.assertEqual(notes.get_by_id(id1)['note'], 15)
+        self.assertEqual(notes.get(lambda x: x["id"] == id1)[0]['note'], 15)
         notes.transaction(id1, -15)
-        self.assertEqual(notes.get_by_id(id1)['note'], 0)
+        self.assertEqual(notes.get(lambda x: x["id"] == id1)[0]['note'], 0)
         notes.transaction(id1, 5)
         notes.transaction(id1, -4.95)
-        self.assertEqual(notes.get_by_id(id1)['note'], 0.05)
+        self.assertEqual(notes.get(lambda x: x["id"] == id1)[0]['note'], 0.05)
 

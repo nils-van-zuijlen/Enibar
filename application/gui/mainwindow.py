@@ -41,7 +41,7 @@ class MainWindow(QtWidgets.QMainWindow):
         super().__init__()
         uic.loadUi('ui/mainwindow.ui', self)
 
-        self.notes_list.refresh(api.notes.get_all_shown())
+        self.notes_list.refresh(api.notes.get(lambda x: x['hidden'] == 0))
         self.notes_list.itemSelectionChanged.connect(self.select_note)
 
     def select_note(self):
@@ -49,7 +49,7 @@ class MainWindow(QtWidgets.QMainWindow):
         Called when a note is selected
         """
         widget = self.notes_list.currentItem()
-        infos = list(api.notes.get_by_nickname(widget.text()))[0]
+        infos = list(api.notes.get(lambda x: widget.text() in x["nickname"]))[0]
         self.note_name.setText(widget.text())
         self.note_mail.setText(infos['mail'])
         self.note_solde.setText("{:.2f} €".format(infos['note']))
