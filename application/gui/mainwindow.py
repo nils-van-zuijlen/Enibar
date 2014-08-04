@@ -5,6 +5,7 @@ Main Window description
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import QtGui
+from PyQt5 import uic
 
 import api.notes
 import time
@@ -19,36 +20,30 @@ class MainWindow(QtWidgets.QMainWindow):
     """
     def __init__(self):
         super().__init__()
-        self.central_widget = CentralWidget(self)
-        self.menu_bar = MenuBar(self)
+        uic.loadUi('ui/mainwindow.ui', self)
+        #self.central_widget = CentralWidget(self)
+        #self.menu_bar = MenuBar(self)
 
-        self.setCentralWidget(self.central_widget)
-        self.setMenuBar(self.menu_bar)
-
-
-class CentralWidget(QtWidgets.QWidget):
-    """ Central widget of the MainWindow
-        This is where everithing will be. """
-    def __init__(self, parent):
-        super().__init__(parent)
-
-        self.layout = QtWidgets.QGridLayout(self)
-
-        self.notes_list = NotesList(self)
+        #self.setCentralWidget(self.central_widget)
+        #self.setMenuBar(self.menu_bar)
         self.notes_list.refresh(api.notes.get_all_shown())
-        self.layout.addWidget(self.notes_list, 0, 0)
+        self.notes_list.itemSelectionChanged.connect(self.select_note)
 
-        self.student_descr = RightContainer(self)
-        self.layout.addWidget(self.student_descr, 0, 1)
+    def select_note(self):
+        widget = self.notes_list.currentItem()
+        infos = list(api.notes.get_by_nickname(widget.text()))[0]
+        self.note_name.setText(widget.text())
+        self.note_mail.setText(infos['mail'])
+        self.note_solde.setText("{:.2f} €".format(infos['note']))
+        self.note_promo.setText(infos['promo'])
+        self.note_phone.setText(infos['tel'])
 
-        self.setLayout(self.layout)
-
-
-class RightContainer(QtWidgets.QTabWidget):
-    """ Container on the right of the MainWindow """
-    def __init__(self, parent):
-        super().__init__(parent)
-
+        image = QtGui.QPixmap('img/coucou.jpg')
+        if not image.isNull():
+            self.note_photo.setPixmap(image.scaled(QtCore.QSize(120, 160)))
+        else:
+            self.note_photo.setPixmap(image)
+        pass
 
 class NotesList(QtWidgets.QListWidget):
     # pylint: disable=too-many-public-methods
