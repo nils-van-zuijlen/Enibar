@@ -25,7 +25,6 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5 import uic
-from .auth_prompt import ask_auth
 
 import api.notes
 import time
@@ -45,7 +44,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.notes_list.refresh(api.notes.get_all_shown())
         self.notes_list.itemSelectionChanged.connect(self.select_note)
 
-    @ask_auth
     def select_note(self):
         """
         Called when a note is selected
