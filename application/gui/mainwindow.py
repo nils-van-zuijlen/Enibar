@@ -62,6 +62,13 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.note_photo.setPixmap(image)
 
+        if infos['note'] < 0:
+            self.note_box.setStyleSheet("background-color: red;")
+        elif time.time() - infos['birthdate'] < 18 * 365 * 24 * 3600:
+            self.note_box.setStyleSheet("background-color: pink;")
+        else:
+            self.note_box.setStyleSheet("background-color: none;")
+
 
 class NotesList(QtWidgets.QListWidget):
     # pylint: disable=too-many-public-methods
@@ -79,7 +86,7 @@ class NotesList(QtWidgets.QListWidget):
                 note["nickname"], self))
             if note['note'] < 0:
                 self.notes[-1].setBackground(QtCore.Qt.red)
-            if time.time() - note["birthdate"] < 18 * 365 * 24 * 3600:
+            elif time.time() - note["birthdate"] < 18 * 365 * 24 * 3600:
                 self.notes[-1].setBackground(QtGui.QColor(255, 192, 203))
 
         if len(self.notes):
