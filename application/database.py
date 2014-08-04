@@ -56,9 +56,7 @@ class Cursor:
         self.database.setDatabaseName(settings.DBNAME)
 
         if not self.database.open():
-            errormessage = QtWidgets.QErrorMessage()
-            errormessage.showMessage("Can't join database", "Error")
-            errormessage.exec()
+            print("Can't join database")
             sys.exit(1)
         self.cursor = SqlQuery(self.database)
 
