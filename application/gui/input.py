@@ -29,20 +29,25 @@ class Input(QtWidgets.QLineEdit):
     """ Fancy input that takes a validator, and has a green border when ok, a
         red one when not.
     """
-    def __init__(self, parent, validator):
+    def __init__(self, parent):
         """
         :param QtWidget parent: The parent of the input
-        :param QtValidator validator: The validator the input will use to \
-        change his border.
         """
         super().__init__(parent)
         # Red by default
         self.parent = parent
         self.setStyleSheet("QLineEdit{border: 1px solid red;}")
         self.textChanged.connect(self.on_change)
-        self.setValidator(validator)
         self.shadow = None
         self.valid = False
+
+    def set_validator(self, validator):
+        """ Set a validator to the input
+
+        :param QtValidator validator: The validator the input will use to \
+        change his border.
+        """
+        self.setValidator(validator)
 
     def event(self, event):
         """ Overwrite event management from qt to catch the focus of the input

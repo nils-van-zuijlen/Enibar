@@ -24,9 +24,8 @@ AddNote Window
 """
 
 
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
-from PyQt5 import QtGui
+from PyQt5 import QtWidgets, QtCore, QtGui, uic
+
 import api.notes
 import api.validator
 from .input import Input
@@ -34,69 +33,25 @@ from .input import Input
 
 class AddNote(QtWidgets.QDialog):
     # pylint: disable=too-many-instance-attributes
-    """ Authorization prompt class """
+    """ AddNote window class """
     def __init__(self):
         super().__init__()
-        self.layout = QtWidgets.QGridLayout()
+        uic.loadUi('ui/addnote.ui', self)
 
-        self.pseudo_label = QtWidgets.QLabel("Surnom:", self)
-        self.name_label = QtWidgets.QLabel("Nom:", self)
-        self.surname_label = QtWidgets.QLabel("Prénom:", self)
-        self.birthdate_label = QtWidgets.QLabel("Date de naissance:", self)
-        self.promo_label = QtWidgets.QLabel("Promo:", self)
-        self.mail_label = QtWidgets.QLabel("Mail:", self)
-        self.phone_label = QtWidgets.QLabel("Téléphone:", self)
-        self.photo_label = QtWidgets.QLabel("Photo: ", self)
-        self.image = QtWidgets.QLabel(self)
-        self.image.setAlignment(QtCore.Qt.AlignCenter)
-
-        self.pseudo_input = Input(self, api.validator.NAME)
-        self.name_input = Input(self, api.validator.NAME)
-        self.surname_input = Input(self, api.validator.NAME)
-        self.birthdate_input = Input(self, api.validator.BIRTHDATE)
-        self.promo_input = QtWidgets.QComboBox(self)
-        self.promo_input.insertItems(0, ["1A", "2A", "3A", "3S", "4A", "5A",
-                                         "Esiab", "Externe", "Ancien", "Prof"])
-        self.mail_input = Input(self, api.validator.MAIL)
-        self.phone_input = Input(self, api.validator.PHONE_NUMBER)
-        self.photo_input_button = QtWidgets.QPushButton("Ajouter une photo")
-        self.photo_input_button.clicked.connect(self.add_photo)
-
-        self.reject_button = QtWidgets.QPushButton("Cancel", self)
-        self.accept_button = QtWidgets.QPushButton("Ajouter", self)
-        self.accept_button.setEnabled(False)
-
-        self.layout.addWidget(self.pseudo_label, 1, 0)
-        self.layout.addWidget(self.pseudo_input, 2, 0, 1, 0)
-        self.layout.addWidget(self.name_label, 3, 0)
-        self.layout.addWidget(self.name_input, 4, 0, 1, 0)
-        self.layout.addWidget(self.surname_label, 5, 0)
-        self.layout.addWidget(self.surname_input, 6, 0, 1, 0)
-        self.layout.addWidget(self.birthdate_label, 7, 0)
-        self.layout.addWidget(self.birthdate_input, 8, 0, 1, 0)
-        self.layout.addWidget(self.promo_label, 9, 0)
-        self.layout.addWidget(self.promo_input, 10, 0, 1, 0)
-        self.layout.addWidget(self.mail_label, 11, 0)
-        self.layout.addWidget(self.mail_input, 12, 0, 1, 0)
-        self.layout.addWidget(self.phone_label, 13, 0)
-        self.layout.addWidget(self.phone_input, 14, 0, 1, 0)
-        self.layout.addWidget(self.photo_label, 15, 0)
-        self.layout.addWidget(self.photo_input_button, 16, 0, 1, 0)
-        self.layout.addWidget(self.accept_button, 18, 0)
-        self.layout.addWidget(self.reject_button, 18, 1)
-
-        self.reject_button.setAutoDefault(False)
-        self.setLayout(self.layout)
-
-        self.accept_button.clicked.connect(self.accept)
-        self.reject_button.clicked.connect(self.reject)
+        # Add validators on inputs.
+        self.nickname_input.set_validator(api.validator.NAME)
+        self.name_input.set_validator(api.validator.NAME)
+        self.first_name_input.set_validator(api.validator.NAME)
+        self.mail_input.set_validator(api.validator.MAIL)
+        self.phone_input.set_validator(api.validator.PHONE_NUMBER)
+        self.birthdate_input.set_validator(api.validator.BIRTHDATE)
 
         self.photo_selected = None
         self.show()
 
     def add_photo(self):
         """ Function called to add a photo. Open a QFileDialog and fill
-            self.image with the selected image
+            self.photo with the selected image
         """
         self.photo_selected = QtWidgets.QFileDialog(self).getOpenFileUrl(
             self, "Selectionnez une image", "img/",
@@ -106,14 +61,14 @@ class AddNote(QtWidgets.QDialog):
             image = QtGui.QPixmap(self.photo_selected)
 
             if not image.isNull():
-                self.image.setPixmap(image.scaled(QtCore.QSize(140, 120)))
-                self.layout.addWidget(self.image, 17, 0, 1, 0)
+                self.photo.setPixmap(image.scaled(QtCore.QSize(140, 120)))
+                self.on_change()
 
     def accept(self):
         """ Called when "Ajouter" is clicked """
         super().accept()
-        api.notes.add(self.pseudo_input.text(),
-                      self.surname_input.text(),
+        api.notes.add(self.nickname_input.text(),
+                      self.first_name_input.text(),
                       self.name_input.text(),
                       self.mail_input.text(),
                       self.phone_input.text(),
@@ -124,6 +79,8 @@ class AddNote(QtWidgets.QDialog):
     def on_change(self):
         """ Called when an Input goes from red to green
         """
+        if not self.photo_selected:
+            return
         for _, obj in self.__dict__.items():
             if isinstance(obj, Input):
                 if not obj.valid:
