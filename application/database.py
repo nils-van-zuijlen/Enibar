@@ -1,4 +1,3 @@
-
 # Copyright (C) 2014 Bastien Orivel <b2orivel@enib.fr>
 # Copyright (C) 2014 Arnaud Levaufre <a2levauf@enib.fr>
 #
