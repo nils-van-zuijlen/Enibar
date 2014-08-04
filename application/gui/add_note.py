@@ -38,7 +38,6 @@ class AddNote(QtWidgets.QDialog):
     def __init__(self):
         super().__init__()
         self.layout = QtWidgets.QGridLayout()
-        self.setStyleSheet("QPushButton{margin:0.5em 0 0 0;padding:0.25em 1em}")
 
         self.pseudo_label = QtWidgets.QLabel("Surnom:", self)
         self.name_label = QtWidgets.QLabel("Nom:", self)
@@ -93,6 +92,7 @@ class AddNote(QtWidgets.QDialog):
         self.reject_button.clicked.connect(self.reject)
 
         self.photo_selected = None
+        self.show()
 
     def add_photo(self):
         """ Function called to add a photo. Open a QFileDialog and fill

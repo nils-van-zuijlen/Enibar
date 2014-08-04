@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>884</width>
+    <height>690</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -21,23 +21,6 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_3">
-    <item row="2" column="1">
-     <widget class="QTabWidget" name="tabWidget">
-      <property name="currentIndex">
-       <number>0</number>
-      </property>
-      <widget class="QWidget" name="tab_7">
-       <attribute name="title">
-        <string>Tab 1</string>
-       </attribute>
-      </widget>
-      <widget class="QWidget" name="tab_8">
-       <attribute name="title">
-        <string>Tab 2</string>
-       </attribute>
-      </widget>
-     </widget>
-    </item>
     <item row="0" column="1">
      <widget class="QFrame" name="note_box">
       <property name="enabled">
@@ -249,6 +232,23 @@
       </property>
      </widget>
     </item>
+    <item row="1" column="1">
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab_7">
+       <attribute name="title">
+        <string>Tab 1</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tab_8">
+       <attribute name="title">
+        <string>Tab 2</string>
+       </attribute>
+      </widget>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="MenuBar" name="menu_bar">
@@ -256,7 +256,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>884</width>
      <height>20</height>
     </rect>
    </property>
@@ -266,10 +266,14 @@
     </property>
     <addaction name="user_managment"/>
     <addaction name="products_managment"/>
+    <addaction name="add_note"/>
    </widget>
    <addaction name="administration"/>
   </widget>
   <action name="user_managment">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Gerer les utilisateurs</string>
    </property>
@@ -277,6 +281,11 @@
   <action name="products_managment">
    <property name="text">
     <string>Gerer les consomations</string>
+   </property>
+  </action>
+  <action name="add_note">
+   <property name="text">
+    <string>Ajouter une note</string>
    </property>
   </action>
  </widget>
@@ -290,8 +299,62 @@
    <class>MenuBar</class>
    <extends>QMenuBar</extends>
    <header>gui/mainwindow</header>
+   <slots>
+    <slot>user_managment()</slot>
+    <slot>consumption_managment()</slot>
+    <slot>add_note()</slot>
+   </slots>
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>user_managment</sender>
+   <signal>triggered()</signal>
+   <receiver>menu_bar</receiver>
+   <slot>user_managment()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>9</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>products_managment</sender>
+   <signal>triggered()</signal>
+   <receiver>menu_bar</receiver>
+   <slot>consumption_managment()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>9</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>add_note</sender>
+   <signal>triggered()</signal>
+   <receiver>menu_bar</receiver>
+   <slot>add_note()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>9</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
