@@ -35,7 +35,6 @@ You can use the DB class like that:
 
 
 from PyQt5 import QtSql
-from PyQt5 import QtWidgets
 import sys
 import settings
 
