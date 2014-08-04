@@ -32,6 +32,25 @@ NOTE_FIELDS = ['id', 'nickname', 'surname', 'firstname', 'mail', 'tel',
                'birthdate', 'promo', 'note', 'photo_path', 'overdraft_time',
                'ecocups', 'hidden']
 
+NOTES_CACHE = []
+
+
+def rebuild_cache():
+    """ Build a cache with all notes inside. This improve greatly the perfs of
+        get actions
+    """
+    # pylint: disable=global-statement
+    global NOTES_CACHE
+    NOTES_CACHE = []
+    with Cursor() as cursor:
+        cursor.prepare("SELECT * FROM notes")
+        if cursor.exec_():
+            while cursor.next():
+                row = {field: cursor.record().value(field) for field in
+                       NOTE_FIELDS}
+                NOTES_CACHE.append(row)
+    return True
+
 
 # pylint: disable=too-many-arguments
 def add(nickname, surname, firstname, mail, tel, birthdate, promo, photo_path):
@@ -68,6 +87,7 @@ def add(nickname, surname, firstname, mail, tel, birthdate, promo, photo_path):
                            ':photo_path': "img/" + name if photo_path else ""})
 
         if cursor.exec_():
+            rebuild_cache()
             return cursor.lastInsertId()
         return -1
 
@@ -82,7 +102,7 @@ def remove(id_):
     with Cursor() as cursor:
         cursor.prepare("DELETE FROM notes WHERE id=:id")
         cursor.bindValue(':id', id_)
-        return cursor.exec_()
+        return cursor.exec_() and rebuild_cache()
 
 
 def change_nickname(id_, new_nickname):
@@ -98,7 +118,7 @@ def change_nickname(id_, new_nickname):
 
         cursor.bindValues({':nickname': new_nickname, ':id': id_})
 
-        return cursor.exec_()
+        return cursor.exec_() and rebuild_cache()
 
 
 def change_tel(id_, new_tel):
@@ -114,7 +134,7 @@ def change_tel(id_, new_tel):
 
         cursor.bindValues({':tel': new_tel, ':id': id_})
 
-        return cursor.exec_()
+        return cursor.exec_() and rebuild_cache()
 
 
 def change_photo(id_, new_photo):
@@ -130,7 +150,7 @@ def change_photo(id_, new_photo):
 
         cursor.bindValues({':photo_path': new_photo, ':id': id_})
 
-        return cursor.exec_()
+        return cursor.exec_() and rebuild_cache()
 
 
 def get(filter_=None):
@@ -138,18 +158,11 @@ def get(filter_=None):
             lamda x: x["id"] == 1
         to keep only notes with the id 1
     """
-    with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM notes")
-        rows = []
-        if cursor.exec_():
-            while cursor.next():
-                row = {field: cursor.record().value(field) for field in
-                       NOTE_FIELDS}
-                if filter_(row):
-                    rows.append(row)
-            return rows
-        else:
-            return None
+    rows = []
+    for row in NOTES_CACHE:
+        if filter_ is None or filter_(row):
+            rows.append(row)
+    return rows
 
 
 def hide(id_):
@@ -190,5 +203,8 @@ def transaction(id_, diff):
         cursor.prepare("UPDATE notes SET note=note+:diff WHERE id=:id")
         cursor.bindValue(":diff", diff)
         cursor.bindValue(":id", id_)
-        return cursor.exec_()
+
+        return cursor.exec_() and rebuild_cache()
+
+rebuild_cache()
 

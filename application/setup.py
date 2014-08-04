@@ -21,18 +21,20 @@
 Will insert 100 fake notes in the db.
 """
 
-import api.notes
+from api import notes
 import faker
 import time
 import random
+import datetime
 
 FAK = faker.Faker()
 
 for i in range(100):
-    id_ = api.notes.add(FAK.first_name(), FAK.first_name(), FAK.first_name(),
-                        FAK.email(), FAK.phone_number(),
+    id_ = notes.add(FAK.first_name(), FAK.first_name(), FAK.first_name(),
+                    FAK.email(), FAK.phone_number(),
+                    datetime.datetime.fromtimestamp(
                         random.randint(int(time.time() - 36 * 365 * 3600 * 24),
-                                       int(time.time())),
-                        "1A", "")
-    api.notes.transaction(id_, random.randint(-10, 10))
+                                       int(time.time()))).strftime("%d/%m/%Y"),
+                    "1A", "")
+    notes.transaction(id_, random.randint(-10, 10))
 
