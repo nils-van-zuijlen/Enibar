@@ -1,3 +1,22 @@
+# Copyright (C) 2014 Bastien Orivel <b2orivel@enib.fr>
+# Copyright (C) 2014 Arnaud Levaufre <a2levauf@enib.fr>
+#
+# This file is part of Enibar.
+#
+# Enibar is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Enibar is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
+
+
 """
 Main Window description
 """
@@ -21,15 +40,14 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi('ui/mainwindow.ui', self)
-        #self.central_widget = CentralWidget(self)
-        #self.menu_bar = MenuBar(self)
 
-        #self.setCentralWidget(self.central_widget)
-        #self.setMenuBar(self.menu_bar)
         self.notes_list.refresh(api.notes.get_all_shown())
         self.notes_list.itemSelectionChanged.connect(self.select_note)
 
     def select_note(self):
+        """
+        Called when a note is selected
+        """
         widget = self.notes_list.currentItem()
         infos = list(api.notes.get_by_nickname(widget.text()))[0]
         self.note_name.setText(widget.text())
@@ -43,7 +61,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.note_photo.setPixmap(image.scaled(QtCore.QSize(120, 160)))
         else:
             self.note_photo.setPixmap(image)
-        pass
+
 
 class NotesList(QtWidgets.QListWidget):
     # pylint: disable=too-many-public-methods
