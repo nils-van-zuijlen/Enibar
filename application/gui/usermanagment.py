@@ -21,6 +21,7 @@ User managment window
 """
 
 from PyQt5 import QtWidgets
+from PyQt5 import uic
 from api import users
 import gui.utils
 
@@ -31,50 +32,43 @@ class UserManagmentWindow(QtWidgets.QDialog):
     """
     def __init__(self):
         super().__init__()
-        self.layout = QtWidgets.QGridLayout(self)
+        uic.loadUi('ui/usermanagment.ui', self)
 
-        self.save_button = QtWidgets.QPushButton("Sauvegarder")
         self.save_button.clicked.connect(self.save)
-        self.add_button = QtWidgets.QPushButton("Ajouter un utilisateur")
         self.add_button.clicked.connect(self.add)
-        self.delete_button = QtWidgets.QPushButton("Supprimer l'utilisateur")
         self.delete_button.clicked.connect(self.delete)
-
         self.rights = {
-            'manage_users': QtWidgets.QCheckBox("Gérer les utilisateurs"),
-            'manage_products': QtWidgets.QCheckBox("Gérer les consomations"),
-            'manage_notes': QtWidgets.QCheckBox("Gérer les notes"),
+            'manage_users': self.manage_users,
+            'manage_products': self.manage_products,
+            'manage_notes': self.manage_notes,
         }
-
-        self.user_list = UserList()
+        self.user_list.itemSelectionChanged.connect(self.select_user)
         try:
             self.selected = self.user_list.widgets[0]
             self.update_form()
         except IndexError:
             self.selected = None
-            for right in self.rights:
-                self.rights[right].setCheckable(False)
-        self.user_list.itemSelectionChanged.connect(self.select_user)
+            self.set_form_checkable(False)
 
-        self.layout.addWidget(self.user_list, 0, 0, len(self.rights) + 1, 3)
-        for index, key in enumerate(self.rights):
-            self.layout.addWidget(self.rights[key], index, 3)
-        self.layout.addWidget(self.save_button, len(self.rights) + 1, 3)
-        self.layout.addWidget(self.add_button, len(self.rights) + 1, 0, 1, 2)
-        self.layout.addWidget(self.delete_button, len(self.rights) + 1, 2)
-
-        self.setLayout(self.layout)
         self.show()
+
+    def set_form_checkable(self, checkable):
+        for right in self.rights:
+            self.rights[right].setCheckable(checkable)
+            if not checkable:
+                self.rights[right].setCheckState(0)
 
     def update_form(self):
         """ Fetch user rights of newly selected user
         """
         # May break if you touch it
-        rights = users.get_rights(self.selected.text())
-        if not rights:
+        if not self.selected:
+            self.set_form_checkable(False)
             return
+        rights = users.get_rights(self.selected.text())
         for right in rights:
             self.rights[right].setChecked(rights[right])
+        self.set_form_checkable(True)
 
     def select_user(self):
         """ Callback for user selection in user list
@@ -85,6 +79,9 @@ class UserManagmentWindow(QtWidgets.QDialog):
     def delete(self):
         """ Callback to delete user when button is pushed
         """
+        if not self.selected:
+            gui.utils.error("Aucun utilisateur selectionné")
+            return
         if users.remove(self.selected.text()):
             self.user_list.refresh()
         else:
@@ -120,8 +117,8 @@ class UserManagmentWindow(QtWidgets.QDialog):
 class UserList(QtWidgets.QListWidget):
     """ Class handling user list """
     # pylint: disable=too-many-public-methods
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent):
+        super().__init__(parent)
         super().setSortingEnabled(True)
         self.widgets = []
         for user in users.get_list():
@@ -143,6 +140,7 @@ class UserList(QtWidgets.QListWidget):
         for widget in self.widgets:
             if widget.text() not in user_list:
                 item = self.takeItem(self.row(widget))
+                self.widgets.pop(self.widgets.index(widget))
                 del item
 
 

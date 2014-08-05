@@ -213,7 +213,7 @@
     <item row="0" column="0" rowspan="3">
      <widget class="NotesList" name="notes_list">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+       <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -226,7 +226,7 @@
       </property>
       <property name="baseSize">
        <size>
-        <width>0</width>
+        <width>200</width>
         <height>0</height>
        </size>
       </property>
@@ -257,7 +257,7 @@
      <x>0</x>
      <y>0</y>
      <width>884</width>
-     <height>20</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="administration">

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="6" column="1">
+    <widget class="QPushButton" name="delete_button">
+     <property name="text">
+      <string>Supprimer</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QLabel" name="title">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Droits de l'utilsateur</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QCheckBox" name="manage_notes">
+     <property name="text">
+      <string>Gérer les notes</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QCheckBox" name="manage_users">
+     <property name="text">
+      <string>Gérer les utilisateurs</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="2">
+    <widget class="QCheckBox" name="manage_products">
+     <property name="text">
+      <string>Gérer les consomations</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QPushButton" name="add_button">
+     <property name="text">
+      <string>Ajouter</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
+    <widget class="QPushButton" name="save_button">
+     <property name="text">
+      <string>Sauvegarder</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" rowspan="6" colspan="2">
+    <widget class="UserList" name="user_list"/>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>UserList</class>
+   <extends>QListView</extends>
+   <header>gui/usermanagment</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>user_list</tabstop>
+  <tabstop>manage_notes</tabstop>
+  <tabstop>manage_users</tabstop>
+  <tabstop>manage_products</tabstop>
+  <tabstop>save_button</tabstop>
+  <tabstop>add_button</tabstop>
+  <tabstop>delete_button</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
