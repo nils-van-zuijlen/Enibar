@@ -264,9 +264,17 @@
     <property name="title">
      <string>Administration</string>
     </property>
+    <widget class="QMenu" name="export_notes">
+     <property name="title">
+      <string>Exporter les notes</string>
+     </property>
+     <addaction name="export_with_profs"/>
+     <addaction name="export_without_profs"/>
+    </widget>
     <addaction name="user_managment"/>
     <addaction name="products_managment"/>
     <addaction name="add_note"/>
+    <addaction name="export_notes"/>
    </widget>
    <addaction name="administration"/>
   </widget>
@@ -288,6 +296,16 @@
     <string>Ajouter une note</string>
    </property>
   </action>
+  <action name="export_with_profs">
+   <property name="text">
+    <string>Avec profs</string>
+   </property>
+  </action>
+  <action name="export_without_profs">
+   <property name="text">
+    <string>Sans profs</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -303,6 +321,8 @@
     <slot>user_managment()</slot>
     <slot>consumption_managment()</slot>
     <slot>add_note()</slot>
+    <slot>export_notes_with_profs()</slot>
+    <slot>export_notes_without_profs()</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -345,6 +365,38 @@
    <signal>triggered()</signal>
    <receiver>menu_bar</receiver>
    <slot>add_note()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>9</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>export_with_profs</sender>
+   <signal>triggered()</signal>
+   <receiver>menu_bar</receiver>
+   <slot>export_notes_with_profs()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>9</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>export_without_profs</sender>
+   <signal>triggered()</signal>
+   <receiver>menu_bar</receiver>
+   <slot>export_notes_without_profs()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
