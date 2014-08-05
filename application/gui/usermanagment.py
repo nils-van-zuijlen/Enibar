@@ -53,6 +53,10 @@ class UserManagmentWindow(QtWidgets.QDialog):
         self.show()
 
     def set_form_checkable(self, checkable):
+        """ Set form state
+
+        :param bool checkable: Futur checkbox state
+        """
         for right in self.rights:
             self.rights[right].setCheckable(checkable)
             if not checkable:
