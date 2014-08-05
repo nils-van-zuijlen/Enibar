@@ -36,33 +36,42 @@ match a combination in database.
 
 
 from PyQt5 import QtWidgets, uic
+from api import users
 
 
-def ask_auth(func):
+def ask_auth(*dargs):
     """ Decorator to ask for authorization """
-    def wrapper(*args, **kwargs):
-        """ Wrapper """
-        prompt = AuthPrompt()
-        prompt.exec()
-        if prompt.is_authorized:
-            func(*args, **kwargs)
-        else:
-            print("Nope")
-    return wrapper
+    def decorator(func):
+        """ Decorator wrapper """
+        def wrapper(*args, **kwargs):
+            """ Wrapper """
+            prompt = AuthPrompt(dargs)
+            prompt.exec()
+            if prompt.is_authorized:
+                func(*args, **kwargs)
+            else:
+                print("Nope")
+        return wrapper
+    return decorator
 
 
 class AuthPrompt(QtWidgets.QDialog):
     """ Authorization prompt class """
-    def __init__(self):
+    def __init__(self, requirements):
         super().__init__()
+        self.requirements = requirements
         uic.loadUi('ui/authprompt.ui', self)
         self.is_authorized = False
 
     def accept(self):
         """ Called when "Login" is clicked """
-        if self.login_input.text() == "test":
+        if users.is_authorized(self.login_input.text(), self.pass_input.text()):
+            rights = users.get_rights(self.login_input.text())
+            for requirement in self.requirements:
+                if not rights[requirement]:
+                    return super().accept()
             self.is_authorized = True
         else:
             self.is_authorized = False
-        super().accept()
+        return super().accept()
 

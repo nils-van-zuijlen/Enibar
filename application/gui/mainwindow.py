@@ -45,7 +45,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.notes_list.refresh(api.notes.get(lambda x: x['hidden'] == 0))
         self.notes_list.currentRowChanged.connect(self.select_note)
 
-    def select_note(self):
+    def select_note(self, _):
         """
         Called when a note is selected
         """
