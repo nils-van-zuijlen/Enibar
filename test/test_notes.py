@@ -255,3 +255,27 @@ class NotesTest(unittest.TestCase):
         notes.transaction(id1, -4.95)
         self.assertEqual(notes.get(lambda x: x["id"] == id1)[0]['note'], 0.05)
 
+    def test_export(self):
+        """ Testing notes exporting """
+        id1 = notes.add("test1",
+            "test",
+            "test",
+            "test@pouette.com",
+            "0600000000",
+            '12/12/2001',
+            '1A',
+            ''
+        )
+        xml = "<?xml version=\"1.0\"?>\n"
+        xml += "<notes date=\"{}\">\n".format(datetime.datetime.now().strftime(
+            "%Y-%m-%d"))
+        xml += "\t<note id=\"1\">\n"
+        xml += "\t\t<prenom>test</prenom>\n"
+        xml += "\t\t<nom>test</nom>\n"
+        xml += "\t\t<compte>0.0</compte>\n"
+        xml += "\t\t<image></image>\n"
+        xml += "\t\t<date_Decouvert></date_Decouvert>\n"
+        xml += "\t</note>\n"
+        xml += "</notes>\n"
+        self.assertEqual(notes.export(notes.get()), xml)
+

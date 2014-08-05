@@ -27,6 +27,7 @@ from PyQt5 import QtGui
 from PyQt5 import uic
 
 import api.notes
+import datetime
 import time
 from .add_note import AddNote
 import gui.usermanagment
@@ -114,4 +115,22 @@ class MenuBar(QtWidgets.QMenuBar):
         """ Open an AddNote window
         """
         self.an_window = AddNote()
+
+    def export_notes_with_profs(self):
+        """ Export all notes """
+        self.export(api.notes.get())
+
+    def export_notes_without_profs(self):
+        """ Export only students notes """
+        self.export(api.notes.get(lambda x: x["promo"] != "Prof"))
+
+    def export(self, notes):
+        """ Generic export notes function """
+        path = QtWidgets.QFileDialog(self).getSaveFileName(
+            self, "Exporter vers", "{}.xml".format(
+                datetime.datetime.now().strftime("%Y-%m-%d")),
+            "XML Files (*.xml)")[0]
+
+        with open(path, "w") as save_file:
+            save_file.write(api.notes.export(notes))
 

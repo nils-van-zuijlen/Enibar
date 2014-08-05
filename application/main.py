@@ -21,12 +21,12 @@ Main file of the Application
 """
 
 import sys
-import gui
+import gui.mainwindow
 from PyQt5 import QtWidgets
 
 if __name__ == "__main__":
     APP = QtWidgets.QApplication(sys.argv)
-    MYAPP = gui.MainWindow()
+    MYAPP = gui.mainwindow.MainWindow()
     MYAPP.show()
     APP.exec_()
 
