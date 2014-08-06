@@ -131,6 +131,7 @@ class MenuBar(QtWidgets.QMenuBar):
                 datetime.datetime.now().strftime("%Y-%m-%d")),
             "XML Files (*.xml)")[0]
 
-        with open(path, "w") as save_file:
-            save_file.write(api.notes.export(notes))
+        if path:
+            with open(path, "w") as save_file:
+                save_file.write(api.notes.export(notes))
 
