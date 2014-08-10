@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ConsumptionManagmentWindow</class>
+ <widget class="QDialog" name="ConsumptionManagmentWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>447</width>
+    <height>548</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="4" column="2">
+    <widget class="QPushButton" name="save_button">
+     <property name="text">
+      <string>Sauvegarder</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QLabel" name="titile">
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Modifier les consommable</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0">
+    <widget class="QPushButton" name="add_button">
+     <property name="text">
+      <string>Ajouter</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="1">
+    <widget class="QPushButton" name="delete_button">
+     <property name="text">
+      <string>Supprimer</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QGroupBox" name="category_group">
+     <property name="font">
+      <font>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="title">
+      <string>Catégorie</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QComboBox" name="category_list">
+        <item>
+         <property name="text">
+          <string notr="true">Nourriture</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Boisson soft</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Boisson alcolisé / bouteille</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">Boisson alcolisé / pression</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="5" column="2">
+    <spacer name="spacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="2">
+    <widget class="QGroupBox" name="price_group">
+     <property name="title">
+      <string>Prix</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout_2">
+      <property name="fieldGrowthPolicy">
+       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_unit">
+        <property name="text">
+         <string>Unité:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QDoubleSpinBox" name="price_unit">
+        <property name="maximum">
+         <double>999.990000000000009</double>
+        </property>
+        <property name="singleStep">
+         <double>0.500000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_half">
+        <property name="text">
+         <string>Demi:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QDoubleSpinBox" name="price_half"/>
+      </item>
+      <item row="2" column="1">
+       <widget class="QDoubleSpinBox" name="price_meter">
+        <property name="maximum">
+         <double>999.990000000000009</double>
+        </property>
+        <property name="singleStep">
+         <double>0.500000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_meter">
+        <property name="text">
+         <string>Mètre:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QDoubleSpinBox" name="price_pint">
+        <property name="maximum">
+         <double>999.990000000000009</double>
+        </property>
+        <property name="singleStep">
+         <double>0.500000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_pint">
+        <property name="text">
+         <string>Pinte:</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="8" column="0" colspan="2">
+    <widget class="QLineEdit" name="add_name">
+     <property name="inputMask">
+      <string/>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="placeholderText">
+      <string>Nom de la nouvelle consommation</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" rowspan="8" colspan="2">
+    <widget class="QListWidget" name="product_list">
+     <property name="selectionMode">
+      <enum>QAbstractItemView::ExtendedSelection</enum>
+     </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectItems</enum>
+     </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>add_button</sender>
+   <signal>clicked()</signal>
+   <receiver>ConsumptionManagmentWindow</receiver>
+   <slot>add()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>43</x>
+     <y>528</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>49</x>
+     <y>545</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>delete_button</sender>
+   <signal>clicked()</signal>
+   <receiver>ConsumptionManagmentWindow</receiver>
+   <slot>delete()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>174</x>
+     <y>534</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>219</x>
+     <y>533</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>save_button</sender>
+   <signal>clicked()</signal>
+   <receiver>ConsumptionManagmentWindow</receiver>
+   <slot>save()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>301</x>
+     <y>305</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>300</x>
+     <y>334</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>save()</slot>
+  <slot>add()</slot>
+  <slot>delete()</slot>
+  <slot>select()</slot>
+ </slots>
+</ui>

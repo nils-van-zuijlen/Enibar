@@ -33,12 +33,19 @@ def add(name, category):
     """ Add a product.
 
     :param str name: Name.
-    :param str category: Category. One of 'manger', 'soft', 'alcool'.
+    :param str category: Category. One of 'manger', 'soft', 'alcool_bouteille',
+    'alcool_pression'.
 
-    :return int: The id of the product added if success else -1.
+    :return bool: Operation status
     """
-    if category not in ("manger", "soft", "alcool"):
-        return -1
+    valid_category = (
+        "manger",
+        "soft",
+        "alcool_bouteille",
+        "alcool_pression"
+    )
+    if category not in valid_category:
+        return False
 
     with Cursor() as cursor:
         cursor.prepare("INSERT INTO products (name, category) VALUES(:name,\
@@ -47,28 +54,39 @@ def add(name, category):
         cursor.bindValue(':name', name)
         cursor.bindValue(':category', category)
 
-        if cursor.exec_():
-            return cursor.lastInsertId()
-
-        return -1
+        return cursor.exec_()
 
 
-def remove(id_):
+def remove(name):
     """ Remove a product
 
-    :param int id_: The id of the product to delete
+    :param str name: The name of the product to delete
 
     :return bool: True if success else False.
     """
     with Cursor() as cursor:
-        cursor.prepare("DELETE FROM products WHERE id=:id")
+        cursor.prepare("DELETE FROM products WHERE name=:name")
 
-        cursor.bindValue(':id', id_)
+        cursor.bindValue(':name', name)
 
         return cursor.exec_()
 
 
-def set_prices(id_, unit=None, demi=None, pint=None, meter=None):
+def get_all():
+    """ List all products
+
+    :return dict: All products
+    """
+    with Cursor() as cursor:
+        cursor.prepare("SELECT * FROM products")
+        cursor.exec_()
+
+        while cursor.next():
+            yield {field: cursor.record().value(field) for field in
+                   PRODUCT_FIELDS}
+
+
+def set_prices(name, unit=None, demi=None, pint=None, meter=None):
     """ Set prices for a product
 
     :param float unit: Price for an unit.
@@ -80,16 +98,24 @@ def set_prices(id_, unit=None, demi=None, pint=None, meter=None):
     """
     with Cursor() as cursor:
         cursor.prepare("UPDATE products SET price_unit=:unit, price_demi=:demi,\
-                        price_pint=:pint, price_meter=:meter WHERE id=:id")
+                        price_pint=:pint, price_meter=:meter WHERE name=:name")
 
         cursor.bindValue(':unit', unit)
         cursor.bindValue(':demi', demi)
         cursor.bindValue(':pint', pint)
         cursor.bindValue(':meter', meter)
-        cursor.bindValue(':id', id_)
+        cursor.bindValue(':name', name)
 
         return cursor.exec_()
 
+def set_category(name, category):
+    """ Set product category
+
+    :param str name: Name of the product
+    :param str category: category of the product
+
+    :return bool: Operation status
+    """
 
 def get_by_category(category):
     """ Get products by category
@@ -112,6 +138,24 @@ def get_by_category(category):
 def get_by_name(name):
     """ Get products by name
 
+    :param str name: name of the product.
+
+    :return list: A list of product descriptions.
+    """
+    with Cursor() as cursor:
+        cursor.prepare("SELECT * FROM products WHERE name LIKE :name")
+
+        cursor.bindValue(':name', "%{}%".format(name))
+        cursor.exec_()
+
+        if cursor.next():
+            return {field: cursor.record().value(field) for field in
+                    PRODUCT_FIELDS}
+
+
+def search_by_name(name):
+    """ Search products by name
+
     :param str name: The name you want to search
 
     :return list: A list of product descriptions.
@@ -125,24 +169,4 @@ def get_by_name(name):
         while cursor.next():
             yield {field: cursor.record().value(field) for field in
                    PRODUCT_FIELDS}
-
-
-def get_by_id(id_):
-    """ Get product by id
-
-    :param int id_: The id of the product.
-
-    :return dict: Description of the product or None if not found.
-    """
-    with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM products WHERE id=:id")
-
-        cursor.bindValue(":id", id_)
-
-        cursor.exec_()
-        if cursor.next():
-            return {field: cursor.record().value(field) for field in
-                    PRODUCT_FIELDS}
-        else:
-            return None
 

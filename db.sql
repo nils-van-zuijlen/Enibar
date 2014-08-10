@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS notes(
 CREATE TABLE IF NOT EXISTS products(
 	id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
 	name VARCHAR(127),
-	category ENUM('manger', 'soft', 'alcool'),
+	category ENUM('manger', 'soft', 'alcool_bouteille', 'alcool_pression'),
 	price_unit FLOAT UNSIGNED DEFAULT NULL,
 	price_demi FLOAT UNSIGNED DEFAULT NULL,
 	price_pint FLOAT UNSIGNED DEFAULT NULL,
