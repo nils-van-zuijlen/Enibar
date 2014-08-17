@@ -39,12 +39,11 @@ import sys
 import settings
 
 
-class Cursor:
+class Database:
     # pylint: disable=too-few-public-methods
     """ Context manager to use the database """
     def __init__(self):
         self.database = None
-        self.cursor = None
 
     def __enter__(self):
         self.database = QtSql.QSqlDatabase("QMYSQL")
@@ -53,16 +52,27 @@ class Cursor:
         self.database.setUserName(settings.USERNAME)
         self.database.setPassword(settings.PASSWORD)
         self.database.setDatabaseName(settings.DBNAME)
-
         if not self.database.open():
             print("Can't join database")
             sys.exit(1)
-        self.cursor = SqlQuery(self.database)
 
-        return self.cursor
+        return self.database
 
     def __exit__(self, type_, value, traceback):
         self.database.close()
+
+
+class Cursor(Database):
+    # pylint: disable=too-few-public-methods
+    """ Context manager to use the cursor """
+    def __init__(self):
+        super().__init__()
+        self.cursor = None
+
+    def __enter__(self):
+        super().__enter__()
+        self.cursor = SqlQuery(self.database)
+        return self.cursor
 
 
 class SqlQuery(QtSql.QSqlQuery):

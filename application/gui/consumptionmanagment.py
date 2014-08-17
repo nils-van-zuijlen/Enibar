@@ -29,133 +29,115 @@ import api.categories
 import api.prices
 
 
-#class ConsumptionManagmentWindow(QtWidgets.QDialog):
-#    """
-#    Consumption managment window
-#    """
-#    def __init__(self):
-#        super().__init__()
-#        uic.loadUi('ui/consumptionmanagment.ui', self)
-#        self.categories = {
-#            'manger': 'Nourriture',
-#            'soft': 'Boisson soft',
-#            'alcool_boutielle': 'Boisson alcolisé / bouteille',
-#            'alcool_pression': 'Boisson alcolisé / pression',
-#        }
-#        self.products = []
-#
-#        for product in api.products.get_all():
-#            self.products.append(
-#                QtWidgets.QListWidgetItem(product['name'], self.product_list)
-#            )
-#        try:
-#            self.selected = self.products[0]
-#            self.update_inputs()
-#        except IndexError:
-#            self.selected = None
-#        self.show()
-#
-#    def update_inputs(self):
-#        """ update value of all inputs
-#        """
-#        if self.selected:  # Bullshit
-#            product = api.products.get_by_name(self.selected.text())
-#            self.price_half = product['price_demi']
-#            self.price_unit = product['price_unit']
-#            self.price_pint = product['price_pint']
-#            self.price_meter = product['price_meter']
-#        else:
-#            pass
-#
-#    def get_category_from_combobox(self):
-#        """ Get current category from selected combobox item
-#        """
-#        result = None
-#        for key, value in self.categories.items():
-#            if value == self.category_list.currentText():
-#                result = key
-#        if not result:
-#            raise Exception(
-#                "Unkown product category from QComboBox value {}".format(
-#                    self.category_list.currentText()
-#                )
-#            )
-#        return result
-#
-#    def add(self):
-#        """ Add product
-#        """
-#        if not self.add_name.text():
-#            gui.utils.error(
-#                "Aucun nom pour la nouvelle consommation",
-#                "Le champ nom est obligatoire pour ajouter une consommation"
-#            )
-#            return
-#        category = self.get_category_from_combobox()
-#        name = self.add_name.text()
-#        if api.products.add(name, category):
-#            QtWidgets.QListWidgetItem(name, self.product_list)
-#            self.add_name.setText("")
-#        else:
-#            gui.utils.error("Impossible d'ajouter cette consommation")
-#
-#    def save(self):
-#        """ Save product
-#        """
-#        for index in self.product_list.selectedIndex():
-#            succeed = api.products.set_prices(
-#                index.data(),
-#                unit=self.price_unit.text(),
-#                demi=self.price_half.text(),
-#                pint=self.price_pint.text(),
-#                meter=self.price_meter.text()
-#            )
-#            if not succeed:
-#                gui.utils.error(
-#                    "Impossible de changer le prix pour la"
-#                    "consomation {}".format(index.data())
-#                )
-#            succeed = api.products.set_category(
-#                name,
-#                self.get_category_from_combobox()
-#            )
-#            if not succeed:
-#                gui.utils.error(
-#                    "Impossible de modifier la catégorie de la"
-#                    "consommation {}".format(index.data())
-#                )
-#
-#    def delete(self):
-#        """ Delete product
-#        """
-#        # reverse is required to delete items from list without
-#        # breaking it
-#        for index in reversed(self.product_list.selectedIndexes()):
-#            if api.products.remove(index.data()):
-#                item = self.product_list.takeItem(index.row())
-#                del item
-#            else:
-#                gui.utils.error(
-#                    "Impossible de suppimer la consomation {}".format(
-#                        index.data()
-#                    )
-#                )
-
-
 class ConsumptionManagmentWindow(QtWidgets.QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi('ui/untitled.ui', self)
+        uic.loadUi('ui/consumptionmanagment.ui', self)
+        self.prices.setEnabled(False)
+        self.category_prices.setEnabled(False)
+        self.input_product_save.setEnabled(False)
+        self.button_cat_save.setEnabled(False)
+        self.button_cat_price.setEnabled(False)
         self.show()
 
     def add_product(self):
-        pass
+        """ Add product
+        Add a new product with the name found in the product name input and
+        update the product list displayed on screen.
+        """
+        pname = self.input_product.text()
+        indexes = self.products.selectedIndexes()
+        if not len(indexes) == 1:
+            # TODO error message must select only one item
+            return
+        index = indexes[0]
+        cat_name = None
+        if index.parent().isValid():
+            cat_name = index.parent().data()
+        elif index.data():
+            cat_name = index.data()
+        if cat_name and api.products.add(pname, category_name=cat_name):
+            self.products.add_product(pname, cat_name)
+            self.input_product.setText("")
+        else:
+            # TODO Error
+            pass
 
     def remove_product(self):
-        pass
+        """ Remove product
+        Removes all selected products in both database and displayed list.
+        """
+        indexes = self.products.selectedIndexes()
+        for index in reversed(indexes):
+            if not index.parent().isValid():
+                continue
+            parent = self.products.topLevelItem(index.parent().row())
+            if api.products.remove(index.data()):
+                child = parent.takeChild(index.row())
+                del child
 
-    def save_product(self):
-        pass
+    def save_product(self, lol):
+        """ Save product
+        Save product prices given in the prices sections. This support
+        multi-selection in the same category to allow user to update similar
+        prices at once (e.g: cans).
+        """
+        indexes = self.products.selectedIndexes()
+        new_prices = []
+        for index in indexes:
+            # TODO display error when faill to find cat or product
+            if not index.parent().isValid(): continue
+            cat = api.categories.get_unique(name=index.parent().data())
+            if not cat: continue
+            product = api.products.get_unique(
+                name=index.data(),
+                category=cat['id']
+            )
+            if not product: continue
+            prices = api.prices.get(product=product['id'])
+            for price in prices:
+                for widget in self.prices.widgets:
+                    if widget.label.text() != price['label']:
+                        continue
+                    new_prices.append({
+                        'id': price['id'],
+                        'value': widget.input.text()
+                    })
+        if not api.prices.set_multiple_values(new_prices):
+            # TODO Error can't set prices
+            pass
+
+    def select_product(self):
+        """ Select product
+        verify that selected prducts are all under the same category and allow
+        or deny access to price control.
+        """
+        parent = None
+        invalid = False
+        indexes = self.products.selectedIndexes()
+        if not indexes:
+            self.prices.setEnabled(False)
+            self.input_product_save.setEnabled(False)
+            return
+        item = indexes[-1]
+
+        for index in self.products.selectedIndexes():
+            if not index.parent().isValid():
+                continue
+            if parent and index.parent() != parent:
+                invalid = True
+                break
+            parent = index.parent()
+
+        if item.parent().isValid() and not invalid:
+            self.prices.rebuild(item.data(), item.parent().data())
+            self.prices.setEnabled(True)
+            self.input_product_save.setEnabled(True)
+        else:
+            self.prices.clean()
+            self.prices.setEnabled(False)
+            self.input_product_save.setEnabled(False)
+
 
     def add_category(self):
         cat_name = self.input_cat.text()
@@ -164,6 +146,7 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
         if api.categories.add(cat_name):
             self.categories.add_category(cat_name)
             self.input_cat.setText('')
+            self.products.rebuild()
         else:
             gui.utils.error(
                 "Impossible d'ajouter la catégorie.",
@@ -177,6 +160,7 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
             if api.categories.remove(index.data()):
                 item = self.categories.takeItem(index.row())
                 del item
+                self.products.rebuild() # TODO optimise call
             else:
                 gui.utils.error(
                     "Impossible de suppimer la categorie {}".format(
@@ -193,7 +177,8 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
             if widget.id_ and widget.input.text():
                 api.prices.rename_descriptor(widget.id_, widget.input.text())
             elif widget.id_:
-                api.prices.remove_descriptor(widget.id_)
+                if not api.prices.remove_descriptor(widget.id_):
+                    gui.utils.error("Impossible de supprimer le prix")
             elif widget.input.text():
                 cat = api.categories.get_by_name(self.category.text())
                 try:
@@ -202,17 +187,27 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
                         cat['id']
                     )
                 except IndexError:
-                    # FIXME Trigger error saying there is no category
-                    pass
+                    # TODO Trigger error saying there is no category
+                    print("Error")
+        self.products.rebuild() # TODO opti
 
 
     def add_category_price(self):
         self.category_prices.add_price()
 
     def select_category(self, item):
-        # TODO remove if useless
         self.category = item
-        self.category_prices.rebuild(item.text())
+
+        if item:
+            self.category_prices.rebuild(item.text())
+            self.category_prices.setEnabled(True)
+            self.button_cat_save.setEnabled(True)
+            self.button_cat_price.setEnabled(True)
+        else:
+            self.category_prices.clean()
+            self.category_prices.setEnabled(False)
+            self.button_cat_save.setEnabled(False)
+            self.button_cat_price.setEnabled(False)
 
 #
 # Consumption
@@ -222,11 +217,97 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
 class ConsumptionPrices(QtWidgets.QGroupBox):
     def __init__(self, parent):
         super().__init__(parent)
+        self.widgets = []
+
+    def add_price(self, id_, name, value):
+        item = ConsumptionPricesItem(id_, name, value)
+        self.layout().insertWidget(len(self.widgets), item)
+        self.widgets.append(item)
+
+    def clean(self):
+        for i in range(len(self.widgets)):
+            widget = self.widgets.pop()
+            widget.setVisible(False)
+            del widget
+
+    def rebuild(self, product, category):
+        self.clean()
+        self.build(product, category)
+
+    def build(self, pname, cname):
+        category = api.categories.get_unique(name=cname)
+        if not category:
+            return
+        product = api.products.get_unique(name=pname, category=category['id'])
+        if not product:
+            return
+
+        for prices in api.prices.get(product=product['id']):
+            self.add_price(prices['id'], prices['label'], prices['value'])
+
+class ConsumptionPricesItem(QtWidgets.QWidget):
+    def __init__(self, id_, name, value):
+        super().__init__()
+        self.id_ = id_
+        self.label = QtWidgets.QLabel(name)
+        self.input = QtWidgets.QDoubleSpinBox()
+        self.input.setValue(value)
+        self.layout = QtWidgets.QHBoxLayout(self)
+        self.layout.addWidget(self.label)
+        self.layout.addWidget(self.input)
 
 
-class ConsumptionList(QtWidgets.QTreeView):
+class ConsumptionList(QtWidgets.QTreeWidget):
     def __init__(self, parent):
         super().__init__(parent)
+        self.categories = []
+        self.products = []
+        self.build()
+
+    def clean(self):
+        for i in range(len(self.categories) - 1, -1, -1):
+            widget = self.takeTopLevelItem(i)
+            del widget
+
+    def rebuild(self):
+        self.clean()
+        self.build()
+
+    def build(self):
+        self.categories = []
+        self.products = []
+        for cat in api.categories.get_all():
+            self.add_category(cat['name'], cat['id'])
+
+    def add_product(self, name, category):
+        """ Add product to consumption list
+
+        :param str name: Product name
+        :param str category: Category Name
+        """
+        # Find category widget
+        for cat in self.categories:
+            if category == cat.text(0):
+                cat_widget = cat
+        if not cat:
+            return
+
+        prod_widget = QtWidgets.QTreeWidgetItem([name])
+        cat_widget.addChild(prod_widget)
+        self.products.append(prod_widget)
+
+    def add_category(self, name, id_):
+        """ Add product category to product list.
+        This function can't add product to database.
+
+        :param str name: Category name
+        :param int id_: Category id
+        """
+        cat_widget = QtWidgets.QTreeWidgetItem(self, [name])
+        self.categories.append(cat_widget)
+        for prod in api.products.get_by_category(id_):
+            self.add_product(prod['name'], name)
+
 
 #
 # Category
@@ -238,23 +319,26 @@ class CategoryPrices(QtWidgets.QGroupBox):
         super().__init__(parent)
         self.widgets = []
 
-    def add_price(self, name="", id_=None):
-        widget = CategoryPriceItem(name, id_)
+    def add_price(self, id_=None, name=""):
+        widget = CategoryPriceItem(id_, name)
         self.layout().insertWidget(len(self.widgets), widget, stretch=0)
         self.widgets.append(widget)
 
-    def rebuild(self, category_name):
+    def clean(self):
         for i in range(len(self.widgets)):
             widget = self.widgets.pop()
             widget.setVisible(False)
             del widget
+
+    def rebuild(self, category_name):
+        self.clean()
         self.build(category_name)
 
     def build(self, category_name):
         cat = api.categories.get_by_name(category_name)
         if cat:
             for desc in api.prices.get_decriptor(category=cat['id']):
-                self.add_price(desc['label'], desc['id'])
+                self.add_price(desc['id'], desc['label'])
         else:
             # TODO error message category no longer exists
             pass
@@ -263,7 +347,7 @@ class CategoryPrices(QtWidgets.QGroupBox):
 
 
 class CategoryPriceItem(QtWidgets.QWidget):
-    def __init__(self, name="", id_=None):
+    def __init__(self, id_, name=""):
         super().__init__()
         self.id_ = id_
         self.input = QtWidgets.QLineEdit()
@@ -276,10 +360,7 @@ class CategoryPriceItem(QtWidgets.QWidget):
 
     def remove(self):
         self.setVisible(False)
-        if self.id_:
-            if not api.prices.remove_descriptor(self.id_):
-                # TODO error message can't delete
-                pass
+        self.input.setText("")  # Will be removed when saved
 
 
 class CategoryList(QtWidgets.QListWidget):
@@ -287,7 +368,6 @@ class CategoryList(QtWidgets.QListWidget):
         super().__init__(parent)
         self.categories = []
         for cat in api.categories.get_all():
-            print(cat)
             self.add_category(cat['name'])
 
     def add_category(self, cat_name):

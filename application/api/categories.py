@@ -69,3 +69,36 @@ def get_by_name(name):
                 'name': cursor.record().value('name'),
             }
 
+def get(**kwargs):
+    """ Get category with given values
+
+    :param dict kwargs: filter to apply
+    """
+    with Cursor() as cursor:
+        filters = []
+        for key in kwargs:
+            filters.append("{key}=:{key}".format(key=key))
+        cursor.prepare("SELECT * FROM categories WHERE {filter}".format(
+            filter=" AND ".join(filters)
+        ))
+        for key, value in kwargs.items():
+            cursor.bindValue(":{}".format(key), value)
+        if cursor.exec_():
+            while cursor.next():
+                yield {
+                    'id': cursor.record().value('id'),
+                    'name': cursor.record().value('name'),
+                }
+
+
+def get_unique(**kwargs):
+    """ Get categories with filter and return something only if unique
+
+    :param **kwargs: filters
+    """
+    results = list(get(**kwargs))
+    if len(results) != 1:
+        return None
+    else:
+        return results[0]
+

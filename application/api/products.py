@@ -23,28 +23,32 @@ Products management function
 """
 
 from database import Cursor
-
+import api.categories
 
 PRODUCT_FIELDS = ['name', 'category', 'price_unit', 'price_demi', 'price_pint',
                   'price_meter']
 
 
-def add(name, category):
+def add(name, *, category_name=None, category_id=None):
     """ Add a product.
+    At least one of category_name and category_id arguments must not be None.
+    If both are used then category_id is prefered.
 
     :param str name: Name.
-    :param str category: Category. One of 'manger', 'soft', 'alcool_bouteille',
+    :param str category_name: Category name in which you want to add the product
+    :param str category_id: Category id in which you want to add the produt
     'alcool_pression'.
 
     :return bool: Operation status
     """
-    valid_category = (
-        "manger",
-        "soft",
-        "alcool_bouteille",
-        "alcool_pression"
-    )
-    if category not in valid_category:
+    if category_id:
+        # TODO check if exsists
+        cat = list(api.categories.get(id=category_id))
+    elif category_name:
+        cat = list(api.categories.get(name=category_name))
+    else:
+        return False
+    if not cat or len(cat) != 1:
         return False
 
     with Cursor() as cursor:
@@ -52,23 +56,32 @@ def add(name, category):
                         :category)")
 
         cursor.bindValue(':name', name)
-        cursor.bindValue(':category', category)
+        cursor.bindValue(':category', cat[0]['id'])
 
-        return cursor.exec_()
+        if cursor.exec_():
+            product = cursor.lastInsertId()
+            # TODO maybe us a transaction to rollback when failled
+            # Create all prices for this product
+            cursor.prepare("SELECT id FROM price_description WHERE \
+                    category=:category")
+            cursor.bindValue(":category", cat[0]['id'])
+            cursor.exec_()
+            while cursor.next():
+                api.prices.add(product, cursor.record().value('id'), '0.00')
+            return True
+        else:
+            return False
 
 
 def remove(name):
     """ Remove a product
 
     :param str name: The name of the product to delete
-
     :return bool: True if success else False.
     """
     with Cursor() as cursor:
         cursor.prepare("DELETE FROM products WHERE name=:name")
-
         cursor.bindValue(':name', name)
-
         return cursor.exec_()
 
 
@@ -120,7 +133,7 @@ def set_category(name, category):
 def get_by_category(category):
     """ Get products by category
 
-    :param str category: The category the products are in.
+    :param int category: Category id
 
     :return list: A list of product descriptions.
     """
@@ -169,4 +182,39 @@ def search_by_name(name):
         while cursor.next():
             yield {field: cursor.record().value(field) for field in
                    PRODUCT_FIELDS}
+
+
+def get(**kwargs):
+    """ Get products filtered by given values
+
+    :param **kwargs: filters to apply
+    """
+    with Cursor() as cursor:
+        filters = []
+        for key in kwargs:
+            filters.append("{key}=:{key}".format(key=key))
+        cursor.prepare("SELECT * FROM products WHERE {}".format(
+            " AND ".join(filters)
+        ))
+        for key, arg in kwargs.items():
+            cursor.bindValue(":{}".format(key), arg)
+        if cursor.exec_():
+            while cursor.next():
+                yield {
+                    'id': cursor.record().value('id'),
+                    'name': cursor.record().value('name'),
+                    'category': cursor.record().value('category'),
+                }
+
+
+def get_unique(**kwargs):
+    """ Get products with filter and return something only if unique
+
+    :param **kwargs: filters
+    """
+    results = list(get(**kwargs))
+    if len(results) != 1:
+        return None
+    else:
+        return results[0]
 

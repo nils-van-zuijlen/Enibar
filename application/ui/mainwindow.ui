@@ -262,7 +262,7 @@
    </property>
    <widget class="QMenu" name="administration">
     <property name="title">
-     <string>Administration</string>
+     <string>&amp;Administration</string>
     </property>
     <widget class="QMenu" name="export_notes">
      <property name="title">
@@ -283,17 +283,17 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Gerer les utilisateurs</string>
+    <string>Gerer les &amp;utilisateurs</string>
    </property>
   </action>
   <action name="products_managment">
    <property name="text">
-    <string>Gerer les consomations</string>
+    <string>Gerer les &amp;consomations</string>
    </property>
   </action>
   <action name="add_note">
    <property name="text">
-    <string>Ajouter une note</string>
+    <string>Ajouter une &amp;note</string>
    </property>
   </action>
   <action name="export_with_profs">
