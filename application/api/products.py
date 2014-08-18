@@ -26,8 +26,7 @@ from PyQt5 import QtSql
 from database import Cursor, Database
 import api.categories
 
-PRODUCT_FIELDS = ['name', 'category', 'price_unit', 'price_demi', 'price_pint',
-                  'price_meter']
+PRODUCT_FIELDS = ['name', 'category']
 
 
 def add(name, *, category_name=None, category_id=None):
@@ -39,7 +38,7 @@ def add(name, *, category_name=None, category_id=None):
 
     :param str name: Name.
     :param str category_name: Category name in which you want to add the product
-    :param str category_id: Category id in which you want to add the produt \
+    :param int category_id: Category id in which you want to add the produt \
     'alcool_pression'.
 
     :return bool: Operation status
@@ -49,9 +48,9 @@ def add(name, *, category_name=None, category_id=None):
     elif category_name:
         cat = list(api.categories.get(name=category_name))
     else:
-        return False
+        return None
     if not cat or len(cat) != 1:
-        return False
+        return None
 
     with Database() as database:
         database.transaction()
@@ -62,14 +61,15 @@ def add(name, *, category_name=None, category_id=None):
         cursor.bindValue(':cat', cat[0]['id'])
         if not cursor.exec_():
             database.rollback()
-            return False
+            print("LOLZ")
+            return None
 
         product = cursor.lastInsertId()
         cursor.prepare("SELECT id FROM price_description WHERE category=:cat")
         cursor.bindValue(":cat", cat[0]['id'])
         if not cursor.exec_():
             database.rollback()
-            return False
+            return None
 
         error = False
         while cursor.next():
@@ -86,14 +86,15 @@ def add(name, *, category_name=None, category_id=None):
             error = error or not pcursor.exec_()
         if not error:
             database.commit()
-            return True
+            return product
 
         # Something went wrong
         database.rollback()
-    return False
+    return None
 
 
 def remove(name):
+    # FIXME Should use id (name may not be unique)
     """ Remove a product
 
     :param str name: The name of the product to delete

@@ -36,7 +36,10 @@ def add(name):
     with Cursor() as cursor:
         cursor.prepare("INSERT INTO categories(name) VALUES(:name)")
         cursor.bindValue(':name', name)
-        return cursor.exec_()
+        if cursor.exec_():
+            return cursor.lastInsertId()
+        else:
+            return None
 
 
 def remove(name):

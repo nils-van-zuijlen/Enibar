@@ -20,13 +20,19 @@ import basetest
 import unittest
 
 import api.products as products
+import api.categories as categories
 from database import Cursor
 
 
 class UtilsTest(unittest.TestCase):
     def setUp(self):
         with Cursor() as cursor:
-            cursor.exec("TRUNCATE TABLE products")
+            # Erf can't truncate this so just partially clean up
+            cursor.exec("DELETE FROM products")
+            cursor.exec("DELETE FROM categories")
+        self.cat_eat = categories.add("Manger")
+        self.cat_drink = categories.add("Boire")
+        self.cat_soft = categories.add("Soft")
 
     def count_products(self):
         """ Returns the number of products currently in database """
@@ -35,70 +41,23 @@ class UtilsTest(unittest.TestCase):
             if cursor.next():
                 return cursor.record().value(0)
 
-    def test_add(self):
-        """ Testing adding products """
+    def test_add_with_cat_name(self):
+        """ Testing adding products with category name """
+        self.assertIsNotNone(products.add("Banane", category_name="Manger"))
+        self.assertIsNotNone(products.add("Biere", category_name="Boire"))
+        self.assertIsNone(products.add("Cidre", category_name="Terroir"))
+        self.assertEqual(self.count_products(), 2)
 
-        self.assertEqual(products.add("test", "manger"), 1)
-        self.assertEqual(products.add("test2", "soft"), 2)
-        self.assertEqual(products.add("test3", "alcool"), 3)
-        self.assertEqual(products.add("test4", "nope"), -1)
-        self.assertEqual(self.count_products(), 3)
+    def test_add_with_cat_id(self):
+        """ Testing adding products with category id """
+        self.assertIsNotNone(products.add("Banane", category_id=self.cat_eat))
+        self.assertIsNotNone(products.add("Biere", category_id=self.cat_drink))
+        self.assertIsNone(products.add("Cidre", category_id=512))
+        self.assertEqual(self.count_products(), 2)
 
     def test_remove(self):
         """ Testing removing products """
-        id_ = products.add("test", "manger")
-
+        id_ = products.add("test", category_name="Manger")
         self.assertTrue(products.remove(id_))
         self.assertEqual(self.count_products(), 0)
-
-    def test_prices(self):
-        """ Testing setting prices and get_by_id """
-        id_ = products.add("test", "manger")
-
-        self.assertTrue(products.set_prices(id_, 1.25, 2.50))
-        self.assertEqual(products.get_by_id(id_), {'category': 'manger',
-                                                   'name': 'test',
-                                                   'price_demi': 2.5,
-                                                   'price_unit': 1.25,
-                                                   'price_meter': 0.0,
-                                                   'price_pint': 0.0})
-        self.assertTrue(products.set_prices(id_, 1.25, 2.50, 3.50, 4.50))
-        self.assertEqual(products.get_by_id(id_), {'category': 'manger',
-                                                   'name': 'test',
-                                                   'price_demi': 2.50,
-                                                   'price_unit': 1.25,
-                                                   'price_meter': 4.50,
-                                                   'price_pint': 3.50})
-
-    def test_get_by_category(self):
-        """ Testing get_by_category """
-        products.add("test0", "manger")
-        products.add("test1", "manger")
-        products.add("test2", "manger")
-        products.add("test3", "soft")
-        products.add("test4", "alcool")
-
-        self.assertEqual(list(products.get_by_category("manger")),
-                         [{'category': 'manger',
-                           'name': 'test' + str(i),
-                           'price_demi': 0.0,
-                           'price_unit': 0.0,
-                           'price_meter': 0.0,
-                           'price_pint': 0.0} for i in range(3)])
-
-    def test_get_by_name(self):
-        """ Testing get_by_name """
-        products.add("coucou0", "manger")
-        products.add("test1", "manger")
-        products.add("coucou1", "manger")
-        products.add("test2", "manger")
-        products.add("coucou2", "manger")
-
-        self.assertEqual(list(products.get_by_name("coucou")),
-                         [{'category': 'manger',
-                           'name': 'coucou' + str(i),
-                           'price_demi': 0.0,
-                           'price_unit': 0.0,
-                           'price_meter': 0.0,
-                           'price_pint': 0.0} for i in range(3)])
 
