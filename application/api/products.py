@@ -22,7 +22,8 @@ Products management function
 
 """
 
-from database import Cursor
+from PyQt5 import QtSql
+from database import Cursor, Database
 import api.categories
 
 PRODUCT_FIELDS = ['name', 'category', 'price_unit', 'price_demi', 'price_pint',
@@ -32,17 +33,18 @@ PRODUCT_FIELDS = ['name', 'category', 'price_unit', 'price_demi', 'price_pint',
 def add(name, *, category_name=None, category_id=None):
     """ Add a product.
     At least one of category_name and category_id arguments must not be None.
-    If both are used then category_id is prefered.
+    If both are given then category_id is prefered.
+    If any of the categoy prices wasn't created for this price then database
+    transaction is rollback and so the product is not added.
 
     :param str name: Name.
     :param str category_name: Category name in which you want to add the product
-    :param str category_id: Category id in which you want to add the produt
+    :param str category_id: Category id in which you want to add the produt \
     'alcool_pression'.
 
     :return bool: Operation status
     """
     if category_id:
-        # TODO check if exsists
         cat = list(api.categories.get(id=category_id))
     elif category_name:
         cat = list(api.categories.get(name=category_name))
@@ -51,26 +53,44 @@ def add(name, *, category_name=None, category_id=None):
     if not cat or len(cat) != 1:
         return False
 
-    with Cursor() as cursor:
-        cursor.prepare("INSERT INTO products (name, category) VALUES(:name,\
-                        :category)")
-
+    with Database() as database:
+        database.transaction()
+        cursor = QtSql.QSqlQuery(database)
+        cursor.prepare("INSERT INTO products(name, category) VALUES(:name,\
+                        :cat)")
         cursor.bindValue(':name', name)
-        cursor.bindValue(':category', cat[0]['id'])
-
-        if cursor.exec_():
-            product = cursor.lastInsertId()
-            # TODO maybe us a transaction to rollback when failled
-            # Create all prices for this product
-            cursor.prepare("SELECT id FROM price_description WHERE \
-                    category=:category")
-            cursor.bindValue(":category", cat[0]['id'])
-            cursor.exec_()
-            while cursor.next():
-                api.prices.add(product, cursor.record().value('id'), '0.00')
-            return True
-        else:
+        cursor.bindValue(':cat', cat[0]['id'])
+        if not cursor.exec_():
+            database.rollback()
             return False
+
+        product = cursor.lastInsertId()
+        cursor.prepare("SELECT id FROM price_description WHERE category=:cat")
+        cursor.bindValue(":cat", cat[0]['id'])
+        if not cursor.exec_():
+            database.rollback()
+            return False
+
+        error = False
+        while cursor.next():
+            pcursor = QtSql.QSqlQuery(database)
+            pcursor.prepare("INSERT INTO prices(product,\
+                    price_description, value)\
+                    VALUES(:product, :price_description, :value)")
+            pcursor.bindValue(':product', product)
+            pcursor.bindValue(
+                ':price_description',
+                cursor.record().value('id')
+            )
+            pcursor.bindValue(':value', '0.00')
+            error = error or not pcursor.exec_()
+        if not error:
+            database.commit()
+            return True
+
+        # Something went wrong
+        database.rollback()
+    return False
 
 
 def remove(name):
@@ -121,14 +141,6 @@ def set_prices(name, unit=None, demi=None, pint=None, meter=None):
 
         return cursor.exec_()
 
-def set_category(name, category):
-    """ Set product category
-
-    :param str name: Name of the product
-    :param str category: category of the product
-
-    :return bool: Operation status
-    """
 
 def get_by_category(category):
     """ Get products by category

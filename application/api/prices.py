@@ -8,6 +8,7 @@ Prices API
 from database import Cursor, Database
 from PyQt5 import QtSql
 
+
 def add_descriptor(name, category):
     """ Add price
 
@@ -28,13 +29,13 @@ def add_descriptor(name, category):
             cursor.bindValue(":category", category)
             if cursor.exec_():
                 while cursor.next():
-                    c = QtSql.QSqlQuery(database)
-                    c.prepare("INSERT INTO prices(price_description, \
+                    pcurser = QtSql.QSqlQuery(database)
+                    pcurser.prepare("INSERT INTO prices(price_description, \
                             product, value) VALUES(:desc, :product, :value)")
-                    c.bindValue(":desc", desc_id)
-                    c.bindValue(":product", cursor.record().value('id'))
-                    c.bindValue(":value", 0.00)
-                    c.exec_()
+                    pcurser.bindValue(":desc", desc_id)
+                    pcurser.bindValue(":product", cursor.record().value('id'))
+                    pcurser.bindValue(":value", 0.00)
+                    pcurser.exec_()
             database.commit()
             return desc_id
 
@@ -54,6 +55,7 @@ def remove_descriptor(id_):
         cursor.bindValue(":id", id_)
         return cursor.exec_()
 
+
 def rename_descriptor(id_, name):
     """ Rename price descriptor
 
@@ -66,20 +68,22 @@ def rename_descriptor(id_, name):
         cursor.bindValue(":label", name)
         return cursor.exec_()
 
+
 def get_decriptor(**kwargs):
     """ Get price descriptor
 
     :param **kwargs: filters to apply
     """
-    # TODO FIXME securiy issues
     with Cursor() as cursor:
         request_filters = []
-        for key, arg in kwargs.items():
-            request_filters.append("{}={}".format(key, arg))
+        for key in kwargs:
+            request_filters.append("{key}=:{key}".format(key=key))
         request = "SELECT * FROM price_description WHERE {}".format(
             " AND ".join(request_filters)
         )
         cursor.prepare(request)
+        for key, arg in kwargs.items():
+            cursor.bindValue(":{}".format(key), arg)
         cursor.exec_()
         while cursor.next():
             yield {
@@ -107,6 +111,7 @@ def add(product, price_description, value):
         else:
             return None
 
+
 def remove(id_):
     """ Remove price
 
@@ -116,6 +121,7 @@ def remove(id_):
         cursor.prepare("DELETE FROM prices WHERE id=:id")
         cursor.bindValue(':id', id_)
         return cursor.exec_()
+
 
 def get(**kwargs):
     """ Get prices filtered by given values
@@ -133,8 +139,7 @@ def get(**kwargs):
             price_description.category as category\
             from prices INNER JOIN price_description \
             ON prices.price_description=price_description.id \
-            WHERE {} ".format(" AND ".join(filters))
-        )
+            WHERE {} ".format(" AND ".join(filters)))
         for key, arg in kwargs.items():
             cursor.bindValue(":{}".format(key), arg)
         if cursor.exec_():
@@ -162,6 +167,8 @@ def get_unique(**kwargs):
 
 def set_value(id_, value):
     """ Set price value
+    If you have to change value of multiple prices use set_multiple_values
+    instead.
 
     :param int id_: price id
     :param float value: new price value
@@ -181,9 +188,9 @@ def set_multiple_values(prices):
     :param list prices: List of prices
     """
     error = False
-    with Database() as db:
-        db.transaction()
-        cursor = QtSql.QSqlQuery(db)
+    with Database() as database:
+        database.transaction()
+        cursor = QtSql.QSqlQuery(database)
         cursor.prepare("UPDATE prices SET value=:value WHERE id=:id")
         for price in prices:
             cursor.bindValue(":id", price['id'])
@@ -191,9 +198,9 @@ def set_multiple_values(prices):
             error = error or not cursor.exec_()
 
         if error:
-            db.rollback()
+            database.rollback()
             return False
         else:
-            db.commit()
+            database.commit()
             return True
 

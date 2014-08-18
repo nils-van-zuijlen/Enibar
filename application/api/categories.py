@@ -16,6 +16,14 @@
 # You should have received a copy of the GNU General Public License
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
+"""
+Categories API
+==============
+
+This api handle category managment.
+
+"""
+
 from database import Cursor
 
 
@@ -30,6 +38,7 @@ def add(name):
         cursor.bindValue(':name', name)
         return cursor.exec_()
 
+
 def remove(name):
     """ Remove category
 
@@ -43,6 +52,11 @@ def remove(name):
 
 
 def get_all():
+    """ Get all categories without any filter
+    Deprecated use get instead
+
+    :return generator: All categories
+    """
     with Cursor() as cursor:
         cursor.prepare("SELECT * FROM categories")
         cursor.exec_()
@@ -55,9 +69,10 @@ def get_all():
 
 def get_by_name(name):
     """ Get category by name
+    deprecated use get_unique instead
 
     :param str name: Category name
-    :return dict: Catrogry description
+    :return dict: Caterogy description
     """
     with Cursor() as cursor:
         cursor.prepare("SELECT * FROM categories WHERE name=:name")
@@ -68,6 +83,7 @@ def get_by_name(name):
                 'id': cursor.record().value('id'),
                 'name': cursor.record().value('name'),
             }
+
 
 def get(**kwargs):
     """ Get category with given values
@@ -96,6 +112,7 @@ def get_unique(**kwargs):
 
     :param **kwargs: filters
     """
+    # pylint: disable=
     results = list(get(**kwargs))
     if len(results) != 1:
         return None
