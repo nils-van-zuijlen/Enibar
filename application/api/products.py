@@ -97,16 +97,15 @@ def add(name, *, category_name=None, category_id=None):
     return None
 
 
-def remove(name):
-    # FIXME Should use id (name may not be unique)
+def remove(id_):
     """ Remove a product
 
     :param str name: The name of the product to delete
     :return bool: True if success else False.
     """
     with Cursor() as cursor:
-        cursor.prepare("DELETE FROM products WHERE name=:name")
-        cursor.bindValue(':name', name)
+        cursor.prepare("DELETE FROM products WHERE id=:id")
+        cursor.bindValue(':id', id_)
         return cursor.exec_()
 
 
