@@ -16,6 +16,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
+# pylint: disable=invalid-name
+# pylint: disable=no-value-for-parameter
+# pylint: disable=unexpected-keyword-arg
+
 """
 Categories API
 ==============
@@ -25,6 +29,7 @@ This api handle category managment.
 """
 
 from database import Cursor
+import api.base
 
 
 def add(name):
@@ -88,37 +93,31 @@ def get_by_name(name):
             }
 
 
-def get(**kwargs):
+def set_alcoholic(cat_id, is_alcoholic):
+    """ Set alcoholic state of a product
+
+    :param int cat_id: Category id
+    :param bool is_alcoholic: True if categorie products contain alcohol
+    """
+    with Cursor() as cursor:
+        cursor.prepare("UPDATE categories SET alcoholic=? WHERE id=?")
+        cursor.addBindValue(is_alcoholic)
+        cursor.addBindValue(cat_id)
+        return cursor.exec_()
+
+
+@api.base.filtered_getter('categories')
+def get(cursor):
     """ Get category with given values
 
     :param dict kwargs: filter to apply
     """
-    with Cursor() as cursor:
-        filters = []
-        for key in kwargs:
-            filters.append("{key}=:{key}".format(key=key))
-        cursor.prepare("SELECT * FROM categories WHERE {filter}".format(
-            filter=" AND ".join(filters)
-        ))
-        for key, value in kwargs.items():
-            cursor.bindValue(":{}".format(key), value)
-        if cursor.exec_():
-            while cursor.next():
-                yield {
-                    'id': cursor.record().value('id'),
-                    'name': cursor.record().value('name'),
-                }
+    while cursor.next():
+        yield {
+            'id': cursor.record().value('id'),
+            'name': cursor.record().value('name'),
+            'alcoholic': cursor.record().value('alcoholic'),
+        }
 
 
-def get_unique(**kwargs):
-    """ Get categories with filter and return something only if unique
-
-    :param **kwargs: filters
-    """
-    # pylint: disable=
-    results = list(get(**kwargs))
-    if len(results) != 1:
-        return None
-    else:
-        return results[0]
-
+get_unique = api.base.make_get_unique(get)

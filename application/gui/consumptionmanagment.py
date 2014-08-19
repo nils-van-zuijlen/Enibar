@@ -40,6 +40,7 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
         self.input_product_save.setEnabled(False)
         self.button_cat_save.setEnabled(False)
         self.button_cat_price.setEnabled(False)
+        self.category_type.setEnabled(False)
         self.category = None
         self.show()
 
@@ -78,7 +79,10 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
             if not index.parent().isValid():
                 continue
             parent = self.products.topLevelItem(index.parent().row())
-            if api.products.remove(index.data()):
+            product = api.products.get_unique(name=index.data())
+            if not product:
+                continue
+            if api.products.remove(product['id']):
                 child = parent.takeChild(index.row())
                 del child
 
@@ -181,6 +185,10 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
         """
         if not self.category:
             return
+        cat = api.categories.get_unique(name=self.category.text())
+        if not cat:
+            return
+
         for widget in self.category_prices.widgets:
             if widget.id_ and widget.input.text():
                 api.prices.rename_descriptor(widget.id_, widget.input.text())
@@ -188,7 +196,6 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
                 if not api.prices.remove_descriptor(widget.id_):
                     gui.utils.error("Impossible de supprimer le prix")
             elif widget.input.text():
-                cat = api.categories.get_by_name(self.category.text())
                 try:
                     widget.id_ = api.prices.add_descriptor(
                         widget.input.text(),
@@ -197,6 +204,8 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
                 except IndexError:
                     gui.utils.error("La catégorie sélectionnée n'existe pas.")
         self.products.rebuild()
+        is_alcoholic = self.checkbox_alcoholic.isChecked()
+        api.categories.set_alcoholic(cat['id'], is_alcoholic)
 
     def add_category_price(self):
         """ Add category price to category price list
@@ -209,17 +218,21 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
         This is a callback for changed selection on category list
         """
         self.category = item
+        cat = api.categories.get_unique(name=item.text())
+        self.checkbox_alcoholic.setChecked(cat['alcoholic'])
 
-        if item:
+        if item and cat:
             self.category_prices.rebuild(item.text())
             self.category_prices.setEnabled(True)
             self.button_cat_save.setEnabled(True)
             self.button_cat_price.setEnabled(True)
+            self.category_type.setEnabled(True)
         else:
             self.category_prices.clean()
             self.category_prices.setEnabled(False)
             self.button_cat_save.setEnabled(False)
             self.button_cat_price.setEnabled(False)
+            self.category_type.setEnabled(False)
 
 #
 # Consumption

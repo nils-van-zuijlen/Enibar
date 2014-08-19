@@ -16,6 +16,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
+# pylint: disable=invalid-name
+# pylint: disable=no-value-for-parameter
+# pylint: disable=unexpected-keyword-arg
+
 """
 Products management function
 =================================
@@ -25,6 +29,7 @@ Products management function
 from PyQt5 import QtSql
 from database import Cursor, Database
 import api.categories
+import api.base
 
 PRODUCT_FIELDS = ['name', 'category']
 
@@ -61,7 +66,6 @@ def add(name, *, category_name=None, category_id=None):
         cursor.bindValue(':cat', cat[0]['id'])
         if not cursor.exec_():
             database.rollback()
-            print("LOLZ")
             return None
 
         product = cursor.lastInsertId()
@@ -93,16 +97,15 @@ def add(name, *, category_name=None, category_id=None):
     return None
 
 
-def remove(name):
-    # FIXME Should use id (name may not be unique)
+def remove(id_):
     """ Remove a product
 
     :param str name: The name of the product to delete
     :return bool: True if success else False.
     """
     with Cursor() as cursor:
-        cursor.prepare("DELETE FROM products WHERE name=:name")
-        cursor.bindValue(':name', name)
+        cursor.prepare("DELETE FROM products WHERE id=:id")
+        cursor.bindValue(':id', id_)
         return cursor.exec_()
 
 
@@ -197,37 +200,20 @@ def search_by_name(name):
                    PRODUCT_FIELDS}
 
 
-def get(**kwargs):
+@api.base.filtered_getter('products')
+def get(cursor):
     """ Get products filtered by given values
+    Shuld be used like this api.products.get(name="machin", catgegory=5)
 
-    :param **kwargs: filters to apply
+    :param cursor: database cursor
     """
-    with Cursor() as cursor:
-        filters = []
-        for key in kwargs:
-            filters.append("{key}=:{key}".format(key=key))
-        cursor.prepare("SELECT * FROM products WHERE {}".format(
-            " AND ".join(filters)
-        ))
-        for key, arg in kwargs.items():
-            cursor.bindValue(":{}".format(key), arg)
-        if cursor.exec_():
-            while cursor.next():
-                yield {
-                    'id': cursor.record().value('id'),
-                    'name': cursor.record().value('name'),
-                    'category': cursor.record().value('category'),
-                }
+    while cursor.next():
+        yield {
+            'id': cursor.record().value('id'),
+            'name': cursor.record().value('name'),
+            'category': cursor.record().value('category'),
+        }
 
 
-def get_unique(**kwargs):
-    """ Get products with filter and return something only if unique
-
-    :param **kwargs: filters
-    """
-    results = list(get(**kwargs))
-    if len(results) != 1:
-        return None
-    else:
-        return results[0]
+get_unique = api.base.make_get_unique(get)
 

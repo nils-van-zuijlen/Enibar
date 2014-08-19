@@ -1,3 +1,23 @@
+# Copyright (C) 2014 Bastien Orivel <b2orivel@enib.fr>
+# Copyright (C) 2014 Arnaud Levaufre <a2levauf@enib.fr>
+#
+# This file is part of Enibar.
+#
+# Enibar is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Enibar is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
+
+# pylint: disable=invalid-name
+
 """
 Prices API
 ==========
@@ -7,6 +27,7 @@ Prices API
 
 from database import Cursor, Database
 from PyQt5 import QtSql
+import api.base
 
 
 def add_descriptor(name, category):
@@ -153,18 +174,6 @@ def get(**kwargs):
                 }
 
 
-def get_unique(**kwargs):
-    """ Get price with filter and return something only if unique
-
-    :param **kwargs: filters
-    """
-    results = list(get(**kwargs))
-    if len(results) != 1:
-        return None
-    else:
-        return results[0]
-
-
 def set_value(id_, value):
     """ Set price value
     If you have to change value of multiple prices use set_multiple_values
@@ -204,3 +213,5 @@ def set_multiple_values(prices):
             database.commit()
             return True
 
+
+get_unique = api.base.make_get_unique(get)
