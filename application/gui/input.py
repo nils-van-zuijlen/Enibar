@@ -73,7 +73,7 @@ class Input(QtWidgets.QLineEdit):
             self.valid = True
             try:
                 self.parent.on_change()
-            except NameError:
+            except AttributeError:
                 pass
         else:
             self.set_non_ok()

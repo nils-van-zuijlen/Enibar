@@ -30,6 +30,7 @@ import api.notes
 import datetime
 import time
 from .add_note import AddNote
+from .passwordmanagment import PasswordManagment
 import gui.usermanagment
 import gui.consumptionmanagment
 
@@ -101,28 +102,34 @@ class MenuBar(QtWidgets.QMenuBar):
         self.cm_window = None
         self.um_window = None
         self.an_window = None
+        self.cp_window = None
 
-    def user_managment(self):
+    def user_managment_fnc(self):
         """ Call user managment window """
         self.um_window = gui.usermanagment.UserManagmentWindow()
 
-    def consumption_managment(self):
+    def consumption_managment_fnc(self):
         """ Call consumption managment window """
         # Java style
         self.cm_window = gui.consumptionmanagment.ConsumptionManagmentWindow()
 
-    def add_note(self):
+    def add_note_fnc(self):
         """ Open an AddNote window
         """
         self.an_window = AddNote()
 
-    def export_notes_with_profs(self):
+    def export_notes_with_profs_fnc(self):
         """ Export all notes """
         self.export(api.notes.get())
 
-    def export_notes_without_profs(self):
+    def export_notes_without_profs_fnc(self):
         """ Export only students notes """
         self.export(api.notes.get(lambda x: x["promo"] != "Prof"))
+
+    def change_password_fnc(self):
+        """ Open a PasswordManagment window
+        """
+        self.cp_window = PasswordManagment()
 
     def export(self, notes):
         """ Generic export notes function """

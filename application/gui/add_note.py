@@ -28,7 +28,6 @@ from PyQt5 import QtWidgets, QtCore, QtGui, uic
 
 import api.notes
 import api.validator
-from .input import Input
 
 
 class AddNote(QtWidgets.QDialog):
@@ -47,6 +46,7 @@ class AddNote(QtWidgets.QDialog):
         self.birthdate_input.set_validator(api.validator.BIRTHDATE)
 
         self.photo_selected = None
+        self.on_change = api.validator.on_change(self)
         self.show()
 
     def add_photo(self):
@@ -75,14 +75,4 @@ class AddNote(QtWidgets.QDialog):
                       self.birthdate_input.text(),
                       self.promo_input.currentText(),
                       self.photo_selected)
-
-    def on_change(self):
-        """ Called when an Input goes from red to green
-        """
-        for _, obj in self.__dict__.items():
-            if isinstance(obj, Input):
-                if not obj.valid:
-                    self.accept_button.setEnabled(False)
-                    return
-        self.accept_button.setEnabled(True)
 

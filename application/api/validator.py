@@ -23,6 +23,7 @@ Some validators to use with our fancy Input.
 
 from PyQt5 import QtGui
 from PyQt5 import QtCore
+from gui.input import Input
 
 
 PHONE_NUMBER = QtGui.QRegExpValidator(QtCore.QRegExp(r"(?:\+[0-9])?[0-9]{10}"))
@@ -35,3 +36,19 @@ BIRTHDATE = QtGui.QRegExpValidator(QtCore.QRegExp((
     r"((29|30)[\/](0[4,6,9]|11)))[\/](19|[2-9][0-9])\d\d$)|"
     r"(^29[\/]02[\/](19|[2-9][0-9])(00|04|08|12|16|20|24|"
     r"28|32|36|40|44|48|52|56|60|64|68|72|76|80|84|88|92|96)$)")))
+
+
+def on_change(cls):
+    """ Called when an Input goes from red to green
+    """
+    def wrapper():
+        """ Function to be returned
+        """
+        for _, obj in cls.__dict__.items():
+            if isinstance(obj, Input):
+                if not obj.valid:
+                    cls.accept_button.setEnabled(False)
+                    return
+        cls.accept_button.setEnabled(True)
+    return wrapper
+
