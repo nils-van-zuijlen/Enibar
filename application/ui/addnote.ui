@@ -24,12 +24,18 @@
        <property name="text">
         <string>Nom:</string>
        </property>
+       <property name="buddy">
+        <cstring>name_input</cstring>
+       </property>
       </widget>
      </item>
      <item row="4" column="0">
       <widget class="QLabel" name="first_name_label">
        <property name="text">
         <string>Prénom: </string>
+       </property>
+       <property name="buddy">
+        <cstring>first_name_input</cstring>
        </property>
       </widget>
      </item>
@@ -44,12 +50,18 @@
        <property name="text">
         <string>Date de naissance: </string>
        </property>
+       <property name="buddy">
+        <cstring>birthdate_input</cstring>
+       </property>
       </widget>
      </item>
      <item row="15" column="0" colspan="2">
       <widget class="QLabel" name="promo_label">
        <property name="text">
         <string>Promo:</string>
+       </property>
+       <property name="buddy">
+        <cstring>promo_input</cstring>
        </property>
       </widget>
      </item>
@@ -68,6 +80,9 @@
        <property name="text">
         <string>Surnom: </string>
        </property>
+       <property name="buddy">
+        <cstring>nickname_input</cstring>
+       </property>
       </widget>
      </item>
      <item row="20" column="0">
@@ -75,12 +90,18 @@
        <property name="text">
         <string>Téléphone:</string>
        </property>
+       <property name="buddy">
+        <cstring>phone_input</cstring>
+       </property>
       </widget>
      </item>
      <item row="22" column="0">
       <widget class="QLabel" name="photo_label">
        <property name="text">
         <string>Photo:</string>
+       </property>
+       <property name="buddy">
+        <cstring>photo_button</cstring>
        </property>
       </widget>
      </item>
@@ -102,6 +123,9 @@
       <widget class="QLabel" name="mail_label">
        <property name="text">
         <string>Mail:</string>
+       </property>
+       <property name="buddy">
+        <cstring>mail_input</cstring>
        </property>
       </widget>
      </item>
@@ -210,8 +234,8 @@
    <slot>add_photo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>169</x>
-     <y>332</y>
+     <x>179</x>
+     <y>403</y>
     </hint>
     <hint type="destinationlabel">
      <x>169</x>
@@ -226,8 +250,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>88</x>
-     <y>374</y>
+     <x>98</x>
+     <y>453</y>
     </hint>
     <hint type="destinationlabel">
      <x>169</x>
@@ -242,8 +266,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>251</x>
-     <y>374</y>
+     <x>290</x>
+     <y>453</y>
     </hint>
     <hint type="destinationlabel">
      <x>169</x>

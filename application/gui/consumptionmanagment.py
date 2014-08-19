@@ -303,6 +303,7 @@ class ConsumptionPricesItem(QtWidgets.QWidget):
         self.label = QtWidgets.QLabel(name)
         self.input = QtWidgets.QDoubleSpinBox()
         self.input.setValue(value)
+        self.label.setBuddy(self.input)
         self.layout = QtWidgets.QHBoxLayout(self)
         self.layout.addWidget(self.label)
         self.layout.addWidget(self.input)

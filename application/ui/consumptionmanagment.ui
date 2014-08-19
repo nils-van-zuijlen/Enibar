@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>504</width>
-    <height>461</height>
+    <width>525</width>
+    <height>416</height>
    </rect>
   </property>
   <property name="baseSize">
@@ -539,7 +539,7 @@
    <slot>add_category()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>130</x>
+     <x>119</x>
      <y>440</y>
     </hint>
     <hint type="destinationlabel">
@@ -555,8 +555,8 @@
    <slot>remove_category()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>185</x>
-     <y>435</y>
+     <x>219</x>
+     <y>440</y>
     </hint>
     <hint type="destinationlabel">
      <x>221</x>
@@ -571,8 +571,8 @@
    <slot>save_category()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>378</x>
-     <y>440</y>
+     <x>266</x>
+     <y>418</y>
     </hint>
     <hint type="destinationlabel">
      <x>405</x>
@@ -587,8 +587,8 @@
    <slot>add_category()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>172</x>
-     <y>412</y>
+     <x>183</x>
+     <y>389</y>
     </hint>
     <hint type="destinationlabel">
      <x>178</x>
@@ -603,8 +603,8 @@
    <slot>add_category_price()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>378</x>
-     <y>412</y>
+     <x>266</x>
+     <y>389</y>
     </hint>
     <hint type="destinationlabel">
      <x>498</x>
@@ -619,8 +619,8 @@
    <slot>select_category()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>93</x>
-     <y>208</y>
+     <x>104</x>
+     <y>47</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
