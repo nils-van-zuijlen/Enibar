@@ -26,7 +26,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <property name="documentMode">
       <bool>false</bool>
@@ -207,21 +207,21 @@
        <string>Gestion des catégories</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="4" column="2">
+       <item row="5" column="2">
         <widget class="QPushButton" name="button_cat_save">
          <property name="text">
           <string>Sauvegarder la catégorie</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="2">
+       <item row="4" column="2">
         <widget class="QPushButton" name="button_cat_price">
          <property name="text">
           <string>Ajouter un prix</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="2" rowspan="3">
+       <item row="1" column="2" rowspan="3">
         <widget class="CategoryPrices" name="category_prices">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -236,7 +236,7 @@
           </size>
          </property>
          <property name="title">
-          <string>Prix de la catégorie</string>
+          <string>Libellé des prix</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <property name="spacing">
@@ -270,7 +270,7 @@
          </layout>
         </widget>
        </item>
-       <item row="4" column="0">
+       <item row="5" column="0">
         <widget class="QWidget" name="widget" native="true">
          <property name="minimumSize">
           <size>
@@ -362,7 +362,7 @@
          </layout>
         </widget>
        </item>
-       <item row="3" column="0">
+       <item row="4" column="0">
         <widget class="QLineEdit" name="input_cat">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -390,7 +390,7 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="0" rowspan="3" colspan="2">
+       <item row="0" column="0" rowspan="4" colspan="2">
         <widget class="CategoryList" name="categories">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
@@ -413,6 +413,43 @@
          <property name="selectionMode">
           <enum>QAbstractItemView::SingleSelection</enum>
          </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QGroupBox" name="category_type">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>Type</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>9</number>
+          </property>
+          <property name="topMargin">
+           <number>9</number>
+          </property>
+          <property name="rightMargin">
+           <number>9</number>
+          </property>
+          <property name="bottomMargin">
+           <number>9</number>
+          </property>
+          <item>
+           <widget class="QCheckBox" name="checkbox_alcoholic">
+            <property name="text">
+             <string>Alcoolisé</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>

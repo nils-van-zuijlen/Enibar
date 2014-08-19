@@ -88,6 +88,19 @@ def get_by_name(name):
             }
 
 
+def set_alcoholic(cat_id, is_alcoholic):
+    """ Set alcoholic state of a product
+
+    :param int cat_id: Category id
+    :param bool is_alcoholic: True if categorie products contain alcohol
+    """
+    with Cursor() as cursor:
+        cursor.prepare("UPDATE categories SET alcoholic=? WHERE id=?")
+        cursor.addBindValue(is_alcoholic)
+        cursor.addBindValue(cat_id)
+        return cursor.exec_()
+
+
 def get(**kwargs):
     """ Get category with given values
 
@@ -107,6 +120,7 @@ def get(**kwargs):
                 yield {
                     'id': cursor.record().value('id'),
                     'name': cursor.record().value('name'),
+                    'alcoholic': cursor.record().value('alcoholic'),
                 }
 
 
