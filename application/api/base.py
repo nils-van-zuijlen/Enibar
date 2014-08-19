@@ -58,8 +58,9 @@ def filtered_getter(table):
                 filters = []
                 for key in kwargs:
                     filters.append("{key}=:{key}".format(key=key))
-                cursor.prepare("SELECT * FROM {} WHERE {}".format(
+                cursor.prepare("SELECT * FROM {} {} {}".format(
                     table,
+                    "WHERE" * bool(len(filters)),
                     " AND ".join(filters)
                 ))
                 for key, arg in kwargs.items():
