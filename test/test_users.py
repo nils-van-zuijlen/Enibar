@@ -91,3 +91,21 @@ class UsersTest(unittest.TestCase):
                                                      'manage_notes': False,
                                                      'manage_products': False})
 
+    def test_issue_24(self):
+        """ Testing issue #24 regression.
+        """
+        id1 = users.add("test", "test")
+        id2 = users.add("test2", "test")
+        id3 = users.add("test3", "test")
+        users.set_rights("test", {'manage_users': True,
+                                  'manage_notes': False,
+                                  'manage_products': False})
+        users.set_rights("test2", {'manage_users': True,
+                                  'manage_notes': False,
+                                  'manage_products': False})
+        self.assertTrue(users.remove("test"))
+        users.remove("test2")
+        self.assertEqual(list(users.get_list()), ["test2", "test3"])
+        users.remove("test3")
+        self.assertEqual(list(users.get_list()), ["test2"])
+
