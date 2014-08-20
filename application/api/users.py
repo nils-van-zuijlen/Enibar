@@ -51,7 +51,10 @@ def remove(pseudo):
     :return bool: True if success else False.
     """
     with Cursor() as cursor:
-        cursor.prepare("DELETE FROM admins WHERE login=:pseudo")
+        cursor.prepare("DELETE FROM admins WHERE ((SELECT * FROM (SELECT \
+        manage_users FROM admins WHERE login=:pseudo) AS t)=0 OR (SELECT * \
+        FROM(SELECT COUNT(*) FROM admins WHERE manage_users=1) AS p)>1) AND \
+        login=:pseudo")
         cursor.bindValue(':pseudo', pseudo)
 
         return cursor.exec_()
