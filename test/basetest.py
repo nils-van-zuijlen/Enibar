@@ -27,7 +27,7 @@ def addSuccess(self, test):
 def addError(self, test, err):
     super(TextTestResult, self).addError(test, err)
     self.stream.writeln("[ \033[01;31mERROR \033[0m] {}".format(self.getDescription(test)))
-    print(err[1])
+    traceback.print_exception(*err)
 
 
 def addFailure(self, test, err):
