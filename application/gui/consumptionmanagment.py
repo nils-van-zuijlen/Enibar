@@ -419,7 +419,7 @@ class CategoryPrices(QtWidgets.QGroupBox):
         """
         cat = api.categories.get_by_name(category_name)
         if cat:
-            for desc in api.prices.get_decriptor(category=cat['id']):
+            for desc in api.prices.get_descriptor(category=cat['id']):
                 self.add_price(desc['id'], desc['label'])
         else:
             gui.utils.error("La catégorie sélectionnée n'existe pas.")

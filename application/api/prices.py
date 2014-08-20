@@ -31,7 +31,7 @@ import api.base
 
 
 def add_descriptor(name, category):
-    """ Add price
+    """ Add price descriptor
 
     :param str name: Price name
     :param int category: category id
@@ -90,7 +90,7 @@ def rename_descriptor(id_, name):
         return cursor.exec_()
 
 
-def get_decriptor(**kwargs):
+def get_descriptor(**kwargs):
     """ Get price descriptor
 
     :param **kwargs: filters to apply
@@ -160,7 +160,7 @@ def get(**kwargs):
             price_description.category as category\
             from prices INNER JOIN price_description \
             ON prices.price_description=price_description.id \
-            WHERE {} ".format(" AND ".join(filters)))
+            {} {} ".format("WHERE" * bool(filters), " AND ".join(filters)))
         for key, arg in kwargs.items():
             cursor.bindValue(":{}".format(key), arg)
         if cursor.exec_():
