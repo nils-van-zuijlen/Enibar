@@ -79,12 +79,12 @@ class PricesTest(unittest.TestCase):
     def test_remove_description_extended(self):
         """ Testing advanced feature of description removing """
         did1 = api.prices.add_descriptor("Unité", self.cat_eat)
-        pid10 = api.prices.add(None, did1, 0.0)
-        pid11 = api.prices.add(None, did1, 0.0)
+        pid11 = api.products.add("Lapin", category_id=self.cat_eat)
+        pid12 = api.products.add("Lapine", category_id=self.cat_eat)
 
         did2 = api.prices.add_descriptor("Unité", self.cat_drink)
-        pid20 = api.prices.add(None, did2, 0.0)
-        pid21 = api.prices.add(None, did2, 0.0)
+        pid21 = api.products.add("Lapon", category_id=self.cat_drink)
+        pid22 = api.products.add("Lapone", category_id=self.cat_drink)
 
         self.assertEqual(self.count_prices(), 4)
         self.assertTrue(api.prices.remove_descriptor(did1))
@@ -98,19 +98,87 @@ class PricesTest(unittest.TestCase):
         self.assertEqual(len(price_descs), 1)
         self.assertEqual(id_, price_descs[0]['id'])
 
+    def test_add(self):
+        """ Testing adding prices """
+        desc_id = api.prices.add_descriptor("Unité", self.cat_eat)
+        pid = api.products.add("Lapin", category_id=self.cat_eat)
+        self.assertIsNone(api.prices.add(None, None, 0))
+        self.assertIsNotNone(api.prices.add(pid, desc_id, 0))
+        # We should have two prices as product insertion creates one
+        self.assertEqual(self.count_prices(), 2)
+
     def test_get(self):
-        """ Testing price get function """
+        """ Testing get price function """
         self.assertEqual(list(api.prices.get()), [])
         price_desc_id = api.prices.add_descriptor("Unité", self.cat_drink)
-        price_id = api.prices.add(None, price_desc_id, 3.14)
+        pid = api.products.add("Lapin", category_id=self.cat_drink)
+
+        price_id = None
+        with Cursor() as cursor:
+            cursor.prepare("SELECT id FROM prices WHERE product=?")
+            cursor.addBindValue(pid)
+            self.assertTrue(cursor.exec_())
+            if cursor.next():
+                price_id = cursor.record().value('id')
+        self.assertIsNotNone(price_id)
+
         self.assertEqual(list(api.prices.get()), [{
             'id': price_id,
             'label': "Unité",
-            'value': 3.14,
-            'product': 0,
+            'value': 0,
+            'product': pid,
             'category': self.cat_drink
         }])
-        api.prices.add(None, price_desc_id, 0.00)
+        api.prices.add(None, price_desc_id, 0)
         self.assertTrue(self.count_prices(), 2)
+        self.assertEqual(list(api.prices.get(id=price_id)), [{
+            'id': price_id,
+            'label': "Unité",
+            'value': 0,
+            'product': pid,
+            'category': self.cat_drink
+        }])
+
+    def test_get_unique(self):
+        """ Testing get unique """
+        pid = api.products.add("Lapin", category_id=self.cat_eat)
+        desc_id1 = api.prices.add_descriptor("Unité", self.cat_eat)
+        desc_id2 = api.prices.add_descriptor("Kilo", self.cat_eat)
+        id1 = api.prices.add(pid, desc_id1, 0)
+        id2 = api.prices.add(pid, desc_id2, 0)
+        self.assertIsNone(api.prices.get_unique(value=0))
+        self.assertEqual(api.prices.get_unique(id=id1), {
+            'id': id1,
+            'label': "Unité",
+            'value': 0,
+            'product': pid,
+            'category': self.cat_eat
+        })
+
+    def test_set_value(self):
+        """ Testing setting price value """
+        desc_id = api.prices.add_descriptor("Unité", self.cat_eat)
+        product = api.products.add("Lapin", category_id=self.cat_eat)
+        pid = api.prices.add(product, desc_id, 0)
+        self.assertTrue(api.prices.set_value(pid, 12.34))
+        self.assertEqual(api.prices.get_unique(id=pid)['value'], 12.34)
+
+    def test_set_multiple_value(self):
+        """ Testing setting multiple values """
+        desc_id = api.prices.add_descriptor("Unité", self.cat_eat)
+        product = api.products.add("Lapin", category_id=self.cat_eat)
+        prices = []
+        for i in range(10):
+            id_ = api.prices.add(product, desc_id, 0)
+            prices.append({'id': id_, 'value': i})
+        self.assertTrue(api.prices.set_multiple_values(prices))
+        for price in api.prices.get():
+            id_, value = price['id'], price['value']
+            for price in prices:
+                if price['id'] == id_:
+                    self.assertEqual(value, price['value'])
+        # The extra length of api.prices.get is due to product creation
+        self.assertEqual(len(prices), len(list(api.prices.get())) - 1)
+
 
 
