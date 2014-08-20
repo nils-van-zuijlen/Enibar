@@ -152,12 +152,12 @@ def get(**kwargs):
     with Cursor() as cursor:
         filters = []
         for key in kwargs:
-            filters.append("{key}=:{key}".format(key=key))
+            filters.append("prices.{key}=:{key}".format(key=key))
         cursor.prepare("SELECT prices.id as id,\
             prices.product as product,\
             prices.value as value,\
             price_description.label as label,\
-            price_description.category as category\
+            price_description.category as category \
             from prices INNER JOIN price_description \
             ON prices.price_description=price_description.id \
             {} {} ".format("WHERE" * bool(filters), " AND ".join(filters)))
