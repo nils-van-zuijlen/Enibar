@@ -24,7 +24,7 @@ import api.categories as categories
 from database import Cursor
 
 
-class UtilsTest(unittest.TestCase):
+class ProductsTest(unittest.TestCase):
     def setUp(self):
         with Cursor() as cursor:
             # Erf can't truncate this so just partially clean up
@@ -34,7 +34,8 @@ class UtilsTest(unittest.TestCase):
         self.cat_drink = categories.add("Boire")
         self.cat_soft = categories.add("Soft")
 
-    def count_products(self):
+    @classmethod
+    def count_products(cls):
         """ Returns the number of products currently in database """
         with Cursor() as cursor:
             cursor.exec("SELECT COUNT(*) FROM products")

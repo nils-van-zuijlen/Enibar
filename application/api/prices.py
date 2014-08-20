@@ -123,7 +123,10 @@ def add(product, price_description, value):
     """
     with Cursor() as cursor:
         cursor.prepare("INSERT INTO prices (product, price_description, value)\
-                VALUES(:product, :price_description, :value)")
+        (SELECT :product, :price_description, :value FROM (SELECT 1) t WHERE\
+        NOT EXISTS(SELECT * FROM products INNER JOIN price_description ON\
+        products.category=price_description.category WHERE products.id=:product\
+        AND price_description.id=:price_description))")
         cursor.bindValue(':product', product)
         cursor.bindValue(':price_description', price_description)
         cursor.bindValue(':value', value)
