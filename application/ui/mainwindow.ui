@@ -254,7 +254,7 @@
      <x>0</x>
      <y>0</y>
      <width>884</width>
-     <height>20</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="administration">
@@ -270,7 +270,10 @@
     </widget>
     <addaction name="user_managment"/>
     <addaction name="change_password"/>
+    <addaction name="separator"/>
     <addaction name="products_managment"/>
+    <addaction name="actionGerer_les_panels"/>
+    <addaction name="separator"/>
     <addaction name="add_note"/>
     <addaction name="export_notes"/>
    </widget>
@@ -307,6 +310,11 @@
   <action name="change_password">
    <property name="text">
     <string>Changer mon mot de passe</string>
+   </property>
+  </action>
+  <action name="actionGerer_les_panels">
+   <property name="text">
+    <string>Gerer les &amp;panels</string>
    </property>
   </action>
  </widget>
