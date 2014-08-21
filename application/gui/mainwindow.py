@@ -31,6 +31,7 @@ import datetime
 import time
 from .add_note import AddNote
 from .passwordmanagment import PasswordManagment
+from .panelmanagment import PanelManagment
 import gui.usermanagment
 import gui.consumptionmanagment
 
@@ -99,24 +100,21 @@ class MenuBar(QtWidgets.QMenuBar):
     """ MainWindow menu bar """
     def __init__(self, parent):
         super().__init__(parent)
-        self.cm_window = None
-        self.um_window = None
-        self.an_window = None
-        self.cp_window = None
+        self.cur_window = None
 
     def user_managment_fnc(self):
         """ Call user managment window """
-        self.um_window = gui.usermanagment.UserManagmentWindow()
+        self.cur_window = gui.usermanagment.UserManagmentWindow()
 
     def consumption_managment_fnc(self):
         """ Call consumption managment window """
         # Java style
-        self.cm_window = gui.consumptionmanagment.ConsumptionManagmentWindow()
+        self.cur_window = gui.consumptionmanagment.ConsumptionManagmentWindow()
 
     def add_note_fnc(self):
         """ Open an AddNote window
         """
-        self.an_window = AddNote()
+        self.cur_window = AddNote()
 
     def export_notes_with_profs_fnc(self):
         """ Export all notes """
@@ -129,7 +127,12 @@ class MenuBar(QtWidgets.QMenuBar):
     def change_password_fnc(self):
         """ Open a PasswordManagment window
         """
-        self.cp_window = PasswordManagment()
+        self.cur_window = PasswordManagment()
+
+    def panel_managment_fnc(self):
+        """ Open a PanelManagment window
+        """
+        self.cur_window = PanelManagment()
 
     def export(self, notes):
         """ Generic export notes function """
