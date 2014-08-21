@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -21,10 +24,48 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_3">
-    <item row="0" column="1">
-     <widget class="QFrame" name="note_box">
+    <item row="0" column="0" rowspan="3">
+     <widget class="NotesList" name="notes_list">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>250</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>250</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="baseSize">
+       <size>
+        <width>200</width>
+        <height>0</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="Panels" name="panels">
       <property name="enabled">
        <bool>true</bool>
+      </property>
+      <property name="currentIndex">
+       <number>-1</number>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1" rowspan="2">
+     <widget class="QFrame" name="note_box">
+      <property name="enabled">
+       <bool>false</bool>
       </property>
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
@@ -60,15 +101,12 @@
           </size>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item alignment="Qt::AlignTop">
         <widget class="QFrame" name="note_middle">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
            <horstretch>1</horstretch>
@@ -107,7 +145,7 @@
              </font>
             </property>
             <property name="text">
-             <string>Germaine Suce</string>
+             <string>Prénom Nom (surnom)</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -126,7 +164,7 @@
              <enum>QFrame::Plain</enum>
             </property>
             <property name="text">
-             <string>g2suce@enib.fr</string>
+             <string>email@enib.fr</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -142,7 +180,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>01 02 03 04 05</string>
+             <string>+336 00 00 00 00</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -158,7 +196,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>1A</string>
+             <string>Promo</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -167,6 +205,9 @@
           </item>
           <item>
            <spacer name="verticalSpacer">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="orientation">
              <enum>Qt::Vertical</enum>
             </property>
@@ -200,50 +241,11 @@
           </font>
          </property>
          <property name="text">
-          <string>12.50 €</string>
+          <string>0.00 €</string>
          </property>
         </widget>
        </item>
       </layout>
-     </widget>
-    </item>
-    <item row="0" column="0" rowspan="3">
-     <widget class="NotesList" name="notes_list">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>200</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="baseSize">
-       <size>
-        <width>200</width>
-        <height>0</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QTabWidget" name="tabWidget">
-      <property name="currentIndex">
-       <number>0</number>
-      </property>
-      <widget class="QWidget" name="tab_7">
-       <attribute name="title">
-        <string>Tab 1</string>
-       </attribute>
-      </widget>
-      <widget class="QWidget" name="tab_8">
-       <attribute name="title">
-        <string>Tab 2</string>
-       </attribute>
-      </widget>
      </widget>
     </item>
    </layout>
@@ -254,7 +256,7 @@
      <x>0</x>
      <y>0</y>
      <width>884</width>
-     <height>20</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="administration">
@@ -337,6 +339,12 @@
     <slot>change_password_fnc()</slot>
     <slot>panel_managment_fnc()</slot>
    </slots>
+  </customwidget>
+  <customwidget>
+   <class>Panels</class>
+   <extends>QTabWidget</extends>
+   <header>gui/panels</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

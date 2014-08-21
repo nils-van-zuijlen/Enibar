@@ -47,10 +47,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.notes_list.refresh(api.notes.get(lambda x: x['hidden'] == 0))
         self.notes_list.currentRowChanged.connect(self.select_note)
 
-    def select_note(self, _):
+    def select_note(self):
         """
         Called when a note is selected
         """
+        self.note_box.setEnabled(True)
         widget = self.notes_list.currentItem()
         infos = list(api.notes.get(lambda x: widget.text() in x["nickname"]))[0]
         self.note_name.setText(widget.text())
