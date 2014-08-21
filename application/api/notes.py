@@ -28,7 +28,7 @@ import os.path
 import shutil
 
 
-NOTE_FIELDS = ['id', 'nickname', 'surname', 'firstname', 'mail', 'tel',
+NOTE_FIELDS = ['id', 'nickname', 'lastname', 'firstname', 'mail', 'tel',
                'birthdate', 'promo', 'note', 'photo_path', 'overdraft_time',
                'ecocups', 'hidden']
 
@@ -53,11 +53,11 @@ def rebuild_cache():
 
 
 # pylint: disable=too-many-arguments
-def add(nickname, surname, firstname, mail, tel, birthdate, promo, photo_path):
+def add(nickname, firstname, lastname, mail, tel, birthdate, promo, photo_path):
     """ Create a note. Copy the image from photo_path to img/
 
     :param str nickname: Nickname
-    :param str surname: Surname
+    :param str lastname: Last name
     :param str firstname: First name
     :param str mail: Mail
     :param str tel: Phone number
@@ -74,14 +74,14 @@ def add(nickname, surname, firstname, mail, tel, birthdate, promo, photo_path):
             shutil.copyfile(photo_path, "img/" + name)
 
     with Cursor() as cursor:
-        cursor.prepare("INSERT INTO notes (nickname, surname, firstname,\
+        cursor.prepare("INSERT INTO notes (nickname, lastname, firstname,\
                         mail, tel, birthdate, promo, photo_path)\
-                        VALUES(:nickname, :surname, :firstname, :mail, :tel,\
+                        VALUES(:nickname, :lastname, :firstname, :mail, :tel,\
                         :birthdate, :promo, :photo_path)")
         birthdate = datetime.datetime.strptime(birthdate,
                                                "%d/%m/%Y").timestamp()
 
-        cursor.bindValues({':nickname': nickname, ':surname': surname,
+        cursor.bindValues({':nickname': nickname, ':lastname': lastname,
                            ':firstname': firstname, ':mail': mail, ':tel': tel,
                            ':birthdate': birthdate, ':promo': promo,
                            ':photo_path': "img/" + name if photo_path else ""})
@@ -218,7 +218,7 @@ def export(notes):
     for note in notes:
         xml += "\t<note id=\"{}\">\n".format(note["id"])
         xml += "\t\t<prenom>{}</prenom>\n".format(note["firstname"])
-        xml += "\t\t<nom>{}</nom>\n".format(note["surname"])
+        xml += "\t\t<nom>{}</nom>\n".format(note["lastname"])
         xml += "\t\t<compte>{}</compte>\n".format(note["note"])
         xml += "\t\t<image>{}</image>\n".format(note["photo_path"])
         xml += "\t\t<date_Decouvert>{}</date_Decouvert>\n".format(

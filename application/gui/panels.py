@@ -28,7 +28,6 @@ import api.panels
 
 class Panels(QtWidgets.QTabWidget):
     def __init__(self, parent):
-        print("ok")
         super().__init__(parent)
         self.build()
 

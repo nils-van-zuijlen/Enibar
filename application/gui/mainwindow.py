@@ -54,7 +54,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.note_box.setEnabled(True)
         widget = self.notes_list.currentItem()
         infos = list(api.notes.get(lambda x: widget.text() in x["nickname"]))[0]
-        self.note_name.setText(widget.text())
+        self.note_name.setText("{nickname} - {firstname} {lastname}".format(
+            nickname=infos['nickname'],
+            firstname=infos['firstname'],
+            lastname=infos['lastname']
+        ))
         self.note_mail.setText(infos['mail'])
         self.note_solde.setText("{:.2f} €".format(infos['note']))
         self.note_promo.setText(infos['promo'])
@@ -62,7 +66,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         image = QtGui.QPixmap('img/coucou.jpg')
         if not image.isNull():
-            self.note_photo.setPixmap(image.scaled(QtCore.QSize(120, 160)))
+            self.note_photo.setPixmap(image.scaled(QtCore.QSize(120, 160), 1))
         else:
             self.note_photo.setPixmap(image)
 

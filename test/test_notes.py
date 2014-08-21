@@ -98,7 +98,7 @@ class NotesTest(unittest.TestCase):
         getted = notes.get(lambda x: x['id'] == id_)[0]
         self.assertEqual(getted, {'id': id_,
                                  'nickname': 'test1',
-                                 'surname': 'test',
+                                 'lastname': 'test',
                                  'firstname': 'test',
                                  'mail': 'test@pouette.com',
                                  'tel': '0600000000',
@@ -143,7 +143,7 @@ class NotesTest(unittest.TestCase):
 
         self.assertEqual(notes.get(lambda x: 'test' in x["nickname"]), [{'id': i + 1,
                                  'nickname': 'test' + str(i),
-                                 'surname': 'test',
+                                 'lastname': 'test',
                                  'firstname': 'test',
                                  'mail': 'test@pouette.com',
                                  'tel': '0600000000',
@@ -181,7 +181,7 @@ class NotesTest(unittest.TestCase):
 
         self.assertEqual(notes.get(lambda x: x["birthdate"] > time.time() - 18 * 365 * 24 * 3600), [{'id': id1,
                                  'nickname': 'test1',
-                                 'surname': 'test',
+                                 'lastname': 'test',
                                  'firstname': 'test',
                                  'mail': 'test@pouette.com',
                                  'tel': '0600000000',
@@ -219,7 +219,7 @@ class NotesTest(unittest.TestCase):
 
         self.assertEqual(notes.get(lambda x: x["birthdate"] < time.time() - 18 * 365 * 24 * 3600), [{'id': id0,
                                  'nickname': 'test0',
-                                 'surname': 'test',
+                                 'lastname': 'test',
                                  'firstname': 'test',
                                  'mail': 'test@pouette.com',
                                  'tel': '0600000000',

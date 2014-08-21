@@ -38,7 +38,7 @@ INSERT INTO admins(login, password) VALUES("admin", "$2a$12$grLadAuopGdXxA7wEIeh
 CREATE TABLE IF NOT EXISTS notes(
 	id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
 	nickname VARCHAR(127) UNIQUE,
-	surname VARCHAR(127),
+	lastname VARCHAR(127),
 	firstname VARCHAR(127),
 	mail VARCHAR(255),
 	tel VARCHAR(32),

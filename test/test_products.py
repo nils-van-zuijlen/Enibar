@@ -53,7 +53,7 @@ class ProductsTest(unittest.TestCase):
         """ Testing adding products with category id """
         self.assertIsNotNone(products.add("Banane", category_id=self.cat_eat))
         self.assertIsNotNone(products.add("Biere", category_id=self.cat_drink))
-        self.assertIsNone(products.add("Cidre", category_id=512))
+        self.assertIsNone(products.add("Cidre", category_id=2685240))
         self.assertEqual(self.count_products(), 2)
 
     def test_remove(self):

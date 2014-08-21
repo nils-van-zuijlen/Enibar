@@ -145,7 +145,7 @@
              </font>
             </property>
             <property name="text">
-             <string>Prénom Nom (surnom)</string>
+             <string>Surnom - Prénom nom</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
