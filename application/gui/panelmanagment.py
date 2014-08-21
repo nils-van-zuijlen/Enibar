@@ -29,6 +29,7 @@ from PyQt5 import QtWidgets, QtCore, QtGui, uic
 import api.panels
 import api.validator
 import gui.utils
+from .consumptionmanagment import ConsumptionList
 
 
 class PanelManagment(QtWidgets.QDialog):
@@ -71,5 +72,21 @@ class PanelManagment(QtWidgets.QDialog):
                     )
                 )
 
-    def update_form(self):
-        pass
+    def on_selection(self):
+        selected = self.panels.selectedIndexes()
+        if len(selected) > 1:
+            self.product_list.setEnabled(False)
+            self.panel_content.setEnabled(False)
+        else:
+            self.product_list.setEnabled(True)
+            self.panel_content.setEnabled(True)
+
+
+class GlobalConsumptionList(ConsumptionList):
+    def __init__(self, parent):
+        super().__init__(parent)
+
+class PanelConsumptionList(ConsumptionList):
+    def __init__(self, parent):
+        super().__init__(parent)
+
