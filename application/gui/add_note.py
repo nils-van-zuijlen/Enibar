@@ -76,4 +76,5 @@ class AddNote(QtWidgets.QDialog):
                       self.birthdate_input.text(),
                       self.promo_input.currentText(),
                       self.photo_selected)
-        self.main_window.notes_list.refresh(api.notes.get(lambda x: x['hidden'] == 0))
+        self.main_window.notes_list.refresh(api.notes.get(
+            lambda x: x['hidden'] == 0))

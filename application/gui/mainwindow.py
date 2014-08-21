@@ -85,32 +85,43 @@ class NotesList(QtWidgets.QListWidget):
     """ Notes list on the left of the MainWindow. """
     def __init__(self, parent):
         super().__init__(parent)
-        self.notes = []
+        self.refresh_timer = QtCore.QTimer(self)
+        self.refresh_timer.setInterval(10 * 1000)  # 10 seconds
+        self.refresh_timer.timeout.connect(self.on_timer)
+        self.refresh_timer.start()
+        self.pink_color = QtGui.QColor(255, 192, 203)
+        self.red_color = QtCore.Qt.red
 
     def build(self, notes_list):
         """ Fill the list with notes from notes_list, coloring negatives one
             in red """
+        current_time = time.time()
         for note in notes_list:
-            self.notes.append(QtWidgets.QListWidgetItem(
-                note["nickname"], self))
+            widget = QtWidgets.QListWidgetItem(note["nickname"], self)
             if note['note'] < 0:
-                self.notes[-1].setBackground(QtCore.Qt.red)
-            elif time.time() - note["birthdate"] < 18 * 365 * 24 * 3600:
-                self.notes[-1].setBackground(QtGui.QColor(255, 192, 203))
+                widget.setBackground(self.red_color)
+            elif current_time - note["birthdate"] < 18 * 365 * 24 * 3600:
+                widget.setBackground(self.pink_color)
 
-        if len(self.notes):
-            self.notes[0].setSelected(True)
+    def on_timer(self):
+        """ Rebuild the note list every 10 seconds
+        """
+        api.notes.rebuild_cache()
+        self.refresh(api.notes.get(lambda x: x['hidden'] == 0))
 
     def clean(self):
         """ Clean the note list
         """
-        for i, _ in enumerate(reversed(self.notes)):
-            widget = self.takeItem(i)
-            del widget
+        for i in reversed(range(self.count())):
+            self.takeItem(i)
 
     def refresh(self, notes_list):
+        """ Refresh the note list
+        """
+        selected = self.currentRow()
         self.clean()
         self.build(notes_list)
+        self.setCurrentRow(selected)
 
 
 class MenuBar(QtWidgets.QMenuBar):
