@@ -26,14 +26,15 @@ from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5 import uic
 
+from .add_note import AddNote
+from .panelmanagment import PanelManagment
+from .passwordmanagment import PasswordManagment
+from .consumptionmanagment import ConsumptionManagmentWindow
+from .usermanagment import UserManagmentWindow
 import api.notes
 import datetime
+import settings
 import time
-from .add_note import AddNote
-from .passwordmanagment import PasswordManagment
-from .panelmanagment import PanelManagment
-import gui.usermanagment
-import gui.consumptionmanagment
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -89,8 +90,8 @@ class NotesList(QtWidgets.QListWidget):
         self.refresh_timer.setInterval(10 * 1000)  # 10 seconds
         self.refresh_timer.timeout.connect(self.on_timer)
         self.refresh_timer.start()
-        self.pink_color = QtGui.QColor(255, 192, 203)
-        self.red_color = QtCore.Qt.red
+        self.minors_color = settings.MINORS_COLOR
+        self.overdraft_color = settings.OVERDRAFT_COLOR
 
     def build(self, notes_list):
         """ Fill the list with notes from notes_list, coloring negatives one
@@ -99,9 +100,9 @@ class NotesList(QtWidgets.QListWidget):
         for note in notes_list:
             widget = QtWidgets.QListWidgetItem(note["nickname"], self)
             if note['note'] < 0:
-                widget.setBackground(self.red_color)
+                widget.setBackground(self.overdraft_color)
             elif current_time - note["birthdate"] < 18 * 365 * 24 * 3600:
-                widget.setBackground(self.pink_color)
+                widget.setBackground(self.minors_color)
 
     def on_timer(self):
         """ Rebuild the note list every 10 seconds
@@ -132,12 +133,12 @@ class MenuBar(QtWidgets.QMenuBar):
 
     def user_managment_fnc(self):
         """ Call user managment window """
-        self.cur_window = gui.usermanagment.UserManagmentWindow()
+        self.cur_window = UserManagmentWindow()
 
     def consumption_managment_fnc(self):
         """ Call consumption managment window """
         # Java style
-        self.cur_window = gui.consumptionmanagment.ConsumptionManagmentWindow()
+        self.cur_window = ConsumptionManagmentWindow()
 
     def add_note_fnc(self):
         """ Open an AddNote window

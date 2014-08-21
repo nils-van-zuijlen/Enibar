@@ -29,7 +29,7 @@ import datetime
 
 FAK = faker.Faker()
 
-for i in range(100000):
+for i in range(1000):
     id_ = notes.add(FAK.first_name(), FAK.first_name(), FAK.first_name(),
                     FAK.email(), FAK.phone_number(),
                     datetime.datetime.fromtimestamp(
