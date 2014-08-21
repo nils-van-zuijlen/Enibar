@@ -53,6 +53,8 @@ class MainWindow(QtWidgets.QMainWindow):
         """
         self.note_box.setEnabled(True)
         widget = self.notes_list.currentItem()
+        if not widget:
+            return
         infos = list(api.notes.get(lambda x: widget.text() in x["nickname"]))[0]
         self.note_name.setText("{nickname} - {firstname} {lastname}".format(
             nickname=infos['nickname'],
@@ -85,10 +87,9 @@ class NotesList(QtWidgets.QListWidget):
         super().__init__(parent)
         self.notes = []
 
-    def refresh(self, notes_list):
+    def build(self, notes_list):
         """ Fill the list with notes from notes_list, coloring negatives one
             in red """
-        self.notes = []
         for note in notes_list:
             self.notes.append(QtWidgets.QListWidgetItem(
                 note["nickname"], self))
@@ -99,6 +100,17 @@ class NotesList(QtWidgets.QListWidget):
 
         if len(self.notes):
             self.notes[0].setSelected(True)
+
+    def clean(self):
+        """ Clean the note list
+        """
+        for i, _ in enumerate(reversed(self.notes)):
+            widget = self.takeItem(i)
+            del widget
+
+    def refresh(self, notes_list):
+        self.clean()
+        self.build(notes_list)
 
 
 class MenuBar(QtWidgets.QMenuBar):
@@ -119,7 +131,7 @@ class MenuBar(QtWidgets.QMenuBar):
     def add_note_fnc(self):
         """ Open an AddNote window
         """
-        self.cur_window = AddNote()
+        self.cur_window = AddNote(self.parent())
 
     def export_notes_with_profs_fnc(self):
         """ Export all notes """

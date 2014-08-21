@@ -33,10 +33,11 @@ import api.validator
 class AddNote(QtWidgets.QDialog):
     # pylint: disable=too-many-instance-attributes
     """ AddNote window class """
-    def __init__(self):
+    def __init__(self, main_window):
         super().__init__()
         uic.loadUi('ui/addnote.ui', self)
 
+        self.main_window = main_window
         # Add validators on inputs.
         self.nickname_input.set_validator(api.validator.NAME)
         self.name_input.set_validator(api.validator.NAME)
@@ -75,4 +76,4 @@ class AddNote(QtWidgets.QDialog):
                       self.birthdate_input.text(),
                       self.promo_input.currentText(),
                       self.photo_selected)
-
+        self.main_window.notes_list.refresh(api.notes.get(lambda x: x['hidden'] == 0))
