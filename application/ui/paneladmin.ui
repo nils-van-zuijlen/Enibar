@@ -106,15 +106,30 @@
     </widget>
    </item>
    <item row="0" column="1" rowspan="3">
-    <widget class="QTreeWidget" name="product_list">
+    <widget class="GlobalConsumptionList" name="product_list">
+     <property name="showDropIndicator" stdset="0">
+      <bool>false</bool>
+     </property>
      <property name="dragEnabled">
-      <bool>true</bool>
+      <bool>false</bool>
+     </property>
+     <property name="dragDropOverwriteMode">
+      <bool>false</bool>
      </property>
      <property name="dragDropMode">
-      <enum>QAbstractItemView::DragDrop</enum>
+      <enum>QAbstractItemView::NoDragDrop</enum>
+     </property>
+     <property name="defaultDropAction">
+      <enum>Qt::IgnoreAction</enum>
      </property>
      <property name="selectionMode">
       <enum>QAbstractItemView::ExtendedSelection</enum>
+     </property>
+     <property name="animated">
+      <bool>false</bool>
+     </property>
+     <property name="allColumnsShowFocus">
+      <bool>false</bool>
      </property>
      <column>
       <property name="text">
@@ -168,12 +183,18 @@
     </layout>
    </item>
    <item row="0" column="3" rowspan="3">
-    <widget class="QTreeWidget" name="panel_content">
+    <widget class="PanelConsumptionList" name="panel_content">
+     <property name="showDropIndicator" stdset="0">
+      <bool>false</bool>
+     </property>
      <property name="dragEnabled">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
      <property name="dragDropMode">
-      <enum>QAbstractItemView::DragDrop</enum>
+      <enum>QAbstractItemView::NoDragDrop</enum>
+     </property>
+     <property name="defaultDropAction">
+      <enum>Qt::IgnoreAction</enum>
      </property>
      <property name="selectionMode">
       <enum>QAbstractItemView::ExtendedSelection</enum>
@@ -187,6 +208,18 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PanelConsumptionList</class>
+   <extends>QTreeWidget</extends>
+   <header>gui/panelmanagment</header>
+  </customwidget>
+  <customwidget>
+   <class>GlobalConsumptionList</class>
+   <extends>QTreeWidget</extends>
+   <header>gui/panelmanagment</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
@@ -221,8 +254,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>panels</sender>
+   <signal>itemSelectionChanged()</signal>
+   <receiver>PanelAdmin</receiver>
+   <slot>on_selection()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>108</x>
+     <y>197</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>401</x>
+     <y>226</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>delete()</slot>
+  <slot>on_selection()</slot>
  </slots>
 </ui>
