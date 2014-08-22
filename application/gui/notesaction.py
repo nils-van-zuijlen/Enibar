@@ -43,12 +43,9 @@ class NotesAction(QtWidgets.QDialog):
         to_del = []
         indexes_to_del = []
         for index in reversed(indexes):
-            note = api.notes.get(lambda x: x["nickname"] == index.data())[0]
-            if not note:
-                continue
-            to_del.append(note['id'])
+            to_del.append(index.data())
             self.note_list.takeItem(index.row())
-        api.notes.remove_multiple(to_del)
+        api.notes.remove_multiple(api.notes.get_notes_id(to_del))
 
 
 class MultiNotesList(NotesList):
