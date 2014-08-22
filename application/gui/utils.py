@@ -24,7 +24,10 @@ Gui Utils
 Somme shortcut to do repetitive actions more easely
 """
 
-from PyQt5 import QtWidgets
+import api.notes
+from PyQt5 import QtWidgets, QtCore
+import settings
+import time
 
 
 def error(title, message=""):
@@ -35,3 +38,47 @@ def error(title, message=""):
     err.setInformativeText(message)
     err.setIcon(QtWidgets.QMessageBox.Critical)
     err.exec()
+
+
+class NotesList(QtWidgets.QListWidget):
+    # pylint: disable=too-many-public-methods
+    """ Notes list on the left of the MainWindow. """
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.refresh_timer = QtCore.QTimer(self)
+        self.refresh_timer.setInterval(10 * 1000)  # 10 seconds
+        self.refresh_timer.timeout.connect(self.on_timer)
+        self.refresh_timer.start()
+        self.minors_color = settings.MINORS_COLOR
+        self.overdraft_color = settings.OVERDRAFT_COLOR
+
+    def build(self, notes_list):
+        """ Fill the list with notes from notes_list, coloring negatives one
+            in red """
+        current_time = time.time()
+        for note in notes_list:
+            widget = QtWidgets.QListWidgetItem(note["nickname"], self)
+            if note['note'] < 0:
+                widget.setBackground(self.overdraft_color)
+            elif current_time - note["birthdate"] < 18 * 365 * 24 * 3600:
+                widget.setBackground(self.minors_color)
+
+    def on_timer(self):
+        """ Rebuild the note list every 10 seconds
+        """
+        api.notes.rebuild_cache()
+        self.refresh(api.notes.get(lambda x: x['hidden'] == 0))
+
+    def clean(self):
+        """ Clean the note list
+        """
+        for i in reversed(range(self.count())):
+            self.takeItem(i)
+
+    def refresh(self, notes_list):
+        """ Refresh the note list
+        """
+        selected = self.currentRow()
+        self.clean()
+        self.build(notes_list)
+        self.setCurrentRow(selected)
