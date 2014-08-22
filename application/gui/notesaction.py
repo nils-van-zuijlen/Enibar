@@ -38,7 +38,6 @@ class NotesAction(QtWidgets.QDialog):
         uic.loadUi('ui/notesaction.ui', self)
         self.show()
 
-    @profile
     def del_action(self, _):
         indexes = self.note_list.selectedIndexes()
         to_del = []
