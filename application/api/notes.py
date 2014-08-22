@@ -189,7 +189,7 @@ def get_notes_id(nicknames):
     """
     for row in NOTES_CACHE:
         if row["nickname"] in nicknames:
-            yield row
+            yield row["id"]
 
 
 def hide(id_):
