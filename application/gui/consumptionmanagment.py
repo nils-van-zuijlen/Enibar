@@ -80,7 +80,13 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
             if not index.parent().isValid():
                 continue
             parent = self.products.topLevelItem(index.parent().row())
-            product = api.products.get_unique(name=index.data())
+            category = api.categories.get_unique(name=parent.text(0))
+            if not category:
+                continue
+            product = api.products.get_unique(
+                name=index.data(),
+                category=category['id']
+            )
             if not product:
                 continue
             if api.products.remove(product['id']):
