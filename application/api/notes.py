@@ -58,6 +58,23 @@ def rebuild_cache():
     return True
 
 
+def _multiple_request(ids, request):
+    """ Execute the request on multiple ids
+
+    :param list ids: Ids on wich the request will be executed
+    :param str request: The request
+    """
+
+    with Database() as database:
+        database.transaction()
+        cursor = QtSql.QSqlQuery(database)
+        cursor.prepare(request)
+        for id_ in ids:
+            cursor.bindValue(':id', id_)
+            cursor.exec_()
+        return database.commit() and rebuild_cache()
+
+
 # pylint: disable=too-many-arguments
 def add(nickname, firstname, lastname, mail, tel, birthdate, promo, photo_path):
     """ Create a note. Copy the image from photo_path to img/
@@ -118,14 +135,7 @@ def remove_multiple(ids):
 
     :return bool: True if success else False.
     """
-    with Database() as database:
-        database.transaction()
-        cursor = QtSql.QSqlQuery(database)
-        cursor.prepare("DELETE FROM notes WHERE id=:id")
-        for id_ in ids:
-            cursor.bindValue(':id', id_)
-            cursor.exec_()
-        return database.commit() and rebuild_cache()
+    _multiple_request(ids, "DELETE FROM notes WHERE id=:id")
 
 
 def change_nickname(id_, new_nickname):
@@ -205,6 +215,16 @@ def hide(id_):
         return cursor.exec_()
 
 
+def hide_multiple(ids):
+    """ Hide multiple notes.
+
+    :param list ids: The list of notes to hide
+
+    :return bool: True if success else False
+    """
+    return _multiple_request(ids, "UPDATE notes SET hidden=1 WHERE id=:id")
+
+
 def show(id_):
     """ Show a note
 
@@ -216,6 +236,16 @@ def show(id_):
         cursor.prepare("UPDATE notes SET hidden=0 WHERE id=:id")
         cursor.bindValue(':id', id_)
         return cursor.exec_()
+
+
+def show_multiple(ids):
+    """ Show multiple notes
+
+    :param int id_: The list of notes to show
+
+    :return bool: True if success else False
+    """
+    return _multiple_request(ids, "UPDATE notes SET hidden=0 WHERE id=:id")
 
 
 def transaction(id_, diff):

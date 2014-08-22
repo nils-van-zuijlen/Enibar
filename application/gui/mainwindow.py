@@ -38,11 +38,13 @@ class MainWindow(QtWidgets.QMainWindow):
     """
     Main Window
     """
+    notes_list = None
+
     def __init__(self):
         super().__init__()
         uic.loadUi('ui/mainwindow.ui', self)
 
-        self.notes_list.refresh(api.notes.get(lambda x: x['hidden'] == 0))
+        self.refresh()
         self.notes_list.currentRowChanged.connect(self.select_note)
 
     def select_note(self):
@@ -77,6 +79,11 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.note_box.setStyleSheet("background-color: none;")
 
+    def refresh(self):
+        """ Refresh the notes list
+        """
+        self.notes_list.refresh(api.notes.get(lambda x: x['hidden'] == 0))
+
 
 class MenuBar(QtWidgets.QMenuBar):
     """ MainWindow menu bar """
@@ -84,42 +91,61 @@ class MenuBar(QtWidgets.QMenuBar):
         super().__init__(parent)
         self.cur_window = None
 
+    def _refresh_parent(self):
+        """ Refresh the parent
+        """
+        self.parent().refresh()
+
+    def _connect_window(self):
+        """ Connect the finished signal of the opened window to
+            refresh_parent
+        """
+        self.cur_window.finished.connect(self._refresh_parent)
+
     def user_managment_fnc(self):
         """ Call user managment window """
         self.cur_window = UserManagmentWindow()
+        self._connect_window()
 
     def consumption_managment_fnc(self):
         """ Call consumption managment window """
         # Java style
         self.cur_window = ConsumptionManagmentWindow()
+        self._connect_window()
 
     def add_note_fnc(self):
         """ Open an AddNote window
         """
         self.cur_window = AddNote(self.parent())
+        self._connect_window()
 
     def export_notes_with_profs_fnc(self):
         """ Export all notes """
         self.export(api.notes.get())
+        self._connect_window()
 
     def export_notes_without_profs_fnc(self):
         """ Export only students notes """
         self.export(api.notes.get(lambda x: x["promo"] != "Prof"))
+        self._connect_window()
 
     def change_password_fnc(self):
         """ Open a PasswordManagment window
         """
         self.cur_window = PasswordManagment()
+        self._connect_window()
 
     def panel_managment_fnc(self):
         """ Open a PanelManagment window
         """
         self.cur_window = PanelManagment()
+        self._connect_window()
 
     def notes_action_fnc(self):
         """ Open a NotesAction window
         """
         self.cur_window = NotesAction()
+        self._connect_window()
 
     def export(self, notes):
         """ Generic export notes function """

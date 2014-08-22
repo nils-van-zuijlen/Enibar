@@ -48,6 +48,25 @@ class NotesAction(QtWidgets.QDialog):
             self.note_list.takeItem(index.row())
         api.notes.remove_multiple(api.notes.get_notes_id(to_del))
 
+    def _multiple_action(self, fnc):
+        """ Execute a function on the currently selected notes
+        """
+        indexes = self.note_list.selectedIndexes()
+        notes_id = []
+        for index in indexes:
+            notes_id.append(index.data())
+        fnc(api.notes.get_notes_id(notes_id))
+
+    def hide_action(self):
+        """ Called when "cacher" is clicked
+        """
+        self._multiple_action(api.notes.hide_multiple)
+
+    def show_action(self):
+        """ Called when "Montrer" is clicked
+        """
+        self._multiple_action(api.notes.show_multiple)
+
 
 class MultiNotesList(NotesList):
     # pylint: disable=too-many-public-methods
