@@ -74,5 +74,5 @@ USERNAME = "root"
 PASSWORD = ""
 DBNAME = "enibar"
 
-MINORS_COLOR = QtCore.Qt.red
-OVERDRAFT_COLOR = QtGui.QColor(255, 192, 203)
+MINORS_COLOR = QtGui.QColor(255, 192, 203)
+OVERDRAFT_COLOR = QtCore.Qt.red

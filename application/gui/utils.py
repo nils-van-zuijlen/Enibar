@@ -45,12 +45,16 @@ class NotesList(QtWidgets.QListWidget):
     """ Notes list on the left of the MainWindow. """
     def __init__(self, parent):
         super().__init__(parent)
+        self.minors_color = settings.MINORS_COLOR
+        self.overdraft_color = settings.OVERDRAFT_COLOR
+
+    def init_mw(self):
+        """ Function used only on the main_window
+        """
         self.refresh_timer = QtCore.QTimer(self)
         self.refresh_timer.setInterval(10 * 1000)  # 10 seconds
         self.refresh_timer.timeout.connect(self.on_timer)
         self.refresh_timer.start()
-        self.minors_color = settings.MINORS_COLOR
-        self.overdraft_color = settings.OVERDRAFT_COLOR
 
     def build(self, notes_list):
         """ Fill the list with notes from notes_list, coloring negatives one
@@ -62,6 +66,8 @@ class NotesList(QtWidgets.QListWidget):
                 widget.setBackground(self.overdraft_color)
             elif current_time - note["birthdate"] < 18 * 365 * 24 * 3600:
                 widget.setBackground(self.minors_color)
+            else:
+                widget.setStyleSheet("background-color: none;")
 
     def on_timer(self):
         """ Rebuild the note list every 10 seconds
@@ -72,8 +78,10 @@ class NotesList(QtWidgets.QListWidget):
     def clean(self):
         """ Clean the note list
         """
+        print("Clean")
         for i in reversed(range(self.count())):
-            self.takeItem(i)
+            a = self.takeItem(i)
+            del a
 
     def refresh(self, notes_list):
         """ Refresh the note list
@@ -82,3 +90,4 @@ class NotesList(QtWidgets.QListWidget):
         self.clean()
         self.build(notes_list)
         self.setCurrentRow(selected)
+

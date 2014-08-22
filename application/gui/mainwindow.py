@@ -31,6 +31,7 @@ from .passwordmanagment import PasswordManagment
 from .usermanagment import UserManagmentWindow
 import api.notes
 import datetime
+import settings
 import time
 
 
@@ -45,6 +46,7 @@ class MainWindow(QtWidgets.QMainWindow):
         uic.loadUi('ui/mainwindow.ui', self)
 
         self.refresh()
+        self.notes_list.init_mw()
         self.notes_list.currentRowChanged.connect(self.select_note)
 
     def select_note(self):

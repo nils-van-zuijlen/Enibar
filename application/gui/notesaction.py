@@ -35,6 +35,7 @@ class NotesAction(QtWidgets.QDialog):
     """ NotesAction window class """
     def __init__(self):
         super().__init__()
+        self.current_filter = lambda x: x['hidden'] == "0"
         uic.loadUi('ui/notesaction.ui', self)
         self.show()
 
@@ -47,6 +48,7 @@ class NotesAction(QtWidgets.QDialog):
             to_del.append(index.data())
             self.note_list.takeItem(index.row())
         api.notes.remove_multiple(api.notes.get_notes_id(to_del))
+        self.note_list.rebuild(api.notes.get(self.current_filter))
 
     def _multiple_action(self, fnc):
         """ Execute a function on the currently selected notes
@@ -56,6 +58,19 @@ class NotesAction(QtWidgets.QDialog):
         for index in indexes:
             notes_id.append(index.data())
         fnc(api.notes.get_notes_id(notes_id))
+        self.note_list.rebuild(api.notes.get(self.current_filter))
+
+    def filter_combobox_change(self, id_):
+        print(api.notes.get()[0]['note'] > 0)
+        if id_ == 0:
+            self.current_filter = lambda x: x['hidden'] == 0
+        elif id_ == 1:
+            self.current_filter = lambda x: x['hidden'] == 1
+        elif id_ == 2:
+            self.current_filter = lambda x: x['note'] > 0
+        elif id_ == 3:
+            self.current_filter = lambda x: x['note'] < 0
+        self.note_list.rebuild(api.notes.get(self.current_filter))
 
     def hide_action(self):
         """ Called when "cacher" is clicked
@@ -75,5 +90,12 @@ class MultiNotesList(NotesList):
     def __init__(self, parent):
         super().__init__(parent)
         self.build(api.notes.get())
+
+    def rebuild(self, notes_list):
+        """ Just rebuild the notes list
+        """
+        print(notes_list)
+        self.clean()
+        self.build(notes_list)
 
 
