@@ -15,6 +15,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
+# pylint: disable=no-value-for-parameter
+# pylint: disable=unexpected-keyword-arg
 
 """
 PanelManagment Window
@@ -24,7 +26,7 @@ PanelManagment Window
 """
 
 
-from PyQt5 import QtWidgets, QtCore, QtGui, uic
+from PyQt5 import QtWidgets, uic
 
 import api.panels
 import api.validator
@@ -44,7 +46,7 @@ class PanelManagment(QtWidgets.QDialog):
         self.show()
 
     def create_panel_list(self):
-        """ Create panel list
+        """ Create the list of panels on the left.
         """
         self.panel_list = []
         for panel in api.panels.get():
@@ -52,6 +54,8 @@ class PanelManagment(QtWidgets.QDialog):
                 panel["name"], self.panels))
 
     def accept(self):
+        """ Called when "Ajouter" is clicked
+        """
         if self.name_input.text():
             if not api.panels.add(self.name_input.text()):
                 gui.utils.error("Erreur", "Impossible d'ajouter le panel")
@@ -75,6 +79,8 @@ class PanelManagment(QtWidgets.QDialog):
                 )
 
     def on_selection(self):
+        """ Called when a panel is selected
+        """
         selected = self.panels.selectedIndexes()
         if len(selected) != 1:
             self.product_list.setEnabled(False)
@@ -89,6 +95,8 @@ class PanelManagment(QtWidgets.QDialog):
             self.move_right.setEnabled(True)
 
     def add_product(self):
+        """ Called when ">>>>>" is clicked
+        """
         if not self.panels.currentItem():
             return
         panel = api.panels.get_unique(name=self.panels.currentItem().text())
@@ -126,6 +134,8 @@ class PanelManagment(QtWidgets.QDialog):
         self.rebuild(panel['name'])
 
     def delete_product(self):
+        """ Called when "<<<<<" is clicked
+        """
         if not self.panels.currentItem():
             return
         panel = api.panels.get_unique(name=self.panels.currentItem().text())
@@ -163,13 +173,18 @@ class PanelManagment(QtWidgets.QDialog):
         self.rebuild(panel['name'])
 
     def rebuild(self, panel_name):
+        """ Rebuild the two right lists
+        """
         panel = api.panels.get_unique(name=panel_name)
         self.panel_content.rebuild(panel['id'])
-        self.product_list.rebuild(panel['id'], self.panel_content)
-        pass
+        self.product_list.rebuild_from_panel(self.panel_content)
 
 
 class PanelList(ConsumptionList):
+    # pylint: disable=too-many-public-methods, too-many-ancestors
+    """ Base class for the two panels
+    """
+
     def __init__(self, parent):
         super().__init__(parent)
 
@@ -193,19 +208,23 @@ class PanelList(ConsumptionList):
 
 
 class GlobalConsumptionList(PanelList):
+    # pylint: disable=too-many-public-methods, too-many-ancestors
+    """ List containing all products NOT in the panel
+    """
     def __init__(self, parent):
         super().__init__(parent)
 
-    def rebuild(self, paid, panel_content):
-        """ Rebuild list
+    def rebuild_from_panel(self, panel_content):
+        """ Rebuild list base on the content of the panel.
 
-        :param int paid: Panel id
         :param PanelConsumptionList panel_content: Panel content list
         """
         self.clean()
-        self.build(paid, panel_content)
+        self.build_from_panel(panel_content)
 
-    def build(self, paid, panel_content):
+    def build_from_panel(self, panel_content):
+        """ Build the list
+        """
         self.categories = []
         self.products = []
         names = {}
@@ -225,6 +244,10 @@ class GlobalConsumptionList(PanelList):
 
 
 class PanelConsumptionList(PanelList):
+    # pylint: disable=too-many-public-methods, too-many-ancestors,
+    # pylint: disable=arguments-differ
+    """ List the content of the panel
+    """
     def __init__(self, parent):
         super().__init__(parent)
 

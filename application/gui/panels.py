@@ -29,7 +29,7 @@ import api.panels
 
 
 class Panels(QtWidgets.QTabWidget):
-    """ Panels container
+    """ Base class for panels
     """
     def __init__(self, parent):
         super().__init__(parent)

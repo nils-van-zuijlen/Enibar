@@ -166,6 +166,7 @@ def get(**kwargs):
             {} {} ".format("WHERE" * bool(filters), " AND ".join(filters)))
         for key, arg in kwargs.items():
             cursor.bindValue(":{}".format(key), arg)
+
         if cursor.exec_():
             while cursor.next():
                 yield {

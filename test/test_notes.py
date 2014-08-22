@@ -255,7 +255,7 @@ class NotesTest(unittest.TestCase):
         notes.transaction(id1, -4.95)
         self.assertEqual(notes.get(lambda x: x["id"] == id1)[0]['note'], 0.05)
 
-    def test_export(self):
+    def test_export_xml(self):
         """ Testing notes exporting """
         id1 = notes.add("test1",
             "test",
@@ -278,4 +278,30 @@ class NotesTest(unittest.TestCase):
         xml += "\t</note>\n"
         xml += "</notes>\n"
         self.assertEqual(notes.export(notes.get()), xml)
+
+    def test_remove_multiple(self):
+        """ Testing multiple removing
+        """
+        id0 = notes.add("test0",
+            "test",
+            "test",
+            "test@pouette.com",
+            "0600000000",
+            "01/01/1994",
+            '1A',
+            ''
+        )
+        id1 = notes.add("test1",
+            "test",
+            "test",
+            "test@pouette.com",
+            "0600000000",
+            "01/01/1994",
+            '1A',
+            ''
+        )
+
+        self.assertEqual(self.count_notes(), 2)
+        notes.remove_multiple([id0, id1])
+        self.assertEqual(self.count_notes(), 0)
 

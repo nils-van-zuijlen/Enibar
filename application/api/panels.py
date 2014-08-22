@@ -41,7 +41,7 @@ def add(name):
         cursor.prepare("INSERT INTO panels(name) VALUES(:name)")
         cursor.bindValue(':name', name)
         if cursor.exec_():
-            return cursor.lastInsertId()
+            return cursor.lastInsertId()  # Return the created panel
         else:
             return None
 

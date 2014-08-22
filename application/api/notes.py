@@ -182,6 +182,16 @@ def get(filter_=None):
     return rows
 
 
+def get_notes_id(nicknames):
+    """ Get multiple notes id from nicknames
+
+    :param list nicknames: The list of nicknames you want the id.
+    """
+    for row in NOTES_CACHE:
+        if row["nickname"] in nicknames:
+            yield row["id"]
+
+
 def hide(id_):
     """ Hide a note
 
