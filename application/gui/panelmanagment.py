@@ -44,6 +44,8 @@ class PanelManagment(QtWidgets.QDialog):
         self.show()
 
     def create_panel_list(self):
+        """ Create panel list
+        """
         self.panel_list = []
         for panel in api.panels.get():
             self.panel_list.append(QtWidgets.QListWidgetItem(
@@ -77,10 +79,14 @@ class PanelManagment(QtWidgets.QDialog):
         if len(selected) != 1:
             self.product_list.setEnabled(False)
             self.panel_content.setEnabled(False)
+            self.move_left.setEnabled(False)
+            self.move_right.setEnabled(False)
         else:
             self.rebuild(selected[0].data())
             self.product_list.setEnabled(True)
             self.panel_content.setEnabled(True)
+            self.move_left.setEnabled(True)
+            self.move_right.setEnabled(True)
 
     def add_product(self):
         if not self.panels.currentItem():
@@ -90,6 +96,7 @@ class PanelManagment(QtWidgets.QDialog):
             return
 
         products_added = []
+        category = None
         for index in self.product_list.selectedIndexes():
             if index.parent().isValid():
                 cat_name = index.parent().data()
