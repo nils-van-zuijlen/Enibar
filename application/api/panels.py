@@ -120,6 +120,7 @@ def delete_products(paid, products):
             cursor.exec_()
         database.commit()
 
+
 @api.base.filtered_getter('panels')
 def get(cursor):
     """ Get panel with given values
@@ -131,6 +132,7 @@ def get(cursor):
             'name': cursor.record().value('name'),
             'id': cursor.record().value('id'),
         }
+
 
 def get_content(**kwargs):
     """ Get panel content

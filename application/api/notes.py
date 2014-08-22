@@ -97,6 +97,7 @@ def add(nickname, firstname, lastname, mail, tel, birthdate, promo, photo_path):
             return cursor.lastInsertId()
         return -1
 
+
 def remove(id_):
     """ Remove a note
 
@@ -107,7 +108,8 @@ def remove(id_):
     with Cursor() as cursor:
         cursor.prepare("DELETE FROM notes WHERE id=:id")
         cursor.bindValue(':id', id_)
-        return  cursor.exec_() and rebuild_cache()
+        return cursor.exec_() and rebuild_cache()
+
 
 def remove_multiple(ids):
     """ Remove a list of notes
@@ -125,6 +127,7 @@ def remove_multiple(ids):
             cursor.exec_()
         return database.commit() and rebuild_cache()
 
+
 def change_nickname(id_, new_nickname):
     """ Change a note nickname.
 
@@ -135,9 +138,7 @@ def change_nickname(id_, new_nickname):
     """
     with Cursor() as cursor:
         cursor.prepare("UPDATE notes SET nickname=:nickname WHERE id=:id")
-
         cursor.bindValues({':nickname': new_nickname, ':id': id_})
-
         return cursor.exec_() and rebuild_cache()
 
 
@@ -151,9 +152,7 @@ def change_tel(id_, new_tel):
     """
     with Cursor() as cursor:
         cursor.prepare("UPDATE notes SET tel=:tel WHERE id=:id")
-
         cursor.bindValues({':tel': new_tel, ':id': id_})
-
         return cursor.exec_() and rebuild_cache()
 
 
@@ -167,9 +166,7 @@ def change_photo(id_, new_photo):
     """
     with Cursor() as cursor:
         cursor.prepare("UPDATE notes SET photo_path=:photo_path WHERE id=:id")
-
         cursor.bindValues({':photo_path': new_photo, ':id': id_})
-
         return cursor.exec_() and rebuild_cache()
 
 

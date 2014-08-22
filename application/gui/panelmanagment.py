@@ -126,6 +126,7 @@ class PanelManagment(QtWidgets.QDialog):
             return
 
         products_deleted = []
+        category = None
         for index in self.panel_content.selectedIndexes():
             if index.parent().isValid():
                 cat_name = index.parent().data()
@@ -179,9 +180,10 @@ class PanelList(ConsumptionList):
             cat_widget = QtWidgets.QTreeWidgetItem(self, [cname])
             self.categories.append(cat_widget)
 
-        if not cname in [widget.text(0) for widget in self.products]:
+        if cname not in [widget.text(0) for widget in self.products]:
             pro_widget = QtWidgets.QTreeWidgetItem(cat_widget, [pname])
             self.products.append(pro_widget)
+
 
 class GlobalConsumptionList(PanelList):
     def __init__(self, parent):

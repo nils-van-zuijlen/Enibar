@@ -44,6 +44,7 @@ class Panels(QtWidgets.QTabWidget):
     def add_tab(self, name):
         pass
 
+
 class PanelTab(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
