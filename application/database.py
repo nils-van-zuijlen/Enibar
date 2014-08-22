@@ -40,26 +40,29 @@ import settings
 
 
 class Database:
+    database = None
     # pylint: disable=too-few-public-methods
     """ Context manager to use the database """
     def __init__(self):
-        self.database = None
+        if Database.database is None:
+            Database.database = QtSql.QSqlDatabase("QMYSQL")
+
+            Database.database.setHostName(settings.HOST)
+            Database.database.setUserName(settings.USERNAME)
+            Database.database.setPassword(settings.PASSWORD)
+            Database.database.setDatabaseName(settings.DBNAME)
+            if not Database.database.open():
+                print("Can't join database")
+                sys.exit(1)
+            cursor = SqlQuery(self.database)
+            cursor.exec("SET AUTOCOMMIT=0")
+            cursor.exec("ST innodb_flush_log_at_trx_commit=0")
 
     def __enter__(self):
-        self.database = QtSql.QSqlDatabase("QMYSQL")
-
-        self.database.setHostName(settings.HOST)
-        self.database.setUserName(settings.USERNAME)
-        self.database.setPassword(settings.PASSWORD)
-        self.database.setDatabaseName(settings.DBNAME)
-        if not self.database.open():
-            print("Can't join database")
-            sys.exit(1)
-
         return self.database
 
     def __exit__(self, type_, value, traceback):
-        self.database.close()
+        pass
 
 
 class Cursor(Database):
@@ -73,6 +76,9 @@ class Cursor(Database):
         super().__enter__()
         self.cursor = SqlQuery(self.database)
         return self.cursor
+
+    def __exit__(self, type_, value, traceback):
+        self.database.commit()
 
 
 class SqlQuery(QtSql.QSqlQuery):
