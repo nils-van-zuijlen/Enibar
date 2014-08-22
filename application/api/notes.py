@@ -22,7 +22,8 @@ Notes management functions
 
 """
 
-from database import Cursor
+from PyQt5 import QtSql
+from database import Cursor, Database
 import datetime
 import os.path
 import shutil
@@ -33,6 +34,7 @@ NOTE_FIELDS = ['id', 'nickname', 'lastname', 'firstname', 'mail', 'tel',
                'ecocups', 'hidden']
 
 NOTES_CACHE = []
+NOTES_FIELDS_CACHE = {}
 
 
 def rebuild_cache():
@@ -40,14 +42,18 @@ def rebuild_cache():
         get actions
     """
     # pylint: disable=global-statement
-    global NOTES_CACHE
+    global NOTES_CACHE, NOTES_FIELDS_CACHE
     NOTES_CACHE = []
     with Cursor() as cursor:
         cursor.prepare("SELECT * FROM notes")
         if cursor.exec_():
             while cursor.next():
-                row = {field: cursor.record().value(field) for field in
-                       NOTE_FIELDS}
+                record = cursor.record()
+                if NOTES_FIELDS_CACHE == {}:
+                    NOTES_FIELDS_CACHE = {field: record.indexOf(field) for field
+                                          in NOTE_FIELDS}
+                row = {field: record.value(NOTES_FIELDS_CACHE[field]) for field
+                       in NOTE_FIELDS}
                 NOTES_CACHE.append(row)
     return True
 
@@ -91,7 +97,6 @@ def add(nickname, firstname, lastname, mail, tel, birthdate, promo, photo_path):
             return cursor.lastInsertId()
         return -1
 
-
 def remove(id_):
     """ Remove a note
 
@@ -102,8 +107,23 @@ def remove(id_):
     with Cursor() as cursor:
         cursor.prepare("DELETE FROM notes WHERE id=:id")
         cursor.bindValue(':id', id_)
-        return cursor.exec_() and rebuild_cache()
+        return  cursor.exec_() and rebuild_cache()
 
+def remove_multiple(ids):
+    """ Remove a list of notes
+
+    :param list ids: The list of notes to delete
+
+    :return bool: True if success else False.
+    """
+    with Database() as database:
+        database.transaction()
+        cursor = QtSql.QSqlQuery(database)
+        cursor.prepare("DELETE FROM notes WHERE id=:id")
+        for id_ in ids:
+            cursor.bindValue(':id', id_)
+            cursor.exec_()
+        return database.commit() and rebuild_cache()
 
 def change_nickname(id_, new_nickname):
     """ Change a note nickname.
@@ -227,5 +247,5 @@ def export(notes):
         xml += "\t</note>\n"
     xml += "</notes>\n"
     return xml
-rebuild_cache()
 
+rebuild_cache()

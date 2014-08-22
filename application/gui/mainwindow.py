@@ -26,14 +26,16 @@ from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5 import uic
 
+from .add_note import AddNote
+from .panelmanagment import PanelManagment
+from .passwordmanagment import PasswordManagment
+from .consumptionmanagment import ConsumptionManagmentWindow
+from .usermanagment import UserManagmentWindow
+from .notesaction import NotesAction
 import api.notes
 import datetime
+import settings
 import time
-from .add_note import AddNote
-from .passwordmanagment import PasswordManagment
-from .panelmanagment import PanelManagment
-import gui.usermanagment
-import gui.consumptionmanagment
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -53,6 +55,8 @@ class MainWindow(QtWidgets.QMainWindow):
         """
         self.note_box.setEnabled(True)
         widget = self.notes_list.currentItem()
+        if not widget:
+            return
         infos = list(api.notes.get(lambda x: widget.text() in x["nickname"]))[0]
         self.note_name.setText("{nickname} - {firstname} {lastname}".format(
             nickname=infos['nickname'],
@@ -78,29 +82,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.note_box.setStyleSheet("background-color: none;")
 
 
-class NotesList(QtWidgets.QListWidget):
-    # pylint: disable=too-many-public-methods
-    """ Notes list on the left of the MainWindow. """
-    def __init__(self, parent):
-        super().__init__(parent)
-        self.notes = []
-
-    def refresh(self, notes_list):
-        """ Fill the list with notes from notes_list, coloring negatives one
-            in red """
-        self.notes = []
-        for note in notes_list:
-            self.notes.append(QtWidgets.QListWidgetItem(
-                note["nickname"], self))
-            if note['note'] < 0:
-                self.notes[-1].setBackground(QtCore.Qt.red)
-            elif time.time() - note["birthdate"] < 18 * 365 * 24 * 3600:
-                self.notes[-1].setBackground(QtGui.QColor(255, 192, 203))
-
-        if len(self.notes):
-            self.notes[0].setSelected(True)
-
-
 class MenuBar(QtWidgets.QMenuBar):
     """ MainWindow menu bar """
     def __init__(self, parent):
@@ -109,17 +90,17 @@ class MenuBar(QtWidgets.QMenuBar):
 
     def user_managment_fnc(self):
         """ Call user managment window """
-        self.cur_window = gui.usermanagment.UserManagmentWindow()
+        self.cur_window = UserManagmentWindow()
 
     def consumption_managment_fnc(self):
         """ Call consumption managment window """
         # Java style
-        self.cur_window = gui.consumptionmanagment.ConsumptionManagmentWindow()
+        self.cur_window = ConsumptionManagmentWindow()
 
     def add_note_fnc(self):
         """ Open an AddNote window
         """
-        self.cur_window = AddNote()
+        self.cur_window = AddNote(self.parent())
 
     def export_notes_with_profs_fnc(self):
         """ Export all notes """
@@ -138,6 +119,11 @@ class MenuBar(QtWidgets.QMenuBar):
         """ Open a PanelManagment window
         """
         self.cur_window = PanelManagment()
+
+    def notes_action_fnc(self):
+        """ Open a NotesAction window
+        """
+        self.cur_window = NotesAction()
 
     def export(self, notes):
         """ Generic export notes function """

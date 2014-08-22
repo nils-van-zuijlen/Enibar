@@ -463,3 +463,4 @@ class CategoryList(QtWidgets.QListWidget):
         :param str cat_name: Category name
         """
         self.categories.append(QtWidgets.QListWidgetItem(cat_name, self))
+

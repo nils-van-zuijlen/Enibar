@@ -50,6 +50,9 @@
         <height>0</height>
        </size>
       </property>
+      <property name="sortingEnabled">
+       <bool>true</bool>
+      </property>
      </widget>
     </item>
     <item row="2" column="1">
@@ -256,30 +259,36 @@
      <x>0</x>
      <y>0</y>
      <width>884</width>
-     <height>19</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="administration">
     <property name="title">
      <string>&amp;Administration</string>
     </property>
-    <widget class="QMenu" name="export_notes">
-     <property name="title">
-      <string>Exporter les notes</string>
-     </property>
-     <addaction name="export_with_profs"/>
-     <addaction name="export_without_profs"/>
-    </widget>
     <addaction name="user_managment"/>
     <addaction name="change_password"/>
     <addaction name="separator"/>
     <addaction name="products_managment"/>
     <addaction name="panel_managment"/>
-    <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="menuNotes">
+    <property name="title">
+     <string>&amp;Notes</string>
+    </property>
+    <widget class="QMenu" name="menuExporter_les_notes">
+     <property name="title">
+      <string>&amp;Exporter les notes</string>
+     </property>
+     <addaction name="export_with_profs"/>
+     <addaction name="export_without_profs"/>
+    </widget>
     <addaction name="add_note"/>
-    <addaction name="export_notes"/>
+    <addaction name="notes_action"/>
+    <addaction name="menuExporter_les_notes"/>
    </widget>
    <addaction name="administration"/>
+   <addaction name="menuNotes"/>
   </widget>
   <action name="user_managment">
    <property name="checkable">
@@ -301,17 +310,17 @@
   </action>
   <action name="export_with_profs">
    <property name="text">
-    <string>Avec profs</string>
+    <string>A&amp;vec profs</string>
    </property>
   </action>
   <action name="export_without_profs">
    <property name="text">
-    <string>Sans profs</string>
+    <string>Sa&amp;ns profs</string>
    </property>
   </action>
   <action name="change_password">
    <property name="text">
-    <string>Changer mon mot de passe</string>
+    <string>Changer mon &amp;mot de passe</string>
    </property>
   </action>
   <action name="panel_managment">
@@ -319,12 +328,17 @@
     <string>Gerer les &amp;panels</string>
    </property>
   </action>
+  <action name="notes_action">
+   <property name="text">
+    <string>&amp;Faire des actions sur plusieurs notes</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
    <class>NotesList</class>
    <extends>QListWidget</extends>
-   <header>gui/mainwindow</header>
+   <header>gui/utils</header>
   </customwidget>
   <customwidget>
    <class>MenuBar</class>
@@ -338,6 +352,7 @@
     <slot>export_notes_without_profs_fnc()</slot>
     <slot>change_password_fnc()</slot>
     <slot>panel_managment_fnc()</slot>
+    <slot>notes_action_fnc()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -450,6 +465,22 @@
    <signal>triggered()</signal>
    <receiver>menu_bar</receiver>
    <slot>panel_managment_fnc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>9</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>notes_action</sender>
+   <signal>triggered()</signal>
+   <receiver>menu_bar</receiver>
+   <slot>notes_action_fnc()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
