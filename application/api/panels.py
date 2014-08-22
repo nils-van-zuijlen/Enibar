@@ -22,7 +22,8 @@ Panel management functions
 
 """
 
-from database import Cursor
+from PyQt5 import QtSql
+from database import Cursor, Database
 import api.base
 
 
@@ -36,14 +37,16 @@ def add(name):
     with Cursor() as cursor:
         cursor.prepare("INSERT INTO panels(name) VALUES(:name)")
         cursor.bindValue(':name', name)
-
-        return cursor.exec_()
+        if cursor.exec_():
+            return cursor.lastInsertId()
+        else:
+            return None
 
 
 def remove(name):
     """ Remove an panel
 
-    :param str penel: Panel name
+    :param str name: Panel name
 
     :return bool: True if success else False.
     """
@@ -53,6 +56,69 @@ def remove(name):
 
         return cursor.exec_()
 
+
+def add_product(paid, product):
+    """ Add product
+
+    :param int paid: Panel id
+    :param int product: Product id
+    """
+    with Cursor() as cursor:
+        cursor.prepare("INSERT INTO panel_content(panel_id, product_id) \
+                VALUES(:paid, :poid)")
+        cursor.bindValue(':paid', paid)
+        cursor.bindValue(':poid', product)
+        return cursor.exec_()
+
+
+def add_products(paid, products):
+    """ Add multpile product to panel content
+
+    :param int paid: panel id
+    :param list products: list of products id
+    """
+    with Database() as database:
+        database.transaction()
+        cursor = QtSql.QSqlQuery(database)
+        cursor.prepare("INSERT INTO panel_content(panel_id, product_id) VALUES\
+                (:paid, :poid)")
+        for product in products:
+            cursor.bindValue(":paid", paid)
+            cursor.bindValue(":poid", product)
+            cursor.exec_()
+        database.commit()
+
+
+def delete_product(paid, product):
+    """ Delete product from panel
+
+    :param int paid: Panel id
+    :param int product: Product
+    """
+    with Cursor() as cursor:
+        cursor.prepare("DELETE FROM panel_content WHERE panel_id=? and \
+                product_id=?")
+        cursor.addBindValue(paid)
+        cursor.addBindValue(product)
+        return cursor.exec_()
+
+
+def delete_products(paid, products):
+    """ Delete multiple products from panel
+
+    :param int paid: Panel id
+    :param int product: Product
+    """
+    with Database() as database:
+        database.transaction()
+        cursor = QtSql.QSqlQuery(database)
+        cursor.prepare("DELETE FROM panel_content WHERE panel_id=:paid and \
+                product_id=:poid")
+        for product in products:
+            cursor.bindValue(":paid", paid)
+            cursor.bindValue(":poid", product)
+            cursor.exec_()
+        database.commit()
 
 @api.base.filtered_getter('panels')
 def get(cursor):
@@ -66,6 +132,38 @@ def get(cursor):
             'id': cursor.record().value('id'),
         }
 
+def get_content(**kwargs):
+    """ Get panel content
+
+    :param kwargs: filter to apply
+    """
+    with Cursor() as cursor:
+        filters = []
+        for key in kwargs:
+            filters.append("panel_content.{key}=:{key}".format(key=key))
+
+        request = """SELECT panel_content.panel_id AS panel_id,
+        products.id AS product_id,
+        products.name AS product_name,
+        categories.id AS category_id,
+        categories.name as category_name
+        FROM panel_content
+        INNER JOIN products ON products.id=panel_content.product_id
+        INNER JOIN categories ON categories.id=products.category
+        {} {}""".format("WHERE" * bool(len(filters)), " AND ".join(filters))
+
+        cursor.prepare(request)
+        for key, arg in kwargs.items():
+            cursor.bindValue(":{}".format(key), arg)
+        if cursor.exec_():
+            while cursor.next():
+                yield {
+                    'panel_id': cursor.record().value('panel_id'),
+                    'product_id': cursor.record().value('product_id'),
+                    'product_name': cursor.record().value('product_name'),
+                    'category_id': cursor.record().value('category_id'),
+                    'category_name': cursor.record().value('category_name'),
+                }
 # pylint: disable=invalid-name
 get_unique = api.base.make_get_unique(get)
 

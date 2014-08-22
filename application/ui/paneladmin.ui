@@ -108,10 +108,10 @@
    <item row="0" column="1" rowspan="3">
     <widget class="GlobalConsumptionList" name="product_list">
      <property name="showDropIndicator" stdset="0">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="dragEnabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="dragDropOverwriteMode">
       <bool>false</bool>
@@ -185,9 +185,12 @@
    <item row="0" column="3" rowspan="3">
     <widget class="PanelConsumptionList" name="panel_content">
      <property name="showDropIndicator" stdset="0">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="dragEnabled">
+      <bool>true</bool>
+     </property>
+     <property name="dragDropOverwriteMode">
       <bool>false</bool>
      </property>
      <property name="dragDropMode">
@@ -270,9 +273,43 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>move_right</sender>
+   <signal>clicked()</signal>
+   <receiver>PanelAdmin</receiver>
+   <slot>add_product()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>504</x>
+     <y>211</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>489</x>
+     <y>143</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>move_left</sender>
+   <signal>clicked()</signal>
+   <receiver>PanelAdmin</receiver>
+   <slot>delete_product()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>523</x>
+     <y>244</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>518</x>
+     <y>283</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>delete()</slot>
   <slot>on_selection()</slot>
+  <slot>delete_product()</slot>
+  <slot>add_product()</slot>
  </slots>
 </ui>

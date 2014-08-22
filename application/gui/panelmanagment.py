@@ -18,7 +18,7 @@
 
 """
 PanelManagment Window
-====================
+=====================
 
 
 """
@@ -52,7 +52,7 @@ class PanelManagment(QtWidgets.QDialog):
     def accept(self):
         if self.name_input.text():
             if not api.panels.add(self.name_input.text()):
-                gui.utils.error("Erreur", "Impossible d'ajouter la catégorie")
+                gui.utils.error("Erreur", "Impossible d'ajouter le panel")
             else:
                 self.panel_list.append(QtWidgets.QListWidgetItem(
                     self.name_input.text(), self.panels))
@@ -74,19 +74,169 @@ class PanelManagment(QtWidgets.QDialog):
 
     def on_selection(self):
         selected = self.panels.selectedIndexes()
-        if len(selected) > 1:
+        if len(selected) != 1:
             self.product_list.setEnabled(False)
             self.panel_content.setEnabled(False)
         else:
+            self.rebuild(selected[0].data())
             self.product_list.setEnabled(True)
             self.panel_content.setEnabled(True)
 
+    def add_product(self):
+        if not self.panels.currentItem():
+            return
+        panel = api.panels.get_unique(name=self.panels.currentItem().text())
+        if not panel:
+            return
 
-class GlobalConsumptionList(ConsumptionList):
+        products_added = []
+        for index in self.product_list.selectedIndexes():
+            if index.parent().isValid():
+                cat_name = index.parent().data()
+                category = api.categories.get_unique(name=cat_name)
+                if not category:
+                    continue
+                product = api.products.get_unique(
+                    category=category['id'],
+                    name=index.data()
+                )
+                if not product:
+                    # Error
+                    continue
+                products_added.append(product['id'])
+            else:
+                cat_name = index.data()
+                category = api.categories.get_unique(name=cat_name)
+                if not category:
+                    continue
+                for product in api.products.get(category=category['id']):
+                    products_added.append(product['id'])
+
+        # Add all products at once
+        if category and products_added:
+            api.panels.add_products(panel['id'], products_added)
+
+        self.rebuild(panel['name'])
+
+    def delete_product(self):
+        if not self.panels.currentItem():
+            return
+        panel = api.panels.get_unique(name=self.panels.currentItem().text())
+        if not panel:
+            return
+
+        products_deleted = []
+        for index in self.panel_content.selectedIndexes():
+            if index.parent().isValid():
+                cat_name = index.parent().data()
+                category = api.categories.get_unique(name=cat_name)
+                if not category:
+                    continue
+                product = api.products.get_unique(
+                    category=category['id'],
+                    name=index.data()
+                )
+                if not product:
+                    # Error
+                    continue
+                products_deleted.append(product['id'])
+            else:
+                cat_name = index.data()
+                category = api.categories.get_unique(name=cat_name)
+                if not category:
+                    continue
+                for product in api.products.get(category=category['id']):
+                    products_deleted.append(product['id'])
+
+        # Add all products at once
+        if category and products_deleted:
+            api.panels.delete_products(panel['id'], products_deleted)
+
+        self.rebuild(panel['name'])
+
+    def rebuild(self, panel_name):
+        panel = api.panels.get_unique(name=panel_name)
+        self.panel_content.rebuild(panel['id'])
+        self.product_list.rebuild(panel['id'], self.panel_content)
+        pass
+
+
+class PanelList(ConsumptionList):
     def __init__(self, parent):
         super().__init__(parent)
 
-class PanelConsumptionList(ConsumptionList):
+    def add_product(self, pname, cname):
+        """ Add product
+
+        :param str pname: Product name
+        :param str cname: Category name
+        """
+        cat_widget = None
+        for widget in self.categories:
+            if widget.text(0) == cname:
+                cat_widget = widget
+        if not cat_widget:
+            cat_widget = QtWidgets.QTreeWidgetItem(self, [cname])
+            self.categories.append(cat_widget)
+
+        if not cname in [widget.text(0) for widget in self.products]:
+            pro_widget = QtWidgets.QTreeWidgetItem(cat_widget, [pname])
+            self.products.append(pro_widget)
+
+class GlobalConsumptionList(PanelList):
     def __init__(self, parent):
         super().__init__(parent)
+
+    def rebuild(self, paid, panel_content):
+        """ Rebuild list
+
+        :param int paid: Panel id
+        :param PanelConsumptionList panel_content: Panel content list
+        """
+        self.clean()
+        self.build(paid, panel_content)
+
+    def build(self, paid, panel_content):
+        self.categories = []
+        self.products = []
+        names = {}
+        for cat in panel_content.categories:
+            products = []
+            for product in panel_content.products:
+                products.append(product.text(0))
+            names[cat.text(0)] = products
+
+        for cat in api.categories.get_all():
+            if cat['name'] in names:
+                for product in api.products.get(category=cat['id']):
+                    if not product['name'] in names[cat['name']]:
+                        self.add_product(product['name'], cat['name'])
+            else:
+                self.add_category(cat['name'], cat['id'])
+
+
+class PanelConsumptionList(PanelList):
+    def __init__(self, parent):
+        super().__init__(parent)
+
+    def build(self, paid):
+        """ Build list
+
+        :param int paid: Panel id
+        """
+        self.categories = []
+        self.products = []
+        for product in api.panels.get_content(panel_id=paid):
+            self.add_product(
+                product['product_name'],
+                product['category_name']
+            )
+
+    def rebuild(self, paid):
+        """ Rebuilt list
+
+        :param int paid: Panel id
+        """
+        self.clean()
+        self.build(paid)
 

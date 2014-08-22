@@ -42,6 +42,7 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
         self.button_cat_price.setEnabled(False)
         self.category_type.setEnabled(False)
         self.category = None
+        self.products.build()
         self.show()
 
     def add_product(self):
@@ -318,7 +319,6 @@ class ConsumptionList(QtWidgets.QTreeWidget):
         super().__init__(parent)
         self.categories = []
         self.products = []
-        self.build()
 
     def clean(self):
         """ Clean up the list
