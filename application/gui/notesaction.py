@@ -24,14 +24,14 @@ NotesAction Window
 """
 
 
-from PyQt5 import QtWidgets, QtCore, QtGui, uic
+from PyQt5 import QtWidgets, uic
 
 import api.notes
 from .utils import NotesList
 
 
 class NotesAction(QtWidgets.QDialog):
-    # pylint: disable=too-many-instance-attributes
+    # pylint: disable=too-many-instance-attributes, too-many-public-methods
     """ NotesAction window class """
     def __init__(self):
         super().__init__()
@@ -39,9 +39,10 @@ class NotesAction(QtWidgets.QDialog):
         self.show()
 
     def del_action(self, _):
+        """ Called when "Supprimer" is clicked
+        """
         indexes = self.note_list.selectedIndexes()
         to_del = []
-        indexes_to_del = []
         for index in reversed(indexes):
             to_del.append(index.data())
             self.note_list.takeItem(index.row())
@@ -49,6 +50,9 @@ class NotesAction(QtWidgets.QDialog):
 
 
 class MultiNotesList(NotesList):
+    # pylint: disable=too-many-public-methods
+    """ List of notes with multi-selection
+    """
     def __init__(self, parent):
         super().__init__(parent)
         self.build(api.notes.get())

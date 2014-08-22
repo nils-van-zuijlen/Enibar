@@ -39,24 +39,12 @@ def add(name):
     :return int: Category id
     """
     with Cursor() as cursor:
-        cursor.prepare("INSERT INTO categories(name) VALUES(:name)")
-        cursor.bindValue(':name', name)
+        cursor.prepare("INSERT INTO categories(name) VALUES(:cat_name)")
+        cursor.bindValue(':cat_name', name)
         if cursor.exec_():
-            return cursor.lastInsertId()
+            return cursor.lastInsertId()  # Return the created category
         else:
             return None
-
-
-def remove(name):
-    """ Remove category
-
-    :param str name: Category name
-    :return bool: True if operation succeed or False
-    """
-    with Cursor() as cursor:
-        cursor.prepare("DELETE FROM categories WHERE name=:name")
-        cursor.bindValue(':name', name)
-        return cursor.exec_()
 
 
 def get_all():
@@ -73,6 +61,18 @@ def get_all():
                 'id': cursor.record().value('id'),
                 'name': cursor.record().value('name'),
             }
+
+
+def remove(name):
+    """ Remove category
+
+    :param str name: Category name
+    :return bool: True if operation succeed or False
+    """
+    with Cursor() as cursor:
+        cursor.prepare("DELETE FROM categories WHERE name=:name")
+        cursor.bindValue(':name', name)
+        return cursor.exec_()
 
 
 def get_by_name(name):

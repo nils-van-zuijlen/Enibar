@@ -15,6 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
+# pylint: disable=no-value-for-parameter
 
 """
 Panels Widget for Main window
@@ -27,25 +28,37 @@ import api.panels
 
 
 class Panels(QtWidgets.QTabWidget):
+    """ Base class for panels
+    """
     def __init__(self, parent):
         super().__init__(parent)
         self.build()
 
     def build(self):
+        """ Build the panel
+        """
         for panel in api.panels.get():
             self.addTab(PanelTab(), panel['name'])
 
     def clear(self):
+        """ Dummy
+        """
         pass
 
     def rebuild(self):
+        """ Dummy
+        """
         pass
 
     def add_tab(self, name):
+        """ Dummy
+        """
         pass
 
 
 class PanelTab(QtWidgets.QWidget):
+    """ A tab on the main window
+    """
     def __init__(self):
         super().__init__()
 

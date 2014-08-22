@@ -21,20 +21,16 @@
 Main Window description
 """
 
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
-from PyQt5 import QtGui
-from PyQt5 import uic
+from PyQt5 import QtCore, QtGui, QtWidgets, uic
 
 from .add_note import AddNote
+from .consumptionmanagment import ConsumptionManagmentWindow
+from .notesaction import NotesAction
 from .panelmanagment import PanelManagment
 from .passwordmanagment import PasswordManagment
-from .consumptionmanagment import ConsumptionManagmentWindow
 from .usermanagment import UserManagmentWindow
-from .notesaction import NotesAction
 import api.notes
 import datetime
-import settings
 import time
 
 

@@ -40,9 +40,10 @@ import settings
 
 
 class Database:
-    database = None
-    # pylint: disable=too-few-public-methods
     """ Context manager to use the database """
+    # pylint: disable=too-few-public-methods
+    database = None
+
     def __init__(self):
         if Database.database is None:
             Database.database = QtSql.QSqlDatabase("QMYSQL")

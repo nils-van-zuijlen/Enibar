@@ -16,6 +16,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
+# pylint: disable=no-value-for-parameter
+# pylint: disable=unexpected-keyword-arg
+
 """
 Panel management functions
 ==========================
@@ -38,7 +41,7 @@ def add(name):
         cursor.prepare("INSERT INTO panels(name) VALUES(:name)")
         cursor.bindValue(':name', name)
         if cursor.exec_():
-            return cursor.lastInsertId()
+            return cursor.lastInsertId()  # Return the created panel
         else:
             return None
 
