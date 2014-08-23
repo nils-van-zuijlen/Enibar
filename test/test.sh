@@ -50,5 +50,5 @@ if [[ $PEP == 1 ]]; then
 	pep8 --exclude=documentation --ignore=E501,W391,E128,E124 ../ || TEST_FAILED=1
 	pylint * --disable=parse-error,locally-disabled || TEST_FAILED=1
 fi
-
+docker stop $DOCKER_MYSQL_ID
 exit $TEST_FAILED
