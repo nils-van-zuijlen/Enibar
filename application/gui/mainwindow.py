@@ -31,7 +31,6 @@ from .passwordmanagment import PasswordManagment
 from .usermanagment import UserManagmentWindow
 import api.notes
 import datetime
-import settings
 import time
 
 
