@@ -53,20 +53,7 @@ Database
 
             The name of the database used by the software.
 
-    MINORS_COLOR
-
-        **Default value:** ``QtGui.QColor(255, 192, 203)``
-
-        The color of the minors in the notes list
-
-    OVERDRAFT_COLOR
-
-        **Default value:** ``QtCore.Qt.red``
-
-        The color of notes below 0€
 """
-
-from PyQt5 import QtGui, QtCore
 
 
 HOST = ""
@@ -74,5 +61,3 @@ USERNAME = "root"
 PASSWORD = ""
 DBNAME = "enibar"
 
-MINORS_COLOR = QtGui.QColor(255, 192, 203)
-OVERDRAFT_COLOR = QtCore.Qt.red

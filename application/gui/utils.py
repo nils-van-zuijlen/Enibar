@@ -25,8 +25,7 @@ Somme shortcut to do repetitive actions more easely
 """
 
 import api.notes
-from PyQt5 import QtWidgets, QtCore
-import settings
+from PyQt5 import QtWidgets, QtCore, QtGui
 import time
 
 
@@ -45,8 +44,8 @@ class NotesList(QtWidgets.QListWidget):
     """ Notes list on the left of the MainWindow. """
     def __init__(self, parent):
         super().__init__(parent)
-        self.minors_color = settings.MINORS_COLOR
-        self.overdraft_color = settings.OVERDRAFT_COLOR
+        self.minors_color =  QtGui.QColor(255, 192, 203)
+        self.overdraft_color = QtCore.Qt.red
 
     def init_mw(self):
         """ Function used only on the main_window
