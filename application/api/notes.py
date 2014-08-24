@@ -94,7 +94,8 @@ def add(nickname, firstname, lastname, mail, tel, birthdate, promo, photo_path):
     if photo_path:
         name = os.path.split(photo_path)[1]
         if name:
-            shutil.copyfile(photo_path, "img/" + name)
+            if not os.path.exists("img/" + name):
+                shutil.copyfile(photo_path, "img/" + name)
 
     with Cursor() as cursor:
         cursor.prepare("INSERT INTO notes (nickname, lastname, firstname,\
@@ -138,45 +139,50 @@ def remove_multiple(ids):
     _multiple_request(ids, "DELETE FROM notes WHERE id=:id")
 
 
-def change_nickname(id_, new_nickname):
-    """ Change a note nickname.
-
-    :param int id_: The id of the note
-    :param str new_nickname: The new nickname
-
-    :return bool: True if success else False
-    """
-    with Cursor() as cursor:
-        cursor.prepare("UPDATE notes SET nickname=:nickname WHERE id=:id")
-        cursor.bindValues({':nickname': new_nickname, ':id': id_})
-        return cursor.exec_() and rebuild_cache()
-
-
-def change_tel(id_, new_tel):
+def change_tel(nickname, new_tel):
     """ Change a note phone number.
 
-    :param int id_: The id of the note
+    :param str nickname: The nickname of the note.
     :param str new_tel: The new phone number
 
     :return bool: True if success else False
     """
     with Cursor() as cursor:
-        cursor.prepare("UPDATE notes SET tel=:tel WHERE id=:id")
-        cursor.bindValues({':tel': new_tel, ':id': id_})
+        cursor.prepare("UPDATE notes SET tel=:tel WHERE nickname=:nickname")
+        cursor.bindValues({':tel': new_tel, ':nickname': nickname})
         return cursor.exec_() and rebuild_cache()
 
 
-def change_photo(id_, new_photo):
-    """ Change a note photo.
+def change_mail(nickname, new_mail):
+    """ Change a note mail address
 
-    :param int id_: The id of the note
-    :param str new_path: The new photo_path
+    :param str nickname: The nickname of the note.
+    :param str new_mail: The new mail address
 
     :return bool: True if success else False
     """
     with Cursor() as cursor:
-        cursor.prepare("UPDATE notes SET photo_path=:photo_path WHERE id=:id")
-        cursor.bindValues({':photo_path': new_photo, ':id': id_})
+        cursor.prepare("UPDATE notes SET mail=:mail WHERE nickname=:nickname")
+        cursor.bindValues({':mail': new_mail, ':nickname': nickname})
+        return cursor.exec_() and rebuild_cache()
+
+
+def change_photo(nickname, new_photo):
+    """ Change a note photo.
+
+    :param str nickname: The nickname of the note.
+    :param str new_path: The new photo_path
+
+    :return bool: True if success else False
+    """
+    name = os.path.split(new_photo)[1]
+    if name:
+        if not os.path.exists("img/" + name):
+            shutil.copyfile(new_photo, "img/" + name)
+    with Cursor() as cursor:
+        cursor.prepare("UPDATE notes SET photo_path=:photo_path \
+                        WHERE nickname=:nickname")
+        cursor.bindValues({':photo_path': "img/" + name, ':nickname': nickname})
         return cursor.exec_() and rebuild_cache()
 
 

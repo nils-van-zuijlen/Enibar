@@ -23,7 +23,7 @@ Main Window description
 
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 
-from .add_note import AddNote
+from .manage_notes import ManageNotes
 from .consumptionmanagment import ConsumptionManagmentWindow
 from .notesaction import NotesAction
 from .panelmanagment import PanelManagment
@@ -45,7 +45,6 @@ class MainWindow(QtWidgets.QMainWindow):
         uic.loadUi('ui/mainwindow.ui', self)
 
         self.refresh()
-        self.notes_list.init_mw()
         self.notes_list.currentRowChanged.connect(self.select_note)
 
     def select_note(self):
@@ -114,10 +113,10 @@ class MenuBar(QtWidgets.QMenuBar):
         self.cur_window = ConsumptionManagmentWindow()
         self._connect_window()
 
-    def add_note_fnc(self):
-        """ Open an AddNote window
+    def manage_note_fnc(self):
+        """ Open an ManageNotes window
         """
-        self.cur_window = AddNote(self.parent())
+        self.cur_window = ManageNotes(self.parent())
         self._connect_window()
 
     def export_notes_with_profs_fnc(self):

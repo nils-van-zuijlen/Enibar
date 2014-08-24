@@ -44,13 +44,9 @@ class NotesList(QtWidgets.QListWidget):
     """ Notes list on the left of the MainWindow. """
     def __init__(self, parent):
         super().__init__(parent)
+        self.current_filter = lambda x: x['hidden'] == 0
         self.minors_color = QtGui.QColor(255, 192, 203)
         self.overdraft_color = QtCore.Qt.red
-        self.refresh_timer = None
-
-    def init_mw(self):
-        """ Function used only on the main_window
-        """
         self.refresh_timer = QtCore.QTimer(self)
         self.refresh_timer.setInterval(10 * 1000)  # 10 seconds
         self.refresh_timer.timeout.connect(self.on_timer)
@@ -71,12 +67,11 @@ class NotesList(QtWidgets.QListWidget):
         """ Rebuild the note list every 10 seconds
         """
         api.notes.rebuild_cache()
-        self.refresh(api.notes.get(lambda x: x['hidden'] == 0))
+        self.refresh(api.notes.get(self.current_filter))
 
     def clean(self):
         """ Clean the note list
         """
-        print("Clean")
         for i in reversed(range(self.count())):
             widget = self.takeItem(i)
             del widget

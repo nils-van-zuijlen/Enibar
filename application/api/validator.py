@@ -38,7 +38,7 @@ BIRTHDATE = QtGui.QRegExpValidator(QtCore.QRegExp((
     r"28|32|36|40|44|48|52|56|60|64|68|72|76|80|84|88|92|96)$)")))
 
 
-def on_change(cls):
+def on_change(cls, button):
     """ Called when an Input goes from red to green
     """
     def wrapper():
@@ -46,9 +46,9 @@ def on_change(cls):
         """
         for _, obj in cls.__dict__.items():
             if isinstance(obj, Input):
-                if not obj.valid:
-                    cls.accept_button.setEnabled(False)
+                if not obj.valid and obj.isEnabled():
+                    button.setEnabled(False)
                     return
-        cls.accept_button.setEnabled(True)
+        button.setEnabled(True)
     return wrapper
 
