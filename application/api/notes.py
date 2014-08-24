@@ -254,18 +254,18 @@ def show_multiple(ids):
     return _multiple_request(ids, "UPDATE notes SET hidden=0 WHERE id=:id")
 
 
-def transaction(id_, diff):
+def transaction(nickname, diff):
     """ Change the note of a note.
 
-    :param int id_: The id of the note
+    :param int nickname: The nickname of the note
     :param float diff: Will add the diff to the note.
 
     :return bool: True if success else False
     """
     with Cursor() as cursor:
-        cursor.prepare("UPDATE notes SET note=note+:diff WHERE id=:id")
+        cursor.prepare("UPDATE notes SET note=note+:diff WHERE nickname=:nick")
         cursor.bindValue(":diff", diff)
-        cursor.bindValue(":id", id_)
+        cursor.bindValue(":nick", nickname)
 
         return cursor.exec_() and rebuild_cache()
 

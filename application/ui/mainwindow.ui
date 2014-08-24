@@ -280,8 +280,10 @@
      <addaction name="export_with_profs"/>
      <addaction name="export_without_profs"/>
     </widget>
+    <addaction name="refill_note"/>
     <addaction name="manage_notes"/>
     <addaction name="notes_action"/>
+    <addaction name="separator"/>
     <addaction name="menuExporter_les_notes"/>
    </widget>
    <addaction name="administration"/>
@@ -330,6 +332,14 @@
     <string>&amp;Faire des actions sur plusieurs notes</string>
    </property>
   </action>
+  <action name="refill_note">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Recharger</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -340,7 +350,7 @@
   <customwidget>
    <class>MenuBar</class>
    <extends>QMenuBar</extends>
-   <header>gui/mainwindow</header>
+   <header location="global">gui/mainwindow</header>
    <slots>
     <slot>user_managment_fnc()</slot>
     <slot>consumption_managment_fnc()</slot>
@@ -350,6 +360,7 @@
     <slot>change_password_fnc()</slot>
     <slot>panel_managment_fnc()</slot>
     <slot>notes_action_fnc()</slot>
+    <slot>refill_note_fnc()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -478,6 +489,22 @@
    <signal>triggered()</signal>
    <receiver>menu_bar</receiver>
    <slot>notes_action_fnc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>9</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>refill_note</sender>
+   <signal>triggered()</signal>
+   <receiver>menu_bar</receiver>
+   <slot>refill_note_fnc()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

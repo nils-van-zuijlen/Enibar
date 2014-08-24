@@ -243,17 +243,17 @@ class NotesTest(unittest.TestCase):
             ''
         )
 
-        notes.transaction(id1, 10)
-        self.assertEqual(notes.get(lambda x: x["id"] == id1)[0]['note'], 10)
-        notes.transaction(id1, 10)
-        self.assertEqual(notes.get(lambda x: x["id"] == id1)[0]['note'], 20)
-        notes.transaction(id1, -5)
-        self.assertEqual(notes.get(lambda x: x["id"] == id1)[0]['note'], 15)
-        notes.transaction(id1, -15)
-        self.assertEqual(notes.get(lambda x: x["id"] == id1)[0]['note'], 0)
-        notes.transaction(id1, 5)
-        notes.transaction(id1, -4.95)
-        self.assertEqual(notes.get(lambda x: x["id"] == id1)[0]['note'], 0.05)
+        notes.transaction("test1", 10)
+        self.assertEqual(notes.get(lambda x: x["nickname"] == "test1")[0]['note'], 10)
+        notes.transaction("test1", 10)
+        self.assertEqual(notes.get(lambda x: x["nickname"] == "test1")[0]['note'], 20)
+        notes.transaction("test1", -5)
+        self.assertEqual(notes.get(lambda x: x["nickname"] == "test1")[0]['note'], 15)
+        notes.transaction("test1", -15)
+        self.assertEqual(notes.get(lambda x: x["nickname"] == "test1")[0]['note'], 0)
+        notes.transaction("test1", 5)
+        notes.transaction("test1", -4.95)
+        self.assertEqual(notes.get(lambda x: x["nickname"] == "test1")[0]['note'], 0.05)
 
     def test_export_xml(self):
         """ Testing notes exporting """
