@@ -21,6 +21,7 @@ Consumption managment window
 """
 
 from PyQt5 import QtWidgets
+from PyQt5 import QtCore
 from PyQt5 import uic
 import gui.utils
 import api.products
@@ -120,7 +121,7 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
                         continue
                     new_prices.append({
                         'id': price['id'],
-                        'value': widget.input.text()
+                        'value': widget.input.value()
                     })
         if not api.prices.set_multiple_values(new_prices):
             gui.utils.error("Impossible de sauvegarder les nouveaux prix")
@@ -310,6 +311,8 @@ class ConsumptionPricesItem(QtWidgets.QWidget):
         self.label = QtWidgets.QLabel(name)
         self.input = QtWidgets.QDoubleSpinBox()
         self.input.setValue(value)
+        self.input.setMaximum(999.99)
+        self.input.setLocale(QtCore.QLocale('English'))
         self.label.setBuddy(self.input)
         self.layout = QtWidgets.QHBoxLayout(self)
         self.layout.addWidget(self.label)
