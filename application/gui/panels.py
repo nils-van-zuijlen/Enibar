@@ -65,6 +65,7 @@ class PanelTab(QtWidgets.QWidget):
         self.product_list.setColumnWidth(2, 50)
         self.connect_signals()
 
+
     def connect_signals(self):
         """ Connect signals of products widgets with product_clicked
         """
@@ -90,8 +91,49 @@ class PanelTab(QtWidgets.QWidget):
         else:
             price_name = widget.itemText(index)
             price_value = widget.prices[price_name]
+        self.product_list.add_product(widget.name, price_name, price_value)
+        self.total.setText("{:.2f} €".format(self.product_list.get_total()))
 
-        print("Yay", price_name, price_value)
+    def reset_total(self):
+        self.total.setText("0.00 €")
+
+
+class ProductList(QtWidgets.QTreeWidget):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.products = []
+
+    def add_product(self, product_name, price_name, price):
+        """ Add product to list
+        """
+        name = "{} ({})".format(product_name, price_name)
+        found = False
+        for product in self.products:
+            if product['name'] == name:
+                product['price'] += price
+                product['price'] = round(product['price'], 2)
+                product['count'] += 1
+                product['widget'].setText(0, str(product['count']))
+                product['widget'].setText(2, str(product['price']))
+                found = True
+        if not found:
+            product = {
+                'name': name,
+                'price': price,
+                'count': 1,
+            }
+            widget = QtWidgets.QTreeWidgetItem(['1', name, str(price)])
+            self.addTopLevelItem(widget)
+            product['widget'] = widget
+            self.products.append(product)
+
+    def clear(self):
+        super().clear()
+        self.products = []
+
+    def get_total(self):
+        total = sum(map(lambda x: x["price"], self.products))
+        return round(total, 2)
 
 
 class ProductsContainer(QtWidgets.QWidget):

@@ -15,7 +15,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="1">
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="total">
      <property name="font">
       <font>
        <pointsize>15</pointsize>
@@ -105,7 +105,7 @@
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="QTreeWidget" name="product_list">
+    <widget class="ProductList" name="product_list">
      <property name="minimumSize">
       <size>
        <width>250</width>
@@ -177,7 +177,48 @@
    <header>gui/panels</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>ProductList</class>
+   <extends>QTreeWidget</extends>
+   <header>gui/panels</header>
+  </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>product_list</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>777</x>
+     <y>537</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>690</x>
+     <y>293</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>PanelTab</receiver>
+   <slot>reset_total()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>808</x>
+     <y>540</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>818</x>
+     <y>486</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>reset_total()</slot>
+ </slots>
 </ui>
