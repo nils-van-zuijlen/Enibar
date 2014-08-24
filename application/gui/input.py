@@ -21,8 +21,7 @@
     It needs a validator to work.
 """
 
-from PyQt5 import QtWidgets
-from PyQt5 import QtGui
+from PyQt5 import QtWidgets, QtGui
 
 
 class Input(QtWidgets.QLineEdit):
@@ -35,8 +34,8 @@ class Input(QtWidgets.QLineEdit):
         """
         super().__init__(parent)
         # Red by default
-        self.parent = parent
-        self.setStyleSheet("QLineEdit{border: 1px solid red;}")
+        self.setStyleSheet("QLineEdit:enabled{border: 1px solid red;\
+                            padding:2px}")
         self.textChanged.connect(self.on_change)
         self.shadow = None
         self.valid = False
@@ -65,31 +64,37 @@ class Input(QtWidgets.QLineEdit):
         """
         # We need to reconstruct the shadow each time, Qt destroy it when we
         # call self.setGraphicsEffect(None)
+        if not self.isEnabled():
+            self.setGraphicsEffect(None)
+            return
         self.shadow = QtWidgets.QGraphicsDropShadowEffect()
         self.shadow.setBlurRadius(5)
         self.shadow.setOffset(0, 0)
         if self.hasAcceptableInput():
             self.set_ok()
-            self.valid = True
             try:
-                self.parent.on_change()
+                self.parent().on_change()
             except AttributeError:
                 pass
         else:
             self.set_non_ok()
-            self.valid = False
+            self.parent().on_change()
 
     def set_ok(self):
         """ The input content is ok, color it in green
         """
-        self.setStyleSheet("QLineEdit{border: 1px solid green;}")
+        self.valid = True
+        self.setStyleSheet("QLineEdit:enabled{border: 1px solid green;\
+                            padding:2px;}")
         self.shadow.setColor(QtGui.QColor(0, 255, 0))
         self.setGraphicsEffect(self.shadow)
 
     def set_non_ok(self):
         """ The input content is not ok, color it in red
         """
-        self.setStyleSheet("QLineEdit{border: 1px solid red;}")
+        self.valid = False
+        self.setStyleSheet("QLineEdit:enabled{border: 1px solid red;\
+                            padding:2px;}")
         self.shadow.setColor(QtGui.QColor(255, 0, 0))
         self.setGraphicsEffect(self.shadow)
 

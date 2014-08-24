@@ -51,4 +51,7 @@ if [[ $PEP == 1 ]]; then
 	pylint * --disable=parse-error,locally-disabled || TEST_FAILED=1
 fi
 
+if [[ $NODOCKER != 1 ]]; then
+	docker stop $DOCKER_MYSQL_ID
+fi
 exit $TEST_FAILED

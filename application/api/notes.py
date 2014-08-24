@@ -58,6 +58,23 @@ def rebuild_cache():
     return True
 
 
+def _multiple_request(ids, request):
+    """ Execute the request on multiple ids
+
+    :param list ids: Ids on wich the request will be executed
+    :param str request: The request
+    """
+
+    with Database() as database:
+        database.transaction()
+        cursor = QtSql.QSqlQuery(database)
+        cursor.prepare(request)
+        for id_ in ids:
+            cursor.bindValue(':id', id_)
+            cursor.exec_()
+        return database.commit() and rebuild_cache()
+
+
 # pylint: disable=too-many-arguments
 def add(nickname, firstname, lastname, mail, tel, birthdate, promo, photo_path):
     """ Create a note. Copy the image from photo_path to img/
@@ -77,7 +94,8 @@ def add(nickname, firstname, lastname, mail, tel, birthdate, promo, photo_path):
     if photo_path:
         name = os.path.split(photo_path)[1]
         if name:
-            shutil.copyfile(photo_path, "img/" + name)
+            if not os.path.exists("img/" + name):
+                shutil.copyfile(photo_path, "img/" + name)
 
     with Cursor() as cursor:
         cursor.prepare("INSERT INTO notes (nickname, lastname, firstname,\
@@ -118,55 +136,53 @@ def remove_multiple(ids):
 
     :return bool: True if success else False.
     """
-    with Database() as database:
-        database.transaction()
-        cursor = QtSql.QSqlQuery(database)
-        cursor.prepare("DELETE FROM notes WHERE id=:id")
-        for id_ in ids:
-            cursor.bindValue(':id', id_)
-            cursor.exec_()
-        return database.commit() and rebuild_cache()
+    _multiple_request(ids, "DELETE FROM notes WHERE id=:id")
 
 
-def change_nickname(id_, new_nickname):
-    """ Change a note nickname.
-
-    :param int id_: The id of the note
-    :param str new_nickname: The new nickname
-
-    :return bool: True if success else False
-    """
-    with Cursor() as cursor:
-        cursor.prepare("UPDATE notes SET nickname=:nickname WHERE id=:id")
-        cursor.bindValues({':nickname': new_nickname, ':id': id_})
-        return cursor.exec_() and rebuild_cache()
-
-
-def change_tel(id_, new_tel):
+def change_tel(nickname, new_tel):
     """ Change a note phone number.
 
-    :param int id_: The id of the note
+    :param str nickname: The nickname of the note.
     :param str new_tel: The new phone number
 
     :return bool: True if success else False
     """
     with Cursor() as cursor:
-        cursor.prepare("UPDATE notes SET tel=:tel WHERE id=:id")
-        cursor.bindValues({':tel': new_tel, ':id': id_})
+        cursor.prepare("UPDATE notes SET tel=:tel WHERE nickname=:nickname")
+        cursor.bindValues({':tel': new_tel, ':nickname': nickname})
         return cursor.exec_() and rebuild_cache()
 
 
-def change_photo(id_, new_photo):
-    """ Change a note photo.
+def change_mail(nickname, new_mail):
+    """ Change a note mail address
 
-    :param int id_: The id of the note
-    :param str new_path: The new photo_path
+    :param str nickname: The nickname of the note.
+    :param str new_mail: The new mail address
 
     :return bool: True if success else False
     """
     with Cursor() as cursor:
-        cursor.prepare("UPDATE notes SET photo_path=:photo_path WHERE id=:id")
-        cursor.bindValues({':photo_path': new_photo, ':id': id_})
+        cursor.prepare("UPDATE notes SET mail=:mail WHERE nickname=:nickname")
+        cursor.bindValues({':mail': new_mail, ':nickname': nickname})
+        return cursor.exec_() and rebuild_cache()
+
+
+def change_photo(nickname, new_photo):
+    """ Change a note photo.
+
+    :param str nickname: The nickname of the note.
+    :param str new_path: The new photo_path
+
+    :return bool: True if success else False
+    """
+    name = os.path.split(new_photo)[1]
+    if name:
+        if not os.path.exists("img/" + name):
+            shutil.copyfile(new_photo, "img/" + name)
+    with Cursor() as cursor:
+        cursor.prepare("UPDATE notes SET photo_path=:photo_path \
+                        WHERE nickname=:nickname")
+        cursor.bindValues({':photo_path': "img/" + name, ':nickname': nickname})
         return cursor.exec_() and rebuild_cache()
 
 
@@ -205,6 +221,16 @@ def hide(id_):
         return cursor.exec_()
 
 
+def hide_multiple(ids):
+    """ Hide multiple notes.
+
+    :param list ids: The list of notes to hide
+
+    :return bool: True if success else False
+    """
+    return _multiple_request(ids, "UPDATE notes SET hidden=1 WHERE id=:id")
+
+
 def show(id_):
     """ Show a note
 
@@ -216,6 +242,16 @@ def show(id_):
         cursor.prepare("UPDATE notes SET hidden=0 WHERE id=:id")
         cursor.bindValue(':id', id_)
         return cursor.exec_()
+
+
+def show_multiple(ids):
+    """ Show multiple notes
+
+    :param int id_: The list of notes to show
+
+    :return bool: True if success else False
+    """
+    return _multiple_request(ids, "UPDATE notes SET hidden=0 WHERE id=:id")
 
 
 def transaction(id_, diff):

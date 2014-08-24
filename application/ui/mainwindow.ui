@@ -76,11 +76,8 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
+      <property name="styleSheet">
+       <string notr="true"/>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
@@ -283,7 +280,7 @@
      <addaction name="export_with_profs"/>
      <addaction name="export_without_profs"/>
     </widget>
-    <addaction name="add_note"/>
+    <addaction name="manage_notes"/>
     <addaction name="notes_action"/>
     <addaction name="menuExporter_les_notes"/>
    </widget>
@@ -303,9 +300,9 @@
     <string>Gerer les &amp;consomations</string>
    </property>
   </action>
-  <action name="add_note">
+  <action name="manage_notes">
    <property name="text">
-    <string>Ajouter une &amp;note</string>
+    <string>Gerer les &amp;notes</string>
    </property>
   </action>
   <action name="export_with_profs">
@@ -347,7 +344,7 @@
    <slots>
     <slot>user_managment_fnc()</slot>
     <slot>consumption_managment_fnc()</slot>
-    <slot>add_note_fnc()</slot>
+    <slot>manage_note_fnc()</slot>
     <slot>export_notes_with_profs_fnc()</slot>
     <slot>export_notes_without_profs_fnc()</slot>
     <slot>change_password_fnc()</slot>
@@ -397,10 +394,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>add_note</sender>
+   <sender>manage_notes</sender>
    <signal>triggered()</signal>
    <receiver>menu_bar</receiver>
-   <slot>add_note_fnc()</slot>
+   <slot>manage_note_fnc()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
