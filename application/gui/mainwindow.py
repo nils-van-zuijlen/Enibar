@@ -29,6 +29,7 @@ from .notesaction import NotesAction
 from .panelmanagment import PanelManagment
 from .passwordmanagment import PasswordManagment
 from .usermanagment import UserManagmentWindow
+from .refillnote import RefillNote
 import api.notes
 import datetime
 import time
@@ -60,13 +61,22 @@ class MainWindow(QtWidgets.QMainWindow):
         self.selected = item
         widget = self.notes_list.currentItem()
         if not widget:
+            self.refill_note.setEnabled(False)
+            self.note_name.setText("Surnom - Prénom nom")
+            self.note_mail.setText("email@enib.fr")
+            self.note_promo.setText("Promo")
+            self.note_phone.setText("+336 00 00 00 00")
+            self.note_solde.setText("0.00 €")
+            image = QtGui.QPixmap()
+            self.note_photo.setPixmap(image)
+            self.note_box.setStyleSheet("background-color: none;")
+            self.note_box.setEnabled(False)
             return
+        self.refill_note.setEnabled(True)
         infos = list(api.notes.get(lambda x: widget.text() in x["nickname"]))[0]
+        # pylint: disable=star-args
         self.note_name.setText("{nickname} - {firstname} {lastname}".format(
-            nickname=infos['nickname'],
-            firstname=infos['firstname'],
-            lastname=infos['lastname']
-        ))
+            **infos))
         self.note_mail.setText(infos['mail'])
         self.note_solde.setText("{:.2f} €".format(infos['note']))
         self.note_promo.setText(infos['promo'])
@@ -155,6 +165,13 @@ class MenuBar(QtWidgets.QMenuBar):
         """ Open a NotesAction window
         """
         self.cur_window = NotesAction()
+        self._connect_window()
+
+    def refill_note_fnc(self):
+        """ Open a RefillNote window
+        """
+        self.cur_window = RefillNote(
+            self.parent().notes_list.currentItem().text())
         self._connect_window()
 
     def export(self, notes):

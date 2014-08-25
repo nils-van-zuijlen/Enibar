@@ -51,7 +51,6 @@ class ManageNotes(QtWidgets.QDialog):
 
         self.photo_selected = None
         self.adding = False
-        self.cleaning = False
         self.current_shown = -1
         self.on_change = api.validator.on_change(self, self.save_button)
         self.note_list.refresh(api.notes.get())
@@ -138,8 +137,6 @@ class ManageNotes(QtWidgets.QDialog):
     def on_note_selected(self, note_selected):
         """ This is called when a note is selected
         """
-        if self.cleaning:
-            return
         if self.adding and note_selected != -1:
             self.adding = False
         elif self.adding and note_selected == -1:
@@ -206,13 +203,4 @@ class ManageNotesList(gui.utils.NotesList):
     """
     def __init__(self, parent):
         super().__init__(parent)
-
-    def clean(self):
-        """ Clean the note list and reset the current_selected item.
-        """
-        self.parent().cleaning = True
-        for i in reversed(range(self.count())):
-            widget = self.takeItem(i)
-            del widget
-        self.parent().cleaning = False
 

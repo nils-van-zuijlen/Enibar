@@ -69,18 +69,11 @@ class NotesList(QtWidgets.QListWidget):
         api.notes.rebuild_cache()
         self.refresh(api.notes.get(self.current_filter))
 
-    def clean(self):
-        """ Clean the note list
-        """
-        for i in reversed(range(self.count())):
-            widget = self.takeItem(i)
-            del widget
-
     def refresh(self, notes_list):
         """ Refresh the note list
         """
         selected = self.currentRow()
-        self.clean()
+        self.clear()
         self.build(notes_list)
         self.setCurrentRow(selected)
 
