@@ -106,12 +106,12 @@ def set_alcoholic(cat_id, is_alcoholic):
         return cursor.exec_()
 
 
-@api.base.filtered_getter('categories')
-def get(cursor):
+def get(**filter_):
     """ Get category with given values
 
-    :param dict kwargs: filter to apply
+    :param dict filter_: filter to apply
     """
+    cursor = api.base.filtered_getter("categories", filter_)
     while cursor.next():
         yield {
             'id': cursor.record().value('id'),

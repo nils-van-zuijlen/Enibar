@@ -200,13 +200,13 @@ def search_by_name(name):
                    PRODUCT_FIELDS}
 
 
-@api.base.filtered_getter('products')
-def get(cursor):
+def get(**filter_):
     """ Get products filtered by given values
     Shuld be used like this api.products.get(name="machin", catgegory=5)
 
-    :param cursor: database cursor
+    :param dict filter_: filter to apply
     """
+    cursor = api.base.filtered_getter("products", filter_)
     while cursor.next():
         yield {
             'id': cursor.record().value('id'),

@@ -124,12 +124,12 @@ def delete_products(paid, products):
         database.commit()
 
 
-@api.base.filtered_getter('panels')
-def get(cursor):
+def get(**filter_):
     """ Get panel with given values
 
-    :param dict kwargs: filter to apply
+    :param dict filter_: filter to apply
     """
+    cursor = api.base.filtered_getter("panels", filter_)
     while cursor.next():
         yield {
             'name': cursor.record().value('name'),

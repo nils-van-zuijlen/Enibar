@@ -41,31 +41,22 @@ def make_get_unique(getter):
     return get_unique
 
 
-def filtered_getter(table):
-    """ Filtered getter
-    Used to build filter around getters.
-    This is advanced stuff be sure you fully understand decorators before you
-    even remotly think about editing this.
-    Deal with it
+def filtered_getter(table, filter_):
+    """ This creates a request in the table table with the filter filter_ and
+        returns the cursor of this request for future use.
     """
-    def decorator(func):
-        """ Decorator
-        """
-        def wrapper(**kwargs):
-            """ Wrapper
-            """
-            with Cursor() as cursor:
-                filters = []
-                for key in kwargs:
-                    filters.append("{key}=:{key}".format(key=key))
-                cursor.prepare("SELECT * FROM {} {} {}".format(
-                    table,
-                    "WHERE" * bool(len(filters)),
-                    " AND ".join(filters)
-                ))
-                for key, arg in kwargs.items():
-                    cursor.bindValue(":{}".format(key), arg)
-                if cursor.exec_():
-                    yield from func(cursor=cursor)
-        return wrapper
-    return decorator
+    with Cursor() as cursor:
+        filters = []
+        for key in filter_:
+            filters.append("{key}=:{key}".format(key=key))
+
+        cursor.prepare("SELECT * FROM {} {} {}".format(
+            table,
+            "WHERE" * bool(len(filters)),
+            " AND ".join(filters)
+        ))
+        for key, arg in filter_.items():
+            cursor.bindValue(":{}".format(key), arg)
+        if cursor.exec_():
+            return cursor
+
