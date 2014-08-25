@@ -34,13 +34,17 @@ class Panels(QtWidgets.QTabWidget):
     """
     def __init__(self, parent):
         super().__init__(parent)
+        self.main_window = parent.parent()
+        self.panels = []
         self.build()
 
     def build(self):
         """ Build panels from panels found in database
         """
         for panel in api.panels.get():
-            self.addTab(PanelTab(panel['id']), panel['name'])
+            widget = PanelTab(panel['id'], self.main_window)
+            self.panels.append(widget)
+            self.addTab(widget, panel['name'])
 
     def clear(self):
         """ Clear panels
@@ -54,15 +58,13 @@ class Panels(QtWidgets.QTabWidget):
 class PanelTab(QtWidgets.QWidget):
     """ Panel widget
     """
-    def __init__(self, panel_id):
+    def __init__(self, panel_id, main_window):
         super().__init__()
         self.panel_id = panel_id
+        self.main_window = main_window
         uic.loadUi('ui/panel.ui', self)
         self.scroll_area_content.panel_id = self.panel_id
         self.scroll_area_content.build()
-        self.product_list.setColumnWidth(0, 60)
-        self.product_list.setColumnWidth(1, 130)
-        self.product_list.setColumnWidth(2, 50)
         self.connect_signals()
 
     def connect_signals(self):
@@ -90,8 +92,67 @@ class PanelTab(QtWidgets.QWidget):
         else:
             price_name = widget.itemText(index)
             price_value = widget.prices[price_name]
+        self.main_window.product_list.add_product(
+            widget.name,
+            price_name,
+            price_value
+        )
+        text = "{:.2f} €".format(self.main_window.product_list.get_total())
+        self.main_window.total.setText(text)
 
-        print("Yay", price_name, price_value)
+
+class ProductList(QtWidgets.QTreeWidget):
+    """ Product list
+    This is the product list for the main window, whihc is used to build a
+    transaction. This this file may not be the right one for this class.
+    """
+    # pylint: disable=too-many-public-methods
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.products = []
+        self.setColumnWidth(0, 60)
+        self.setColumnWidth(1, 130)
+        self.setColumnWidth(2, 50)
+
+    def add_product(self, product_name, price_name, price):
+        """ Add product to list
+        """
+        name = "{} ({})".format(product_name, price_name)
+        found = False
+        for product in self.products:
+            if product['name'] == name:
+                product['price'] += price
+                product['price'] = round(product['price'], 2)
+                product['count'] += 1
+                product['widget'].setText(0, str(product['count']))
+                product['widget'].setText(2, str(product['price']))
+                found = True
+        if not found:
+            product = {
+                'name': name,
+                'price': price,
+                'count': 1,
+            }
+            widget = QtWidgets.QTreeWidgetItem(['1', name, str(price)])
+            self.addTopLevelItem(widget)
+            product['widget'] = widget
+            self.products.append(product)
+
+    def clear(self):
+        """ Clear the list
+        """
+        super().clear()
+        self.products = []
+        main_window = self.parent().parent().parent()
+        main_window.total.setText("0.00 €")
+
+    def get_total(self):
+        """ Sum up all prices in the list
+
+        :return float: total
+        """
+        total = sum(item["price"] for item in self.products)
+        return round(total, 2)
 
 
 class ProductsContainer(QtWidgets.QWidget):

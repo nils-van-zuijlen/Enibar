@@ -47,12 +47,19 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.refresh()
         self.notes_list.currentRowChanged.connect(self.select_note)
+        self.selected = None
 
-    def select_note(self):
+        # Set product list header width
+        self.product_list.setColumnWidth(0, 60)
+        self.product_list.setColumnWidth(1, 130)
+        self.product_list.setColumnWidth(2, 50)
+
+    def select_note(self, item):
         """
         Called when a note is selected
         """
         self.note_box.setEnabled(True)
+        self.selected = item
         widget = self.notes_list.currentItem()
         if not widget:
             self.refill_note.setEnabled(False)
@@ -93,6 +100,11 @@ class MainWindow(QtWidgets.QMainWindow):
         """ Refresh the notes list
         """
         self.notes_list.refresh(api.notes.get(lambda x: x['hidden'] == 0))
+
+    def validate_transaction(self):
+        """ Validate transaction
+        """
+        self.product_list.clear()
 
 
 class MenuBar(QtWidgets.QMenuBar):

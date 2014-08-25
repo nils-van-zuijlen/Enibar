@@ -14,137 +14,7 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="1">
-    <widget class="QLabel" name="label">
-     <property name="font">
-      <font>
-       <pointsize>15</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">padding:0.75em</string>
-     </property>
-     <property name="text">
-      <string>0.00 €</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="QWidget" name="widget_2" native="true">
-     <property name="minimumSize">
-      <size>
-       <width>250</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>250</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
-      <item>
-       <widget class="QPushButton" name="pushButton_13">
-        <property name="font">
-         <font>
-          <pointsize>11</pointsize>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">padding:0.75em;background-color:green;color:white</string>
-        </property>
-        <property name="text">
-         <string>Valider</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>11</pointsize>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">padding: 0.75em; background-color:red;color:white;</string>
-        </property>
-        <property name="text">
-         <string>Annuler</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QTreeWidget" name="product_list">
-     <property name="minimumSize">
-      <size>
-       <width>250</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>250</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="indentation">
-      <number>0</number>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-     <attribute name="headerDefaultSectionSize">
-      <number>66</number>
-     </attribute>
-     <column>
-      <property name="text">
-       <string>Quantité</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Consommation</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>prix</string>
-      </property>
-     </column>
-    </widget>
-   </item>
-   <item row="0" column="0" rowspan="3">
+   <item row="0" column="0" rowspan="2">
     <widget class="QScrollArea" name="scroll_area">
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
@@ -160,7 +30,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>551</width>
+        <width>807</width>
         <height>547</height>
        </rect>
       </property>
@@ -180,4 +50,7 @@
  </customwidgets>
  <resources/>
  <connections/>
+ <slots>
+  <slot>reset_total()</slot>
+ </slots>
 </ui>

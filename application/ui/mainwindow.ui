@@ -60,12 +60,184 @@
       <property name="enabled">
        <bool>true</bool>
       </property>
+      <property name="tabPosition">
+       <enum>QTabWidget::East</enum>
+      </property>
+      <property name="tabShape">
+       <enum>QTabWidget::Rounded</enum>
+      </property>
       <property name="currentIndex">
        <number>-1</number>
       </property>
+      <property name="elideMode">
+       <enum>Qt::ElideRight</enum>
+      </property>
+      <property name="usesScrollButtons">
+       <bool>true</bool>
+      </property>
+      <property name="documentMode">
+       <bool>false</bool>
+      </property>
+      <property name="movable">
+       <bool>true</bool>
+      </property>
      </widget>
     </item>
-    <item row="0" column="1" rowspan="2">
+    <item row="2" column="2">
+     <widget class="QWidget" name="widget" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item row="2" column="0">
+        <widget class="QWidget" name="widget_2" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>250</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>250</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="validation_button">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">padding:0.75em;background-color:green;color:white</string>
+            </property>
+            <property name="text">
+             <string>Valider</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="cancel_button">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">padding: 0.75em; background-color:red;color:white;</string>
+            </property>
+            <property name="text">
+             <string>Annuler</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="total">
+         <property name="font">
+          <font>
+           <pointsize>15</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">padding:0.75em</string>
+         </property>
+         <property name="text">
+          <string>0.00 €</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="ProductList" name="product_list">
+         <property name="minimumSize">
+          <size>
+           <width>250</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>250</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="indentation">
+          <number>0</number>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+         <attribute name="headerDefaultSectionSize">
+          <number>66</number>
+         </attribute>
+         <column>
+          <property name="text">
+           <string>Quantité</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Consommation</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>prix</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="1" rowspan="2" colspan="2">
      <widget class="QFrame" name="note_box">
       <property name="enabled">
        <bool>false</bool>
@@ -256,7 +428,7 @@
      <x>0</x>
      <y>0</y>
      <width>884</width>
-     <height>20</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="administration">
@@ -343,6 +515,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>ProductList</class>
+   <extends>QTreeWidget</extends>
+   <header>gui/panels</header>
+  </customwidget>
+  <customwidget>
    <class>NotesList</class>
    <extends>QListWidget</extends>
    <header>gui/utils</header>
@@ -350,7 +527,7 @@
   <customwidget>
    <class>MenuBar</class>
    <extends>QMenuBar</extends>
-   <header location="global">gui/mainwindow</header>
+   <header>gui/mainwindow</header>
    <slots>
     <slot>user_managment_fnc()</slot>
     <slot>consumption_managment_fnc()</slot>
@@ -501,6 +678,38 @@
    </hints>
   </connection>
   <connection>
+   <sender>cancel_button</sender>
+   <signal>clicked()</signal>
+   <receiver>product_list</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>843</x>
+     <y>662</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>789</x>
+     <y>442</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>validation_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>validate_transaction()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>696</x>
+     <y>666</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>571</x>
+     <y>687</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
    <sender>refill_note</sender>
    <signal>triggered()</signal>
    <receiver>menu_bar</receiver>
@@ -517,4 +726,7 @@
    </hints>
   </connection>
  </connections>
+ <slots>
+  <slot>validate_transaction()</slot>
+ </slots>
 </ui>
