@@ -24,7 +24,7 @@ from database import Cursor
 
 
 def make_get_unique(getter):
-    """ Make get_unique function for apis
+    """ Make get_unique function for apis.
     """
     get = getter
 

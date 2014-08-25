@@ -83,7 +83,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.note_promo.setText(infos['promo'])
         self.note_phone.setText(infos['tel'])
 
-        image = QtGui.QPixmap('img/coucou.jpg')
+        if infos['photo_path']:
+            image = QtGui.QPixmap(infos['photo_path'])
+        else:
+            image = QtGui.QPixmap("img/coucou.jpg")
         if not image.isNull():
             self.note_photo.setPixmap(image.scaled(QtCore.QSize(120, 160), 1))
         else:
