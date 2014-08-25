@@ -196,11 +196,3 @@ class ManageNotes(QtWidgets.QDialog):
             if isinstance(obj, Input):
                 action(obj)
 
-
-class ManageNotesList(gui.utils.NotesList):
-    # pylint: disable=too-many-public-methods
-    """ The list of notes on the right
-    """
-    def __init__(self, parent):
-        super().__init__(parent)
-

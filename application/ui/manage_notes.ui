@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>418</width>
-    <height>464</height>
+    <height>615</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -261,7 +261,7 @@
     </layout>
    </item>
    <item row="1" column="0">
-    <widget class="ManageNotesList" name="note_list">
+    <widget class="NotesList" name="note_list">
      <property name="sortingEnabled">
       <bool>true</bool>
      </property>
@@ -276,9 +276,9 @@
    <header>gui.input</header>
   </customwidget>
   <customwidget>
-   <class>ManageNotesList</class>
+   <class>NotesList</class>
    <extends>QListWidget</extends>
-   <header>gui.manage_notes</header>
+   <header>gui/utils</header>
   </customwidget>
  </customwidgets>
  <tabstops>
