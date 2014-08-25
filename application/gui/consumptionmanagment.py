@@ -255,10 +255,16 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
         self.color_button.setEnabled(False)
 
     def select_color(self):
+        """ Select color, called when color_button is pressed
+        """
         color = self.color_picker.getColor()
         if color.isValid() and self.category:
             api.categories.set_color(self.category.text(), color.name())
-            self.color_button.setStyleSheet("background:{}".format(color.name()))
+            self.color_button.setStyleSheet(
+                "background:{}".format(color.name())
+            )
+
+
 #
 # Consumption
 #

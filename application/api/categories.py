@@ -82,6 +82,7 @@ def remove(name):
         cursor.bindValue(':name', name)
         return cursor.exec_()
 
+
 def get(**filter_):
     """ Get category with given values
 

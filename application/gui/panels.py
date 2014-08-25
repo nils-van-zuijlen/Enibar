@@ -289,7 +289,9 @@ class CategoryContainer(QtWidgets.QGroupBox):
         if not cat:
             return
 
-        self.setStyleSheet("QGroupBox{{background-color: {}}}".format(cat['color']))
+        self.setStyleSheet(
+            "QGroupBox{{background-color: {}}}".format(cat['color'])
+        )
 
     def finalise(self):
         """ Finalise
@@ -306,6 +308,7 @@ class BaseProduct:
     products information on the destination widget.
     """
     # pylint: disable=too-few-public-methods
+    # pylint: disable=too-many-arguments
     def __init__(self, cid, pid, name, cat_name, prices):
         super().__init__()
         self.cid = cid
@@ -327,6 +330,7 @@ class Button(BaseProduct, QtWidgets.QPushButton):
     """ Button
     Button used to display products which contain a single price.
     """
+    # pylint: disable=too-many-arguments
     def __init__(self, cid, pid, name, cat_name, prices):
         BaseProduct.__init__(self, cid, pid, name, cat_name, prices)
         QtWidgets.QPushButton.__init__(self, name)
@@ -342,6 +346,7 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
     item is clicked so product name is allways displayed while you can still
     select a given price
     """
+    # pylint: disable=too-many-arguments
     def __init__(self, cid, pid, name, cat_name, prices):
         QtWidgets.QComboBox.__init__(self)
         BaseProduct.__init__(self, cid, pid, name, cat_name, prices)
