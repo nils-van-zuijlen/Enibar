@@ -377,7 +377,7 @@ class ConsumptionList(QtWidgets.QTreeWidget):
         """
         cat_widget = QtWidgets.QTreeWidgetItem(self, [name])
         self.categories.append(cat_widget)
-        for prod in api.products.get_by_category(id_):
+        for prod in api.products.get(category=id_):
             self.add_product(prod['name'], name)
 
 
@@ -426,7 +426,7 @@ class CategoryPrices(QtWidgets.QGroupBox):
 
         :param str category_name: Selected category name
         """
-        cat = api.categories.get(name=category_name)
+        cat = api.categories.get_unique(name=category_name)
         if cat:
             for desc in api.prices.get_descriptor(category=cat['id']):
                 self.add_price(desc['id'], desc['label'])

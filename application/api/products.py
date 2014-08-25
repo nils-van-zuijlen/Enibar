@@ -109,20 +109,6 @@ def remove(id_):
         return cursor.exec_()
 
 
-def get_all():
-    """ List all products
-
-    :return dict: All products
-    """
-    with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM products")
-        cursor.exec_()
-
-        while cursor.next():
-            yield {field: cursor.record().value(field) for field in
-                   PRODUCT_FIELDS}
-
-
 def set_prices(name, unit=None, demi=None, pint=None, meter=None):
     """ Set prices for a product
 
@@ -144,42 +130,6 @@ def set_prices(name, unit=None, demi=None, pint=None, meter=None):
         cursor.bindValue(':name', name)
 
         return cursor.exec_()
-
-
-def get_by_category(category):
-    """ Get products by category
-
-    :param int category: Category id
-
-    :return list: A list of product descriptions.
-    """
-    with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM products WHERE category=:category")
-
-        cursor.bindValue(':category', category)
-        cursor.exec_()
-
-        while cursor.next():
-            yield {field: cursor.record().value(field) for field in
-                   PRODUCT_FIELDS}
-
-
-def get_by_name(name):
-    """ Get products by name
-
-    :param str name: name of the product.
-
-    :return list: A list of product descriptions.
-    """
-    with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM products WHERE name LIKE :name")
-
-        cursor.bindValue(':name', "%{}%".format(name))
-        cursor.exec_()
-
-        if cursor.next():
-            return {field: cursor.record().value(field) for field in
-                    PRODUCT_FIELDS}
 
 
 def search_by_name(name):
