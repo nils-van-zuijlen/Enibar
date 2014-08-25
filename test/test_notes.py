@@ -277,7 +277,7 @@ class NotesTest(unittest.TestCase):
         xml += "\t\t<date_Decouvert></date_Decouvert>\n"
         xml += "\t</note>\n"
         xml += "</notes>\n"
-        self.assertEqual(notes.export(notes.get()), xml)
+        self.assertEqual(notes.export(notes.get(), xml=True), xml)
 
     def test_remove_multiple(self):
         """ Testing multiple removing

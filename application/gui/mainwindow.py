@@ -59,11 +59,13 @@ class MainWindow(QtWidgets.QMainWindow):
         Called when a note is selected
         """
         self.note_box.setEnabled(True)
+        self.refill_note.setEnabled(True)
         if index >= 0:
-            self.selected = self.notes_list.itemAt(index, 0)
+            self.selected = self.notes_list.item(index)
         widget = self.notes_list.currentItem()
+
+        # If there are no current selected note.
         if not widget:
-            self.refill_note.setEnabled(False)
             self.note_name.setText("Surnom - Prénom nom")
             self.note_mail.setText("email@enib.fr")
             self.note_promo.setText("Promo")
@@ -72,9 +74,10 @@ class MainWindow(QtWidgets.QMainWindow):
             image = QtGui.QPixmap()
             self.note_photo.setPixmap(image)
             self.note_box.setStyleSheet("background-color: none;")
+            self.refill_note.setEnabled(False)
             self.note_box.setEnabled(False)
             return
-        self.refill_note.setEnabled(True)
+
         infos = list(api.notes.get(lambda x: widget.text() in x["nickname"]))[0]
         # pylint: disable=star-args
         self.note_name.setText("{nickname} - {firstname} {lastname}".format(
@@ -139,7 +142,6 @@ class MenuBar(QtWidgets.QMenuBar):
 
     def consumption_managment_fnc(self):
         """ Call consumption managment window """
-        # Java style
         self.cur_window = ConsumptionManagmentWindow()
         self._connect_window()
 
@@ -152,12 +154,10 @@ class MenuBar(QtWidgets.QMenuBar):
     def export_notes_with_profs_fnc(self):
         """ Export all notes """
         self.export(api.notes.get())
-        self._connect_window()
 
     def export_notes_without_profs_fnc(self):
         """ Export only students notes """
         self.export(api.notes.get(lambda x: x["promo"] != "Prof"))
-        self._connect_window()
 
     def change_password_fnc(self):
         """ Open a PasswordManagment window
@@ -186,12 +186,15 @@ class MenuBar(QtWidgets.QMenuBar):
 
     def export(self, notes):
         """ Generic export notes function """
-        path = QtWidgets.QFileDialog(self).getSaveFileName(
+        path, format_ = QtWidgets.QFileDialog(self).getSaveFileName(
             self, "Exporter vers", "{}.xml".format(
                 datetime.datetime.now().strftime("%Y-%m-%d")),
-            "XML Files (*.xml)")[0]
+            "XML Files (*.xml)\nCSV Files (*.csv)")
 
         if path:
             with open(path, "w") as save_file:
-                save_file.write(api.notes.export(notes))
+                if format_ == "XML Files (*.xml)":
+                    save_file.write(api.notes.export(notes, xml=True))
+                else:
+                    save_file.write(api.notes.export(notes, csv=True))
 

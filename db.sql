@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS admins(
 	manage_products BOOLEAN DEFAULT FALSE
 ) ENGINE=InnoDB;
 
-INSERT INTO admins(login, password) VALUES("admin", "$2a$12$grLadAuopGdXxA7wEIehlO4BpMHTpJFweL3zJAHGaYFOIw1Gp.U5O");
+INSERT INTO admins(login, password, manage_notes, manage_users, manage_products) VALUES("admin", "$2a$12$grLadAuopGdXxA7wEIehlO4BpMHTpJFweL3zJAHGaYFOIw1Gp.U5O", TRUE, TRUE, TRUE);
 
 
 CREATE TABLE IF NOT EXISTS notes(
