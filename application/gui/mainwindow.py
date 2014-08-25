@@ -61,7 +61,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.note_box.setEnabled(True)
         self.refill_note.setEnabled(True)
         if index >= 0:
-            self.selected = self.notes_list.itemAt(index, 0)
+            self.selected = self.notes_list.item(index)
         widget = self.notes_list.currentItem()
 
         # If there are no current selected note.
