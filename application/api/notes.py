@@ -159,54 +159,6 @@ def remove_multiple(ids):
     _request_multiple_ids(ids, "DELETE FROM notes WHERE id=:id")
 
 
-def change_tel(nickname, new_tel):
-    """ Change a note phone number.
-
-    :param str nickname: The nickname of the note.
-    :param str new_tel: The new phone number
-
-    :return bool: True if success else False
-    """
-    with Cursor() as cursor:
-        cursor.prepare("UPDATE notes SET tel=:tel WHERE nickname=:nickname")
-        cursor.bindValues({':tel': new_tel, ':nickname': nickname})
-        value = cursor.exec_()
-    rebuild_cache()
-    return value
-
-
-def change_mail(nickname, new_mail):
-    """ Change a note mail address
-
-    :param str nickname: The nickname of the note.
-    :param str new_mail: The new mail address
-
-    :return bool: True if success else False
-    """
-    with Cursor() as cursor:
-        cursor.prepare("UPDATE notes SET mail=:mail WHERE nickname=:nickname")
-        cursor.bindValues({':mail': new_mail, ':nickname': nickname})
-        value = cursor.exec_()
-    rebuild_cache()
-    return value
-
-
-def change_nickname(nickname, new_nickname):
-    """ Change a note mail address
-
-    :param str nickname: The nickname of the note.
-    :param str new_mail: The new mail address
-
-    :return bool: True if success else False
-    """
-    with Cursor() as cursor:
-        cursor.prepare("UPDATE notes SET mail=:mail WHERE nickname=:nickname")
-        cursor.bindValues({':mail': new_mail, ':nickname': nickname})
-        value = cursor.exec_()
-    rebuild_cache()
-    return value
-
-
 def change_photo(nickname, new_photo):
     """ Change a note photo.
 
