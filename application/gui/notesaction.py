@@ -95,7 +95,7 @@ class NotesAction(QtWidgets.QDialog):
                 self.current_filter = lambda x: x['note'] < float(text)
                 self.note_list.rebuild(api.notes.get(self.current_filter))
         except ValueError:
-            self.note_list.clean()
+            self.note_list.clear()
 
     def hide_action(self):
         """ Called when "cacher" is clicked
@@ -118,6 +118,6 @@ class MultiNotesList(NotesList):
     def rebuild(self, notes_list):
         """ Just rebuild the notes list
         """
-        self.clean()
+        self.clear()
         self.build(notes_list)
 
