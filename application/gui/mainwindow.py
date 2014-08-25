@@ -54,13 +54,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.product_list.setColumnWidth(1, 130)
         self.product_list.setColumnWidth(2, 50)
 
-    def select_note(self, item):
+    def select_note(self, index):
         """
         Called when a note is selected
         """
         self.note_box.setEnabled(True)
         self.refill_note.setEnabled(True)
-        self.selected = item
+        if index >= 0:
+            self.selected = self.notes_list.itemAt(index, 0)
         widget = self.notes_list.currentItem()
 
         # If there are no current selected note.
@@ -110,6 +111,9 @@ class MainWindow(QtWidgets.QMainWindow):
     def validate_transaction(self):
         """ Validate transaction
         """
+        total = self.product_list.get_total()
+        api.notes.transaction(self.selected.text(), -total)
+        self.refresh()
         self.product_list.clear()
 
 
