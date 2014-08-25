@@ -34,13 +34,17 @@ class Panels(QtWidgets.QTabWidget):
     """
     def __init__(self, parent):
         super().__init__(parent)
+        self.main_window = parent.parent()
+        self.panels = []
         self.build()
 
     def build(self):
         """ Build panels from panels found in database
         """
         for panel in api.panels.get():
-            self.addTab(PanelTab(panel['id']), panel['name'])
+            widget = PanelTab(panel['id'], self.main_window)
+            self.panels.append(widget)
+            self.addTab(widget, panel['name'])
 
     def clear(self):
         """ Clear panels
@@ -54,15 +58,13 @@ class Panels(QtWidgets.QTabWidget):
 class PanelTab(QtWidgets.QWidget):
     """ Panel widget
     """
-    def __init__(self, panel_id):
+    def __init__(self, panel_id, main_window):
         super().__init__()
         self.panel_id = panel_id
+        self.main_window = main_window
         uic.loadUi('ui/panel.ui', self)
         self.scroll_area_content.panel_id = self.panel_id
         self.scroll_area_content.build()
-        self.product_list.setColumnWidth(0, 60)
-        self.product_list.setColumnWidth(1, 130)
-        self.product_list.setColumnWidth(2, 50)
         self.connect_signals()
 
 
@@ -91,17 +93,18 @@ class PanelTab(QtWidgets.QWidget):
         else:
             price_name = widget.itemText(index)
             price_value = widget.prices[price_name]
-        self.product_list.add_product(widget.name, price_name, price_value)
-        self.total.setText("{:.2f} €".format(self.product_list.get_total()))
+        self.main_window.product_list.add_product(widget.name, price_name, price_value)
+        self.main_window.total.setText("{:.2f} €".format(self.main_window.product_list.get_total()))
 
-    def reset_total(self):
-        self.total.setText("0.00 €")
 
 
 class ProductList(QtWidgets.QTreeWidget):
     def __init__(self, parent):
         super().__init__(parent)
         self.products = []
+        self.setColumnWidth(0, 60)
+        self.setColumnWidth(1, 130)
+        self.setColumnWidth(2, 50)
 
     def add_product(self, product_name, price_name, price):
         """ Add product to list
@@ -130,6 +133,8 @@ class ProductList(QtWidgets.QTreeWidget):
     def clear(self):
         super().clear()
         self.products = []
+        main_window = self.parent().parent().parent()
+        main_window.total.setText("0.00 €")
 
     def get_total(self):
         total = sum(map(lambda x: x["price"], self.products))
