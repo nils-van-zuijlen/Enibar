@@ -72,7 +72,9 @@ def _multiple_request(ids, request):
         for id_ in ids:
             cursor.bindValue(':id', id_)
             cursor.exec_()
-        return database.commit() and rebuild_cache()
+        value = database.commit()
+    rebuild_cache()
+    return value
 
 
 # pylint: disable=too-many-arguments
@@ -126,7 +128,9 @@ def remove(id_):
     with Cursor() as cursor:
         cursor.prepare("DELETE FROM notes WHERE id=:id")
         cursor.bindValue(':id', id_)
-        return cursor.exec_() and rebuild_cache()
+        value = cursor.exec_()
+    rebuild_cache()
+    return value
 
 
 def remove_multiple(ids):
@@ -150,7 +154,9 @@ def change_tel(nickname, new_tel):
     with Cursor() as cursor:
         cursor.prepare("UPDATE notes SET tel=:tel WHERE nickname=:nickname")
         cursor.bindValues({':tel': new_tel, ':nickname': nickname})
-        return cursor.exec_() and rebuild_cache()
+        value = cursor.exec_()
+    rebuild_cache()
+    return value
 
 
 def change_mail(nickname, new_mail):
@@ -164,7 +170,9 @@ def change_mail(nickname, new_mail):
     with Cursor() as cursor:
         cursor.prepare("UPDATE notes SET mail=:mail WHERE nickname=:nickname")
         cursor.bindValues({':mail': new_mail, ':nickname': nickname})
-        return cursor.exec_() and rebuild_cache()
+        value = cursor.exec_()
+    rebuild_cache()
+    return value
 
 
 def change_photo(nickname, new_photo):
@@ -183,7 +191,9 @@ def change_photo(nickname, new_photo):
         cursor.prepare("UPDATE notes SET photo_path=:photo_path \
                         WHERE nickname=:nickname")
         cursor.bindValues({':photo_path': "img/" + name, ':nickname': nickname})
-        return cursor.exec_() and rebuild_cache()
+        value = cursor.exec_()
+    rebuild_cache()
+    return value
 
 
 def get(filter_=None):
@@ -218,7 +228,9 @@ def hide(id_):
     with Cursor() as cursor:
         cursor.prepare("UPDATE notes SET hidden=1 WHERE id=:id")
         cursor.bindValue(':id', id_)
-        return cursor.exec_()
+        value = cursor.exec_()
+    rebuild_cache()
+    return value
 
 
 def hide_multiple(ids):
@@ -241,7 +253,9 @@ def show(id_):
     with Cursor() as cursor:
         cursor.prepare("UPDATE notes SET hidden=0 WHERE id=:id")
         cursor.bindValue(':id', id_)
-        return cursor.exec_()
+        value = cursor.exec_()
+    rebuild_cache()
+    return value
 
 
 def show_multiple(ids):
@@ -267,7 +281,9 @@ def transaction(nickname, diff):
         cursor.bindValue(":diff", diff)
         cursor.bindValue(":nick", nickname)
 
-        return cursor.exec_() and rebuild_cache()
+        value = cursor.exec_()
+    rebuild_cache()
+    return value
 
 
 def export(notes, *, csv=False, xml=False):
@@ -302,3 +318,4 @@ def export(notes, *, csv=False, xml=False):
         return csv
 
 rebuild_cache()
+
