@@ -47,22 +47,6 @@ def add(name):
             return None
 
 
-def get_all():
-    """ Get all categories without any filter
-    Deprecated use get instead
-
-    :return generator: All categories
-    """
-    with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM categories")
-        cursor.exec_()
-        while cursor.next():
-            yield {
-                'id': cursor.record().value('id'),
-                'name': cursor.record().value('name'),
-            }
-
-
 def remove(name):
     """ Remove category
 
@@ -73,24 +57,6 @@ def remove(name):
         cursor.prepare("DELETE FROM categories WHERE name=:name")
         cursor.bindValue(':name', name)
         return cursor.exec_()
-
-
-def get_by_name(name):
-    """ Get category by name
-    deprecated use get_unique instead
-
-    :param str name: Category name
-    :return dict: Caterogy description
-    """
-    with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM categories WHERE name=:name")
-        cursor.bindValue(':name', name)
-        cursor.exec_()
-        if cursor.next():
-            return {
-                'id': cursor.record().value('id'),
-                'name': cursor.record().value('name'),
-            }
 
 
 def set_alcoholic(cat_id, is_alcoholic):

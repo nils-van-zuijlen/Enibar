@@ -234,7 +234,7 @@ class GlobalConsumptionList(PanelList):
                 products.append(product.text(0))
             names[cat.text(0)] = products
 
-        for cat in api.categories.get_all():
+        for cat in api.categories.get():
             if cat['name'] in names:
                 for product in api.products.get(category=cat['id']):
                     if not product['name'] in names[cat['name']]:
