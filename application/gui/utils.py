@@ -72,8 +72,14 @@ class NotesList(QtWidgets.QListWidget):
     def refresh(self, notes_list):
         """ Refresh the note list
         """
-        selected = self.currentRow()
+        selected = self.currentItem()
+        if selected:
+            selected = selected.text()
         self.clear()
         self.build(notes_list)
-        self.setCurrentRow(selected)
+        try:
+            new_selection = self.findItems(selected, QtCore.Qt.MatchExactly)[0]
+            self.setCurrentItem(new_selection)
+        except IndexError:
+            pass
 
