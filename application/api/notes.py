@@ -58,7 +58,7 @@ def rebuild_cache():
     return True
 
 
-def _multiple_request(ids, request):
+def _request_multiple_ids(ids, request):
     """ Execute the request on multiple ids
 
     :param list ids: Ids on wich the request will be executed
@@ -73,6 +73,22 @@ def _multiple_request(ids, request):
             cursor.bindValue(':id', id_)
             cursor.exec_()
         value = database.commit()
+    rebuild_cache()
+    return value
+
+
+def change_values(nick, **kwargs):
+    """ Change the value of the columns for the note with the nickname
+        `nickname`
+    """
+    with Cursor() as cursor:
+        setter = ", ".join("{key}=:{key}".format(key=key) for key in kwargs)
+        cursor.prepare("UPDATE notes SET {} WHERE nickname=:nick".format(
+            setter))
+        for key, value in kwargs.items():
+            cursor.bindValue(':{}'.format(key), value)
+        cursor.bindValue(':nick', nick)
+        value = cursor.exec_()
     rebuild_cache()
     return value
 
@@ -140,7 +156,7 @@ def remove_multiple(ids):
 
     :return bool: True if success else False.
     """
-    _multiple_request(ids, "DELETE FROM notes WHERE id=:id")
+    _request_multiple_ids(ids, "DELETE FROM notes WHERE id=:id")
 
 
 def change_tel(nickname, new_tel):
@@ -160,6 +176,22 @@ def change_tel(nickname, new_tel):
 
 
 def change_mail(nickname, new_mail):
+    """ Change a note mail address
+
+    :param str nickname: The nickname of the note.
+    :param str new_mail: The new mail address
+
+    :return bool: True if success else False
+    """
+    with Cursor() as cursor:
+        cursor.prepare("UPDATE notes SET mail=:mail WHERE nickname=:nickname")
+        cursor.bindValues({':mail': new_mail, ':nickname': nickname})
+        value = cursor.exec_()
+    rebuild_cache()
+    return value
+
+
+def change_nickname(nickname, new_nickname):
     """ Change a note mail address
 
     :param str nickname: The nickname of the note.
@@ -240,7 +272,7 @@ def hide_multiple(ids):
 
     :return bool: True if success else False
     """
-    return _multiple_request(ids, "UPDATE notes SET hidden=1 WHERE id=:id")
+    return _request_multiple_ids(ids, "UPDATE notes SET hidden=1 WHERE id=:id")
 
 
 def show(id_):
@@ -265,7 +297,7 @@ def show_multiple(ids):
 
     :return bool: True if success else False
     """
-    return _multiple_request(ids, "UPDATE notes SET hidden=0 WHERE id=:id")
+    return _request_multiple_ids(ids, "UPDATE notes SET hidden=0 WHERE id=:id")
 
 
 def transaction(nickname, diff):

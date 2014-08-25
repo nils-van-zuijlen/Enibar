@@ -50,6 +50,7 @@ class ManageNotes(QtWidgets.QDialog):
         self.birthdate_input.set_validator(api.validator.BIRTHDATE)
 
         self.photo_selected = None
+        self.current_nickname = None
         self.adding = False
         self.current_shown = -1
         self.on_change = api.validator.on_change(self, self.save_button)
@@ -108,13 +109,14 @@ class ManageNotes(QtWidgets.QDialog):
             else:
                 gui.utils.error("Erreur", "Impossible d'ajouter la note.")
         else:
-            api.notes.change_tel(self.nickname_input.text(),
-                                 self.phone_input.text())
-            api.notes.change_mail(self.nickname_input.text(),
-                                  self.mail_input.text())
+            api.notes.change_values(self.current_nickname,
+                                    tel=self.phone_input.text(),
+                                    mail=self.mail_input.text(),
+                                    nickname=self.nickname_input.text())
             if self.photo_selected:
                 api.notes.change_photo(self.nickname_input.text(),
                                        self.photo_selected)
+            self.note_list.refresh(api.notes.get())
         self.photo_selected = None
 
     def fill_inputs(self, note):
@@ -145,6 +147,7 @@ class ManageNotes(QtWidgets.QDialog):
         if note_selected == -1:
             return
 
+        self.current_nickname = self.note_list.item(note_selected).text()
         if note_selected != self.current_shown:
             self.current_shown = note_selected
         else:
@@ -187,6 +190,7 @@ class ManageNotes(QtWidgets.QDialog):
         self.mail_input.setEnabled(True)
         self.phone_input.setEnabled(True)
         self.photo_button.setEnabled(True)
+        self.nickname_input.setEnabled(True)
 
     def _inputs_action(self, action):
         """ This performs the action on all object of the type Input in the
