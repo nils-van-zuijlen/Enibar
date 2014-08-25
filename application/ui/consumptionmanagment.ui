@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>525</width>
-    <height>416</height>
+    <width>513</width>
+    <height>556</height>
    </rect>
   </property>
   <property name="baseSize">
@@ -26,7 +26,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <property name="documentMode">
       <bool>false</bool>
@@ -207,21 +207,21 @@
        <string>Gestion des catégories</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="5" column="2">
+       <item row="6" column="2">
         <widget class="QPushButton" name="button_cat_save">
          <property name="text">
           <string>Sauvegarder la catégorie</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="2">
+       <item row="5" column="2">
         <widget class="QPushButton" name="button_cat_price">
          <property name="text">
           <string>Ajouter un prix</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="2" rowspan="3">
+       <item row="2" column="2" rowspan="3">
         <widget class="CategoryPrices" name="category_prices">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -270,7 +270,7 @@
          </layout>
         </widget>
        </item>
-       <item row="5" column="0">
+       <item row="6" column="0">
         <widget class="QWidget" name="widget" native="true">
          <property name="minimumSize">
           <size>
@@ -351,6 +351,12 @@
               <height>16777215</height>
              </size>
             </property>
+            <property name="font">
+             <font>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
             <property name="cursor">
              <cursorShape>ArrowCursor</cursorShape>
             </property>
@@ -362,7 +368,7 @@
          </layout>
         </widget>
        </item>
-       <item row="4" column="0">
+       <item row="5" column="0">
         <widget class="QLineEdit" name="input_cat">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -390,7 +396,7 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="0" rowspan="4" colspan="2">
+       <item row="0" column="0" rowspan="5" colspan="2">
         <widget class="CategoryList" name="categories">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
@@ -452,6 +458,31 @@
          </layout>
         </widget>
        </item>
+       <item row="1" column="2">
+        <widget class="QGroupBox" name="category_color">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>Couleur</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="0" column="0">
+           <widget class="QPushButton" name="color_button">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>changer la couleur</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
       </layout>
      </widget>
     </widget>
@@ -491,8 +522,8 @@
    <slot>add_product()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>97</x>
-     <y>438</y>
+     <x>108</x>
+     <y>535</y>
     </hint>
     <hint type="destinationlabel">
      <x>204</x>
@@ -508,7 +539,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>219</x>
-     <y>440</y>
+     <y>535</y>
     </hint>
     <hint type="destinationlabel">
      <x>360</x>
@@ -523,8 +554,8 @@
    <slot>save_product()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>478</x>
-     <y>440</y>
+     <x>492</x>
+     <y>535</y>
     </hint>
     <hint type="destinationlabel">
      <x>465</x>
@@ -539,8 +570,8 @@
    <slot>add_category()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>119</x>
-     <y>440</y>
+     <x>130</x>
+     <y>535</y>
     </hint>
     <hint type="destinationlabel">
      <x>119</x>
@@ -556,7 +587,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>219</x>
-     <y>440</y>
+     <y>535</y>
     </hint>
     <hint type="destinationlabel">
      <x>221</x>
@@ -571,8 +602,8 @@
    <slot>save_category()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>266</x>
-     <y>418</y>
+     <x>442</x>
+     <y>535</y>
     </hint>
     <hint type="destinationlabel">
      <x>405</x>
@@ -587,8 +618,8 @@
    <slot>add_category()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>183</x>
-     <y>389</y>
+     <x>194</x>
+     <y>507</y>
     </hint>
     <hint type="destinationlabel">
      <x>178</x>
@@ -603,8 +634,8 @@
    <slot>add_category_price()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>266</x>
-     <y>389</y>
+     <x>442</x>
+     <y>507</y>
     </hint>
     <hint type="destinationlabel">
      <x>498</x>
@@ -635,8 +666,8 @@
    <slot>add_product()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>70</x>
-     <y>406</y>
+     <x>81</x>
+     <y>507</y>
     </hint>
     <hint type="destinationlabel">
      <x>79</x>
@@ -660,6 +691,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>color_button</sender>
+   <signal>clicked()</signal>
+   <receiver>ConsuptionManagmentWindow</receiver>
+   <slot>select_color()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>431</x>
+     <y>157</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>420</x>
+     <y>-13</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>add_product()</slot>
@@ -671,5 +718,6 @@
   <slot>save_category()</slot>
   <slot>select_category()</slot>
   <slot>select_product()</slot>
+  <slot>select_color()</slot>
  </slots>
 </ui>

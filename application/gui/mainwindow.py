@@ -108,10 +108,11 @@ class MainWindow(QtWidgets.QMainWindow):
     def validate_transaction(self):
         """ Validate transaction
         """
-        total = self.product_list.get_total()
-        api.notes.transaction(self.selected.text(), -total)
-        self.refresh()
-        self.product_list.clear()
+        if self.selected:
+            total = self.product_list.get_total()
+            api.notes.transaction(self.selected.text(), -total)
+            self.refresh()
+            self.product_list.clear()
 
 
 class MenuBar(QtWidgets.QMenuBar):

@@ -22,6 +22,7 @@ Consumption managment window
 
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
+from PyQt5 import QtGui
 from PyQt5 import uic
 import gui.utils
 import api.products
@@ -44,6 +45,7 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
         self.category_type.setEnabled(False)
         self.category = None
         self.products.build()
+        self.color_picker = QtWidgets.QColorDialog(self)
         self.show()
 
     def add_product(self):
@@ -226,22 +228,37 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
         This is a callback for changed selection on category list
         """
         self.category = item
-        cat = api.categories.get_unique(name=item.text())
-        self.checkbox_alcoholic.setChecked(cat['alcoholic'])
 
-        if item and cat:
-            self.category_prices.rebuild(item.text())
-            self.category_prices.setEnabled(True)
-            self.button_cat_save.setEnabled(True)
-            self.button_cat_price.setEnabled(True)
-            self.category_type.setEnabled(True)
-        else:
-            self.category_prices.clean()
-            self.category_prices.setEnabled(False)
-            self.button_cat_save.setEnabled(False)
-            self.button_cat_price.setEnabled(False)
-            self.category_type.setEnabled(False)
+        if item:
+            cat = api.categories.get_unique(name=item.text())
+            if cat:
+                self.checkbox_alcoholic.setChecked(cat['alcoholic'])
+                self.color_button.setStyleSheet(
+                    "background:{}".format(cat['color'])
+                )
+                color = QtGui.QColor()
+                color.setNamedColor(cat['color'])
+                self.color_picker.setCurrentColor(color)
+                self.category_prices.rebuild(item.text())
+                self.category_prices.setEnabled(True)
+                self.button_cat_save.setEnabled(True)
+                self.button_cat_price.setEnabled(True)
+                self.category_type.setEnabled(True)
+                self.color_button.setEnabled(True)
+                return
 
+        self.category_prices.clean()
+        self.category_prices.setEnabled(False)
+        self.button_cat_save.setEnabled(False)
+        self.button_cat_price.setEnabled(False)
+        self.category_type.setEnabled(False)
+        self.color_button.setEnabled(False)
+
+    def select_color(self):
+        color = self.color_picker.getColor()
+        if color.isValid() and self.category:
+            api.categories.set_color(self.category.text(), color.name())
+            self.color_button.setStyleSheet("background:{}".format(color.name()))
 #
 # Consumption
 #

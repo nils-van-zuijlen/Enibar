@@ -93,6 +93,7 @@ class PanelTab(QtWidgets.QWidget):
             price_name = widget.itemText(index)
             price_value = widget.prices[price_name]
         self.main_window.product_list.add_product(
+            widget.category_name,
             widget.name,
             price_name,
             price_value
@@ -114,10 +115,10 @@ class ProductList(QtWidgets.QTreeWidget):
         self.setColumnWidth(1, 130)
         self.setColumnWidth(2, 50)
 
-    def add_product(self, product_name, price_name, price):
+    def add_product(self, category_name, product_name, price_name, price):
         """ Add product to list
         """
-        name = "{} ({})".format(product_name, price_name)
+        name = "{} ({}) - {}".format(product_name, price_name, category_name)
         found = False
         for product in self.products:
             if product['name'] == name:
@@ -208,6 +209,7 @@ class ProductsContainer(QtWidgets.QWidget):
                     cid,
                     pid,
                     product['product_name'],
+                    product['category_name'],
                     prices,
                 )
                 self.products[cid]['products'][pid] = {
@@ -283,6 +285,12 @@ class CategoryContainer(QtWidgets.QGroupBox):
         self.setLayout(self.layout)
         self.spacer = None
 
+        cat = api.categories.get_unique(name=category_name)
+        if not cat:
+            return
+
+        self.setStyleSheet("QGroupBox{{background-color: {}}}".format(cat['color']))
+
     def finalise(self):
         """ Finalise
         Add a spacer at the bottom of the QGroupBox layout
@@ -298,11 +306,12 @@ class BaseProduct:
     products information on the destination widget.
     """
     # pylint: disable=too-few-public-methods
-    def __init__(self, cid, pid, name, prices):
+    def __init__(self, cid, pid, name, cat_name, prices):
         super().__init__()
         self.cid = cid
         self.pid = pid
         self.name = name
+        self.category_name = cat_name
         self.prices = prices
 
     def get_signal(self):
@@ -318,8 +327,8 @@ class Button(BaseProduct, QtWidgets.QPushButton):
     """ Button
     Button used to display products which contain a single price.
     """
-    def __init__(self, cid, pid, name, prices):
-        BaseProduct.__init__(self, cid, pid, name, prices)
+    def __init__(self, cid, pid, name, cat_name, prices):
+        BaseProduct.__init__(self, cid, pid, name, cat_name, prices)
         QtWidgets.QPushButton.__init__(self, name)
 
     def get_signal(self):
@@ -333,9 +342,9 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
     item is clicked so product name is allways displayed while you can still
     select a given price
     """
-    def __init__(self, cid, pid, name, prices):
+    def __init__(self, cid, pid, name, cat_name, prices):
         QtWidgets.QComboBox.__init__(self)
-        BaseProduct.__init__(self, cid, pid, name, prices)
+        BaseProduct.__init__(self, cid, pid, name, cat_name, prices)
         self.product_view = QtWidgets.QListWidget()
         self.setModel(self.product_view.model())
         self.widgets = []
@@ -393,7 +402,7 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
         super().hidePopup()
 
 
-def get_product_widget(cid, pid, name, prices):
+def get_product_widget(cid, pid, name, cat_name, prices):
     """ Get prduct widget
     Select best widget between Button and ComboBox to use regarding the price
     list.
@@ -405,9 +414,9 @@ def get_product_widget(cid, pid, name, prices):
     :return BaseProduct: Widget
     """
     if len(prices) == 1:
-        widget = Button(cid, pid, name, prices)
+        widget = Button(cid, pid, name, cat_name, prices)
     else:
-        widget = ComboBox(cid, pid, name, prices)
+        widget = ComboBox(cid, pid, name, cat_name, prices)
 
     # Set attributes
     widget.setMinimumSize(QtCore.QSize(100, 35))

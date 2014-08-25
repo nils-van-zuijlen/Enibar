@@ -58,6 +58,19 @@ def set_alcoholic(cat_id, is_alcoholic):
         return cursor.exec_()
 
 
+def set_color(name, color):
+    """ Set category color
+
+    :param str name: Category name
+    :param bool: True if operation succed or False
+    """
+    with Cursor() as cursor:
+        cursor.prepare("UPDATE categories SET color=? WHERE name=?")
+        cursor.addBindValue(color)
+        cursor.addBindValue(name)
+        return cursor.exec_()
+
+
 def remove(name):
     """ Remove category
 
@@ -68,7 +81,6 @@ def remove(name):
         cursor.prepare("DELETE FROM categories WHERE name=:name")
         cursor.bindValue(':name', name)
         return cursor.exec_()
-
 
 def get(**filter_):
     """ Get category with given values
@@ -81,6 +93,7 @@ def get(**filter_):
             'id': cursor.record().value('id'),
             'name': cursor.record().value('name'),
             'alcoholic': cursor.record().value('alcoholic'),
+            'color': cursor.record().value('color'),
         }
 
 
