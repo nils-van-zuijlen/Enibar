@@ -270,25 +270,35 @@ def transaction(nickname, diff):
         return cursor.exec_() and rebuild_cache()
 
 
-def export(notes):
+def export(notes, *, csv=False, xml=False):
     """ Return an xml representation of all notes
 
         :param list: A list of notes to export
     """
-    xml = "<?xml version=\"1.0\"?>\n"
-    xml += "<notes date=\"{}\">\n".format(datetime.datetime.now().strftime(
-        "%Y-%m-%d"))
-    for note in notes:
-        xml += "\t<note id=\"{}\">\n".format(note["id"])
-        xml += "\t\t<prenom>{}</prenom>\n".format(note["firstname"])
-        xml += "\t\t<nom>{}</nom>\n".format(note["lastname"])
-        xml += "\t\t<compte>{}</compte>\n".format(note["note"])
-        xml += "\t\t<image>{}</image>\n".format(note["photo_path"])
-        xml += "\t\t<date_Decouvert>{}</date_Decouvert>\n".format(
-            datetime.datetime.fromtimestamp(note["overdraft_time"]).strftime(
-                "%Y-%m-%d %H:%M:%S") if note["overdraft_time"] else "")
-        xml += "\t</note>\n"
-    xml += "</notes>\n"
-    return xml
+    if xml:
+        xml = "<?xml version=\"1.0\"?>\n"
+        xml += "<notes date=\"{}\">\n".format(datetime.datetime.now().strftime(
+            "%Y-%m-%d"))
+        for note in notes:
+            xml += "\t<note id=\"{}\">\n".format(note["id"])
+            xml += "\t\t<prenom>{}</prenom>\n".format(note["firstname"])
+            xml += "\t\t<nom>{}</nom>\n".format(note["lastname"])
+            xml += "\t\t<compte>{}</compte>\n".format(note["note"])
+            xml += "\t\t<image>{}</image>\n".format(note["photo_path"])
+            xml += "\t\t<date_Decouvert>{}</date_Decouvert>\n".format(
+                datetime.datetime.fromtimestamp(note["overdraft_time"]).
+                strftime("%Y-%m-%d %H:%M:%S") if note["overdraft_time"] else "")
+
+            xml += "\t</note>\n"
+        xml += "</notes>\n"
+        return xml
+    elif csv:
+        to_export = ["id", "nickname", "firstname", "lastname", "note",
+                     "photo_path"]
+        csv = ", ".join(to_export)
+        for note in notes:
+            csv += "\n" + ", ".join(str(note[value]) for value in to_export)
+        print(csv)
+        return csv
 
 rebuild_cache()
