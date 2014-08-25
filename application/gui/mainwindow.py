@@ -47,6 +47,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.refresh()
         self.notes_list.currentRowChanged.connect(self.select_note)
+        self.selected = None
 
         # Set product list header width
         self.product_list.setColumnWidth(0, 60)
@@ -104,6 +105,7 @@ class MainWindow(QtWidgets.QMainWindow):
         """ Validate transaction
         """
         self.product_list.clear()
+
 
 class MenuBar(QtWidgets.QMenuBar):
     """ MainWindow menu bar """

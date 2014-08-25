@@ -67,7 +67,6 @@ class PanelTab(QtWidgets.QWidget):
         self.scroll_area_content.build()
         self.connect_signals()
 
-
     def connect_signals(self):
         """ Connect signals of products widgets with product_clicked
         """
@@ -93,12 +92,21 @@ class PanelTab(QtWidgets.QWidget):
         else:
             price_name = widget.itemText(index)
             price_value = widget.prices[price_name]
-        self.main_window.product_list.add_product(widget.name, price_name, price_value)
-        self.main_window.total.setText("{:.2f} €".format(self.main_window.product_list.get_total()))
-
+        self.main_window.product_list.add_product(
+            widget.name,
+            price_name,
+            price_value
+        )
+        text = "{:.2f} €".format(self.main_window.product_list.get_total())
+        self.main_window.total.setText(text)
 
 
 class ProductList(QtWidgets.QTreeWidget):
+    """ Product list
+    This is the product list for the main window, whihc is used to build a
+    transaction. This this file may not be the right one for this class.
+    """
+    # pylint: disable=too-many-public-methods
     def __init__(self, parent):
         super().__init__(parent)
         self.products = []
@@ -131,13 +139,19 @@ class ProductList(QtWidgets.QTreeWidget):
             self.products.append(product)
 
     def clear(self):
+        """ Clear the list
+        """
         super().clear()
         self.products = []
         main_window = self.parent().parent().parent()
         main_window.total.setText("0.00 €")
 
     def get_total(self):
-        total = sum(map(lambda x: x["price"], self.products))
+        """ Sum up all prices in the list
+
+        :return float: total
+        """
+        total = sum(item["price"] for item in self.products)
         return round(total, 2)
 
 
