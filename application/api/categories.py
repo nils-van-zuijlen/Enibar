@@ -17,8 +17,6 @@
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 # pylint: disable=invalid-name
-# pylint: disable=no-value-for-parameter
-# pylint: disable=unexpected-keyword-arg
 
 """
 Categories API
@@ -47,18 +45,6 @@ def add(name):
             return None
 
 
-def remove(name):
-    """ Remove category
-
-    :param str name: Category name
-    :return bool: True if operation succeed or False
-    """
-    with Cursor() as cursor:
-        cursor.prepare("DELETE FROM categories WHERE name=:name")
-        cursor.bindValue(':name', name)
-        return cursor.exec_()
-
-
 def set_alcoholic(cat_id, is_alcoholic):
     """ Set alcoholic state of a product
 
@@ -69,6 +55,18 @@ def set_alcoholic(cat_id, is_alcoholic):
         cursor.prepare("UPDATE categories SET alcoholic=? WHERE id=?")
         cursor.addBindValue(is_alcoholic)
         cursor.addBindValue(cat_id)
+        return cursor.exec_()
+
+
+def remove(name):
+    """ Remove category
+
+    :param str name: Category name
+    :return bool: True if operation succeed or False
+    """
+    with Cursor() as cursor:
+        cursor.prepare("DELETE FROM categories WHERE name=:name")
+        cursor.bindValue(':name', name)
         return cursor.exec_()
 
 
