@@ -143,6 +143,7 @@ class MenuBar(QtWidgets.QMenuBar):
     def consumption_managment_fnc(self):
         """ Call consumption managment window """
         self.cur_window = ConsumptionManagmentWindow()
+        self.cur_window.finished.connect(self.parent().panels.rebuild)
         self._connect_window()
 
     def manage_note_fnc(self):
@@ -169,6 +170,7 @@ class MenuBar(QtWidgets.QMenuBar):
         """ Open a PanelManagment window
         """
         self.cur_window = PanelManagment()
+        self.cur_window.finished.connect(self.parent().panels.rebuild)
         self._connect_window()
 
     def notes_action_fnc(self):

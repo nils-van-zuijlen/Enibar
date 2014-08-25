@@ -46,13 +46,11 @@ class Panels(QtWidgets.QTabWidget):
             self.panels.append(widget)
             self.addTab(widget, panel['name'])
 
-    def clear(self):
-        """ Clear panels
-        """
-
     def rebuild(self):
         """ Clear panels and build them back
         """
+        self.clear()
+        self.build()
 
 
 class PanelTab(QtWidgets.QWidget):
@@ -396,6 +394,13 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
         """
         # pylint: disable=invalid-name
         self.parent().wheelEvent(event)
+
+    def keyPressEvent(self, _):
+        """ Overwrite qt key press event
+        """
+        # pylint: disable=invalid-name
+        # pylint: disable=no-self-use
+        return
 
     def hidePopup(self):
         """ Overwrite qt hidePopup event so product name is displayed and
