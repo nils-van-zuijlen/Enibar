@@ -131,6 +131,9 @@ class ProductList(QtWidgets.QTreeWidget):
                 'name': name,
                 'price': price,
                 'count': 1,
+                'category': category_name,
+                'product': product_name,
+                'price_name': price_name,
             }
             widget = QtWidgets.QTreeWidgetItem(['1', name, str(price)])
             self.addTopLevelItem(widget)

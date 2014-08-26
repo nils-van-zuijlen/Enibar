@@ -33,6 +33,7 @@ from .refillnote import RefillNote
 import api.notes
 import datetime
 import time
+import gui.utils
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -113,9 +114,23 @@ class MainWindow(QtWidgets.QMainWindow):
         """
         if self.selected:
             total = self.product_list.get_total()
-            api.notes.transaction(self.selected.text(), -total)
-            self.refresh()
-            self.product_list.clear()
+            transactions = []
+            for product in self.product_list.products:
+                transaction = {
+                    'note': self.selected.text(),
+                    'category': product['category'],
+                    'product': product['product'],
+                    'price_name': product['price_name'],
+                    'quantity': product['count'],
+                    'price': product['price']
+                }
+                transactions.append(transaction)
+            if api.notes.log_transactions(transactions):
+                api.notes.transaction(self.selected.text(), -total)
+                self.refresh()
+                self.product_list.clear()
+            else:
+                gui.utils.error('Impossible de valider la transaction')
 
 
 class MenuBar(QtWidgets.QMenuBar):
