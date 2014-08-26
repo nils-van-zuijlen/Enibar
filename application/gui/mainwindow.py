@@ -186,6 +186,30 @@ class MenuBar(QtWidgets.QMenuBar):
             self.parent().notes_list.currentItem().text())
         self._connect_window()
 
+    def take_ecocup_fnc(self):
+        """ Used to take an ecocup on a note
+        """
+        self.parent().product_list.add_product(
+            "Bar",
+            "Ecocup",
+            "Achat",
+            2
+        )
+        text = "{:.2f} €".format(self.parent().product_list.get_total())
+        self.parent().total.setText(text)
+
+    def repay_ecocup_fnc(self):
+        """ Used to repay an ecocup on a note
+        """
+        self.parent().product_list.add_product(
+            "Bar",
+            "Ecocup",
+            "Remboursement",
+            -2
+        )
+        text = "{:.2f} €".format(self.parent().product_list.get_total())
+        self.parent().total.setText(text)
+
     def export(self, notes):
         """ Generic export notes function """
         path, format_ = QtWidgets.QFileDialog(self).getSaveFileName(

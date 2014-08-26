@@ -459,8 +459,16 @@
     <addaction name="separator"/>
     <addaction name="menuExporter_les_notes"/>
    </widget>
+   <widget class="QMenu" name="menu_Ecocups">
+    <property name="title">
+     <string>&amp;Ecocups</string>
+    </property>
+    <addaction name="take_ecocup"/>
+    <addaction name="repay_ecocup"/>
+   </widget>
    <addaction name="administration"/>
    <addaction name="menuNotes"/>
+   <addaction name="menu_Ecocups"/>
   </widget>
   <action name="user_managment">
    <property name="checkable">
@@ -521,6 +529,16 @@
     <string>Cacher les boissons alcolisées</string>
    </property>
   </action>
+  <action name="take_ecocup">
+   <property name="text">
+    <string>&amp;Prendre</string>
+   </property>
+  </action>
+  <action name="repay_ecocup">
+   <property name="text">
+    <string>&amp;Rembourser</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -547,6 +565,8 @@
     <slot>panel_managment_fnc()</slot>
     <slot>notes_action_fnc()</slot>
     <slot>refill_note_fnc()</slot>
+    <slot>take_ecocup_fnc()</slot>
+    <slot>repay_ecocup_fnc()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -750,6 +770,38 @@
     <hint type="destinationlabel">
      <x>441</x>
      <y>446</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>take_ecocup</sender>
+   <signal>triggered()</signal>
+   <receiver>menu_bar</receiver>
+   <slot>take_ecocup_fnc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>9</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>repay_ecocup</sender>
+   <signal>triggered()</signal>
+   <receiver>menu_bar</receiver>
+   <slot>repay_ecocup_fnc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>9</y>
     </hint>
    </hints>
   </connection>
