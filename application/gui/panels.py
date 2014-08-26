@@ -491,7 +491,8 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
         using wheel.
         """
         # pylint: disable=invalid-name
-        self.ignore()
+        # pylint: disable=no-self-use
+        return
 
     def keyPressEvent(self, _):
         """ Overwrite qt key press event
