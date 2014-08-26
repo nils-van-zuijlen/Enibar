@@ -270,58 +270,6 @@ def transaction(nickname, diff):
     return value
 
 
-def log_transaction(nickname, category, product, price_name, quantity, price):
-    """ Insert a transaction log line in database
-
-    :param str nickname: Note nickname
-    :param str category: Product's category
-    :param str product: Product's name
-    :param str price_name: Product's price name
-    :param int quantity: Product quantity on this transaction
-    :param float price: total price of the transaction
-    """
-    with Cursor() as cursor:
-        cursor.prepare("INSERT INTO transactions(date, note, category, product,\
-                price_name, quantity, price) VALUES(NOW(), :note, :category, \
-                :product, :price_name, :quantity, :price)")
-        cursor.bindValue(':note', nickname)
-        cursor.bindValue(':category', category)
-        cursor.bindValue(':product', product)
-        cursor.bindValue(':price_name', price_name)
-        cursor.bindValue(':quantity', quantity)
-        cursor.bindValue(':price', price)
-        return cursor.exec_()
-
-
-def log_transactions(transactions):
-    """ Log mulsiple transactions
-
-    :param list transactions:
-    """
-    with Database() as database:
-        error = False
-        database.transaction()
-        cursor = QtSql.QSqlQuery(database)
-        cursor.prepare("INSERT INTO transactions(date, note, category, product,\
-                price_name, quantity, price) VALUES(NOW(), :note, :category, \
-                :product, :price_name, :quantity, :price)")
-        for trans in transactions:
-            cursor.bindValue(':note', trans['note'])
-            cursor.bindValue(':category', trans['category'])
-            cursor.bindValue(':product', trans['product'])
-            cursor.bindValue(':price_name', trans['price_name'])
-            cursor.bindValue(':quantity', trans['quantity'])
-            cursor.bindValue(':price', trans['price'])
-            error = error or not cursor.exec_()
-
-    if not error:
-        database.commit()
-        return True
-    else:
-        database.rollback()
-        return False
-
-
 def export(notes, *, csv=False, xml=False):
     """ Return an xml representation of all notes
 

@@ -428,7 +428,7 @@
      <x>0</x>
      <y>0</y>
      <width>884</width>
-     <height>20</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="administration">
@@ -441,6 +441,8 @@
     <addaction name="products_managment"/>
     <addaction name="panel_managment"/>
     <addaction name="hide_alcohol"/>
+    <addaction name="separator"/>
+    <addaction name="transaction_history"/>
    </widget>
    <widget class="QMenu" name="menuNotes">
     <property name="title">
@@ -539,6 +541,11 @@
     <string>&amp;Rembourser</string>
    </property>
   </action>
+  <action name="transaction_history">
+   <property name="text">
+    <string>Consulter l'historique des transactions</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -567,6 +574,7 @@
     <slot>refill_note_fnc()</slot>
     <slot>take_ecocup_fnc()</slot>
     <slot>repay_ecocup_fnc()</slot>
+    <slot>show_transactions_history()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -794,6 +802,22 @@
    <signal>triggered()</signal>
    <receiver>menu_bar</receiver>
    <slot>repay_ecocup_fnc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>9</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>transaction_history</sender>
+   <signal>triggered()</signal>
+   <receiver>menu_bar</receiver>
+   <slot>show_transactions_history()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

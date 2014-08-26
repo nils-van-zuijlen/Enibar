@@ -30,7 +30,9 @@ from .panelmanagment import PanelManagment
 from .passwordmanagment import PasswordManagment
 from .usermanagment import UserManagmentWindow
 from .refillnote import RefillNote
+from .transactionhistory import TransactionHistory
 import api.notes
+import api.transactions
 import datetime
 import time
 import gui.utils
@@ -125,7 +127,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     'price': product['price']
                 }
                 transactions.append(transaction)
-            if api.notes.log_transactions(transactions):
+            if api.transactions.log_transactions(transactions):
                 api.notes.transaction(self.selected.text(), -total)
                 self.refresh()
                 self.product_list.clear()
@@ -135,6 +137,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
 class MenuBar(QtWidgets.QMenuBar):
     """ MainWindow menu bar """
+    # pylint: disable=too-many-public-methods
     def __init__(self, parent):
         super().__init__(parent)
         self.cur_window = None
@@ -238,4 +241,9 @@ class MenuBar(QtWidgets.QMenuBar):
                     save_file.write(api.notes.export(notes, xml=True))
                 else:
                     save_file.write(api.notes.export(notes, csv=True))
+
+    def show_transactions_history(self):
+        """ Show transaction logs
+        """
+        self.cur_window = TransactionHistory(self)
 
