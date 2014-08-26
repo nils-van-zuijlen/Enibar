@@ -109,7 +109,10 @@ def set_rights(username, rights):
             SET manage_users=:manage_users,
             manage_notes=:manage_notes,
             manage_products=:manage_products
-            WHERE login=:login
+            WHERE ((SELECT * FROM (SELECT \
+            manage_users FROM admins WHERE login=:login) AS t)=0 OR (SELECT * \
+            FROM(SELECT COUNT(*) FROM admins WHERE manage_users=1) AS p)>1) AND \
+            login=:login
             """)
         for right, value in rights.items():
             cursor.bindValue(':{}'.format(right), value)

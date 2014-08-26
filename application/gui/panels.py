@@ -182,6 +182,16 @@ class ProductsContainer(QtWidgets.QWidget):
         categores and products are build on the fly.  Then all categories are
         sorted into columns in an oprimised maner.
         """
+        try:
+            if self.parent().parent().parent().main_window.\
+               hide_alcohol.isChecked():
+                alcoholic_categories = [item['id'] for item in
+                                        api.categories.get(alcoholic=True)]
+            else:
+                alcoholic_categories = []
+        except AttributeError:  # The first time, the menu does not exist...
+            alcoholic_categories = []
+
         if not self.panel_id:
             raise Exception(
                 "{} attribute plane_id must not be None when "
@@ -192,6 +202,8 @@ class ProductsContainer(QtWidgets.QWidget):
         content = sorted(content, key=lambda x: x['product_name'].lower())
         for product in content:
             cid = product['category_id']
+            if cid in alcoholic_categories:
+                continue
             pid = product['product_id']
             if cid not in self.products:
                 self.products[cid] = {

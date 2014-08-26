@@ -305,3 +305,21 @@ class NotesTest(unittest.TestCase):
         notes.remove_multiple([id0, id1])
         self.assertEqual(self.count_notes(), 0)
 
+    def test_modif_note(self):
+        """ Testing modifying a note.
+        """
+        id0 = notes.add("test0",
+            "test",
+            "test",
+            "test@pouette.com",
+            "0600000000",
+            "01/01/1994",
+            '1A',
+            ''
+        )
+
+        notes.change_values("test0", tel="0200000000", promo="3A")
+        note = list(notes.get())[0]
+        self.assertEqual(note["tel"], "0200000000")
+        self.assertEqual(note["promo"], "3A")
+

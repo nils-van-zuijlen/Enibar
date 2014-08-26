@@ -36,6 +36,7 @@ class NotesAction(QtWidgets.QDialog):
     def __init__(self):
         super().__init__()
         self.current_filter = lambda x: x['hidden'] == 0
+        print(self.current_filter)
         uic.loadUi('ui/notesaction.ui', self)
         self.filter_input.setEnabled(False)
         self.filter_input.keyPressEvent = self.filter_input_changed
@@ -51,7 +52,7 @@ class NotesAction(QtWidgets.QDialog):
             to_del.append(index.data())
             self.note_list.takeItem(index.row())
         api.notes.remove_multiple(api.notes.get_notes_id(to_del))
-        self.note_list.rebuild(api.notes.get(self.current_filter))
+        self.note_list.rebuild(api.notes.get(self.note_list.current_filter))
 
     def _multiple_action(self, fnc):
         """ Execute a function on the currently selected notes
@@ -61,26 +62,27 @@ class NotesAction(QtWidgets.QDialog):
         for index in indexes:
             notes_id.append(index.data())
         fnc(api.notes.get_notes_id(notes_id))
-        self.note_list.rebuild(api.notes.get(self.current_filter))
+        self.note_list.rebuild(api.notes.get(self.note_list.current_filter))
 
     def filter_combobox_change(self, id_):
         """ Called when the filter combobox is chnged
         """
         if id_ == 0:
-            self.current_filter = lambda x: x['hidden'] == 0
+            self.note_list.current_filter = lambda x: x['hidden'] == 0
             self.filter_input.setEnabled(False)
         elif id_ == 1:
-            self.current_filter = lambda x: x['hidden'] == 1
+            self.note_list.current_filter = lambda x: x['hidden'] == 1
+            print(self.note_list.current_filter)
             self.filter_input.setEnabled(False)
         elif id_ == 2:
             self.filter_input.setEnabled(True)
             self.filter_input.setText("0")
-            self.current_filter = lambda x: x['note'] > 0
+            self.note_list.current_filter = lambda x: x['note'] > 0
         elif id_ == 3:
             self.filter_input.setEnabled(True)
             self.filter_input.setText("0")
-            self.current_filter = lambda x: x['note'] < 0
-        self.note_list.rebuild(api.notes.get(self.current_filter))
+            self.note_list.current_filter = lambda x: x['note'] < 0
+        self.note_list.rebuild(api.notes.get(self.note_list.current_filter))
 
     def filter_input_changed(self, event):
         """ Called when the filter input is changed
@@ -89,11 +91,15 @@ class NotesAction(QtWidgets.QDialog):
         text = self.filter_input.text()
         try:
             if self.filter_combobox.currentIndex() == 2:
-                self.current_filter = lambda x: x['note'] > float(text)
-                self.note_list.rebuild(api.notes.get(self.current_filter))
+                self.note_list.current_filter = lambda x: x['note'] >\
+                    float(text)
+                self.note_list.rebuild(api.notes.get(
+                    self.note_list.current_filter))
             if self.filter_combobox.currentIndex() == 3:
-                self.current_filter = lambda x: x['note'] < float(text)
-                self.note_list.rebuild(api.notes.get(self.current_filter))
+                self.note_list.current_filter = lambda x: x['note'] <\
+                    float(text)
+                self.note_list.rebuild(api.notes.get(
+                    self.note_list.current_filter))
         except ValueError:
             self.note_list.clear()
 
@@ -121,3 +127,8 @@ class MultiNotesList(NotesList):
         self.clear()
         self.build(notes_list)
 
+    def on_timer(self):
+        """ Rebuild the note list every 10 seconds
+        """
+        api.notes.rebuild_cache()
+        self.rebuild(api.notes.get(self.current_filter))

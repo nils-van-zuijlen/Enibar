@@ -116,6 +116,8 @@ class UserManagmentWindow(QtWidgets.QDialog):
                 "Impossible de sauvegarder les droits",
                 "erreur de communication avec la base de donnée."
             )
+        self.user_list.refresh()
+        self.select_user()
 
 
 class UserList(QtWidgets.QListWidget):
@@ -189,3 +191,4 @@ class AddUserPrompt(QtWidgets.QDialog):
                                      "être déja pris.")
             error.setIcon(QtWidgets.QMessageBox.Critical)
             error.exec()
+
