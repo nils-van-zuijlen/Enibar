@@ -266,7 +266,8 @@ class ProductsContainer(QtWidgets.QWidget):
                 }
             if pid not in self.products[cid]['products']:
                 prices = self.fetch_prices(pid)
-                if not prices:
+                price_sum = sum([price for _, price in prices.items()])
+                if not prices or not price_sum:
                     continue
                 widget = get_product_widget(
                     cid,
@@ -524,7 +525,10 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
 def get_product_widget(cid, pid, name, cat_name, prices):
     """ Get prduct widget
     Select best widget between Button and ComboBox to use regarding the price
-    list.
+    list. If prices are set to 0 they will not be displayed. Knowing that, you
+    must be sure to provide at least one price in the prices list (by filtering
+    products which have no prices at all and/or product which prices sum is
+    equal to 0).
 
     :param int cid: Category id
     :param int pid: Product id
@@ -532,10 +536,15 @@ def get_product_widget(cid, pid, name, cat_name, prices):
     :param OrderedDict prices: Products prices.
     :return BaseProduct: Widget
     """
-    if len(prices) == 1:
-        widget = Button(cid, pid, name, cat_name, prices)
+    valid_prices = collections.OrderedDict()
+    for price, value in prices.items():
+        if value != 0:
+            valid_prices[price] = value
+
+    if len(valid_prices) == 1:
+        widget = Button(cid, pid, name, cat_name, valid_prices)
     else:
-        widget = ComboBox(cid, pid, name, cat_name, prices)
+        widget = ComboBox(cid, pid, name, cat_name, valid_prices)
 
     # Set attributes
     widget.setMinimumSize(QtCore.QSize(100, 35))
