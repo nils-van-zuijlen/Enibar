@@ -109,3 +109,24 @@ class UsersTest(unittest.TestCase):
         users.remove("test3")
         self.assertEqual(list(users.get_list()), ["test2"])
 
+    def test_issue_43(self):
+        """ Testing issue #43 regression.
+        """
+        id1 = users.add("test", "test")
+        id2 = users.add("test2", "test")
+        id3 = users.add("test3", "test")
+        self.assertTrue(users.set_rights("test", {'manage_users': True,
+                                                  'manage_notes': False,
+                                                  'manage_products': False}))
+        users.set_rights("test", {'manage_users': False,
+                                  'manage_notes': False,
+                                  'manage_products': False})
+        self.assertEqual(users.get_rights("test")["manage_users"], 1)
+        self.assertTrue(users.set_rights("test2", {'manage_users': True,
+                                                  'manage_notes': False,
+                                                  'manage_products': False}))
+        users.set_rights("test", {'manage_users': False,
+                                  'manage_notes': False,
+                                  'manage_products': False})
+
+        self.assertEqual(users.get_rights("test")["manage_users"], 0)
