@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>418</width>
-    <height>644</height>
+    <height>646</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Gestion notes</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="1" column="1">
@@ -288,14 +288,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Input</class>
-   <extends>QLineEdit</extends>
-   <header>gui.input</header>
-  </customwidget>
-  <customwidget>
    <class>NotesList</class>
    <extends>QListWidget</extends>
    <header>gui/utils</header>
+  </customwidget>
+  <customwidget>
+   <class>Input</class>
+   <extends>QLineEdit</extends>
+   <header>gui.input</header>
   </customwidget>
  </customwidgets>
  <tabstops>
