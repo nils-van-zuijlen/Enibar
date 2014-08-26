@@ -72,6 +72,7 @@ class PanelTab(QtWidgets.QWidget):
         for cat in products.values():
             for product in cat['products'].values():
                 product['widget'].get_signal().connect(self.product_clicked)
+                product['widget'].connect_mouse_wheel(self.product_wheeled)
 
     def product_clicked(self, index=None):
         """ Product clicked
@@ -96,8 +97,25 @@ class PanelTab(QtWidgets.QWidget):
             price_name,
             price_value
         )
-        text = "{:.2f} €".format(self.main_window.product_list.get_total())
-        self.main_window.total.setText(text)
+
+    def product_wheeled(self, event, category, name, price, value):
+        """ Wheel callback
+        """
+        # pylint: disable=too-many-arguments
+        if event.angleDelta().y() >= 0:
+            self.main_window.product_list.add_product(
+                category,
+                name,
+                price,
+                value
+            )
+        else:
+            self.main_window.product_list.del_product(
+                category,
+                name,
+                price,
+                value
+            )
 
 
 class ProductList(QtWidgets.QTreeWidget):
@@ -139,6 +157,21 @@ class ProductList(QtWidgets.QTreeWidget):
             self.addTopLevelItem(widget)
             product['widget'] = widget
             self.products.append(product)
+        self.update_total()
+
+    def del_product(self, category_name, product_name, price_name, price):
+        """ Delete product from product list
+        """
+        name = "{} ({}) - {}".format(product_name, price_name, category_name)
+        for product in self.products:
+            if product['name'] == name:
+                if product['count'] > 1:
+                    product['price'] -= price
+                    product['price'] = round(product['price'], 2)
+                    product['count'] -= 1
+                    product['widget'].setText(0, str(product['count']))
+                    product['widget'].setText(2, str(product['price']))
+        self.update_total()
 
     def clear(self):
         """ Clear the list
@@ -155,6 +188,13 @@ class ProductList(QtWidgets.QTreeWidget):
         """
         total = sum(item["price"] for item in self.products)
         return round(total, 2)
+
+    def update_total(self):
+        """ Update main window total
+        """
+        main_window = self.parent().parent().parent()
+        text = "{:.2f} €".format(self.get_total())
+        main_window.total.setText(text)
 
 
 class ProductsContainer(QtWidgets.QWidget):
@@ -338,6 +378,12 @@ class BaseProduct:
         """
         raise NotImplementedError
 
+    def connect_mouse_wheel(self, _):
+        """ Connect mouse wheel to the product so it add or removes product
+        easely. It must be implemented in all child classes.
+        """
+        raise NotImplementedError
+
 
 class Button(BaseProduct, QtWidgets.QPushButton):
     """ Button
@@ -347,6 +393,26 @@ class Button(BaseProduct, QtWidgets.QPushButton):
     def __init__(self, cid, pid, name, cat_name, prices):
         BaseProduct.__init__(self, cid, pid, name, cat_name, prices)
         QtWidgets.QPushButton.__init__(self, name)
+        self.wheel_callback = None
+        self.price_name, self.price_value = tuple(iter(prices.items()))[0]
+
+    def connect_mouse_wheel(self, func):
+        self.wheel_callback = func
+
+    def wheelEvent(self, event):
+        """ WheelEvent
+        """
+        # pylint: disable=invalid-name
+        if self.wheel_callback:
+            self.wheel_callback(
+                event,
+                self.category_name,
+                self.name,
+                self.price_name,
+                self.price_value
+            )
+        else:
+            self.ignore()
 
     def get_signal(self):
         return self.clicked
@@ -364,8 +430,10 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
         QtWidgets.QComboBox.__init__(self)
         BaseProduct.__init__(self, cid, pid, name, cat_name, prices)
         self.product_view = QtWidgets.QListWidget()
+        self.product_view.wheelEvent = self.caca
         self.setModel(self.product_view.model())
         self.widgets = []
+        self.call = None
 
         self.product_view.addItem(QtWidgets.QListWidgetItem(self.name))
         for price in prices:
@@ -376,8 +444,23 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
         self.setView(self.product_view)
         self.activated.connect(self.callback)
 
+    def caca(self, event):
+        """ Call back when wheel is used
+        """
+        current_price = self.product_view.currentItem().text()
+        self.call(
+            event,
+            self.category_name,
+            self.name,
+            current_price,
+            self.prices[current_price]
+        )
+
     def get_signal(self):
         return self.activated
+
+    def connect_mouse_wheel(self, func):
+        self.call = func
 
     def callback(self, _):
         """ Activated callback.
@@ -403,12 +486,12 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
         self.product_view.setRowHidden(0, False)
         self.setCurrentIndex(0)
 
-    def wheelEvent(self, event):
+    def wheelEvent(self, _):
         """ Overwrite qt mouse wheel event so the selection do not change when
         using wheel.
         """
         # pylint: disable=invalid-name
-        self.parent().wheelEvent(event)
+        self.ignore()
 
     def keyPressEvent(self, _):
         """ Overwrite qt key press event
