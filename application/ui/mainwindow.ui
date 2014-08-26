@@ -34,13 +34,13 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>125</width>
+        <width>150</width>
         <height>0</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>125</width>
+        <width>150</width>
         <height>16777215</height>
        </size>
       </property>
@@ -104,7 +104,7 @@
        <property name="bottomMargin">
         <number>0</number>
        </property>
-       <item row="2" column="1">
+       <item row="0" column="0">
         <widget class="ProductList" name="product_list">
          <property name="minimumSize">
           <size>
@@ -129,22 +129,22 @@
          </attribute>
          <column>
           <property name="text">
-           <string>Nbr</string>
+           <string>Quantité</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string>Conso</string>
+           <string>Consommation</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string>Prix</string>
+           <string>prix</string>
           </property>
          </column>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item row="1" column="0">
         <widget class="QLabel" name="total">
          <property name="minimumSize">
           <size>
@@ -176,7 +176,7 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item row="2" column="0">
         <widget class="QWidget" name="widget_2" native="true">
          <property name="minimumSize">
           <size>
@@ -246,55 +246,6 @@
          </layout>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QWidget" name="widget_3" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="note_photo">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>120</width>
-              <height>160</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>120</width>
-              <height>160</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Photo</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
       </layout>
      </widget>
     </item>
@@ -313,6 +264,31 @@
        <string notr="true"/>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="note_photo">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>120</width>
+           <height>160</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>120</width>
+           <height>160</height>
+          </size>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
        <item alignment="Qt::AlignTop">
         <widget class="QFrame" name="note_middle">
          <property name="sizePolicy">
@@ -410,6 +386,25 @@
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
             </property>
            </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Expanding</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>120</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>
