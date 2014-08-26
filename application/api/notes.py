@@ -269,6 +269,7 @@ def transaction(nickname, diff):
     rebuild_cache()
     return value
 
+
 def log_transaction(nickname, category, product, price_name, quantity, price):
     """ Insert a transaction log line in database
 
@@ -291,6 +292,7 @@ def log_transaction(nickname, category, product, price_name, quantity, price):
         cursor.bindValue(':price', price)
         return cursor.exec_()
 
+
 def log_transactions(transactions):
     """ Log mulsiple transactions
 
@@ -303,13 +305,13 @@ def log_transactions(transactions):
         cursor.prepare("INSERT INTO transactions(date, note, category, product,\
                 price_name, quantity, price) VALUES(NOW(), :note, :category, \
                 :product, :price_name, :quantity, :price)")
-        for transaction in transactions:
-            cursor.bindValue(':note', transaction['note'])
-            cursor.bindValue(':category', transaction['category'])
-            cursor.bindValue(':product', transaction['product'])
-            cursor.bindValue(':price_name',transaction['price_name'])
-            cursor.bindValue(':quantity', transaction['quantity'])
-            cursor.bindValue(':price', transaction['price'])
+        for trans in transactions:
+            cursor.bindValue(':note', trans['note'])
+            cursor.bindValue(':category', trans['category'])
+            cursor.bindValue(':product', trans['product'])
+            cursor.bindValue(':price_name', trans['price_name'])
+            cursor.bindValue(':quantity', trans['quantity'])
+            cursor.bindValue(':price', trans['price'])
             error = error or not cursor.exec_()
 
     if not error:
@@ -318,7 +320,6 @@ def log_transactions(transactions):
     else:
         database.rollback()
         return False
-
 
 
 def export(notes, *, csv=False, xml=False):
