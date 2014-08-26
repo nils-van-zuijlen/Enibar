@@ -100,6 +100,12 @@ class PanelTab(QtWidgets.QWidget):
 
     def product_wheeled(self, event, category, name, price, value):
         """ Wheel callback
+
+        :param QWheelEvent event: qt wheel event
+        :param str category: category name
+        :param str name: product name
+        :param str price: product price name
+        :param float value: product price
         """
         # pylint: disable=too-many-arguments
         if event.angleDelta().y() >= 0:
@@ -163,7 +169,7 @@ class ProductList(QtWidgets.QTreeWidget):
         """ Delete product from product list
         """
         name = "{} ({}) - {}".format(product_name, price_name, category_name)
-        for product in self.products:
+        for i, product in enumerate(self.products):
             if product['name'] == name:
                 if product['count'] > 1:
                     product['price'] -= price
@@ -171,6 +177,10 @@ class ProductList(QtWidgets.QTreeWidget):
                     product['count'] -= 1
                     product['widget'].setText(0, str(product['count']))
                     product['widget'].setText(2, str(product['price']))
+                else:
+                    self.takeTopLevelItem(i)
+                    del self.products[i]
+
         self.update_total()
 
     def clear(self):
