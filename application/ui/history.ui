@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>823</width>
-    <height>599</height>
+    <width>874</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -60,7 +60,12 @@
      </column>
      <column>
       <property name="text">
-       <string>Prix</string>
+       <string>Credit</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Debit</string>
       </property>
      </column>
     </widget>

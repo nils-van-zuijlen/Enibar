@@ -53,9 +53,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.selected = None
 
         # Set product list header width
-        self.product_list.setColumnWidth(0, 60)
-        self.product_list.setColumnWidth(1, 130)
-        self.product_list.setColumnWidth(2, 50)
+        self.product_list.setColumnWidth(0, 30)
+        self.product_list.setColumnWidth(1, 128)
+        self.product_list.setColumnWidth(2, 40)
 
     def select_note(self, index):
         """
@@ -124,7 +124,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     'product': product['product'],
                     'price_name': product['price_name'],
                     'quantity': product['count'],
-                    'price': product['price']
+                    'price': -product['price']
                 }
                 transactions.append(transaction)
             if api.transactions.log_transactions(transactions):

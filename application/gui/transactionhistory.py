@@ -35,8 +35,9 @@ class TransactionHistory(QtWidgets.QDialog):
         self.transaction_list.setColumnWidth(2, 120)
         self.transaction_list.setColumnWidth(3, 120)
         self.transaction_list.setColumnWidth(4, 120)
-        self.transaction_list.setColumnWidth(5, 50)
+        self.transaction_list.setColumnWidth(5, 75)
         self.transaction_list.setColumnWidth(6, 50)
+        self.transaction_list.setColumnWidth(7, 50)
         self.build()
         self.show()
 
@@ -44,6 +45,13 @@ class TransactionHistory(QtWidgets.QDialog):
         """ Buildhistory list
         """
         for transaction in api.transactions.get():
+            if transaction['price'] >= 0:
+                credit = transaction['price']
+                debit = "-"
+            else:
+                credit = "-"
+                debit = -transaction['price']
+
             widget = QtWidgets.QTreeWidgetItem(self.transaction_list, [
                 transaction['date'].toString("yyyy/MM/dd HH:mm:ss"),
                 transaction['note'],
@@ -51,7 +59,8 @@ class TransactionHistory(QtWidgets.QDialog):
                 transaction['product'],
                 transaction['price_name'],
                 str(transaction['quantity']),
-                str(transaction['price'])
+                str(credit),
+                str(debit)
             ])
             self.transaction_list.addTopLevelItem(widget)
 
