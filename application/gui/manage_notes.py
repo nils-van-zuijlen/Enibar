@@ -147,6 +147,7 @@ class ManageNotes(QtWidgets.QDialog):
         if note_selected == -1:
             return
 
+        self.del_button.setEnabled(True)
         self.current_nickname = self.note_list.item(note_selected).text()
         if note_selected != self.current_shown:
             self.current_shown = note_selected
@@ -158,6 +159,15 @@ class ManageNotes(QtWidgets.QDialog):
         self.disable_inputs_for_editing()
         self.add_button.setEnabled(True)
         self.fill_inputs(note)
+
+    def del_fnc(self):
+        """ Called when "Supprimer" is clicked
+        """
+        api.notes.remove(list(api.notes.get(
+            lambda x: x["nickname"] == self.current_nickname))[0]['id'])
+        self.note_list.refresh(api.notes.get())
+        self.disable_inputs()
+        self.empty_inputs()
 
     def empty_inputs(self):
         """ This empty all the inputs
