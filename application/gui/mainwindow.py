@@ -23,22 +23,23 @@ Main Window description
 
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 
-from .manage_notes import ManageNotes
+from .auth_prompt import ask_auth
 from .consumptionmanagment import ConsumptionManagmentWindow
+from .douchette import Douchette
+from .manage_notes import ManageNotes
 from .notesaction import NotesAction
 from .panelmanagment import PanelManagment
 from .passwordmanagment import PasswordManagment
-from .usermanagment import UserManagmentWindow
 from .refillnote import RefillNote
 from .transactionhistory import TransactionHistory
-from .douchette import Douchette
-from .auth_prompt import ask_auth
+from .usermanagment import UserManagmentWindow
+import api.categories
 import api.notes
 import api.transactions
-import api.categories
 import datetime
-import time
 import gui.utils
+import settings
+import time
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -252,7 +253,7 @@ class MenuBar(QtWidgets.QMenuBar):
             "Bar",
             "Ecocup",
             "Achat",
-            2
+            settings.ECOCUP_PRICE
         )
         text = "{:.2f} €".format(self.parent().product_list.get_total())
         self.parent().total.setText(text)
@@ -264,7 +265,7 @@ class MenuBar(QtWidgets.QMenuBar):
             "Bar",
             "Ecocup",
             "Remboursement",
-            -2
+            -settings.ECOCUP_PRICE
         )
         text = "{:.2f} €".format(self.parent().product_list.get_total())
         self.parent().total.setText(text)

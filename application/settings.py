@@ -58,6 +58,11 @@ Database
 
             If True, the password will never be asked
 
+    ECOCUP_PRICE
+            **Default value** ``1.0``
+
+            The price of an ecocup
+
 """
 
 
@@ -67,4 +72,5 @@ PASSWORD = ""
 DBNAME = "enibar"
 
 DEBUG = False
+ECOCUP_PRICE = 1.0
 
