@@ -37,6 +37,7 @@ match a combination in database.
 
 from PyQt5 import QtWidgets, uic
 from api import users
+import settings
 
 
 def ask_auth(*dargs):
@@ -45,6 +46,9 @@ def ask_auth(*dargs):
         """ Decorator wrapper """
         def wrapper(*args, **kwargs):
             """ Wrapper """
+            if settings.DEBUG:
+                func(*args, **kwargs)
+                return
             prompt = AuthPrompt(dargs)
             prompt.exec()
             if prompt.is_authorized:
