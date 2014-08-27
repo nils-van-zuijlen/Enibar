@@ -37,7 +37,9 @@ match a combination in database.
 
 from PyQt5 import QtWidgets, uic
 from api import users
+from database import Cursor
 import settings
+import gui.utils
 
 
 def ask_auth(*dargs):
@@ -50,7 +52,6 @@ def ask_auth(*dargs):
                 func(*args, **kwargs)
                 return
             prompt = AuthPrompt(dargs)
-            prompt.exec()
             if prompt.is_authorized:
                 func(*args, **kwargs)
             else:
@@ -64,13 +65,29 @@ class AuthPrompt(QtWidgets.QDialog):
     def __init__(self, requirements):
         super().__init__()
         self.requirements = requirements
-        uic.loadUi('ui/authprompt.ui', self)
         self.is_authorized = False
+        uic.loadUi('ui/authprompt.ui', self)
+        filter_ = ", ".join("{key}=1".format(key=key) for key in requirements)
+
+        with Cursor() as cursor:
+            cursor.prepare("SELECT * FROM admins WHERE " + filter_)
+            cursor.exec_()
+
+        ok = False
+        while cursor.next():
+            self.login_input.addItem(cursor.record().value("login"))
+            ok = True
+
+        if not ok:
+            gui.utils.error("Error", "Personne n'a le droit de faire ça")
+        else:
+            self.exec()
 
     def accept(self):
         """ Called when "Login" is clicked """
-        if users.is_authorized(self.login_input.text(), self.pass_input.text()):
-            rights = users.get_rights(self.login_input.text())
+        if users.is_authorized(self.login_input.currentText(),
+                               self.pass_input.text()):
+            rights = users.get_rights(self.login_input.currentText())
             for requirement in self.requirements:
                 if not rights[requirement]:
                     return super().accept()

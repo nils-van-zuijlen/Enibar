@@ -298,7 +298,6 @@ def export(notes, *, csv=False, xml=False):
         csv = ", ".join(to_export)
         for note in notes:
             csv += "\n" + ", ".join(str(note[value]) for value in to_export)
-        print(csv)
         return csv
 
 rebuild_cache()

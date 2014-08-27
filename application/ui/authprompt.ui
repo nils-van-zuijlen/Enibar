@@ -16,13 +16,17 @@
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
-     <item row="1" column="0" colspan="2">
-      <widget class="QLineEdit" name="login_input"/>
-     </item>
      <item row="5" column="0">
       <widget class="QPushButton" name="accept_button">
        <property name="text">
         <string>Login</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="login_label">
+       <property name="text">
+        <string>Login:</string>
        </property>
       </widget>
      </item>
@@ -33,30 +37,6 @@
        </property>
        <property name="buddy">
         <cstring>pass_input</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="login_label">
-       <property name="text">
-        <string>Login:</string>
-       </property>
-       <property name="buddy">
-        <cstring>login_input</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="1">
-      <widget class="QPushButton" name="cancel_button">
-       <property name="text">
-        <string>Annuler</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0" colspan="2">
-      <widget class="QLineEdit" name="pass_input">
-       <property name="echoMode">
-        <enum>QLineEdit::Password</enum>
        </property>
       </widget>
      </item>
@@ -73,12 +53,28 @@
        </property>
       </spacer>
      </item>
+     <item row="5" column="1">
+      <widget class="QPushButton" name="cancel_button">
+       <property name="text">
+        <string>Annuler</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0" colspan="2">
+      <widget class="QLineEdit" name="pass_input">
+       <property name="echoMode">
+        <enum>QLineEdit::Password</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" colspan="2">
+      <widget class="QComboBox" name="login_input"/>
+     </item>
     </layout>
    </item>
   </layout>
  </widget>
  <tabstops>
-  <tabstop>login_input</tabstop>
   <tabstop>pass_input</tabstop>
   <tabstop>accept_button</tabstop>
   <tabstop>cancel_button</tabstop>
