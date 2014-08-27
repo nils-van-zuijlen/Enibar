@@ -36,9 +36,11 @@ def add(name):
     :param str name: Category name
     :return int: Category id
     """
+    if not name.strip():
+        return None
     with Cursor() as cursor:
         cursor.prepare("INSERT INTO categories(name) VALUES(:cat_name)")
-        cursor.bindValue(':cat_name', name)
+        cursor.bindValue(':cat_name', name.strip())
         if cursor.exec_():
             return cursor.lastInsertId()  # Return the created category
         else:
