@@ -63,7 +63,8 @@ CREATE TABLE IF NOT EXISTS products(
 	id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
 	name VARCHAR(127),
 	category INTEGER UNSIGNED,
-	UNIQUE (name, category),
+	barcode VARCHAR(127),
+	UNIQUE (name, category, barcode),
 	FOREIGN KEY (`category`) REFERENCES categories(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 

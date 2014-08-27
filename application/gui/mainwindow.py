@@ -31,8 +31,10 @@ from .passwordmanagment import PasswordManagment
 from .usermanagment import UserManagmentWindow
 from .refillnote import RefillNote
 from .transactionhistory import TransactionHistory
+from .douchette import Douchette
 import api.notes
 import api.transactions
+import api.categories
 import datetime
 import time
 import gui.utils
@@ -51,6 +53,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.refresh()
         self.notes_list.currentRowChanged.connect(self.select_note)
         self.selected = None
+        self.win = None
 
         # Set product list header width
         self.product_list.setColumnWidth(0, 60)
@@ -110,6 +113,37 @@ class MainWindow(QtWidgets.QMainWindow):
         """ Refresh the notes list
         """
         self.notes_list.refresh(api.notes.get(lambda x: x['hidden'] == 0))
+
+    def event(self, event):
+        """ Rewrite the event loop
+        """
+        if isinstance(event, QtGui.QKeyEvent):
+            if event.text() == "\"":
+                self.win = Douchette(self.on_douchette)
+                return True
+        return super().event(event)
+
+    def on_douchette(self, text):
+        """ Called after the douchette is fired !
+        """
+        product = api.products.get_unique(barcode=text)
+        if not product:
+            return
+        catname = api.categories.get_unique(id=product["category"])
+        if not catname:
+            return
+        prices = list(api.prices.get(product=product["id"]))
+        if not prices:
+            return
+        if not len(product):
+            return
+        self.product_list.add_product(
+            catname["name"],
+            product["name"],
+            prices[0]["label"],
+            prices[0]["value"])
+        text = "{:.2f} €".format(self.product_list.get_total())
+        self.total.setText(text)
 
     def validate_transaction(self):
         """ Validate transaction
