@@ -54,6 +54,7 @@ class ManageNotes(QtWidgets.QDialog):
         self.adding = False
         self.current_shown = -1
         self.on_change = api.validator.on_change(self, self.save_button)
+        self.note_list.current_filter = lambda x: True
         self.note_list.refresh(api.notes.get())
         self.show()
 

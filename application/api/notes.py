@@ -186,8 +186,10 @@ def get(filter_=None):
         to keep only notes with the id 1
     """
     rows = []
+    if filter_ is None:
+        return NOTES_CACHE
     for row in NOTES_CACHE:
-        if filter_ is None or filter_(row):
+        if filter_(row):
             rows.append(row)
     return rows
 
