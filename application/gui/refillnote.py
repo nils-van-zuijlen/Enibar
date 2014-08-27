@@ -24,7 +24,7 @@ RefillNote Window
 """
 
 
-from PyQt5 import QtWidgets, uic
+from PyQt5 import QtWidgets, QtCore, uic
 
 import api.notes
 import api.transactions
@@ -38,6 +38,7 @@ class RefillNote(QtWidgets.QDialog):
         super().__init__()
         uic.loadUi('ui/refill_note.ui', self)
         self.selected_note = selected_note
+        self.to_add.setLocale(QtCore.QLocale('English'))
 
         self.show()
         self.to_add.selectAll()
