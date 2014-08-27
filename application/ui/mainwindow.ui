@@ -440,7 +440,7 @@
      <x>0</x>
      <y>0</y>
      <width>884</width>
-     <height>19</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="administration">
@@ -468,6 +468,8 @@
      <addaction name="export_without_profs"/>
     </widget>
     <addaction name="refill_note"/>
+    <addaction name="empty_note"/>
+    <addaction name="separator"/>
     <addaction name="manage_notes"/>
     <addaction name="notes_action"/>
     <addaction name="separator"/>
@@ -558,6 +560,14 @@
     <string>Consulter l'historique des transactions</string>
    </property>
   </action>
+  <action name="empty_note">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Prendre sur une note</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -587,6 +597,7 @@
     <slot>take_ecocup_fnc()</slot>
     <slot>repay_ecocup_fnc()</slot>
     <slot>show_transactions_history()</slot>
+    <slot>empty_note_fnc()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -830,6 +841,22 @@
    <signal>triggered()</signal>
    <receiver>menu_bar</receiver>
    <slot>show_transactions_history()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>9</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>empty_note</sender>
+   <signal>triggered()</signal>
+   <receiver>menu_bar</receiver>
+   <slot>empty_note_fnc()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

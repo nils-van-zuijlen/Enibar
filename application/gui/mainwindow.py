@@ -26,6 +26,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from .auth_prompt import ask_auth
 from .consumptionmanagment import ConsumptionManagmentWindow
 from .douchette import Douchette
+from .emptynote import EmptyNote
 from .manage_notes import ManageNotes
 from .notesaction import NotesAction
 from .panelmanagment import PanelManagment
@@ -68,6 +69,7 @@ class MainWindow(QtWidgets.QMainWindow):
         """
         self.note_box.setEnabled(True)
         self.refill_note.setEnabled(True)
+        self.empty_note.setEnabled(True)
         if index >= 0:
             self.selected = self.notes_list.item(index)
         widget = self.notes_list.currentItem()
@@ -83,6 +85,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.note_photo.setPixmap(image)
             self.note_box.setStyleSheet("background-color: none;")
             self.refill_note.setEnabled(False)
+            self.empty_note.setEnabled(False)
             self.note_box.setEnabled(False)
             return
 
@@ -243,6 +246,13 @@ class MenuBar(QtWidgets.QMenuBar):
         """ Open a RefillNote window
         """
         self.cur_window = RefillNote(
+            self.parent().notes_list.currentItem().text())
+        self._connect_window()
+
+    def empty_note_fnc(self, _):
+        """ Open a EmptyNote window
+        """
+        self.cur_window = EmptyNote(
             self.parent().notes_list.currentItem().text())
         self._connect_window()
 
