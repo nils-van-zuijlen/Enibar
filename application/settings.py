@@ -53,6 +53,11 @@ Database
 
             The name of the database used by the software.
 
+    DEBUG
+            **Default value** ``False``
+
+            If True, the password will never be asked
+
 """
 
 
@@ -60,4 +65,6 @@ HOST = ""
 USERNAME = "root"
 PASSWORD = ""
 DBNAME = "enibar"
+
+DEBUG = True
 
