@@ -36,7 +36,6 @@ class Panels(QtWidgets.QTabWidget):
         super().__init__(parent)
         self.main_window = parent.parent()
         self.panels = []
-        self.build()
 
     def build(self):
         """ Build panels from panels found in database
@@ -235,6 +234,7 @@ class ProductsContainer(QtWidgets.QWidget):
         categores and products are build on the fly.  Then all categories are
         sorted into columns in an oprimised maner.
         """
+        print(self.parent().parent().parent().main_window.hide_alcohol.isChecked())
         try:
             if self.parent().parent().parent().main_window.\
                hide_alcohol.isChecked():

@@ -541,6 +541,9 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Cacher les boissons alcolisées</string>
    </property>

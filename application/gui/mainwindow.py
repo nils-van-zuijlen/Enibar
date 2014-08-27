@@ -63,6 +63,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.product_list.setColumnWidth(1, 128)
         self.product_list.setColumnWidth(2, 40)
 
+        self.panels.build()
+
     def select_note(self, index):
         """
         Called when a note is selected
