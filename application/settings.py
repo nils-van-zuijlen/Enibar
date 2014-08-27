@@ -66,5 +66,5 @@ USERNAME = "root"
 PASSWORD = ""
 DBNAME = "enibar"
 
-DEBUG = True
+DEBUG = False
 
