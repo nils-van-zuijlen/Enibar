@@ -189,7 +189,7 @@ class ProductList(QtWidgets.QTreeWidget):
         self.products = []
         main_window = self.parent().parent().parent()
         main_window.total.setText("0.00 €")
-        self.setFocus()
+        main_window.notes_list.setFocus()
 
     def get_total(self):
         """ Sum up all prices in the list
