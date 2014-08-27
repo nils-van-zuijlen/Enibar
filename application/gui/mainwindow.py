@@ -172,6 +172,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 api.notes.transaction(self.selected.text(), -total)
                 self.refresh()
                 self.product_list.clear()
+                self.notes_list.setFocus()
             else:
                 gui.utils.error('Impossible de valider la transaction')
 
