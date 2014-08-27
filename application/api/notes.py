@@ -297,7 +297,7 @@ def export(notes, *, csv=False, xml=False):
                      "photo_path"]
         csv = ", ".join(to_export)
         for note in notes:
-            csv += "\n" + ", ".join(str(note[value]) for value in to_export)
+            csv += "\n" + ",".join(str(note[value]) for value in to_export)
         return csv
 
 rebuild_cache()
