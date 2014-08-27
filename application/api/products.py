@@ -31,7 +31,7 @@ from database import Cursor, Database
 import api.categories
 import api.base
 
-PRODUCT_FIELDS = ['name', 'category']
+PRODUCT_FIELDS = ['name', 'category', 'barcode']
 
 
 def add(name, *, category_name=None, category_id=None):
@@ -109,25 +109,22 @@ def remove(id_):
         return cursor.exec_()
 
 
-def set_prices(name, unit=None, demi=None, pint=None, meter=None):
-    """ Set prices for a product
+def set_barcode(name, category, barcode):
+    """ Set the barcode of a product in a category
 
-    :param float unit: Price for an unit.
-    :param float demi: Price of a « demi ».
-    :param float pint: Price of a pint.
-    :param float meter: Price of a meter.
-
-    :return bool: True if success else False.
+        :param str name: The name of the product
+        :param str category: The name of the category
+        :return bool: True if success else False.
     """
-    with Cursor() as cursor:
-        cursor.prepare("UPDATE products SET price_unit=:unit, price_demi=:demi,\
-                        price_pint=:pint, price_meter=:meter WHERE name=:name")
 
-        cursor.bindValue(':unit', unit)
-        cursor.bindValue(':demi', demi)
-        cursor.bindValue(':pint', pint)
-        cursor.bindValue(':meter', meter)
+    with Cursor() as cursor:
+        cursor.prepare("UPDATE products SET barcode=:barcode WHERE name=:name\
+                        AND category=:cat")
+
+        category = api.categories.get_unique(name=category)
+        cursor.bindValue(':barcode', barcode)
         cursor.bindValue(':name', name)
+        cursor.bindValue(':cat', category['id'])
 
         return cursor.exec_()
 
@@ -162,6 +159,7 @@ def get(**filter_):
             'id': cursor.record().value('id'),
             'name': cursor.record().value('name'),
             'category': cursor.record().value('category'),
+            'barcode': cursor.record().value('barcode'),
         }
 
 

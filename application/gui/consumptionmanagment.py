@@ -28,6 +28,7 @@ import gui.utils
 import api.products
 import api.categories
 import api.prices
+from .douchette import Douchette
 
 
 class ConsumptionManagmentWindow(QtWidgets.QDialog):
@@ -46,6 +47,7 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
         self.category = None
         self.products.build()
         self.color_picker = QtWidgets.QColorDialog(self)
+        self.win = None
         self.show()
 
     def add_product(self):
@@ -73,6 +75,17 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
             self.input_product.setText("")
         elif cat_name:
             gui.utils.error("Impossible d'ajouter le produit")
+
+    def event(self, event):
+        """ Rewrite the event loop
+        """
+        if isinstance(event, QtGui.QKeyEvent):
+            if self.tabs.currentIndex() == 0 and\
+                    not self.input_product.hasFocus():
+                if event.text() == "\"":
+                    self.win = Douchette(self.barcode_input.setText)
+                    return True
+        return super().event(event)
 
     def remove_product(self):
         """ Remove product
@@ -127,6 +140,10 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
                     })
         if not api.prices.set_multiple_values(new_prices):
             gui.utils.error("Impossible de sauvegarder les nouveaux prix")
+        if not api.products.set_barcode(indexes[0].data(),
+                                        indexes[0].parent().data(),
+                                        self.barcode_input.text()):
+            gui.utils.error("Impossible de sauvegarder le code barre")
 
     def select_product(self):
         """ Select product
@@ -139,6 +156,7 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
         if not indexes:
             self.prices.setEnabled(False)
             self.input_product_save.setEnabled(False)
+            self.barcode_input.setEnabled(False)
             return
         item = indexes[-1]
 
@@ -154,10 +172,17 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
             self.prices.rebuild(item.data(), item.parent().data())
             self.prices.setEnabled(True)
             self.input_product_save.setEnabled(True)
+            if len(indexes) < 2:
+                self.barcode_input.setEnabled(True)
+                category = api.categories.get_unique(name=item.parent().data())
+                product = api.products.get_unique(name=item.data(),
+                                                  category=category['id'])
+                self.barcode_input.setText(product['barcode'])
         else:
             self.prices.clean()
             self.prices.setEnabled(False)
             self.input_product_save.setEnabled(False)
+            self.barcode_input.setEnabled(False)
 
     def add_category(self):
         """ Add category to category list.

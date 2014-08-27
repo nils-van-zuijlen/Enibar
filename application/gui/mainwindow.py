@@ -31,8 +31,11 @@ from .passwordmanagment import PasswordManagment
 from .usermanagment import UserManagmentWindow
 from .refillnote import RefillNote
 from .transactionhistory import TransactionHistory
+from .douchette import Douchette
+from .auth_prompt import ask_auth
 import api.notes
 import api.transactions
+import api.categories
 import datetime
 import time
 import gui.utils
@@ -51,6 +54,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.refresh()
         self.notes_list.currentRowChanged.connect(self.select_note)
         self.selected = None
+        self.win = None
 
         # Set product list header width
         self.product_list.setColumnWidth(0, 30)
@@ -111,6 +115,37 @@ class MainWindow(QtWidgets.QMainWindow):
         """
         self.notes_list.refresh(api.notes.get(lambda x: x['hidden'] == 0))
 
+    def event(self, event):
+        """ Rewrite the event loop
+        """
+        if isinstance(event, QtGui.QKeyEvent):
+            if event.text() == "\"":
+                self.win = Douchette(self.on_douchette)
+                return True
+        return super().event(event)
+
+    def on_douchette(self, text):
+        """ Called after the douchette is fired !
+        """
+        product = api.products.get_unique(barcode=text)
+        if not product:
+            return
+        catname = api.categories.get_unique(id=product["category"])
+        if not catname:
+            return
+        prices = list(api.prices.get(product=product["id"]))
+        if not prices:
+            return
+        if not len(product):
+            return
+        self.product_list.add_product(
+            catname["name"],
+            product["name"],
+            prices[0]["label"],
+            prices[0]["value"])
+        text = "{:.2f} €".format(self.product_list.get_total())
+        self.total.setText(text)
+
     def validate_transaction(self):
         """ Validate transaction
         """
@@ -153,51 +188,57 @@ class MenuBar(QtWidgets.QMenuBar):
         """
         self.cur_window.finished.connect(self._refresh_parent)
 
-    def user_managment_fnc(self):
+    @ask_auth("manage_users")
+    def user_managment_fnc(self, _):
         """ Call user managment window """
         self.cur_window = UserManagmentWindow()
         self._connect_window()
 
-    def consumption_managment_fnc(self):
+    @ask_auth("manage_products")
+    def consumption_managment_fnc(self, _):
         """ Call consumption managment window """
         self.cur_window = ConsumptionManagmentWindow()
         self.cur_window.finished.connect(self.parent().panels.rebuild)
         self._connect_window()
 
-    def manage_note_fnc(self):
+    @ask_auth("manage_users")
+    def manage_note_fnc(self, _):
         """ Open an ManageNotes window
         """
         self.cur_window = ManageNotes(self.parent())
         self._connect_window()
 
-    def export_notes_with_profs_fnc(self):
+    def export_notes_with_profs_fnc(self, _):
         """ Export all notes """
         self.export(api.notes.get())
 
-    def export_notes_without_profs_fnc(self):
+    def export_notes_without_profs_fnc(self, _):
         """ Export only students notes """
         self.export(api.notes.get(lambda x: x["promo"] != "Prof"))
 
-    def change_password_fnc(self):
+    def change_password_fnc(self, _):
         """ Open a PasswordManagment window
         """
         self.cur_window = PasswordManagment()
         self._connect_window()
 
-    def panel_managment_fnc(self):
+    @ask_auth("manage_products")
+    def panel_managment_fnc(self, _):
         """ Open a PanelManagment window
         """
         self.cur_window = PanelManagment()
         self.cur_window.finished.connect(self.parent().panels.rebuild)
         self._connect_window()
 
-    def notes_action_fnc(self):
+    @ask_auth("manage_notes")
+    def notes_action_fnc(self, _):
         """ Open a NotesAction window
         """
         self.cur_window = NotesAction()
         self._connect_window()
 
-    def refill_note_fnc(self):
+    @ask_auth("manage_notes")
+    def refill_note_fnc(self, _):
         """ Open a RefillNote window
         """
         self.cur_window = RefillNote(
