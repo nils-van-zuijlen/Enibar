@@ -32,6 +32,7 @@ from .usermanagment import UserManagmentWindow
 from .refillnote import RefillNote
 from .transactionhistory import TransactionHistory
 from .douchette import Douchette
+from .auth_prompt import ask_auth
 import api.notes
 import api.transactions
 import api.categories
@@ -187,51 +188,57 @@ class MenuBar(QtWidgets.QMenuBar):
         """
         self.cur_window.finished.connect(self._refresh_parent)
 
-    def user_managment_fnc(self):
+    @ask_auth("manage_users")
+    def user_managment_fnc(self, _):
         """ Call user managment window """
         self.cur_window = UserManagmentWindow()
         self._connect_window()
 
-    def consumption_managment_fnc(self):
+    @ask_auth("manage_products")
+    def consumption_managment_fnc(self, _):
         """ Call consumption managment window """
         self.cur_window = ConsumptionManagmentWindow()
         self.cur_window.finished.connect(self.parent().panels.rebuild)
         self._connect_window()
 
-    def manage_note_fnc(self):
+    @ask_auth("manage_users")
+    def manage_note_fnc(self, _):
         """ Open an ManageNotes window
         """
         self.cur_window = ManageNotes(self.parent())
         self._connect_window()
 
-    def export_notes_with_profs_fnc(self):
+    def export_notes_with_profs_fnc(self, _):
         """ Export all notes """
         self.export(api.notes.get())
 
-    def export_notes_without_profs_fnc(self):
+    def export_notes_without_profs_fnc(self, _):
         """ Export only students notes """
         self.export(api.notes.get(lambda x: x["promo"] != "Prof"))
 
-    def change_password_fnc(self):
+    def change_password_fnc(self, _):
         """ Open a PasswordManagment window
         """
         self.cur_window = PasswordManagment()
         self._connect_window()
 
-    def panel_managment_fnc(self):
+    @ask_auth("manage_products")
+    def panel_managment_fnc(self, _):
         """ Open a PanelManagment window
         """
         self.cur_window = PanelManagment()
         self.cur_window.finished.connect(self.parent().panels.rebuild)
         self._connect_window()
 
-    def notes_action_fnc(self):
+    @ask_auth("manage_notes")
+    def notes_action_fnc(self, _):
         """ Open a NotesAction window
         """
         self.cur_window = NotesAction()
         self._connect_window()
 
-    def refill_note_fnc(self):
+    @ask_auth("manage_notes")
+    def refill_note_fnc(self, _):
         """ Open a RefillNote window
         """
         self.cur_window = RefillNote(
