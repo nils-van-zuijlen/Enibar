@@ -27,6 +27,7 @@ RefillNote Window
 from PyQt5 import QtWidgets, uic
 
 import api.notes
+import api.transactions
 import gui.utils
 
 
@@ -46,6 +47,14 @@ class RefillNote(QtWidgets.QDialog):
         """
         if self.to_add.value() > 0:
             api.notes.transaction(self.selected_note, self.to_add.value())
+            api.transactions.log_transaction(
+                self.selected_note,
+                "Note",
+                "-",
+                "Rechargement",
+                "1",
+                self.to_add.value()
+            )
             super().accept()
         else:
             gui.utils.error("Erreur", "La valeur à ajouter doit etre positive")

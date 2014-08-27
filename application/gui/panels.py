@@ -100,6 +100,12 @@ class PanelTab(QtWidgets.QWidget):
 
     def product_wheeled(self, event, category, name, price, value):
         """ Wheel callback
+
+        :param QWheelEvent event: qt wheel event
+        :param str category: category name
+        :param str name: product name
+        :param str price: product price name
+        :param float value: product price
         """
         # pylint: disable=too-many-arguments
         if event.angleDelta().y() >= 0:
@@ -163,7 +169,7 @@ class ProductList(QtWidgets.QTreeWidget):
         """ Delete product from product list
         """
         name = "{} ({}) - {}".format(product_name, price_name, category_name)
-        for product in self.products:
+        for i, product in enumerate(self.products):
             if product['name'] == name:
                 if product['count'] > 1:
                     product['price'] -= price
@@ -171,6 +177,10 @@ class ProductList(QtWidgets.QTreeWidget):
                     product['count'] -= 1
                     product['widget'].setText(0, str(product['count']))
                     product['widget'].setText(2, str(product['price']))
+                else:
+                    self.takeTopLevelItem(i)
+                    del self.products[i]
+
         self.update_total()
 
     def clear(self):
@@ -256,7 +266,8 @@ class ProductsContainer(QtWidgets.QWidget):
                 }
             if pid not in self.products[cid]['products']:
                 prices = self.fetch_prices(pid)
-                if not prices:
+                price_sum = sum([price for _, price in prices.items()])
+                if not prices or not price_sum:
                     continue
                 widget = get_product_widget(
                     cid,
@@ -514,7 +525,10 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
 def get_product_widget(cid, pid, name, cat_name, prices):
     """ Get prduct widget
     Select best widget between Button and ComboBox to use regarding the price
-    list.
+    list. If prices are set to 0 they will not be displayed. Knowing that, you
+    must be sure to provide at least one price in the prices list (by filtering
+    products which have no prices at all and/or product which prices sum is
+    equal to 0).
 
     :param int cid: Category id
     :param int pid: Product id
@@ -522,10 +536,15 @@ def get_product_widget(cid, pid, name, cat_name, prices):
     :param OrderedDict prices: Products prices.
     :return BaseProduct: Widget
     """
-    if len(prices) == 1:
-        widget = Button(cid, pid, name, cat_name, prices)
+    valid_prices = collections.OrderedDict()
+    for price, value in prices.items():
+        if value != 0:
+            valid_prices[price] = value
+
+    if len(valid_prices) == 1:
+        widget = Button(cid, pid, name, cat_name, valid_prices)
     else:
-        widget = ComboBox(cid, pid, name, cat_name, prices)
+        widget = ComboBox(cid, pid, name, cat_name, valid_prices)
 
     # Set attributes
     widget.setMinimumSize(QtCore.QSize(100, 35))
