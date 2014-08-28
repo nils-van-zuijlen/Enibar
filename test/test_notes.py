@@ -107,7 +107,7 @@ class NotesTest(unittest.TestCase):
                                  'note': 0,
                                  'overdraft_time': 0,
                                  'ecocups': 0,
-                                 'photo_path': 'img/coucou.jpg',
+                                 'photo_path': 'coucou.jpg',
                                  'hidden': 0})
         self.assertTrue(os.path.isfile("img/coucou.jpg"))
 
