@@ -114,7 +114,7 @@ def add(nickname, firstname, lastname, mail, tel, birthdate, promo, photo_path):
         name = os.path.split(photo_path)[1]
         if name:
             if not os.path.exists(settings.IMG_BASE_DIR + name):
-                shutil.copyfile(photo_path, IMG_BASE_DIR + name)
+                shutil.copyfile(photo_path, settings.IMG_BASE_DIR + name)
 
     with Cursor() as cursor:
         cursor.prepare("INSERT INTO notes (nickname, lastname, firstname,\
