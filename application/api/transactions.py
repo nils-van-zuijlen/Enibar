@@ -28,6 +28,7 @@ from database import Database, Cursor
 import api.base
 import api.notes
 
+
 def log_transaction(nickname, category, product, price_name, quantity, price):
     """ Insert a transaction log line in database
 
@@ -105,8 +106,8 @@ def rollback_transaction(id_):
 
     with Cursor() as cursor:
         if quantity > 1:
-            cursor.prepare("UPDATE transactions SET quantity=quantity - 1, price=?\
-                WHERE id=?")
+            cursor.prepare("UPDATE transactions SET quantity=quantity - 1,\
+                    price=? WHERE id=?")
             price = round(trans['price'] / quantity, 2)
             cursor.addBindValue(trans['price'] - price)
             cursor.addBindValue(trans['id'])
@@ -119,7 +120,6 @@ def rollback_transaction(id_):
             return api.notes.transaction(note['nickname'], -price)
         else:
             return False
-
 
 
 def get(**filter_):

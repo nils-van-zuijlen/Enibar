@@ -71,7 +71,6 @@ class TransactionHistory(QtWidgets.QDialog):
             self.widgets.append(widget)
             self.transaction_list.addTopLevelItem(widget)
 
-    @profile
     def update_list(self, _):
         filter_ = [
             self.input_note.text(),
