@@ -21,7 +21,9 @@ Transaction hisotry window.
 """
 
 from PyQt5 import QtWidgets, uic
+from .auth_prompt import ask_auth
 import api.transactions
+import re
 
 
 class TransactionHistory(QtWidgets.QDialog):
@@ -30,6 +32,8 @@ class TransactionHistory(QtWidgets.QDialog):
     def __init__(self, parent):
         super().__init__(parent)
         uic.loadUi('ui/history.ui', self)
+        self.widgets = []
+        self.transactions = list(api.transactions.get())
         self.transaction_list.setColumnWidth(0, 120)
         self.transaction_list.setColumnWidth(1, 120)
         self.transaction_list.setColumnWidth(2, 120)
@@ -38,13 +42,14 @@ class TransactionHistory(QtWidgets.QDialog):
         self.transaction_list.setColumnWidth(5, 75)
         self.transaction_list.setColumnWidth(6, 50)
         self.transaction_list.setColumnWidth(7, 50)
+        self.transaction_list.setColumnWidth(8, 50)
         self.build()
         self.show()
 
     def build(self):
         """ Buildhistory list
         """
-        for transaction in api.transactions.get():
+        for transaction in self.transactions:
             if transaction['price'] >= 0:
                 credit = transaction['price']
                 debit = "-"
@@ -60,7 +65,54 @@ class TransactionHistory(QtWidgets.QDialog):
                 transaction['price_name'],
                 str(transaction['quantity']),
                 str(credit),
-                str(debit)
+                str(debit),
+                str(transaction['id'])
             ])
+            self.widgets.append(widget)
             self.transaction_list.addTopLevelItem(widget)
+
+    @profile
+    def update_list(self, _):
+        filter_ = [
+            self.input_note.text(),
+            self.input_category.text(),
+            self.input_product.text(),
+        ]
+        for widget in self.widgets:
+            show = True
+            for index, regex in enumerate(filter_):
+                if regex.lower() not in widget.text(index + 1).lower():
+                    show = False
+
+                if show:
+                    widget.setHidden(False)
+                else:
+                    widget.setHidden(True)
+
+    @ask_auth("manage_notes")
+    def delete(self, _):
+        widget = self.transaction_list.currentItem()
+        if api.transactions.rollback_transaction(widget.text(8)):
+            try:
+                quantity = int(widget.text(5))
+            except ValueError:
+                quantity = 1
+
+            if quantity > 1:
+                widget.setText(5, str(quantity - 1))
+                if widget.text(6) != "-":
+                    credit = float(widget.text(6))
+                    credit -= credit / quantity
+                    credit = round(credit, 2)
+                    widget.setText(6, str(credit))
+                elif widget.text(7) != "-":
+                    debit = float(widget.text(7))
+                    debit -= debit / quantity
+                    debit = round(debit, 2)
+                    widget.setText(7, str(debit))
+            else:
+                index = self.transaction_list.indexOfTopLevelItem(widget)
+                self.transaction_list.takeTopLevelItem(index)
+        else:
+            print("Pas supprimé")
 
