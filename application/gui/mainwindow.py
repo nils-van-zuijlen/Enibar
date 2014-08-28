@@ -101,9 +101,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.note_phone.setText(infos['tel'])
 
         if infos['photo_path']:
-            image = QtGui.QPixmap(infos['photo_path'])
+            path = settings.IMG_BASE_DIR + '/' + infos['photo_path']
+            image = QtGui.QPixmap(path)
         else:
-            image = QtGui.QPixmap("img/coucou.jpg")
+            image = QtGui.QPixmap("")
         if not image.isNull():
             self.note_photo.setPixmap(image.scaled(QtCore.QSize(120, 160), 1))
         else:

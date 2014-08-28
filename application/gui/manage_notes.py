@@ -26,11 +26,12 @@ ManageNotes Window
 
 from PyQt5 import QtWidgets, QtCore, QtGui, uic
 
+from gui.input import Input
 import api.notes
 import api.validator
-from gui.input import Input
-import gui.utils
 import datetime
+import gui.utils
+import settings
 
 
 class ManageNotes(QtWidgets.QDialog):
@@ -63,7 +64,7 @@ class ManageNotes(QtWidgets.QDialog):
             self.photo with the selected image
         """
         self.photo_selected = QtWidgets.QFileDialog(self).getOpenFileUrl(
-            self, "Selectionnez une image", "img/",
+            self, "Selectionnez une image", settings.IMG_BASE_DIR,
             "Image Files (*.png *.jpg *.bmp)")[0].path()
 
         if self.photo_selected:
