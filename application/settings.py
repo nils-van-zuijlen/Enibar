@@ -63,6 +63,11 @@ Database
 
             The price of an ecocup
 
+    IMG_BASE_DIR
+            **Default value** ``img/``
+
+            The base dir for all images
+
 """
 
 
@@ -73,4 +78,4 @@ DBNAME = "enibar"
 
 DEBUG = False
 ECOCUP_PRICE = 1.0
-
+IMG_BASE_DIR = "img/"

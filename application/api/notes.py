@@ -26,6 +26,7 @@ from PyQt5 import QtSql
 from database import Cursor, Database
 import datetime
 import os.path
+import settings
 import shutil
 
 
@@ -95,7 +96,7 @@ def change_values(nick, **kwargs):
 
 # pylint: disable=too-many-arguments
 def add(nickname, firstname, lastname, mail, tel, birthdate, promo, photo_path):
-    """ Create a note. Copy the image from photo_path to img/
+    """ Create a note. Copy the image from photo_path to settings.IMG_BASE_DIR
 
     :param str nickname: Nickname
     :param str lastname: Last name
@@ -105,15 +106,15 @@ def add(nickname, firstname, lastname, mail, tel, birthdate, promo, photo_path):
     :param int birthdate: Birthday (DD/MM/YYYY)
     :param str promo: Promo. One of '1A', '2A', '3A', '3S', '4A', '5A',\
     'Ancien', 'Prof', 'Externe', Esiab'
-    :param str photo_path: The path of the photo to use. The root is img/
+    :param str photo_path: The path of the photo to use.
 
     :return bool: The id of the note created or -1.
     """
     if photo_path:
         name = os.path.split(photo_path)[1]
         if name:
-            if not os.path.exists("img/" + name):
-                shutil.copyfile(photo_path, "img/" + name)
+            if not os.path.exists(settings.IMG_BASE_DIR + name):
+                shutil.copyfile(photo_path, IMG_BASE_DIR + name)
 
     with Cursor() as cursor:
         cursor.prepare("INSERT INTO notes (nickname, lastname, firstname,\
@@ -126,7 +127,7 @@ def add(nickname, firstname, lastname, mail, tel, birthdate, promo, photo_path):
         cursor.bindValues({':nickname': nickname, ':lastname': lastname,
                            ':firstname': firstname, ':mail': mail, ':tel': tel,
                            ':birthdate': birthdate, ':promo': promo,
-                           ':photo_path': "img/" + name if photo_path else ""})
+                           ':photo_path': name if photo_path else ""})
 
         if cursor.exec_():
             rebuild_cache()
@@ -169,12 +170,12 @@ def change_photo(nickname, new_photo):
     """
     name = os.path.split(new_photo)[1]
     if name:
-        if not os.path.exists("img/" + name):
-            shutil.copyfile(new_photo, "img/" + name)
+        if not os.path.exists(settings.IMG_BASE_DIR + name):
+            shutil.copyfile(new_photo, settings.IMG_BASE_DIR + name)
     with Cursor() as cursor:
         cursor.prepare("UPDATE notes SET photo_path=:photo_path \
                         WHERE nickname=:nickname")
-        cursor.bindValues({':photo_path': "img/" + name, ':nickname': nickname})
+        cursor.bindValues({':photo_path': name, ':nickname': nickname})
         value = cursor.exec_()
     rebuild_cache()
     return value
