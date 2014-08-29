@@ -24,7 +24,7 @@ NotesAction Window
 """
 
 
-from PyQt5 import QtWidgets, uic
+from PyQt5 import QtWidgets, uic, QtCore
 
 import api.notes
 from .utils import NotesList
@@ -130,5 +130,12 @@ class MultiNotesList(NotesList):
     def on_timer(self):
         """ Rebuild the note list every 10 seconds
         """
+        selected = [item.text() for item in self.selectedItems()]
         api.notes.rebuild_cache()
         self.rebuild(api.notes.get(self.current_filter))
+        for item in selected:
+            try:
+                self.findItems(item, QtCore.Qt.MatchExactly)[0].
+                setSelected(True)
+            except IndexError:
+                pass
