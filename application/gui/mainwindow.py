@@ -302,4 +302,5 @@ class MenuBar(QtWidgets.QMenuBar):
         """ Show transaction logs
         """
         self.cur_window = TransactionHistory(self)
+        self._connect_window()
 

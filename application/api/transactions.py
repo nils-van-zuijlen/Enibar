@@ -26,6 +26,7 @@ consumption bought.
 from PyQt5 import QtSql
 from database import Database, Cursor
 import api.base
+import api.notes
 
 
 def log_transaction(nickname, category, product, price_name, quantity, price):
@@ -81,6 +82,46 @@ def log_transactions(transactions):
         return False
 
 
+def rollback_transaction(id_):
+    """ Rollback transaction
+    And refill note with money
+
+    :param int id_: Transaction id:
+    """
+    print(id_)
+    trans = get_unique(id=id_)
+    print(trans)
+    if not trans:
+        return False
+
+    try:
+        note = list(api.notes.get(lambda x: x['nickname'] == trans['note']))[0]
+    except IndexError:
+        return False
+
+    try:
+        quantity = int(trans['quantity'])
+    except ValueError:
+        quantity = 1
+
+    with Cursor() as cursor:
+        if quantity > 1:
+            cursor.prepare("UPDATE transactions SET quantity=quantity - 1,\
+                    price=? WHERE id=?")
+            price = round(trans['price'] / quantity, 2)
+            cursor.addBindValue(trans['price'] - price)
+            cursor.addBindValue(trans['id'])
+        else:
+            cursor.prepare("DELETE FROM transactions WHERE id=?")
+            cursor.addBindValue(trans['id'])
+            price = trans['price']
+
+        if cursor.exec_():
+            return api.notes.transaction(note['nickname'], -price)
+        else:
+            return False
+
+
 def get(**filter_):
     """ Get transactions matching filter.
 
@@ -88,14 +129,17 @@ def get(**filter_):
     """
     cursor = api.base.filtered_getter("transactions", filter_)
     while cursor.next():
+        record = cursor.record()
         yield {
-            'id': cursor.record().value('id'),
-            'date': cursor.record().value('date'),
-            'note': cursor.record().value('note'),
-            'category': cursor.record().value('category'),
-            'product': cursor.record().value('product'),
-            'price_name': cursor.record().value('price_name'),
-            'quantity': cursor.record().value('quantity'),
-            'price': cursor.record().value('price'),
+            'id': record.value('id'),
+            'date': record.value('date'),
+            'note': record.value('note'),
+            'category': record.value('category'),
+            'product': record.value('product'),
+            'price_name': record.value('price_name'),
+            'quantity': record.value('quantity'),
+            'price': record.value('price'),
         }
+
+get_unique = api.base.make_get_unique(get)
 

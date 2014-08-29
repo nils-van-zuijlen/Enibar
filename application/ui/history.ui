@@ -6,18 +6,100 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>874</width>
-    <height>600</height>
+    <width>958</width>
+    <height>729</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+   <item row="2" column="3">
+    <widget class="QPushButton" name="delete_button">
+     <property name="text">
+      <string>Supprimer</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="4">
+    <widget class="QWidget" name="filter_container" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QLineEdit" name="input_note">
+        <property name="placeholderText">
+         <string>Note</string>
+        </property>
+        <property name="clearButtonEnabled">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="input_category">
+        <property name="placeholderText">
+         <string>Categorie</string>
+        </property>
+        <property name="clearButtonEnabled">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="input_product">
+        <property name="placeholderText">
+         <string>Produit</string>
+        </property>
+        <property name="clearButtonEnabled">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDateTimeEdit" name="dateTimeEdit">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDateTimeEdit" name="dateTimeEdit_2">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="3">
+    <spacer name="spacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="0" colspan="4">
     <widget class="QTreeWidget" name="transaction_list">
      <property name="selectionMode">
-      <enum>QAbstractItemView::ExtendedSelection</enum>
+      <enum>QAbstractItemView::SingleSelection</enum>
      </property>
      <property name="indentation">
       <number>0</number>
@@ -68,10 +150,115 @@
        <string>Debit</string>
       </property>
      </column>
+     <column>
+      <property name="text">
+       <string>Id</string>
+      </property>
+     </column>
     </widget>
    </item>
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>input_note</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>update_list()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>111</x>
+     <y>22</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>150</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>input_category</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>update_list()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>266</x>
+     <y>21</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>283</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>input_product</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>update_list()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>441</x>
+     <y>27</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>470</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dateTimeEdit</sender>
+   <signal>dateTimeChanged(QDateTime)</signal>
+   <receiver>Dialog</receiver>
+   <slot>update_list()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>633</x>
+     <y>21</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>646</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dateTimeEdit_2</sender>
+   <signal>dateTimeChanged(QDateTime)</signal>
+   <receiver>Dialog</receiver>
+   <slot>update_list()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>756</x>
+     <y>21</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>764</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>delete_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>delete()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>744</x>
+     <y>656</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>554</x>
+     <y>576</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>delete()</slot>
+ </slots>
 </ui>
