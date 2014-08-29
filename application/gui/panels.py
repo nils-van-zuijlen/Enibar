@@ -27,6 +27,7 @@ Panels Widget for Main window
 from PyQt5 import QtWidgets, QtCore, uic
 import collections
 import api.panels
+from .auth_prompt import ask_auth
 
 
 class Panels(QtWidgets.QTabWidget):
@@ -44,6 +45,13 @@ class Panels(QtWidgets.QTabWidget):
             widget = PanelTab(panel['id'], self.main_window)
             self.panels.append(widget)
             self.addTab(widget, panel['name'])
+
+    @ask_auth("manage_products")
+    def change_alcohol(self, _):
+        """ Dummy fnction. Only here to ask a password on alcohol view state
+            change.
+        """
+        self.rebuild()
 
     def rebuild(self):
         """ Clear panels and build them back

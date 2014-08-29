@@ -610,6 +610,7 @@
    <container>1</container>
    <slots>
     <slot>rebuild()</slot>
+    <slot>change_alcohol()</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -795,7 +796,7 @@
    <sender>hide_alcohol</sender>
    <signal>triggered()</signal>
    <receiver>panels</receiver>
-   <slot>rebuild()</slot>
+   <slot>change_alcohol()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

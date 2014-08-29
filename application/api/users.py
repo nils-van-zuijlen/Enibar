@@ -111,7 +111,8 @@ def set_rights(username, rights):
             manage_products=:manage_products
             WHERE ((SELECT * FROM (SELECT \
             manage_users FROM admins WHERE login=:login) AS t)=0 OR (SELECT * \
-            FROM(SELECT COUNT(*) FROM admins WHERE manage_users=1) AS p)>1) AND \
+            FROM(SELECT COUNT(*) FROM admins WHERE manage_users=1) AS p)>1 \
+            OR :manage_users=1) AND \
             login=:login
             """)
         for right, value in rights.items():
