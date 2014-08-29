@@ -175,9 +175,28 @@ class PanelManagment(QtWidgets.QDialog):
     def rebuild(self, panel_name):
         """ Rebuild the two right lists
         """
+        global_opened = []
+        panel_opened = []
+
+        for widget in self.panel_content.categories:
+            if widget.isExpanded():
+                panel_opened.append(widget.text(0))
+
+        for widget in self.product_list.categories:
+            if widget.isExpanded():
+                global_opened.append(widget.text(0))
+
         panel = api.panels.get_unique(name=panel_name)
         self.panel_content.rebuild(panel['id'])
         self.product_list.rebuild_from_panel(self.panel_content)
+
+        for widget in self.panel_content.categories:
+            if widget.text(0) in panel_opened:
+                widget.setExpanded(True)
+
+        for widget in self.product_list.categories:
+            if widget.text(0) in global_opened:
+                widget.setExpanded(True)
 
 
 class PanelList(ConsumptionList):
