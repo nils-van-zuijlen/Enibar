@@ -130,3 +130,22 @@ class UsersTest(unittest.TestCase):
                                   'manage_products': False})
 
         self.assertEqual(users.get_rights("test")["manage_users"], 0)
+
+    def test_issue_69(self):
+        """ Testing issue #69 regression.
+        """
+        id1 = users.add("test", "test")
+        id2 = users.add("test2", "test")
+        id3 = users.add("test3", "test")
+        users.set_rights("test", {'manage_users': True,
+                                  'manage_notes': False,
+                                  'manage_products': False})
+        users.set_rights("test2", {'manage_users': False,
+                                  'manage_notes': False,
+                                  'manage_products': False})
+        users.set_rights("test", {'manage_users': True,
+                                  'manage_notes': True,
+                                  'manage_products': False})
+        self.assertEqual(users.get_rights("test"), {'manage_users': 1,
+                                                    'manage_notes': 1,
+                                                    'manage_products': 0})
