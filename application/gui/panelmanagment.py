@@ -186,11 +186,9 @@ class PanelManagment(QtWidgets.QDialog):
             if widget.isExpanded():
                 global_opened.append(widget.text(0))
 
-
         panel = api.panels.get_unique(name=panel_name)
         self.panel_content.rebuild(panel['id'])
         self.product_list.rebuild_from_panel(self.panel_content)
-
 
         for widget in self.panel_content.categories:
             if widget.text(0) in panel_opened:
