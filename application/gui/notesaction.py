@@ -135,7 +135,7 @@ class MultiNotesList(NotesList):
         self.rebuild(api.notes.get(self.current_filter))
         for item in selected:
             try:
-                self.findItems(item, QtCore.Qt.MatchExactly)[0].
-                setSelected(True)
+                self.findItems(item, QtCore.Qt.MatchExactly)[0].\
+                    setSelected(True)
             except IndexError:
                 pass
