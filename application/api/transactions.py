@@ -121,25 +121,25 @@ def rollback_transaction(id_):
         else:
             return False
 
+TRANSACTS_FIELDS_CACHE = {}
+TRANSACT_FIELDS = ['id', 'date', 'note', 'category', 'product', 'price_name',
+               'quantity', 'price']
+
 
 def get(**filter_):
     """ Get transactions matching filter.
 
     :param dict filter_: filter to apply
     """
+    global TRANSACTS_FIELDS_CACHE, TRANSACT_FIELDS
     cursor = api.base.filtered_getter("transactions", filter_)
     while cursor.next():
         record = cursor.record()
-        yield {
-            'id': record.value('id'),
-            'date': record.value('date'),
-            'note': record.value('note'),
-            'category': record.value('category'),
-            'product': record.value('product'),
-            'price_name': record.value('price_name'),
-            'quantity': record.value('quantity'),
-            'price': record.value('price'),
-        }
+        if TRANSACTS_FIELDS_CACHE == {}:
+            TRANSACTS_FIELDS_CACHE = {field: record.indexOf(field) for field
+                                      in TRANSACT_FIELDS}
+        yield {field: record.value(TRANSACTS_FIELDS_CACHE[field]) for field
+               in TRANSACT_FIELDS}
 
 get_unique = api.base.make_get_unique(get)
 
