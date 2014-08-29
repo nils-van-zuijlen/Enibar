@@ -209,7 +209,7 @@ class MenuBar(QtWidgets.QMenuBar):
         self.cur_window.finished.connect(self.parent().panels.rebuild)
         self._connect_window()
 
-    @ask_auth("manage_note")
+    @ask_auth("manage_notes")
     def manage_note_fnc(self, _):
         """ Open an ManageNotes window
         """
