@@ -57,7 +57,7 @@ class TransactionHistory(QtWidgets.QDialog):
                 credit = "-"
                 debit = -transaction['price']
 
-            widget = QtWidgets.QTreeWidgetItem(self.transaction_list, [
+            widget = QtWidgets.QTreeWidgetItem(self.transaction_list, (
                 transaction['date'].toString("yyyy/MM/dd HH:mm:ss"),
                 transaction['note'],
                 transaction['category'],
@@ -67,7 +67,7 @@ class TransactionHistory(QtWidgets.QDialog):
                 str(credit),
                 str(debit),
                 str(transaction['id'])
-            ])
+            ))
             self.widgets.append(widget)
             self.transaction_list.addTopLevelItem(widget)
 
