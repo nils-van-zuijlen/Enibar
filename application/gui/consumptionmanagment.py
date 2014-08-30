@@ -525,7 +525,7 @@ class CategoryList(QtWidgets.QListWidget):
             QtCore.Qt.ItemIsEnabled |
             QtCore.Qt.ItemIsSelectable
         )
-        self.currentTextChanged.connect(self.rename)
+        self.currentTextChanged.connect(self.item_changed)
         self.categories.append(widget)
         model = self.indexFromItem(widget)
 
