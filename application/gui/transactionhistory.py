@@ -80,6 +80,24 @@ class TransactionHistory(QtWidgets.QDialog):
             ))
             self.widgets.append(widget)
             self.transaction_list.addTopLevelItem(widget)
+        self.update_summary()
+
+    def update_summary(self):
+        """ Update debit, credit and Total on the window
+        """
+        credited = 0
+        debited = 0
+
+        for widget in self.widgets:
+            if not widget.isHidden():
+                if widget.text(6) != "-":
+                    credited += float(widget.text(6))
+                if widget.text(7) != "-":
+                    debited += float(widget.text(7))
+
+        self.credited.setText(" {} €".format(str(round(credited, 2))))
+        self.debited.setText("-{} €".format(str(round(debited, 2))))
+        self.total.setText("{} €".format(str(round(credited - debited, 2))))
 
     def rebuild(self):
         """ Rebuild list
@@ -104,6 +122,7 @@ class TransactionHistory(QtWidgets.QDialog):
                     widget.setHidden(False)
                 else:
                     widget.setHidden(True)
+        self.update_summary()
 
     @ask_auth("manage_notes")
     def delete(self, _):
