@@ -42,7 +42,7 @@ import settings
 import gui.utils
 
 
-def ask_auth(*dargs):
+def ask_auth(*dargs, fail_callback=None):
     """ Decorator to ask for authorization """
     def decorator(func):
         """ Decorator wrapper """
@@ -52,9 +52,11 @@ def ask_auth(*dargs):
                 func(*args, **kwargs)
                 return
             prompt = AuthPrompt(dargs)
+            prompt.exec()
             if prompt.is_authorized:
                 func(*args, **kwargs)
             else:
+                fail_callback()
                 print("Nope")
         return wrapper
     return decorator
@@ -82,7 +84,6 @@ class AuthPrompt(QtWidgets.QDialog):
             gui.utils.error("Error", "Personne n'a le droit de faire ça")
         else:
             self.login_input.setFocus()
-            self.exec()
 
     def accept(self):
         """ Called when "Login" is clicked """

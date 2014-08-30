@@ -30,11 +30,18 @@ import api.panels
 from .auth_prompt import ask_auth
 
 
+def fail_callback_dummy():
+    Panels.fail_callback()
+
+
 class Panels(QtWidgets.QTabWidget):
     """ Base class for panels
     """
+    _parent = None
+
     def __init__(self, parent):
         super().__init__(parent)
+        Panels._parent = self.parent()
         self.main_window = parent.parent()
         self.panels = []
 
@@ -46,7 +53,7 @@ class Panels(QtWidgets.QTabWidget):
             self.panels.append(widget)
             self.addTab(widget, panel['name'])
 
-    @ask_auth("manage_products")
+    @ask_auth("manage_products", fail_callback=fail_callback_dummy)
     def change_alcohol(self, _):
         """ Dummy fnction. Only here to ask a password on alcohol view state
             change.
@@ -58,6 +65,11 @@ class Panels(QtWidgets.QTabWidget):
         """
         self.clear()
         self.build()
+
+    @classmethod
+    def fail_callback(self):
+        hide_alcohol = self._parent.parent().hide_alcohol
+        hide_alcohol.setChecked(not hide_alcohol.isChecked())
 
 
 class PanelTab(QtWidgets.QWidget):
