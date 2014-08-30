@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>958</width>
-    <height>729</height>
+    <width>946</width>
+    <height>624</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,6 +16,9 @@
   <layout class="QGridLayout" name="gridLayout">
    <item row="2" column="3">
     <widget class="QPushButton" name="delete_button">
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
      <property name="text">
       <string>Supprimer</string>
      </property>
@@ -67,18 +70,10 @@
        </widget>
       </item>
       <item>
-       <widget class="QDateTimeEdit" name="dateTimeEdit">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-       </widget>
+       <widget class="QDateTimeEdit" name="datetime_from"/>
       </item>
       <item>
-       <widget class="QDateTimeEdit" name="dateTimeEdit_2">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-       </widget>
+       <widget class="QDateTimeEdit" name="datetime_to"/>
       </item>
      </layout>
     </widget>
@@ -159,6 +154,15 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>input_note</tabstop>
+  <tabstop>input_category</tabstop>
+  <tabstop>input_product</tabstop>
+  <tabstop>datetime_from</tabstop>
+  <tabstop>datetime_to</tabstop>
+  <tabstop>transaction_list</tabstop>
+  <tabstop>delete_button</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -200,8 +204,8 @@
    <slot>update_list()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>441</x>
-     <y>27</y>
+     <x>682</x>
+     <y>30</y>
     </hint>
     <hint type="destinationlabel">
      <x>470</x>
@@ -210,14 +214,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>dateTimeEdit</sender>
-   <signal>dateTimeChanged(QDateTime)</signal>
+   <sender>datetime_from</sender>
+   <signal>editingFinished()</signal>
    <receiver>Dialog</receiver>
-   <slot>update_list()</slot>
+   <slot>rebuild()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>633</x>
-     <y>21</y>
+     <x>815</x>
+     <y>30</y>
     </hint>
     <hint type="destinationlabel">
      <x>646</x>
@@ -226,14 +230,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>dateTimeEdit_2</sender>
-   <signal>dateTimeChanged(QDateTime)</signal>
+   <sender>datetime_to</sender>
+   <signal>editingFinished()</signal>
    <receiver>Dialog</receiver>
-   <slot>update_list()</slot>
+   <slot>rebuild()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>756</x>
-     <y>21</y>
+     <x>948</x>
+     <y>30</y>
     </hint>
     <hint type="destinationlabel">
      <x>764</x>
@@ -248,8 +252,8 @@
    <slot>delete()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>744</x>
-     <y>656</y>
+     <x>948</x>
+     <y>719</y>
     </hint>
     <hint type="destinationlabel">
      <x>554</x>
@@ -260,5 +264,7 @@
  </connections>
  <slots>
   <slot>delete()</slot>
+  <slot>rebuild()</slot>
+  <slot>update_list()</slot>
  </slots>
 </ui>

@@ -20,10 +20,11 @@
 Transaction hisotry window.
 """
 
-from PyQt5 import QtWidgets, uic
+from PyQt5 import QtWidgets, uic, QtCore
 from .auth_prompt import ask_auth
 import api.transactions
 import re
+import time
 
 
 class TransactionHistory(QtWidgets.QDialog):
@@ -33,6 +34,12 @@ class TransactionHistory(QtWidgets.QDialog):
         super().__init__(parent)
         uic.loadUi('ui/history.ui', self)
         self.widgets = []
+
+        datetime = QtCore.QDateTime()
+        datetime.setMSecsSinceEpoch((time.time() - 24 * 3600) * 1000)
+        self.datetime_from.setDateTime(datetime)
+        datetime.setMSecsSinceEpoch(time.time() * 1000)
+        self.datetime_to.setDateTime(datetime)
         self.transactions = list(api.transactions.get())
         self.transaction_list.setColumnWidth(0, 120)
         self.transaction_list.setColumnWidth(1, 120)
@@ -50,6 +57,9 @@ class TransactionHistory(QtWidgets.QDialog):
         """ Buildhistory list
         """
         for transaction in self.transactions:
+            if not (self.datetime_from.dateTime() <= transaction['date'] <= self.datetime_to.dateTime()):
+                continue
+
             if transaction['price'] >= 0:
                 credit = transaction['price']
                 debit = "-"
@@ -70,6 +80,13 @@ class TransactionHistory(QtWidgets.QDialog):
             ))
             self.widgets.append(widget)
             self.transaction_list.addTopLevelItem(widget)
+
+    def rebuild(self):
+        """ Rebuild list
+        """
+        self.widgets = []
+        self.transaction_list.clear()
+        self.build()
 
     def update_list(self, _):
         filter_ = [
