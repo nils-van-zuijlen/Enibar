@@ -116,7 +116,6 @@ class UserManagmentWindow(QtWidgets.QDialog):
                 "erreur de communication avec la base de donnée."
             )
         self.user_list.refresh()
-        self.select_user()
 
 
 class UserList(QtWidgets.QListWidget):
