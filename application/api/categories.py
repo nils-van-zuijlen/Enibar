@@ -73,6 +73,19 @@ def set_color(name, color):
         return cursor.exec_()
 
 
+def rename(oldname, newname):
+    """ Rename category
+
+    :param str oldname: Old category name
+    :param str newname: New category name
+    """
+    with Cursor() as cursor:
+        cursor.prepare("UPDATE categories SET name=? WHERE name=?")
+        cursor.addBindValue(newname)
+        cursor.addBindValue(oldname)
+        return cursor.exec_()
+
+
 def remove(name):
     """ Remove category
 

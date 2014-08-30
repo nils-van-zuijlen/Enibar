@@ -48,6 +48,7 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
         self.products.build()
         self.color_picker = QtWidgets.QColorDialog(self)
         self.win = None
+        self.tabs.currentChanged.connect(self.products.rebuild)
         self.show()
 
     def add_product(self):
@@ -193,7 +194,6 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
         if api.categories.add(cat_name):
             self.categories.add_category(cat_name)
             self.input_cat.setText('')
-            self.products.rebuild()
         else:
             gui.utils.error(
                 "Impossible d'ajouter la catégorie.",
@@ -213,7 +213,6 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
                         index.data()
                     )
                 )
-        self.products.rebuild()
 
     def save_category(self):
         """ Callback to save category
@@ -238,7 +237,6 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
                     )
                 except IndexError:
                     gui.utils.error("La catégorie sélectionnée n'existe pas.")
-        self.products.rebuild()
         is_alcoholic = self.checkbox_alcoholic.isChecked()
         api.categories.set_alcoholic(cat['id'], is_alcoholic)
 
@@ -514,10 +512,46 @@ class CategoryList(QtWidgets.QListWidget):
         for cat in api.categories.get():
             self.add_category(cat['name'])
 
+        self.itemChanged.connect(self.item_changed)
+
     def add_category(self, cat_name):
         """ Add category to list
 
         :param str cat_name: Category name
         """
-        self.categories.append(QtWidgets.QListWidgetItem(cat_name, self))
+        widget = CategoryListItem(cat_name, self)
+        widget.setFlags(
+            QtCore.Qt.ItemIsEditable |
+            QtCore.Qt.ItemIsEnabled |
+            QtCore.Qt.ItemIsSelectable
+        )
+        self.currentTextChanged.connect(self.rename)
+        self.categories.append(widget)
+        model = self.indexFromItem(widget)
+
+    def item_changed(self, item):
+        """ Item changed. Connected to self.itemChanged
+        Used to detect when a category is renamed and so update database.
+
+        :param item: Text or item if text is new. (Yay that's qt)
+        """
+
+        if type(item) is CategoryListItem:
+            item.rename()
+
+
+class CategoryListItem(QtWidgets.QListWidgetItem):
+    """ Category list item
+    Used to build the category list.
+    """
+    def __init__(self, name, parent):
+        super().__init__(name, parent)
+        self.name = name
+
+    def rename(self):
+        """ Rename
+        Rename category with the new name set by user.
+        """
+        if api.categories.rename(self.name, self.text()):
+            self.name = self.text()
 
