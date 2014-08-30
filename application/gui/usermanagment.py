@@ -42,7 +42,6 @@ class UserManagmentWindow(QtWidgets.QDialog):
             'manage_products': self.manage_products,
             'manage_notes': self.manage_notes,
         }
-        self.user_list.itemSelectionChanged.connect(self.select_user)
         try:
             self.selected = self.user_list.widgets[0]
             self.update_form()
@@ -74,10 +73,10 @@ class UserManagmentWindow(QtWidgets.QDialog):
             self.rights[right].setChecked(rights[right])
         self.set_form_checkable(True)
 
-    def select_user(self):
+    def select_user(self, item):
         """ Callback for user selection in user list
         """
-        self.selected = self.user_list.currentItem()
+        self.selected = item
         self.update_form()
 
     def delete(self):

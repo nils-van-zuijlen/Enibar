@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>286</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -84,7 +84,7 @@
  <customwidgets>
   <customwidget>
    <class>UserList</class>
-   <extends>QListView</extends>
+   <extends>QListWidget</extends>
    <header>gui/usermanagment</header>
   </customwidget>
  </customwidgets>
@@ -98,5 +98,25 @@
   <tabstop>delete_button</tabstop>
  </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>user_list</sender>
+   <signal>currentItemChanged(QListWidgetItem*,QListWidgetItem*)</signal>
+   <receiver>Dialog</receiver>
+   <slot>select_user()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>147</x>
+     <y>93</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>64</x>
+     <y>-11</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>select_user()</slot>
+ </slots>
 </ui>
