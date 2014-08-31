@@ -21,6 +21,7 @@ import datetime
 import unittest
 import time
 import os.path
+import PyQt5
 import api.notes as notes
 from database import Cursor
 
@@ -105,7 +106,7 @@ class NotesTest(unittest.TestCase):
                                  'birthdate': 1008111600,
                                  'promo': '1A',
                                  'note': 0,
-                                 'overdraft_time': 0,
+                                 'overdraft_date': PyQt5.QtCore.QDate(),
                                  'ecocups': 0,
                                  'photo_path': 'coucou.jpg',
                                  'hidden': 0})
@@ -150,7 +151,7 @@ class NotesTest(unittest.TestCase):
                                  'birthdate': 1008111600,
                                  'promo': '1A',
                                  'note': 0,
-                                 'overdraft_time': 0,
+                                 'overdraft_date': PyQt5.QtCore.QDate(),
                                  'ecocups': 0,
                                  'photo_path': '',
                                  'hidden': 0} for i in range(2)])
@@ -188,7 +189,7 @@ class NotesTest(unittest.TestCase):
                                  'birthdate': dt1,
                                  'promo': '1A',
                                  'note': 0,
-                                 'overdraft_time': 0,
+                                 'overdraft_date': PyQt5.QtCore.QDate(),
                                  'ecocups': 0,
                                  'photo_path': '',
                                  'hidden': 0}])
@@ -226,7 +227,7 @@ class NotesTest(unittest.TestCase):
                                  'birthdate': dt0,
                                  'promo': '1A',
                                  'note': 0,
-                                 'overdraft_time': 0,
+                                 'overdraft_date': PyQt5.QtCore.QDate(),
                                  'ecocups': 0,
                                  'photo_path': '',
                                  'hidden': 0}])

@@ -55,14 +55,13 @@ delimiter //
 CREATE TRIGGER update_overdraft BEFORE UPDATE ON notes
 FOR EACH ROW
 BEGIN
-	IF NEW.note < 0 AND NEW.overdraft_time IS NULL THEN
-		SET NEW.overdraft_time = NOW();
-	ELSEIF NEW.note >= 0 AND NEW.overdraft_time IS NOT NULL THEN
-		SET NEW.overdraft_time = NULL;
+	IF NEW.note < 0 AND NEW.overdraft_date IS NULL THEN
+		SET NEW.overdraft_date = NOW();
+	ELSEIF NEW.note >= 0 AND NEW.overdraft_date IS NOT NULL THEN
+		SET NEW.overdraft_date = NULL;
 	END IF;
 END;//
-delimiter;
-
+delimiter ;
 
 CREATE TABLE IF NOT EXISTS categories(
 	id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,

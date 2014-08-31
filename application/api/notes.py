@@ -31,7 +31,7 @@ import shutil
 
 
 NOTE_FIELDS = ['id', 'nickname', 'lastname', 'firstname', 'mail', 'tel',
-               'birthdate', 'promo', 'note', 'photo_path', 'overdraft_time',
+               'birthdate', 'promo', 'note', 'photo_path', 'overdraft_date',
                'ecocups', 'hidden']
 
 NOTES_CACHE = []
@@ -283,14 +283,21 @@ def export(notes, *, csv=False, xml=False):
         xml += "<notes date=\"{}\">\n".format(datetime.datetime.now().strftime(
             "%Y-%m-%d"))
         for note in notes:
+            if note["overdraft_date"] and note["overdraft_date"].isValid():
+                overdraft_date = note["overdraft_date"].toString("yyyy-MM-dd")
+                if not overdraft_date:
+                    overdraft_date = ""  # Because Qt suks
+            else:
+                overdraft_date = ""
+
             xml += "\t<note id=\"{}\">\n".format(note["id"])
             xml += "\t\t<prenom>{}</prenom>\n".format(note["firstname"])
             xml += "\t\t<nom>{}</nom>\n".format(note["lastname"])
             xml += "\t\t<compte>{}</compte>\n".format(note["note"])
             xml += "\t\t<image>{}</image>\n".format(note["photo_path"])
             xml += "\t\t<date_Decouvert>{}</date_Decouvert>\n".format(
-                datetime.datetime.fromtimestamp(note["overdraft_time"]).
-                strftime("%Y-%m-%d %H:%M:%S") if note["overdraft_time"] else "")
+                overdraft_date
+            )
 
             xml += "\t</note>\n"
         xml += "</notes>\n"
