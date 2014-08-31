@@ -56,7 +56,8 @@ def ask_auth(*dargs, fail_callback=None):
             if prompt.is_authorized:
                 func(*args, **kwargs)
             else:
-                fail_callback()
+                if fail_callback is not None:
+                    fail_callback()
                 print("Nope")
         return wrapper
     return decorator
