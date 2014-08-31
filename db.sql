@@ -46,10 +46,22 @@ CREATE TABLE IF NOT EXISTS notes(
 	promo ENUM('1A', '2A', '3A', '3S', '4A', '5A', 'Esiab', 'Externe', 'Ancien', 'Prof'),
 	photo_path VARCHAR(255) DEFAULT NULL,
 	note FLOAT DEFAULT 0,
-	overdraft_time INTEGER UNSIGNED DEFAULT NULL,
+	overdraft_date DATE DEFAULT NULL,
 	ecocups INTEGER UNSIGNED DEFAULT 0,
 	hidden BOOLEAN DEFAULT 0
 ) ENGINE=InnoDB;
+
+delimiter //
+CREATE TRIGGER update_overdraft BEFORE UPDATE ON notes
+FOR EACH ROW
+BEGIN
+	IF NEW.note < 0 AND NEW.overdraft_time IS NULL THEN
+		SET NEW.overdraft_time = NOW();
+	ELSEIF NEW.note >= 0 AND NEW.overdraft_time IS NOT NULL THEN
+		SET NEW.overdraft_time = NULL;
+	END IF;
+END;//
+delimiter;
 
 
 CREATE TABLE IF NOT EXISTS categories(
