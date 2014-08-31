@@ -324,3 +324,29 @@ class NotesTest(unittest.TestCase):
         self.assertEqual(note["tel"], "0200000000")
         self.assertEqual(note["promo"], "3A")
 
+    def test_overdraft(self):
+        """ Testing overdraft support
+        """
+        id0 = notes.add("test0",
+            "test",
+            "test",
+            "test@pouette.com",
+            "0600000000",
+            "01/01/1994",
+            '1A',
+            ''
+        )
+        note = list(notes.get())[0]
+        self.assertEqual(note['overdraft_date'], PyQt5.QtCore.QDate())
+
+        notes.transaction("test0", -1)
+        note = list(notes.get())[0]
+        now = PyQt5.QtCore.QDateTime()
+        now.setMSecsSinceEpoch(time.time() * 1000)
+        self.assertEqual(note['overdraft_date'], now.date())
+
+        notes.transaction("test0", 1)
+        note = list(notes.get())[0]
+        self.assertEqual(note['overdraft_date'], PyQt5.QtCore.QDate())
+
+
