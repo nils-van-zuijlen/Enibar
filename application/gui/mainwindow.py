@@ -129,8 +129,6 @@ class MainWindow(QtWidgets.QMainWindow):
             if event.text() == "\"":
                 self.win = Douchette(self.on_douchette)
                 return True
-            elif event.text() == "\n":
-                print("coucou")
             if event.key() == 0x01000004 or event.key() == 0x01000005:
                 self.validate_transaction()
         return super().event(event)
