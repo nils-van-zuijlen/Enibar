@@ -34,7 +34,6 @@ CREATE TABLE IF NOT EXISTS admins(
 
 INSERT INTO admins(login, password, manage_notes, manage_users, manage_products) VALUES("admin", "$2a$12$grLadAuopGdXxA7wEIehlO4BpMHTpJFweL3zJAHGaYFOIw1Gp.U5O", TRUE, TRUE, TRUE);
 
-
 CREATE TABLE IF NOT EXISTS notes(
 	id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
 	nickname VARCHAR(127) UNIQUE NOT NULL,
@@ -47,6 +46,7 @@ CREATE TABLE IF NOT EXISTS notes(
 	photo_path VARCHAR(255) DEFAULT NULL,
 	note FLOAT DEFAULT 0,
 	overdraft_date DATE DEFAULT NULL,
+	last_agio DATE DEFAULT NULL,
 	ecocups INTEGER UNSIGNED DEFAULT 0,
 	hidden BOOLEAN DEFAULT 0
 ) ENGINE=InnoDB;
@@ -60,8 +60,11 @@ BEGIN
 	ELSEIF NEW.note >= 0 AND NEW.overdraft_date IS NOT NULL THEN
 		SET NEW.overdraft_date = NULL;
 	END IF;
+	SET NEW.last_agio = NULL;
 END;//
 delimiter ;
+
+
 
 CREATE TABLE IF NOT EXISTS categories(
 	id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,

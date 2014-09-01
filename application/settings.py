@@ -68,6 +68,22 @@ Database
 
             The base dir for all images
 
+    AGIO_THRESHOLD
+            **Default value** ``7``
+
+            Period after which agio are applied if a note stay in the red in
+            days.
+
+    AGIO_EVERY
+            **Default value** ``1``
+
+            Delay between two agio strike in days.
+
+    AGIO_PERCENT
+            **Default value** ``5``
+
+            Agio value
+
 """
 
 
@@ -79,3 +95,7 @@ DBNAME = "enibar"
 DEBUG = False
 ECOCUP_PRICE = 1.0
 IMG_BASE_DIR = "img/"
+
+AGIO_THRESHOLD = 7
+AGIO_EVERY = 1
+AGIO_PERCENT = 5.0
