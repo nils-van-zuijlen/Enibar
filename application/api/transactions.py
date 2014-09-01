@@ -54,7 +54,7 @@ def log_transaction(nickname, category, product, price_name, quantity, price):
 
 
 def log_transactions(transactions):
-    """ Log mulsiple transactions
+    """ Log multiple transactions
 
     :param list transactions:
     """

@@ -52,7 +52,6 @@ def ask_auth(*dargs, fail_callback=None):
                 func(*args, **kwargs)
                 return
             prompt = AuthPrompt(dargs)
-            prompt.exec()
             if prompt.is_authorized:
                 func(*args, **kwargs)
             else:
@@ -84,6 +83,7 @@ class AuthPrompt(QtWidgets.QDialog):
         if not ok:
             gui.utils.error("Error", "Personne n'a le droit de faire ça")
         else:
+            self.exec()
             self.login_input.setFocus()
 
     def accept(self):
