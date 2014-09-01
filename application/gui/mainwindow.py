@@ -91,7 +91,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.note_box.setEnabled(False)
             return
 
-        infos = list(api.notes.get(lambda x: widget.text() in x["nickname"]))[0]
+        infos = list(api.notes.get(lambda x: widget.text() == x["nickname"]))[0]
         # pylint: disable=star-args
         self.note_name.setText("{nickname} - {firstname} {lastname}".format(
             **infos))
