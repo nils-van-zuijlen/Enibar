@@ -522,16 +522,8 @@
     <addaction name="separator"/>
     <addaction name="menuExporter_les_notes"/>
    </widget>
-   <widget class="QMenu" name="menu_Ecocups">
-    <property name="title">
-     <string>&amp;Ecocups</string>
-    </property>
-    <addaction name="take_ecocup"/>
-    <addaction name="repay_ecocup"/>
-   </widget>
    <addaction name="administration"/>
    <addaction name="menuNotes"/>
-   <addaction name="menu_Ecocups"/>
   </widget>
   <action name="user_managment">
    <property name="checkable">
