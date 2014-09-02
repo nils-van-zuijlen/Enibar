@@ -208,6 +208,8 @@ class ProductList(QtWidgets.QTreeWidget):
         super().clear()
         self.products = []
         main_window = self.parent().parent().parent()
+        main_window.eco_diff = 0
+        main_window.refresh_ecocups()
         main_window.total.setText("0.00 €")
         main_window.notes_list.setFocus()
 
@@ -255,7 +257,6 @@ class ProductsContainer(QtWidgets.QWidget):
         categores and products are build on the fly.  Then all categories are
         sorted into columns in an oprimised maner.
         """
-        print(self.parent().parent().parent().main_window.hide_alcohol.isChecked())
         try:
             if self.parent().parent().parent().main_window.\
                hide_alcohol.isChecked():

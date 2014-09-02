@@ -273,6 +273,22 @@ def transaction(nickname, diff):
     return value
 
 
+def change_ecocups(nick, diff):
+    """ Change the number of ecocups taken on a note.
+
+        :param str nick: The nickname og the note
+        :param int diff: The number of ecocups to add.
+    """
+    with Cursor() as cursor:
+        cursor.prepare("UPDATE notes SET ecocups=ecocups+:diff WHERE\
+                        nickname=:nick")
+        cursor.bindValue(":diff", diff)
+        cursor.bindValue(":nick", nick)
+        value = cursor.exec_()
+    rebuild_cache()
+    return value
+
+
 def export(notes, *, csv=False, xml=False):
     """ Return an xml representation of all notes
 
