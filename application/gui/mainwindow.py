@@ -56,7 +56,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.refresh()
         self.notes_list.currentRowChanged.connect(self.select_note)
         self.selected = None
+        self.selected_nickname = None
         self.win = None
+        self.eco_diff = 0
 
         # Set product list header width
         self.product_list.setColumnWidth(0, 30)
@@ -75,6 +77,10 @@ class MainWindow(QtWidgets.QMainWindow):
         if index >= 0:
             self.selected = self.notes_list.item(index)
         widget = self.notes_list.currentItem()
+
+        if self.selected_nickname != self.selected.text():
+            self.selected_nickname = self.selected.text()
+            self.refresh_ecocups()
 
         # If there are no current selected note.
         if not widget:
@@ -117,6 +123,15 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.note_box.setStyleSheet("background-color: none;")
 
+    def refresh_ecocups(self):
+        """ Set the state of the repay_ecocup button
+        """
+        note = api.notes.get(lambda x: x["nickname"] == self.selected_nickname)
+        if list(note)[0]["ecocups"] + self.eco_diff > 0:
+            self.repay_ecocup_btn.setEnabled(True)
+        else:
+            self.repay_ecocup_btn.setEnabled(False)
+
     def refresh(self):
         """ Refresh the notes list
         """
@@ -129,6 +144,8 @@ class MainWindow(QtWidgets.QMainWindow):
             if event.text() == "\"":
                 self.win = Douchette(self.on_douchette)
                 return True
+            if event.key() == 0x01000004 or event.key() == 0x01000005:
+                self.validate_transaction()
         return super().event(event)
 
     def on_douchette(self, text):
@@ -171,7 +188,10 @@ class MainWindow(QtWidgets.QMainWindow):
                 transactions.append(transaction)
             if api.transactions.log_transactions(transactions):
                 api.notes.transaction(self.selected.text(), -total)
+                api.notes.change_ecocups(self.selected_nickname, self.eco_diff)
                 self.refresh()
+                self.eco_diff = 0
+                self.refresh_ecocups()
                 self.product_list.clear()
                 self.notes_list.setFocus()
             else:
@@ -271,6 +291,8 @@ class MenuBar(QtWidgets.QMenuBar):
         )
         text = "{:.2f} €".format(self.parent().product_list.get_total())
         self.parent().total.setText(text)
+        self.parent().eco_diff += 1
+        self.parent().refresh_ecocups()
 
     def repay_ecocup_fnc(self):
         """ Used to repay an ecocup on a note
@@ -283,6 +305,8 @@ class MenuBar(QtWidgets.QMenuBar):
         )
         text = "{:.2f} €".format(self.parent().product_list.get_total())
         self.parent().total.setText(text)
+        self.parent().eco_diff -= 1
+        self.parent().refresh_ecocups()
 
     def export(self, notes):
         """ Generic export notes function """

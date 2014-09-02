@@ -14,7 +14,84 @@
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="0" colspan="3">
+   <item row="2" column="1">
+    <spacer name="spacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="0" column="0" colspan="4">
+    <widget class="QWidget" name="filter_container" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QLineEdit" name="input_note">
+        <property name="placeholderText">
+         <string>Note</string>
+        </property>
+        <property name="clearButtonEnabled">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="input_category">
+        <property name="placeholderText">
+         <string>Categorie</string>
+        </property>
+        <property name="clearButtonEnabled">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="input_product">
+        <property name="placeholderText">
+         <string>Produit</string>
+        </property>
+        <property name="clearButtonEnabled">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDateTimeEdit" name="datetime_from"/>
+      </item>
+      <item>
+       <widget class="QDateTimeEdit" name="datetime_to"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="3">
+    <widget class="QPushButton" name="delete_button">
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="text">
+      <string>Supprimer</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="4">
     <widget class="QTreeWidget" name="transaction_list">
      <property name="selectionMode">
       <enum>QAbstractItemView::SingleSelection</enum>
@@ -73,70 +150,6 @@
        <string>Id</string>
       </property>
      </column>
-    </widget>
-   </item>
-   <item row="0" column="0" colspan="3">
-    <widget class="QWidget" name="filter_container" native="true">
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
-      <item>
-       <widget class="QLineEdit" name="input_note">
-        <property name="placeholderText">
-         <string>Note</string>
-        </property>
-        <property name="clearButtonEnabled">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="input_category">
-        <property name="placeholderText">
-         <string>Categorie</string>
-        </property>
-        <property name="clearButtonEnabled">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="input_product">
-        <property name="placeholderText">
-         <string>Produit</string>
-        </property>
-        <property name="clearButtonEnabled">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QDateTimeEdit" name="datetime_from"/>
-      </item>
-      <item>
-       <widget class="QDateTimeEdit" name="datetime_to"/>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="2" column="2">
-    <widget class="QPushButton" name="delete_button">
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="text">
-      <string>Supprimer</string>
-     </property>
     </widget>
    </item>
    <item row="2" column="0">
@@ -239,18 +252,12 @@
      </layout>
     </widget>
    </item>
-   <item row="2" column="1">
-    <spacer name="spacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+   <item row="2" column="2">
+    <widget class="QPushButton" name="delete_line_button">
+     <property name="text">
+      <string>Supprimer ligne</string>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
+    </widget>
    </item>
   </layout>
  </widget>
@@ -360,10 +367,27 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>delete_line_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>delete_line()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>797</x>
+     <y>574</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>472</x>
+     <y>311</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>delete()</slot>
   <slot>rebuild()</slot>
   <slot>update_list()</slot>
+  <slot>delete_line()</slot>
  </slots>
 </ui>

@@ -54,7 +54,7 @@ def log_transaction(nickname, category, product, price_name, quantity, price):
 
 
 def log_transactions(transactions):
-    """ Log mulsiple transactions
+    """ Log multiple transactions
 
     :param list transactions:
     """
@@ -82,15 +82,14 @@ def log_transactions(transactions):
         return False
 
 
-def rollback_transaction(id_):
+def rollback_transaction(id_, full=False):
     """ Rollback transaction
     And refill note with money
 
     :param int id_: Transaction id:
+    :param bool full: Rollback the full transaction ?
     """
-    print(id_)
     trans = get_unique(id=id_)
-    print(trans)
     if not trans:
         return False
 
@@ -105,7 +104,7 @@ def rollback_transaction(id_):
         quantity = 1
 
     with Cursor() as cursor:
-        if quantity > 1:
+        if quantity > 1 and not full:
             cursor.prepare("UPDATE transactions SET quantity=quantity - 1,\
                     price=? WHERE id=?")
             price = round(trans['price'] / quantity, 2)

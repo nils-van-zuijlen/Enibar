@@ -151,3 +151,11 @@ class TransactionHistory(QtWidgets.QDialog):
         else:
             print("Pas supprimé")
 
+    @ask_auth("manage_notes")
+    def delete_line(self, _):
+        widget = self.transaction_list.currentItem()
+        if api.transactions.rollback_transaction(widget.text(8), True):
+            index = self.transaction_list.indexOfTopLevelItem(widget)
+            self.transaction_list.takeTopLevelItem(index)
+
+
