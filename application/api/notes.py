@@ -319,5 +319,14 @@ def export(notes, *, csv=False, xml=False):
             csv += "\n" + ",".join(str(note[value]) for value in to_export)
         return csv
 
+
+def export_by_id(notes_ids, *args, **kwargs):
+    """ Export notes but taking ids
+    """
+    return export([note for note in NOTES_CACHE if note['id'] in notes_ids],
+                  *args,
+                  **kwargs)
+
+
 rebuild_cache()
 

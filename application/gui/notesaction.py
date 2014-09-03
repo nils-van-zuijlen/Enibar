@@ -28,6 +28,7 @@ from PyQt5 import QtWidgets, uic, QtCore
 
 import api.notes
 from .utils import NotesList
+import datetime
 
 
 class NotesAction(QtWidgets.QDialog):
@@ -54,15 +55,16 @@ class NotesAction(QtWidgets.QDialog):
         api.notes.remove_multiple(api.notes.get_notes_id(to_del))
         self.note_list.rebuild(api.notes.get(self.note_list.current_filter))
 
-    def _multiple_action(self, fnc):
+    def _multiple_action(self, fnc, *args, **kwargs):
         """ Execute a function on the currently selected notes
         """
         indexes = self.note_list.selectedIndexes()
         notes_id = []
         for index in indexes:
             notes_id.append(index.data())
-        fnc(api.notes.get_notes_id(notes_id))
+        val = fnc(api.notes.get_notes_id(notes_id), *args, **kwargs)
         self.note_list.rebuild(api.notes.get(self.note_list.current_filter))
+        return val
 
     def filter_combobox_change(self, id_):
         """ Called when the filter combobox is chnged
@@ -112,6 +114,30 @@ class NotesAction(QtWidgets.QDialog):
         """ Called when "Montrer" is clicked
         """
         self._multiple_action(api.notes.show_multiple)
+
+    def export_csv_action(self):
+        """ Called when "Export CSV" is clicked
+        """
+        path, _ = QtWidgets.QFileDialog(self).getSaveFileName(
+            self, "Exporter vers", "{}.csv".format(
+                datetime.datetime.now().strftime("%Y-%m-%d")),
+            "CSV Files (*.csv)")
+        if path:
+            with open(path, "w") as save_file:
+                save_file.write(self._multiple_action(api.notes.export_by_id,
+                                                      xml=True))
+
+    def export_xml_action(self):
+        """ Called when "Export XML" is clicked
+        """
+        path, format_ = QtWidgets.QFileDialog(self).getSaveFileName(
+            self, "Exporter vers", "{}.xml".format(
+                datetime.datetime.now().strftime("%Y-%m-%d")),
+            "XML Files (*.xml)")
+        if path:
+            with open(path, "w") as save_file:
+                save_file.write(self._multiple_action(api.notes.export_by_id,
+                                                      csv=True))
 
 
 class MultiNotesList(NotesList):
