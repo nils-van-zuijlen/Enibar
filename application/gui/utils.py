@@ -39,6 +39,16 @@ def error(title, message=""):
     err.exec()
 
 
+def valid(title, message=""):
+    """ Display validation with title and message
+    """
+    err = QtWidgets.QMessageBox()
+    err.setText(title)
+    err.setInformativeText(message)
+    err.setIcon(QtWidgets.QMessageBox.Information)
+    err.exec()
+
+
 class NotesList(QtWidgets.QListWidget):
     # pylint: disable=too-many-public-methods
     """ Notes list on the left of the MainWindow. """

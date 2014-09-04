@@ -27,7 +27,10 @@ NotesAction Window
 from PyQt5 import QtWidgets, uic, QtCore
 
 import api.notes
-from .utils import NotesList
+import api.prices
+import api.categories
+from .utils import NotesList, valid
+from .panelmanagment import ConsumptionList
 import datetime
 
 
@@ -37,11 +40,11 @@ class NotesAction(QtWidgets.QDialog):
     def __init__(self):
         super().__init__()
         self.current_filter = lambda x: x['hidden'] == 0
-        print(self.current_filter)
         uic.loadUi('ui/notesaction.ui', self)
         self.filter_input.setEnabled(False)
         self.filter_input.keyPressEvent = self.filter_input_changed
         self.note_list.rebuild(api.notes.get(self.current_filter))
+        self.product_list.build()
         self.show()
 
     def del_action(self, _):
@@ -74,7 +77,6 @@ class NotesAction(QtWidgets.QDialog):
             self.filter_input.setEnabled(False)
         elif id_ == 1:
             self.note_list.current_filter = lambda x: x['hidden'] == 1
-            print(self.note_list.current_filter)
             self.filter_input.setEnabled(False)
         elif id_ == 2:
             self.filter_input.setEnabled(True)
@@ -115,6 +117,38 @@ class NotesAction(QtWidgets.QDialog):
         """
         self._multiple_action(api.notes.show_multiple)
 
+    def take_products_action(self):
+        """ Called when "Valider" is clicked
+        """
+        product = self.product_list.get_selected_product()
+        if product is None:
+            return
+
+        price_name = self.price_list.currentText()
+        category = api.categories.get_unique(id=product['category'])['name']
+        descriptor = list(api.prices.get_descriptor(
+            category=product['category'],
+            label=price_name))[0]
+        price = api.prices.get_unique(price_description=descriptor['id'],
+                                      product=product['id'])
+
+        transactions = []
+        notes = []
+        for note in self.note_list.selectedItems():
+            transaction = {
+                'note': note.text(),
+                'category': category,
+                'product': product['name'],
+                'price_name': price_name,
+                'quantity': 1,
+                'price': -price['value']
+            }
+            transactions.append(transaction)
+            notes.append(note.text())
+        if api.transactions.log_transactions(transactions):
+            api.notes.multiple_transaction(notes, -price['value'])
+            valid("OK", "Transaction effectuée")
+
     def export_csv_action(self):
         """ Called when "Export CSV" is clicked
         """
@@ -130,7 +164,7 @@ class NotesAction(QtWidgets.QDialog):
     def export_xml_action(self):
         """ Called when "Export XML" is clicked
         """
-        path, format_ = QtWidgets.QFileDialog(self).getSaveFileName(
+        path, _ = QtWidgets.QFileDialog(self).getSaveFileName(
             self, "Exporter vers", "{}.xml".format(
                 datetime.datetime.now().strftime("%Y-%m-%d")),
             "XML Files (*.xml)")
@@ -165,3 +199,46 @@ class MultiNotesList(NotesList):
                     setSelected(True)
             except IndexError:
                 pass
+
+
+# pylint: disable=too-many-public-methods
+class UniqueConsumptionList(ConsumptionList):
+    """ A Consumption list where you can select only one item
+    """
+
+    def __init__(self, parent):
+        super().__init__(parent)
+
+    def get_selected_product(self):
+        """ Return the current selected product
+        """
+        for index in self.selectedIndexes():
+            if index.parent().isValid():
+                cat_name = index.parent().data()
+                category = api.categories.get_unique(name=cat_name)
+                if not category:
+                    continue
+                product = api.products.get_unique(
+                    category=category['id'],
+                    name=index.data()
+                )
+                if not product:
+                    # Error
+                    continue
+                return product
+
+    def on_selection(self):
+        """ Called when a product is selected
+        """
+        selected = self.get_selected_product()
+        cb_box = self.parent().parent().price_list
+        valid_button = self.parent().parent().take_products_btn
+        cb_box.clear()
+        cb_box.setEnabled(False)
+        valid_button.setEnabled(False)
+        if selected is not None:
+            for price in api.prices.get(product=selected["id"]):
+                cb_box.setEnabled(True)
+                valid_button.setEnabled(True)
+                cb_box.addItem(price['label'])
+

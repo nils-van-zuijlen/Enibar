@@ -527,8 +527,8 @@ class CategoryList(QtWidgets.QListWidget):
         )
         self.currentTextChanged.connect(self.item_changed)
         self.categories.append(widget)
-        model = self.indexFromItem(widget)
 
+    # pylint: disable=no-self-use
     def item_changed(self, item):
         """ Item changed. Connected to self.itemChanged
         Used to detect when a category is renamed and so update database.
@@ -540,6 +540,7 @@ class CategoryList(QtWidgets.QListWidget):
             item.rename()
 
 
+# pylint: disable=too-few-public-methods
 class CategoryListItem(QtWidgets.QListWidgetItem):
     """ Category list item
     Used to build the category list.

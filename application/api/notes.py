@@ -258,7 +258,7 @@ def show_multiple(ids):
 def transaction(nickname, diff):
     """ Change the note of a note.
 
-    :param int nickname: The nickname of the note
+    :param str nickname: The nickname of the note
     :param float diff: Will add the diff to the note.
 
     :return bool: True if success else False
@@ -269,6 +269,27 @@ def transaction(nickname, diff):
         cursor.bindValue(":nick", nickname)
 
         value = cursor.exec_()
+    rebuild_cache()
+    return value
+
+
+def multiple_transaction(notes, diff):
+    """ Change the note on multiple notes
+
+        :param str nickname: The nickname of the note
+        :param float diff: Will add the diff to the note.
+
+        :return bool: True if success else False
+    """
+    with Database() as database:
+        database.transaction()
+        cursor = QtSql.QSqlQuery(database)
+        cursor.prepare("UPDATE notes SET note=note+:diff WHERE nickname=:nick")
+        for nick in notes:
+            cursor.bindValue(':nick', nick)
+            cursor.bindValue(':diff', diff)
+            cursor.exec_()
+        value = database.commit()
     rebuild_cache()
     return value
 

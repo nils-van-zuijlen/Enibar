@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>574</width>
-    <height>590</height>
+    <height>602</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -58,79 +58,94 @@
      </item>
      <item row="3" column="2">
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="2" column="0">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="3" column="0">
-        <widget class="QPushButton" name="export_xml_button">
-         <property name="text">
-          <string>Export XML</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QPushButton" name="export_csv_button">
-         <property name="text">
-          <string>Export CSV</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0" colspan="2">
-        <widget class="QPushButton" name="show_button">
-         <property name="text">
-          <string>Montrer</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0" colspan="2">
-        <widget class="QPushButton" name="hide_button">
-         <property name="text">
-          <string>Cacher</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0" colspan="2">
+       <item row="7" column="0" colspan="2">
         <widget class="QPushButton" name="del_button">
          <property name="text">
           <string>Supprimer</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+       <item row="6" column="0" colspan="2">
+        <widget class="QPushButton" name="hide_button">
+         <property name="text">
+          <string>Cacher</string>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
+        </widget>
        </item>
-       <item row="1" column="1">
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+       <item row="4" column="1">
+        <widget class="QPushButton" name="export_csv_button">
+         <property name="text">
+          <string>Export CSV</string>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="2">
+        <widget class="QPushButton" name="show_button">
+         <property name="text">
+          <string>Montrer</string>
          </property>
-        </spacer>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QPushButton" name="export_xml_button">
+         <property name="text">
+          <string>Export XML</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>Consommations</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="1" column="0" colspan="2">
+           <widget class="UniqueConsumptionList" name="product_list">
+            <column>
+             <property name="text">
+              <string>Produits</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QPushButton" name="take_products_btn">
+            <property name="text">
+             <string>Valider</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QComboBox" name="price_list"/>
+          </item>
+          <item row="0" column="0">
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="1">
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </item>
@@ -153,6 +168,14 @@
    <class>MultiNotesList</class>
    <extends>QListWidget</extends>
    <header>gui/notesaction</header>
+  </customwidget>
+  <customwidget>
+   <class>UniqueConsumptionList</class>
+   <extends>QTreeWidget</extends>
+   <header>gui/notesaction</header>
+   <slots>
+    <slot>on_selection()</slot>
+   </slots>
   </customwidget>
  </customwidgets>
  <resources/>
@@ -253,6 +276,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>take_products_btn</sender>
+   <signal>clicked()</signal>
+   <receiver>NotesAction</receiver>
+   <slot>take_products_action()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>417</x>
+     <y>463</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>300</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>product_list</sender>
+   <signal>itemSelectionChanged()</signal>
+   <receiver>product_list</receiver>
+   <slot>on_selection()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>422</x>
+     <y>264</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>264</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>del_action()</slot>
@@ -262,5 +317,6 @@
   <slot>filter_input_changed()</slot>
   <slot>export_xml_action()</slot>
   <slot>export_csv_action()</slot>
+  <slot>take_products_action()</slot>
  </slots>
 </ui>
