@@ -57,7 +57,6 @@ def ask_auth(*dargs, fail_callback=None):
             else:
                 if fail_callback is not None:
                     fail_callback()
-                print("Nope")
         return wrapper
     return decorator
 
@@ -75,12 +74,12 @@ class AuthPrompt(QtWidgets.QDialog):
             cursor.prepare("SELECT * FROM admins WHERE " + filter_)
             cursor.exec_()
 
-        ok = False
+        existing_person = False
         while cursor.next():
             self.login_input.addItem(cursor.record().value("login"))
-            ok = True
+            existing_person = True
 
-        if not ok:
+        if not existing_person:
             gui.utils.error("Error", "Personne n'a le droit de faire ça")
         else:
             self.login_input.setFocus()

@@ -23,7 +23,6 @@ Transaction hisotry window.
 from PyQt5 import QtWidgets, uic, QtCore
 from .auth_prompt import ask_auth
 import api.transactions
-import re
 import time
 
 
@@ -57,7 +56,8 @@ class TransactionHistory(QtWidgets.QDialog):
         """ Buildhistory list
         """
         for transaction in self.transactions:
-            if not (self.datetime_from.dateTime() <= transaction['date'] <= self.datetime_to.dateTime()):
+            if not self.datetime_from.dateTime() <= transaction['date'] <=\
+                    self.datetime_to.dateTime():
                 continue
 
             if transaction['price'] >= 0:
@@ -107,6 +107,8 @@ class TransactionHistory(QtWidgets.QDialog):
         self.build()
 
     def update_list(self, _):
+        """ Update the list with all filters
+        """
         filter_ = [
             self.input_note.text(),
             self.input_category.text(),
@@ -126,6 +128,8 @@ class TransactionHistory(QtWidgets.QDialog):
 
     @ask_auth("manage_notes")
     def delete(self, _):
+        """ Delete an item from a line
+        """
         widget = self.transaction_list.currentItem()
         if api.transactions.rollback_transaction(widget.text(8)):
             try:
@@ -153,6 +157,8 @@ class TransactionHistory(QtWidgets.QDialog):
 
     @ask_auth("manage_notes")
     def delete_line(self, _):
+        """ Delete a complete line
+        """
         widget = self.transaction_list.currentItem()
         if api.transactions.rollback_transaction(widget.text(8), True):
             index = self.transaction_list.indexOfTopLevelItem(widget)

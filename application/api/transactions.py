@@ -122,7 +122,7 @@ def rollback_transaction(id_, full=False):
 
 TRANSACTS_FIELDS_CACHE = {}
 TRANSACT_FIELDS = ['id', 'date', 'note', 'category', 'product', 'price_name',
-               'quantity', 'price']
+                   'quantity', 'price']
 
 
 def get(**filter_):
@@ -130,7 +130,8 @@ def get(**filter_):
 
     :param dict filter_: filter to apply
     """
-    global TRANSACTS_FIELDS_CACHE, TRANSACT_FIELDS
+    # pylint: disable=global-statement
+    global TRANSACTS_FIELDS_CACHE
     cursor = api.base.filtered_getter("transactions", filter_)
     while cursor.next():
         record = cursor.record()
@@ -140,5 +141,6 @@ def get(**filter_):
         yield {field: record.value(TRANSACTS_FIELDS_CACHE[field]) for field
                in TRANSACT_FIELDS}
 
+# pylint: disable=invalid-name
 get_unique = api.base.make_get_unique(get)
 

@@ -48,8 +48,6 @@ def add(name, *, category_name=None, category_id=None):
 
     :return bool: Operation status
     """
-    if not name.strip():
-        return None
     if category_id:
         cat = list(api.categories.get(id=category_id))
     elif category_name:

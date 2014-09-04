@@ -28,6 +28,7 @@ import datetime
 import os.path
 import settings
 import shutil
+import tempfile
 
 
 NOTE_FIELDS = ['id', 'nickname', 'lastname', 'firstname', 'mail', 'tel',
@@ -94,6 +95,16 @@ def change_values(nick, **kwargs):
     return value
 
 
+def unique_file(file_name):
+    """ Return an unique filename
+    """
+    dirname, filename = os.path.split(file_name)
+    prefix, suffix = os.path.splitext(filename)
+
+    _, filename = tempfile.mkstemp(suffix, prefix + "_", dirname)
+    return filename
+
+
 # pylint: disable=too-many-arguments
 def add(nickname, firstname, lastname, mail, tel, birthdate, promo, photo_path):
     """ Create a note. Copy the image from photo_path to settings.IMG_BASE_DIR
@@ -113,8 +124,10 @@ def add(nickname, firstname, lastname, mail, tel, birthdate, promo, photo_path):
     if photo_path:
         name = os.path.split(photo_path)[1]
         if name:
-            if not os.path.exists(settings.IMG_BASE_DIR + name):
-                shutil.copyfile(photo_path, settings.IMG_BASE_DIR + name)
+            if os.path.exists(settings.IMG_BASE_DIR + name):
+                name = os.path.split(unique_file(settings.IMG_BASE_DIR +
+                                                 name))[1]
+            shutil.copyfile(photo_path, settings.IMG_BASE_DIR + name)
 
     with Cursor() as cursor:
         cursor.prepare("INSERT INTO notes (nickname, lastname, firstname,\
@@ -170,8 +183,10 @@ def change_photo(nickname, new_photo):
     """
     name = os.path.split(new_photo)[1]
     if name:
-        if not os.path.exists(settings.IMG_BASE_DIR + name):
-            shutil.copyfile(new_photo, settings.IMG_BASE_DIR + name)
+        if os.path.exists(settings.IMG_BASE_DIR + name):
+            name = os.path.split(unique_file(settings.IMG_BASE_DIR +
+                                             name))[1]
+        shutil.copyfile(photo_path, settings.IMG_BASE_DIR + name)
     with Cursor() as cursor:
         cursor.prepare("UPDATE notes SET photo_path=:photo_path \
                         WHERE nickname=:nickname")
@@ -258,7 +273,7 @@ def show_multiple(ids):
 def transaction(nickname, diff):
     """ Change the note of a note.
 
-    :param int nickname: The nickname of the note
+    :param str nickname: The nickname of the note
     :param float diff: Will add the diff to the note.
 
     :return bool: True if success else False
@@ -269,6 +284,27 @@ def transaction(nickname, diff):
         cursor.bindValue(":nick", nickname)
 
         value = cursor.exec_()
+    rebuild_cache()
+    return value
+
+
+def multiple_transaction(notes, diff):
+    """ Change the note on multiple notes
+
+        :param str nickname: The nickname of the note
+        :param float diff: Will add the diff to the note.
+
+        :return bool: True if success else False
+    """
+    with Database() as database:
+        database.transaction()
+        cursor = QtSql.QSqlQuery(database)
+        cursor.prepare("UPDATE notes SET note=note+:diff WHERE nickname=:nick")
+        for nick in notes:
+            cursor.bindValue(':nick', nick)
+            cursor.bindValue(':diff', diff)
+            cursor.exec_()
+        value = database.commit()
     rebuild_cache()
     return value
 
@@ -325,6 +361,15 @@ def export(notes, *, csv=False, xml=False):
         for note in notes:
             csv += "\n" + ",".join(str(note[value]) for value in to_export)
         return csv
+
+
+def export_by_id(notes_ids, *args, **kwargs):
+    """ Export notes but taking ids
+    """
+    return export([note for note in NOTES_CACHE if note['id'] in notes_ids],
+                  *args,
+                  **kwargs)
+
 
 rebuild_cache()
 

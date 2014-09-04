@@ -31,6 +31,8 @@ from .auth_prompt import ask_auth
 
 
 def fail_callback_dummy():
+    """ Dummy callback. Because a classmethod cannot be a callback
+    """
     Panels.fail_callback()
 
 
@@ -67,8 +69,10 @@ class Panels(QtWidgets.QTabWidget):
         self.build()
 
     @classmethod
-    def fail_callback(self):
-        hide_alcohol = self._parent.parent().hide_alcohol
+    def fail_callback(cls):
+        """ called when the auth to hide alcochol fails
+        """
+        hide_alcohol = cls._parent.parent().hide_alcohol
         hide_alcohol.setChecked(not hide_alcohol.isChecked())
 
 
@@ -160,7 +164,6 @@ class ProductList(QtWidgets.QTreeWidget):
         """ Add product to list
         """
         name = "{} ({}) - {}".format(product_name, price_name, category_name)
-        found = False
         for product in self.products:
             if product['name'] == name:
                 product['price'] += price
@@ -168,8 +171,8 @@ class ProductList(QtWidgets.QTreeWidget):
                 product['count'] += 1
                 product['widget'].setText(0, str(product['count']))
                 product['widget'].setText(2, str(product['price']))
-                found = True
-        if not found:
+                break
+        else:
             product = {
                 'name': name,
                 'price': price,
