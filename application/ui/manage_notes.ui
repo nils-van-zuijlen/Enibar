@@ -136,7 +136,7 @@
         <bool>false</bool>
        </property>
        <property name="text">
-        <string>Modifie la photo</string>
+        <string>Modifier la photo</string>
        </property>
       </widget>
      </item>

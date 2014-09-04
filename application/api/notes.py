@@ -28,6 +28,7 @@ import datetime
 import os.path
 import settings
 import shutil
+import tempfile
 
 
 NOTE_FIELDS = ['id', 'nickname', 'lastname', 'firstname', 'mail', 'tel',
@@ -94,6 +95,16 @@ def change_values(nick, **kwargs):
     return value
 
 
+def unique_file(file_name):
+    """ Return an unique filename
+    """
+    dirname, filename = os.path.split(file_name)
+    prefix, suffix = os.path.splitext(filename)
+
+    _, filename = tempfile.mkstemp(suffix, prefix + "_", dirname)
+    return filename
+
+
 # pylint: disable=too-many-arguments
 def add(nickname, firstname, lastname, mail, tel, birthdate, promo, photo_path):
     """ Create a note. Copy the image from photo_path to settings.IMG_BASE_DIR
@@ -113,8 +124,10 @@ def add(nickname, firstname, lastname, mail, tel, birthdate, promo, photo_path):
     if photo_path:
         name = os.path.split(photo_path)[1]
         if name:
-            if not os.path.exists(settings.IMG_BASE_DIR + name):
-                shutil.copyfile(photo_path, settings.IMG_BASE_DIR + name)
+            if os.path.exists(settings.IMG_BASE_DIR + name):
+                name = os.path.split(unique_file(settings.IMG_BASE_DIR +
+                                                 name))[1]
+            shutil.copyfile(photo_path, settings.IMG_BASE_DIR + name)
 
     with Cursor() as cursor:
         cursor.prepare("INSERT INTO notes (nickname, lastname, firstname,\
@@ -170,8 +183,10 @@ def change_photo(nickname, new_photo):
     """
     name = os.path.split(new_photo)[1]
     if name:
-        if not os.path.exists(settings.IMG_BASE_DIR + name):
-            shutil.copyfile(new_photo, settings.IMG_BASE_DIR + name)
+        if os.path.exists(settings.IMG_BASE_DIR + name):
+            name = os.path.split(unique_file(settings.IMG_BASE_DIR +
+                                             name))[1]
+        shutil.copyfile(photo_path, settings.IMG_BASE_DIR + name)
     with Cursor() as cursor:
         cursor.prepare("UPDATE notes SET photo_path=:photo_path \
                         WHERE nickname=:nickname")
