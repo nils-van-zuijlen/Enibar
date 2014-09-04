@@ -110,13 +110,20 @@
           </item>
           <item row="2" column="1">
            <widget class="QPushButton" name="take_products_btn">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Valider</string>
             </property>
            </widget>
           </item>
           <item row="2" column="0">
-           <widget class="QComboBox" name="price_list"/>
+           <widget class="QComboBox" name="price_list">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+           </widget>
           </item>
           <item row="0" column="0">
            <spacer name="horizontalSpacer">
