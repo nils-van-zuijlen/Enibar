@@ -44,6 +44,7 @@ if [[ $TEST == 1 ]]; then
 	mv settings.py.bak settings.py
 fi
 
+rm -f img/coucou.jpg
 
 if [[ $PEP == 1 ]]; then
 	# Pep8 Validation
