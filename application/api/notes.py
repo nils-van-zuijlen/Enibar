@@ -186,7 +186,7 @@ def change_photo(nickname, new_photo):
         if os.path.exists(settings.IMG_BASE_DIR + name):
             name = os.path.split(unique_file(settings.IMG_BASE_DIR +
                                              name))[1]
-        shutil.copyfile(photo_path, settings.IMG_BASE_DIR + name)
+        shutil.copyfile(new_photo, settings.IMG_BASE_DIR + name)
     with Cursor() as cursor:
         cursor.prepare("UPDATE notes SET photo_path=:photo_path \
                         WHERE nickname=:nickname")
