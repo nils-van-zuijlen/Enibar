@@ -159,7 +159,7 @@ class NotesAction(QtWidgets.QDialog):
         if path:
             with open(path, "w") as save_file:
                 save_file.write(self._multiple_action(api.notes.export_by_id,
-                                                      xml=True))
+                                                      csv=True))
 
     def export_xml_action(self):
         """ Called when "Export XML" is clicked
@@ -171,7 +171,7 @@ class NotesAction(QtWidgets.QDialog):
         if path:
             with open(path, "w") as save_file:
                 save_file.write(self._multiple_action(api.notes.export_by_id,
-                                                      csv=True))
+                                                      xml=True))
 
 
 class MultiNotesList(NotesList):
