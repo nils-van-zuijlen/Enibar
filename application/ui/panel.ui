@@ -34,7 +34,6 @@
         <height>547</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_2"/>
      </widget>
     </widget>
    </item>
