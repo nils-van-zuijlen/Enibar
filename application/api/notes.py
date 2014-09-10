@@ -366,6 +366,7 @@ def export(notes, *, csv=False, xml=False):
 def export_by_id(notes_ids, *args, **kwargs):
     """ Export notes but taking ids
     """
+    notes_ids = list(notes_ids)
     return export([note for note in NOTES_CACHE if note['id'] in notes_ids],
                   *args,
                   **kwargs)
