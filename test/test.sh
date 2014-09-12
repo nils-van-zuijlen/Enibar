@@ -25,6 +25,7 @@ done
 
 if [[ $TEST == 1 ]]; then
 	# -- BACKUP --
+	rm -f img/coucou.jpg
 	cp settings.py settings.py.bak
 
 	# -- MYSQL --

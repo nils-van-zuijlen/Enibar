@@ -24,6 +24,7 @@ Main Window description
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 
 from .auth_prompt import ask_auth
+from .validation_window import ValidPrompt
 from .consumptionmanagment import ConsumptionManagmentWindow
 from .douchette import Douchette
 from .emptynote import EmptyNote
@@ -140,7 +141,8 @@ class MainWindow(QtWidgets.QMainWindow):
     def event(self, event):
         """ Rewrite the event loop
         """
-        if isinstance(event, QtGui.QKeyEvent):
+        if isinstance(event, QtGui.QKeyEvent) and\
+                event.type() == QtCore.QEvent.KeyPress:
             if event.text() == "\"":
                 self.win = Douchette(self.on_douchette)
                 return True
@@ -173,8 +175,11 @@ class MainWindow(QtWidgets.QMainWindow):
     def validate_transaction(self):
         """ Validate transaction
         """
+        total = self.product_list.get_total()
+        prompt = ValidPrompt(total, self.selected.text())
+        if not prompt.is_ok:
+            return
         if self.selected:
-            total = self.product_list.get_total()
             transactions = []
             for product in self.product_list.products:
                 transaction = {
