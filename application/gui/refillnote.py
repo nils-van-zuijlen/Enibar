@@ -29,6 +29,7 @@ from PyQt5 import QtWidgets, QtCore, uic
 import api.notes
 import api.transactions
 import gui.utils
+from .validation_window import ValidPrompt
 
 
 class RefillNote(QtWidgets.QDialog):
@@ -46,6 +47,10 @@ class RefillNote(QtWidgets.QDialog):
     def accept(self):
         """ Called when "Ajouter" is clicked
         """
+        prompt = ValidPrompt("Etes vous sûr de vouloir ajouter {} € sur la note\
+            \nde {}".format(self.to_add.value(), self.selected_note))
+        if not prompt.is_ok:
+            return
         if self.to_add.value() > 0:
             api.notes.transaction(self.selected_note, self.to_add.value())
             api.transactions.log_transaction(

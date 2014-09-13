@@ -29,13 +29,12 @@ import settings
 
 class ValidPrompt(QtWidgets.QDialog):
     """ Validation prompt class """
-    def __init__(self, price, note):
+    def __init__(self, text):
         super().__init__()
         if settings.ASK_VALIDATION:
             self.is_ok = False
             uic.loadUi('ui/validprompt.ui', self)
-            self.content.setText("Es tu sûr de vouloir enlever {} € sur la note\
-                \nde {}".format(price, note))
+            self.content.setText(text)
             self.exec()
         else:
             self.is_ok = True
