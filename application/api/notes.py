@@ -355,7 +355,7 @@ def export(notes, *, csv=False, xml=False):
         xml += "</notes>\n"
         return xml
     elif csv:
-        to_export = ["id", "nickname", "firstname", "lastname", "note",
+        to_export = ["nickname", "firstname", "lastname", "note",
                      "photo_path"]
         csv = ", ".join(to_export)
         for note in notes:
