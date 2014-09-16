@@ -28,8 +28,10 @@ from PyQt5 import QtWidgets, QtCore, uic
 
 import api.notes
 import api.transactions
+import api.validator
 import gui.utils
 from .validation_window import ValidPrompt
+from .input import Input
 
 
 class RefillNote(QtWidgets.QDialog):
@@ -39,7 +41,8 @@ class RefillNote(QtWidgets.QDialog):
         super().__init__()
         uic.loadUi('ui/refill_note.ui', self)
         self.selected_note = selected_note
-        self.to_add.setLocale(QtCore.QLocale('English'))
+        self.to_add.set_validator(api.validator.NUMBER)
+        self.to_add.setFocus()
 
         self.show()
         self.to_add.selectAll()
@@ -47,21 +50,28 @@ class RefillNote(QtWidgets.QDialog):
     def accept(self):
         """ Called when "Ajouter" is clicked
         """
+        to_add = float(self.to_add.text().replace(',', '.'))
         prompt = ValidPrompt("Etes vous sûr de vouloir ajouter {} € sur la note\
-            \nde {}".format(self.to_add.value(), self.selected_note))
+            \nde {}".format(self.to_add.text(), self.selected_note))
         if not prompt.is_ok:
             return
-        if self.to_add.value() > 0:
-            api.notes.transaction(self.selected_note, self.to_add.value())
+        if to_add > 0:
+            api.notes.transaction(self.selected_note, to_add)
             api.transactions.log_transaction(
                 self.selected_note,
                 "Note",
                 "-",
                 "Rechargement",
                 "1",
-                self.to_add.value()
+                to_add
             )
             super().accept()
         else:
             gui.utils.error("Erreur", "La valeur à ajouter doit etre positive")
+
+    def on_change(self):
+        if self.to_add.valid:
+            self.valid_button.setEnabled(True)
+        else:
+            self.valid_button.setEnabled(False)
 

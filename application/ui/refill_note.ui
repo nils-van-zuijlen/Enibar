@@ -14,20 +14,13 @@
    <string>Recharger une note</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="1" column="0" colspan="2">
+   <item row="3" column="0" colspan="2">
     <layout class="QGridLayout" name="gridLayout">
-     <item row="1" column="1">
-      <widget class="QPushButton" name="cancel_button">
-       <property name="text">
-        <string>Annuler</string>
-       </property>
-       <property name="autoDefault">
+     <item row="0" column="0">
+      <widget class="QPushButton" name="valid_button">
+       <property name="enabled">
         <bool>false</bool>
        </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QPushButton" name="valid_button">
        <property name="text">
         <string>Valider</string>
        </property>
@@ -39,19 +32,31 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="0" colspan="2">
-      <widget class="QDoubleSpinBox" name="to_add">
-       <property name="maximum">
-        <double>9999.989999999999782</double>
+     <item row="0" column="3">
+      <widget class="QPushButton" name="cancel_button">
+       <property name="text">
+        <string>Annuler</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
     </layout>
    </item>
+   <item row="2" column="0">
+    <widget class="Input" name="to_add"/>
+   </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Input</class>
+   <extends>QLineEdit</extends>
+   <header>gui/input</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
-  <tabstop>to_add</tabstop>
   <tabstop>valid_button</tabstop>
   <tabstop>cancel_button</tabstop>
  </tabstops>
