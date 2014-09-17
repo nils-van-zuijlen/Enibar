@@ -58,11 +58,16 @@ Database
 
             If True, the password will never be asked
 
-    ASK_VALIDATION
+    ASK_VALIDATION_VALIDATE
             **Default value** ``True``
 
             If True, a confirmation will be asked when clicking on « Valider »
             on the MainWindow.
+
+    ASK_VALIDATION_REFILL
+            **Default value** ``True``
+
+            If True, a confirmation will be asked when refilling a note.
 
     ECOCUP_PRICE
             **Default value** ``1.0``
@@ -99,7 +104,8 @@ PASSWORD = ""
 DBNAME = "enibar"
 
 DEBUG = False
-ASK_VALIDATION = True
+ASK_VALIDATION_VALIDATE = True
+ASK_VALIDATION_REFILL = True
 
 ECOCUP_PRICE = 1.0
 IMG_BASE_DIR = "img/"

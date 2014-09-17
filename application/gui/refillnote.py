@@ -32,6 +32,7 @@ import api.validator
 import gui.utils
 from .validation_window import ValidPrompt
 from .input import Input
+import settings
 
 
 class RefillNote(QtWidgets.QDialog):
@@ -52,7 +53,8 @@ class RefillNote(QtWidgets.QDialog):
         """
         to_add = float(self.to_add.text().replace(',', '.'))
         prompt = ValidPrompt("Etes vous sûr de vouloir ajouter {} € sur la note\
-            \nde {}".format(self.to_add.text(), self.selected_note))
+            \nde {}".format(self.to_add.text(), self.selected_note),
+            settings.ASK_VALIDATION_REFILL)
         if not prompt.is_ok:
             return
         if to_add > 0:

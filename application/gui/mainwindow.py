@@ -178,7 +178,7 @@ class MainWindow(QtWidgets.QMainWindow):
         total = self.product_list.get_total()
         text = "Es tu sûr de vouloir enlever {} € sur la note\
                 \nde {}".format(total, self.selected.text())
-        prompt = ValidPrompt(text)
+        prompt = ValidPrompt(text, settings.ASK_VALIDATION_VALIDATE)
         if not prompt.is_ok:
             return
         if self.selected:

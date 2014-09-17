@@ -24,14 +24,13 @@ Validation prompt
 
 
 from PyQt5 import QtWidgets, uic
-import settings
 
 
 class ValidPrompt(QtWidgets.QDialog):
     """ Validation prompt class """
-    def __init__(self, text):
+    def __init__(self, text, enabled=True):
         super().__init__()
-        if settings.ASK_VALIDATION:
+        if enabled:
             self.is_ok = False
             uic.loadUi('ui/validprompt.ui', self)
             self.content.setText(text)
