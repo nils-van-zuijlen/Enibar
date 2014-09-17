@@ -28,6 +28,7 @@ from PyQt5 import QtWidgets, QtCore, uic
 
 import api.notes
 import api.transactions
+import api.validator
 import gui.utils
 
 
@@ -37,6 +38,7 @@ class EmptyNote(QtWidgets.QDialog):
     def __init__(self, selected_note):
         super().__init__()
         uic.loadUi('ui/refill_note.ui', self)
+        self.to_add.set_validator(api.validator.NUMBER)
         self.setWindowTitle("Prendre d'une note")
         self.selected_note = selected_note
         self.to_add.setLocale(QtCore.QLocale('English'))
@@ -47,17 +49,23 @@ class EmptyNote(QtWidgets.QDialog):
     def accept(self):
         """ Called when "Enlever" is clicked
         """
-        if self.to_add.value() > 0:
-            api.notes.transaction(self.selected_note, -self.to_add.value())
+        to_add = float(self.to_add.text().replace(',', '.'))
+        if to_add > 0:
+            api.notes.transaction(self.selected_note, -to_add)
             api.transactions.log_transaction(
                 self.selected_note,
                 "Note",
                 "-",
                 "Solde",
                 "1",
-                -self.to_add.value()
+                -to_add
             )
             super().accept()
         else:
             gui.utils.error("Erreur", "La valeur à enlever doit etre positive")
 
+    def on_change(self):
+        if self.to_add.valid:
+            self.valid_button.setEnabled(True)
+        else:
+            self.valid_button.setEnabled(False)
