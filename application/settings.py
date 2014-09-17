@@ -69,6 +69,12 @@ Database
 
             If True, a confirmation will be asked when refilling a note.
 
+    MAX_HISTORY
+            **Default value** ``5``
+
+            Defines the maximum number of history lines printed on the
+            MainWindow
+
     ECOCUP_PRICE
             **Default value** ``1.0``
 
@@ -106,6 +112,7 @@ DBNAME = "enibar"
 DEBUG = False
 ASK_VALIDATION_VALIDATE = True
 ASK_VALIDATION_REFILL = True
+MAX_HISTORY = 5
 
 ECOCUP_PRICE = 1.0
 IMG_BASE_DIR = "img/"

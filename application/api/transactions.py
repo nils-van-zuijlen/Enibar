@@ -141,6 +141,27 @@ def get(**filter_):
         yield {field: record.value(TRANSACTS_FIELDS_CACHE[field]) for field
                in TRANSACT_FIELDS}
 
+
+def get_reversed(**filter_):
+    """ Get transactions matching filter. Reversed.
+
+    :param dict filter_: filter to apply
+    """
+    # pylint: disable=global-statement
+    global TRANSACTS_FIELDS_CACHE
+    cursor = api.base.filtered_getter("transactions", filter_)
+    cursor.last()
+    record = cursor.record()
+    if TRANSACTS_FIELDS_CACHE == {}:
+        TRANSACTS_FIELDS_CACHE = {field: record.indexOf(field) for field
+                                  in TRANSACT_FIELDS}
+    yield {field: record.value(TRANSACTS_FIELDS_CACHE[field]) for field
+           in TRANSACT_FIELDS}
+    while cursor.previous():
+        record = cursor.record()
+        yield {field: record.value(TRANSACTS_FIELDS_CACHE[field]) for field
+               in TRANSACT_FIELDS}
+
 # pylint: disable=invalid-name
 get_unique = api.base.make_get_unique(get)
 

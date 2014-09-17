@@ -57,8 +57,6 @@ class Database:
                 sys.exit(1)
             cursor = SqlQuery(self.database)
             cursor.exec("SET AUTOCOMMIT=0")
-            cursor.setForwardOnly(True)
-            cursor.setNumericalPrecisionPolicy(QtSql.QSql.LowPrecisionInt32)
             cursor.exec("ST innodb_flush_log_at_trx_commit=0")
 
     def __enter__(self):

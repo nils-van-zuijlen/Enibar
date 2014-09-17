@@ -67,6 +67,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.product_list.setColumnWidth(2, 40)
 
         self.panels.build()
+        self.note_history.header().setStretchLastSection(False)
+        self.note_history.header().setSectionResizeMode(1,
+            QtWidgets.QHeaderView.Stretch)
 
     def select_note(self, index):
         """
@@ -75,6 +78,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.note_box.setEnabled(True)
         self.refill_note.setEnabled(True)
         self.empty_note.setEnabled(True)
+        self.note_history.clear()
         if index >= 0:
             self.selected = self.notes_list.item(index)
         widget = self.notes_list.currentItem()
@@ -99,6 +103,18 @@ class MainWindow(QtWidgets.QMainWindow):
             return
 
         infos = list(api.notes.get(lambda x: widget.text() == x["nickname"]))[0]
+        note_hist = api.transactions.get_reversed(note=self.selected.text())
+        for i, product in enumerate(note_hist):
+            if i > settings.MAX_HISTORY:
+                break
+            name = "{} ({}) - {}".format(product['product'], product['price_name'],
+                                         product['category'])
+            widget = QtWidgets.QTreeWidgetItem([str(product['quantity']), name,
+                                                str(product['price'])])
+            self.note_history.addTopLevelItem(widget)
+        self.note_history.resizeColumnToContents(1)
+        self.note_history.resizeColumnToContents(3)
+
         # pylint: disable=star-args
         self.note_name.setText("{nickname} - {firstname} {lastname}".format(
             **infos))
