@@ -107,10 +107,11 @@ class MainWindow(QtWidgets.QMainWindow):
         for i, product in enumerate(note_hist):
             if i > settings.MAX_HISTORY:
                 break
-            name = "{} ({}) - {}".format(product['product'], product['price_name'],
+            name = "{} ({}) - {}".format(product['product'],
+                                         product['price_name'],
                                          product['category'])
             widget = QtWidgets.QTreeWidgetItem([str(product['quantity']), name,
-                                                str(product['price'])])
+                                                str(-product['price'])])
             self.note_history.addTopLevelItem(widget)
         self.note_history.resizeColumnToContents(1)
         self.note_history.resizeColumnToContents(3)
