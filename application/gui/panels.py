@@ -496,7 +496,6 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
     def get_signal(self):
         return self.activated
 
-
     def connect_mouse_wheel(self, func):
         self.call = func
 
