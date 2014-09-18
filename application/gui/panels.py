@@ -109,6 +109,7 @@ class PanelTab(QtWidgets.QWidget):
         :param int index: Optional selected index.
         """
         widget = self.sender()
+
         if not index and len(widget.prices) == 1:
             price_name, price_value = tuple(iter(widget.prices.items()))[0]
         else:
@@ -495,6 +496,7 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
     def get_signal(self):
         return self.activated
 
+
     def connect_mouse_wheel(self, func):
         self.call = func
 
@@ -530,12 +532,17 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
         # pylint: disable=no-self-use
         return
 
-    def keyPressEvent(self, _):
+    def keyPressEvent(self, event):
         """ Overwrite qt key press event
         """
         # pylint: disable=invalid-name
         # pylint: disable=no-self-use
-        return
+        event.ignore()
+
+    def keyReleaseEvent(self, event):
+        """ Overwrite qt key release event
+        """
+        event.ignore()
 
     def hidePopup(self):
         """ Overwrite qt hidePopup event so product name is displayed and
