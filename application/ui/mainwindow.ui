@@ -512,7 +512,15 @@
             </property>
             <column>
              <property name="text">
-              <string>Nbr</string>
+              <string>Date</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Quantité</string>
+             </property>
+             <property name="textAlignment">
+              <set>AlignLeft|AlignVCenter</set>
              </property>
             </column>
             <column>
@@ -541,7 +549,7 @@
      <x>0</x>
      <y>0</y>
      <width>884</width>
-     <height>19</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="administration">

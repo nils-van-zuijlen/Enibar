@@ -68,7 +68,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.panels.build()
         self.note_history.header().setStretchLastSection(False)
-        self.note_history.header().setSectionResizeMode(1,
+        self.note_history.header().setSectionResizeMode(2,
             QtWidgets.QHeaderView.Stretch)
 
     def select_note(self, index):
@@ -110,11 +110,11 @@ class MainWindow(QtWidgets.QMainWindow):
             name = "{} ({}) - {}".format(product['product'],
                                          product['price_name'],
                                          product['category'])
-            widget = QtWidgets.QTreeWidgetItem([str(product['quantity']), name,
+            widget = QtWidgets.QTreeWidgetItem([product['date'].toString("yyyy/MM/dd HH:mm:ss"), str(product['quantity']), name,
                                                 str(-product['price'])])
             self.note_history.addTopLevelItem(widget)
+        self.note_history.resizeColumnToContents(0)
         self.note_history.resizeColumnToContents(1)
-        self.note_history.resizeColumnToContents(3)
 
         # pylint: disable=star-args
         self.note_name.setText("{nickname} - {firstname} {lastname}".format(
