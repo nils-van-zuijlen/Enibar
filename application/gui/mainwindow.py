@@ -55,7 +55,6 @@ class MainWindow(QtWidgets.QMainWindow):
         uic.loadUi('ui/mainwindow.ui', self)
 
         self.refresh()
-        self.notes_list.currentRowChanged.connect(self.select_note)
         self.selected = None
         self.selected_nickname = None
         self.win = None
@@ -193,13 +192,13 @@ class MainWindow(QtWidgets.QMainWindow):
     def validate_transaction(self):
         """ Validate transaction
         """
-        total = self.product_list.get_total()
-        text = "Es tu sûr de vouloir enlever {} € sur la note\
-                \nde {}".format(total, self.selected.text())
-        prompt = ValidPrompt(text, settings.ASK_VALIDATION_VALIDATE)
-        if not prompt.is_ok:
-            return
         if self.selected:
+            total = self.product_list.get_total()
+            text = "Es tu sûr de vouloir enlever {} € sur la note\
+                    \nde {}".format(total, self.selected.text())
+            prompt = ValidPrompt(text, settings.ASK_VALIDATION_VALIDATE)
+            if not prompt.is_ok:
+                return
             transactions = []
             for product in self.product_list.products:
                 transaction = {

@@ -1036,8 +1036,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>notes_list</sender>
+   <signal>currentRowChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>select_note()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>83</x>
+     <y>354</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>344</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>validate_transaction()</slot>
+  <slot>select_note()</slot>
  </slots>
 </ui>
