@@ -150,7 +150,8 @@ def get_reversed(**filter_):
     # pylint: disable=global-statement
     global TRANSACTS_FIELDS_CACHE
     cursor = api.base.filtered_getter("transactions", filter_)
-    cursor.last()
+    if not cursor.last():
+        return []
     record = cursor.record()
     if TRANSACTS_FIELDS_CACHE == {}:
         TRANSACTS_FIELDS_CACHE = {field: record.indexOf(field) for field
