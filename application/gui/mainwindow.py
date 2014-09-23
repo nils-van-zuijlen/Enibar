@@ -297,6 +297,9 @@ class MenuBar(QtWidgets.QMenuBar):
             self.parent().notes_list.currentItem().text())
         self._connect_window()
 
+    def refresh_panels_fnc(self, _):
+        self.parent().panels.rebuild()
+
     def empty_note_fnc(self, _):
         """ Open a EmptyNote window
         """

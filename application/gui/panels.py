@@ -24,7 +24,7 @@ Panels Widget for Main window
 
 """
 
-from PyQt5 import QtWidgets, QtCore, uic
+from PyQt5 import QtWidgets, QtCore, uic, QtGui
 import collections
 import api.panels
 from .auth_prompt import ask_auth
@@ -495,7 +495,6 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
 
     def get_signal(self):
         return self.activated
-
 
     def connect_mouse_wheel(self, func):
         self.call = func

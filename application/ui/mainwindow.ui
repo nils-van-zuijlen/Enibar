@@ -517,7 +517,6 @@
     <addaction name="change_password"/>
     <addaction name="separator"/>
     <addaction name="products_managment"/>
-    <addaction name="panel_managment"/>
     <addaction name="hide_alcohol"/>
     <addaction name="separator"/>
     <addaction name="transaction_history"/>
@@ -541,8 +540,16 @@
     <addaction name="separator"/>
     <addaction name="menuExporter_les_notes"/>
    </widget>
+   <widget class="QMenu" name="menu_Panels">
+    <property name="title">
+     <string>&amp;Panels</string>
+    </property>
+    <addaction name="panel_managment"/>
+    <addaction name="refresh_panels"/>
+   </widget>
    <addaction name="administration"/>
    <addaction name="menuNotes"/>
+   <addaction name="menu_Panels"/>
   </widget>
   <action name="user_managment">
    <property name="checkable">
@@ -579,7 +586,7 @@
   </action>
   <action name="panel_managment">
    <property name="text">
-    <string>Gerer les &amp;panels</string>
+    <string>&amp;Gerer les panels</string>
    </property>
   </action>
   <action name="notes_action">
@@ -629,6 +636,11 @@
     <string>Prendre sur une note</string>
    </property>
   </action>
+  <action name="refresh_panels">
+   <property name="text">
+    <string>&amp;Raffraichir les panels</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -659,6 +671,7 @@
     <slot>repay_ecocup_fnc()</slot>
     <slot>show_transactions_history()</slot>
     <slot>empty_note_fnc()</slot>
+    <slot>refresh_panels_fnc()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -955,6 +968,22 @@
     <hint type="sourcelabel">
      <x>717</x>
      <y>560</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>9</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>refresh_panels</sender>
+   <signal>triggered()</signal>
+   <receiver>menu_bar</receiver>
+   <slot>refresh_panels_fnc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
      <x>441</x>
