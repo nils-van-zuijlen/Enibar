@@ -45,6 +45,15 @@ class Database:
     database = None
 
     def __init__(self):
+        self.connect()
+
+    def __enter__(self):
+        return self.database
+
+    def __exit__(self, type_, value, traceback):
+        pass
+
+    def connect(self):
         if Database.database is None:
             Database.database = QtSql.QSqlDatabase("QMYSQL")
 
@@ -52,18 +61,13 @@ class Database:
             Database.database.setUserName(settings.USERNAME)
             Database.database.setPassword(settings.PASSWORD)
             Database.database.setDatabaseName(settings.DBNAME)
+            Database.database.setConnectOptions("MYSQL_OPT_RECONNECT=1")
             if not Database.database.open():
                 print("Can't join database")
                 sys.exit(1)
             cursor = SqlQuery(self.database)
             cursor.exec("SET AUTOCOMMIT=0")
-            cursor.exec("ST innodb_flush_log_at_trx_commit=0")
-
-    def __enter__(self):
-        return self.database
-
-    def __exit__(self, type_, value, traceback):
-        pass
+            cursor.exec("SET innodb_flush_log_at_trx_commit=0")
 
 
 class Cursor(Database):
