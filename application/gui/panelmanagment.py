@@ -87,19 +87,50 @@ class PanelManagment(QtWidgets.QDialog):
             self.panel_content.setEnabled(False)
             self.move_left.setEnabled(False)
             self.move_right.setEnabled(False)
+            self.hidden.setEnabled(False)
         else:
+            panel = self.get_current_panel()
+            if not panel:
+                return
+            if panel["hidden"]:
+                self.hidden.setChecked(True)
+            else:
+                self.hidden.setChecked(False)
+            self.hidden.setEnabled(True)
             self.rebuild(selected[0].data())
             self.product_list.setEnabled(True)
             self.panel_content.setEnabled(True)
             self.move_left.setEnabled(True)
             self.move_right.setEnabled(True)
 
+    def get_current_panel(self):
+        """ Return the current panel or None.
+        """
+        currentItem = self.panels.currentItem()
+        if not currentItem:
+            return
+        panel = api.panels.get_unique(name=currentItem.text())
+        if not panel:
+            return
+        return panel
+
+    def on_hide(self, state):
+        """ Toggle the hidden parameter in database. Called when "Panel cache"
+            is clicked
+        """
+        panel = self.get_current_panel()
+        if not panel:
+            return
+
+        if state:
+            api.panels.hide(panel["name"])
+        else:
+            api.panels.show(panel["name"])
+
     def add_product(self):
         """ Called when ">>>>>" is clicked
         """
-        if not self.panels.currentItem():
-            return
-        panel = api.panels.get_unique(name=self.panels.currentItem().text())
+        panel = self.get_current_panel()
         if not panel:
             return
 

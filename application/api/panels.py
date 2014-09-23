@@ -74,6 +74,20 @@ def add_product(paid, product):
         return cursor.exec_()
 
 
+def hide(name):
+    with Cursor() as cursor:
+        cursor.prepare("UPDATE panels SET hidden=1 WHERE name=:name")
+        cursor.bindValue(":name", name)
+        return cursor.exec_()
+
+
+def show(name):
+    with Cursor() as cursor:
+        cursor.prepare("UPDATE panels SET hidden=0 WHERE name=:name")
+        cursor.bindValue(":name", name)
+        return cursor.exec_()
+
+
 def add_products(paid, products):
     """ Add multpile product to panel content
 
@@ -131,9 +145,11 @@ def get(**filter_):
     """
     cursor = api.base.filtered_getter("panels", filter_)
     while cursor.next():
+        record = cursor.record()
         yield {
-            'name': cursor.record().value('name'),
-            'id': cursor.record().value('id'),
+            'name': record.value('name'),
+            'hidden': record.value('hidden'),
+            'id': record.value('id'),
         }
 
 
@@ -162,12 +178,13 @@ def get_content(**kwargs):
             cursor.bindValue(":{}".format(key), arg)
         if cursor.exec_():
             while cursor.next():
+                record = cursor.record()
                 yield {
-                    'panel_id': cursor.record().value('panel_id'),
-                    'product_id': cursor.record().value('product_id'),
-                    'product_name': cursor.record().value('product_name'),
-                    'category_id': cursor.record().value('category_id'),
-                    'category_name': cursor.record().value('category_name'),
+                    'panel_id': record.value('panel_id'),
+                    'product_id': record.value('product_id'),
+                    'product_name': record.value('product_name'),
+                    'category_id': record.value('category_id'),
+                    'category_name': record.value('category_name'),
                 }
 # pylint: disable=invalid-name
 get_unique = api.base.make_get_unique(get)

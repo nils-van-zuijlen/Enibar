@@ -53,6 +53,16 @@ class CategoriesTest(unittest.TestCase):
         panels.add("Coucou")
         self.assertEqual(self.count_panels(), 2)
 
+    def test_hide_show(self):
+        """ Testing hiding/showing panels
+        """
+        panels.add("Coucou")
+        self.assertFalse(panels.get_unique(name="Coucou")["hidden"])
+        panels.hide("Coucou")
+        self.assertTrue(panels.get_unique(name="Coucou")["hidden"])
+        panels.show("Coucou")
+        self.assertFalse(panels.get_unique(name="Coucou")["hidden"])
+
     def test_remove_panel(self):
         """ Testing remove_category
         """

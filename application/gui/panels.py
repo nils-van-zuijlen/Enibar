@@ -50,7 +50,7 @@ class Panels(QtWidgets.QTabWidget):
     def build(self):
         """ Build panels from panels found in database
         """
-        for panel in api.panels.get():
+        for panel in api.panels.get(hidden=False):
             widget = PanelTab(panel['id'], self.main_window)
             self.panels.append(widget)
             self.addTab(widget, panel['name'])
