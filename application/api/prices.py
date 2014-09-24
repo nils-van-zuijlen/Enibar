@@ -130,7 +130,7 @@ def add(product, price_description, value):
         cursor.bindValue(':product', product)
         cursor.bindValue(':price_description', price_description)
         cursor.bindValue(':value', value)
-        cursor.exec_():
+        cursor.exec_()
         return cursor.lastInsertId()
 
 
