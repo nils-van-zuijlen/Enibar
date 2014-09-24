@@ -109,6 +109,15 @@ class PricesTest(unittest.TestCase):
         # We should have two prices as product insertion creates one
         self.assertEqual(self.count_prices(), 2)
 
+    def test_deletion(self):
+        """ Testing deletion of prices
+        """
+        desc_id = api.prices.add_descriptor("Unité", self.cat_eat)
+        pid = api.products.add("Lapin", category_id=self.cat_eat)
+        price = api.prices.add(pid, desc_id, 0)
+        self.assertTrue(api.prices.remove(price))
+        self.assertEqual(self.count_prices(), 1)
+
     def test_get(self):
         """ Testing get price function """
         self.assertEqual(list(api.prices.get()), [])
