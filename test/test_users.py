@@ -90,7 +90,10 @@ class UsersTest(unittest.TestCase):
         self.assertEqual(users.get_rights("test2"), {'manage_users': False,
                                                      'manage_notes': False,
                                                      'manage_products': False})
-
+        # Non existant user has no rights.
+        self.assertEqual(users.get_rights("test3"), {'manage_users': False,
+                                                     'manage_notes': False,
+                                                     'manage_products': False})
     def test_issue_24(self):
         """ Testing issue #24 regression.
         """

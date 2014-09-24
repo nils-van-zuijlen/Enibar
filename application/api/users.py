@@ -149,11 +149,7 @@ def is_authorized(pseudo, password):
     with Cursor() as cursor:
         cursor.prepare("SELECT password FROM admins WHERE login=:login")
         cursor.bindValue(':login', pseudo)
-        if not cursor.exec_():
-            return False
-
-        if not cursor.record().count():
-            return False
+        cursor.exec_()
 
         if not cursor.next():
             return False
