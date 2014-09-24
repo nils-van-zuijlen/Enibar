@@ -102,6 +102,8 @@ class PricesTest(unittest.TestCase):
         """ Testing adding prices """
         desc_id = api.prices.add_descriptor("Unité", self.cat_eat)
         pid = api.products.add("Lapin", category_id=self.cat_eat)
+        test = api.products.add("Lapin", category_id=self.cat_eat)
+        self.assertIsNone(test)
         self.assertIsNone(api.prices.add(None, None, 0))
         self.assertIsNotNone(api.prices.add(pid, desc_id, 0))
         # We should have two prices as product insertion creates one
