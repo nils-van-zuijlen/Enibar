@@ -38,12 +38,13 @@ import settings
 class RefillNote(QtWidgets.QDialog):
     # pylint: disable=too-many-instance-attributes
     """ RefillNote window class """
-    def __init__(self, selected_note):
+    def __init__(self, selected_note, multi=False):
         super().__init__()
         uic.loadUi('ui/refill_note.ui', self)
         self.selected_note = selected_note
         self.to_add.set_validator(api.validator.NUMBER)
         self.to_add.setFocus()
+        self.multi = multi
 
         self.show()
         self.to_add.selectAll()
@@ -51,6 +52,34 @@ class RefillNote(QtWidgets.QDialog):
     def accept(self):
         """ Called when "Ajouter" is clicked
         """
+        if self.multi:
+            self.accept_multi()
+        else:
+            self.accept_not_multi()
+
+    def accept_multi(self):
+        to_add = float(self.to_add.text().replace(',', '.'))
+        prompt = ValidPrompt("Etes vous sûr de vouloir ajouter {} € sur toutes\
+            \nces notes ?".format(self.to_add.text()),
+            settings.ASK_VALIDATION_REFILL)
+        if not prompt.is_ok:
+            return
+        if to_add > 0:
+            for note in self.selected_note:
+                api.notes.transaction(note, to_add)
+                api.transactions.log_transaction(
+                    note,
+                    "Note",
+                    "-",
+                    "Rechargement",
+                    "1",
+                    to_add
+                )
+            super().accept()
+        else:
+            gui.utils.error("Erreur", "La valeur à ajouter doit etre positive")
+
+    def accept_not_multi(self):
         to_add = float(self.to_add.text().replace(',', '.'))
         prompt = ValidPrompt("Etes vous sûr de vouloir ajouter {} € sur la note\
             \nde {}".format(self.to_add.text(), self.selected_note),

@@ -58,38 +58,10 @@
      </item>
      <item row="3" column="2">
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="7" column="0" colspan="2">
+       <item row="8" column="0" colspan="2">
         <widget class="QPushButton" name="del_button">
          <property name="text">
           <string>Supprimer</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0" colspan="2">
-        <widget class="QPushButton" name="hide_button">
-         <property name="text">
-          <string>Cacher</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QPushButton" name="export_csv_button">
-         <property name="text">
-          <string>Export CSV</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0" colspan="2">
-        <widget class="QPushButton" name="show_button">
-         <property name="text">
-          <string>Montrer</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QPushButton" name="export_xml_button">
-         <property name="text">
-          <string>Export XML</string>
          </property>
         </widget>
        </item>
@@ -152,6 +124,41 @@
            </spacer>
           </item>
          </layout>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QPushButton" name="export_csv_button">
+         <property name="text">
+          <string>Export CSV</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0" colspan="2">
+        <widget class="QPushButton" name="hide_button">
+         <property name="text">
+          <string>Cacher</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0" colspan="2">
+        <widget class="QPushButton" name="show_button">
+         <property name="text">
+          <string>Montrer</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QPushButton" name="export_xml_button">
+         <property name="text">
+          <string>Export XML</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="2">
+        <widget class="QPushButton" name="refill_button">
+         <property name="text">
+          <string>Rendre des sous</string>
+         </property>
         </widget>
        </item>
       </layout>
@@ -315,6 +322,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>refill_button</sender>
+   <signal>clicked()</signal>
+   <receiver>NotesAction</receiver>
+   <slot>refill_action()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>422</x>
+     <y>492</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>300</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>del_action()</slot>
@@ -325,5 +348,6 @@
   <slot>export_xml_action()</slot>
   <slot>export_csv_action()</slot>
   <slot>take_products_action()</slot>
+  <slot>refill_action()</slot>
  </slots>
 </ui>

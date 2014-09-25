@@ -30,6 +30,7 @@ import api.notes
 import api.prices
 import api.categories
 from .utils import NotesList, valid
+from .refillnote import RefillNote
 from .panelmanagment import ConsumptionList
 import datetime
 
@@ -111,6 +112,10 @@ class NotesAction(QtWidgets.QDialog):
         """ Called when "cacher" is clicked
         """
         self._multiple_action(api.notes.hide_multiple)
+
+    def refill_action(self):
+        self.win = RefillNote([item.text() for item in
+            self.note_list.selectedItems()], True)
 
     def show_action(self):
         """ Called when "Montrer" is clicked
