@@ -142,7 +142,7 @@ class TransactionHistory(QtWidgets.QDialog):
                         widget.text(8)
                     ),
                     "La transaction du {date} sur la note {note} "
-                    "n'as pas été supprimée.".format(
+                    "n'a pas été supprimée.".format(
                         date=widget.text(0),
                         note=widget.text(1)
                     )
@@ -185,7 +185,7 @@ class TransactionHistory(QtWidgets.QDialog):
                         widget.text(8)
                     ),
                     "La transaction du {date} sur la note {note} "
-                    "n'as pas été supprimée.".format(
+                    "n'a pas été supprimée.".format(
                         date=widget.text(0),
                         note=widget.text(1)
                     )
