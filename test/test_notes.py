@@ -274,7 +274,7 @@ class NotesTest(unittest.TestCase):
         xml += "\t\t<prenom>test</prenom>\n"
         xml += "\t\t<nom>test</nom>\n"
         xml += "\t\t<compte>0.0</compte>\n"
-        xml += "\t\t<image></image>\n"
+        xml += "\t\t<mail>test</mail>\n"
         xml += "\t\t<date_Decouvert></date_Decouvert>\n"
         xml += "\t</note>\n"
         xml += "</notes>\n"

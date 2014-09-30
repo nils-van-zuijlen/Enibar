@@ -346,7 +346,7 @@ def export(notes, *, csv=False, xml=False):
             xml += "\t\t<prenom>{}</prenom>\n".format(note["firstname"])
             xml += "\t\t<nom>{}</nom>\n".format(note["lastname"])
             xml += "\t\t<compte>{}</compte>\n".format(note["note"])
-            xml += "\t\t<image>{}</image>\n".format(note["photo_path"])
+            xml += "\t\t<mail>{}</mail>\n".format(note["mail"].split("@")[0])
             xml += "\t\t<date_Decouvert>{}</date_Decouvert>\n".format(
                 overdraft_date
             )
