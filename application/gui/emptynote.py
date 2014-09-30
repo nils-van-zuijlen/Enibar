@@ -39,6 +39,7 @@ class EmptyNote(QtWidgets.QDialog):
         super().__init__()
         uic.loadUi('ui/refill_note.ui', self)
         self.to_add.set_validator(api.validator.NUMBER)
+        self.to_add.setFocus()
         self.setWindowTitle("Prendre d'une note")
         self.selected_note = selected_note
         self.to_add.setLocale(QtCore.QLocale('English'))
