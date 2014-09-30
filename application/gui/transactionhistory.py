@@ -24,6 +24,7 @@ from PyQt5 import QtWidgets, uic, QtCore
 from .auth_prompt import ask_auth
 import api.transactions
 import time
+import gui.utils
 
 
 class TransactionHistory(QtWidgets.QDialog):
@@ -128,10 +129,26 @@ class TransactionHistory(QtWidgets.QDialog):
 
     @ask_auth("manage_notes")
     def delete(self, _):
-        """ Delete an item from a line
-        """
-        widget = self.transaction_list.currentItem()
-        if api.transactions.rollback_transaction(widget.text(8)):
+        indexes = self.transaction_list.selectedIndexes()
+        for i, index in reversed(list(enumerate(indexes))):
+            if i % self.transaction_list.columnCount() != 0:
+                continue
+
+            widget = self.transaction_list.topLevelItem(index.row())
+
+            if not api.transactions.rollback_transaction(widget.text(8)):
+                gui.utils.error(
+                    "Impossible de supprimer la transation n°{}".format(
+                        widget.text(8)
+                    ),
+                    "La transaction du {date} sur la note {note} "
+                    "n'a pas été supprimée.".format(
+                        date=widget.text(0),
+                        note=widget.text(1)
+                    )
+                )
+                continue
+
             try:
                 quantity = int(widget.text(5))
             except ValueError:
@@ -150,18 +167,30 @@ class TransactionHistory(QtWidgets.QDialog):
                     debit = round(debit, 2)
                     widget.setText(7, str(debit))
             else:
-                index = self.transaction_list.indexOfTopLevelItem(widget)
-                self.transaction_list.takeTopLevelItem(index)
-        else:
-            print("Pas supprimé")
+                self.transaction_list.takeTopLevelItem(index.row())
 
     @ask_auth("manage_notes")
     def delete_line(self, _):
         """ Delete a complete line
         """
-        widget = self.transaction_list.currentItem()
-        if api.transactions.rollback_transaction(widget.text(8), True):
+        indexes = self.transaction_list.selectedIndexes()
+        for i, index in reversed(list(enumerate(indexes))):
+            if i % self.transaction_list.columnCount() != 0:
+                continue
+
+            widget = self.transaction_list.topLevelItem(index.row())
+            if not api.transactions.rollback_transaction(widget.text(8), True):
+                gui.utils.error(
+                    "Impossible de supprimer la transation n°{}".format(
+                        widget.text(8)
+                    ),
+                    "La transaction du {date} sur la note {note} "
+                    "n'a pas été supprimée.".format(
+                        date=widget.text(0),
+                        note=widget.text(1)
+                    )
+                )
+                continue
             index = self.transaction_list.indexOfTopLevelItem(widget)
             self.transaction_list.takeTopLevelItem(index)
-
 

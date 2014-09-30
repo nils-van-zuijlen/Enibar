@@ -94,7 +94,7 @@
    <item row="1" column="0" colspan="4">
     <widget class="QTreeWidget" name="transaction_list">
      <property name="selectionMode">
-      <enum>QAbstractItemView::SingleSelection</enum>
+      <enum>QAbstractItemView::ExtendedSelection</enum>
      </property>
      <property name="indentation">
       <number>0</number>
