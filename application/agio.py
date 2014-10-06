@@ -33,7 +33,7 @@ if __name__ == "__main__":
             update = QtSql.QSqlQuery(database)
             update.prepare("""
                 UPDATE notes
-                SET note=ROUND(note + note * ? / 100, 2), last_agio=CURDATE()
+                SET note=note + note * ? / 100, last_agio=CURDATE()
                 WHERE id=?
                 """
             )

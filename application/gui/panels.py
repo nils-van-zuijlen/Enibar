@@ -168,7 +168,7 @@ class ProductList(QtWidgets.QTreeWidget):
         for product in self.products:
             if product['name'] == name:
                 product['price'] += price
-                product['price'] = round(product['price'], 2)
+                product['price'] = product['price']
                 product['count'] += 1
                 product['widget'].setText(0, str(product['count']))
                 product['widget'].setText(2, str(product['price']))
@@ -196,7 +196,7 @@ class ProductList(QtWidgets.QTreeWidget):
             if product['name'] == name:
                 if product['count'] > 1:
                     product['price'] -= price
-                    product['price'] = round(product['price'], 2)
+                    product['price'] = product['price']
                     product['count'] -= 1
                     product['widget'].setText(0, str(product['count']))
                     product['widget'].setText(2, str(product['price']))
@@ -223,7 +223,7 @@ class ProductList(QtWidgets.QTreeWidget):
         :return float: total
         """
         total = sum(item["price"] for item in self.products)
-        return round(total, 2)
+        return total
 
     def update_total(self):
         """ Update main window total

@@ -96,9 +96,9 @@ class TransactionHistory(QtWidgets.QDialog):
                 if widget.text(7) != "-":
                     debited += float(widget.text(7))
 
-        self.credited.setText(" {} €".format(str(round(credited, 2))))
-        self.debited.setText("-{} €".format(str(round(debited, 2))))
-        self.total.setText("{} €".format(str(round(credited - debited, 2))))
+        self.credited.setText(" {} €".format(str(credited)))
+        self.debited.setText("-{} €".format(str(debited)))
+        self.total.setText("{} €".format(str(credited - debited)))
 
     def rebuild(self):
         """ Rebuild list
@@ -159,12 +159,12 @@ class TransactionHistory(QtWidgets.QDialog):
                 if widget.text(6) != "-":
                     credit = float(widget.text(6))
                     credit -= credit / quantity
-                    credit = round(credit, 2)
+                    credit = credit
                     widget.setText(6, str(credit))
                 elif widget.text(7) != "-":
                     debit = float(widget.text(7))
                     debit -= debit / quantity
-                    debit = round(debit, 2)
+                    debit = debit
                     widget.setText(7, str(debit))
             else:
                 self.transaction_list.takeTopLevelItem(index.row())

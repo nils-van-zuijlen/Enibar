@@ -107,7 +107,7 @@ def rollback_transaction(id_, full=False):
         if quantity > 1 and not full:
             cursor.prepare("UPDATE transactions SET quantity=quantity - 1,\
                     price=? WHERE id=?")
-            price = round(trans['price'] / quantity, 2)
+            price = trans['price'] / quantity
             cursor.addBindValue(trans['price'] - price)
             cursor.addBindValue(trans['id'])
         else:
