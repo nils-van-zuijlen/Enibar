@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS notes(
 	birthdate INTEGER UNSIGNED,
 	promo ENUM('1A', '2A', '3A', '3S', '4A', '5A', 'Esiab', 'Externe', 'Ancien', 'Prof'),
 	photo_path VARCHAR(255) DEFAULT NULL,
-	note FLOAT DEFAULT 0,
+	note DECIMAL(10, 2) DEFAULT 0,
 	overdraft_date DATE DEFAULT NULL,
 	last_agio DATE DEFAULT NULL,
 	ecocups INTEGER UNSIGNED DEFAULT 0,
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS prices(
 	id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
 	price_description INTEGER UNSIGNED,
 	product INTEGER UNSIGNED,
-	value FLOAT UNSIGNED,
+	value DECIMAL(10,2),
 	FOREIGN KEY (price_description) REFERENCES price_description (id) ON DELETE CASCADE,
 	FOREIGN KEY (product) REFERENCES products (id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS transactions(
 	category VARCHAR(127),
 	product VARCHAR(127),
 	price_name VARCHAR(127),
-	price FLOAT,
+	price DECIMAL(10, 2),
 	quantity INTEGER UNSIGNED
 ) ENGINE=InnoDB;
 

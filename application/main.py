@@ -24,6 +24,7 @@ import sys
 import gui.mainwindow
 from PyQt5 import QtWidgets
 
+
 if __name__ == "__main__":
     APP = QtWidgets.QApplication(sys.argv)
     MYAPP = gui.mainwindow.MainWindow()
