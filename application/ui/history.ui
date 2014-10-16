@@ -14,18 +14,90 @@
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="1">
-    <spacer name="spacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+   <item row="5" column="1" rowspan="2">
+    <widget class="QGroupBox" name="groupbox_selected">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
+     <property name="title">
+      <string>Selectionné</string>
      </property>
-    </spacer>
+     <layout class="QFormLayout" name="formLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_selected_credited">
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Crédité</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="selected_credited">
+        <property name="text">
+         <string>0.00 €</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_selected_debited">
+        <property name="text">
+         <string>Débité</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLabel" name="selected_debited">
+        <property name="text">
+         <string>0.00 €</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_seleted_solde">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Solde</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLabel" name="selected_solde">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>0.00 €</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item row="0" column="0" colspan="4">
     <widget class="QWidget" name="filter_container" native="true">
@@ -43,32 +115,18 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QLineEdit" name="input_note">
-        <property name="placeholderText">
-         <string>Note</string>
+       <widget class="QPushButton" name="pushButton">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
         </property>
-        <property name="clearButtonEnabled">
+        <property name="text">
+         <string>&amp;Filtres</string>
+        </property>
+        <property name="checkable">
          <bool>true</bool>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="input_category">
-        <property name="placeholderText">
-         <string>Categorie</string>
-        </property>
-        <property name="clearButtonEnabled">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="input_product">
-        <property name="placeholderText">
-         <string>Produit</string>
-        </property>
-        <property name="clearButtonEnabled">
-         <bool>true</bool>
+        <property name="checked">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -78,20 +136,20 @@
       <item>
        <widget class="QDateTimeEdit" name="datetime_to"/>
       </item>
+      <item>
+       <widget class="QPushButton" name="refresh_button">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>&amp;Rafraîchir</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
-   <item row="2" column="3">
-    <widget class="QPushButton" name="delete_button">
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="text">
-      <string>Supprimer</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="4">
+   <item row="3" column="0" colspan="4">
     <widget class="QTreeWidget" name="transaction_list">
      <property name="selectionMode">
       <enum>QAbstractItemView::ExtendedSelection</enum>
@@ -152,13 +210,16 @@
      </column>
     </widget>
    </item>
-   <item row="2" column="0">
-    <widget class="QWidget" name="widget" native="true">
+   <item row="5" column="0" rowspan="2">
+    <widget class="QGroupBox" name="groupbox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+     <property name="title">
+      <string>Affiché</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
       <property name="fieldGrowthPolicy">
@@ -252,22 +313,292 @@
      </layout>
     </widget>
    </item>
-   <item row="2" column="2">
-    <widget class="QPushButton" name="delete_line_button">
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
+   <item row="1" column="0" colspan="4">
+    <widget class="QFrame" name="filter">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
      </property>
-     <property name="text">
-      <string>Supprimer ligne</string>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
      </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="1">
+       <widget class="QComboBox" name="cb_nickname">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+        <property name="maxVisibleItems">
+         <number>25</number>
+        </property>
+        <property name="duplicatesEnabled">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Catégorie</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Surnom</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Nom</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Prenom</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Produit</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="cb_lastname">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+        <property name="maxVisibleItems">
+         <number>25</number>
+        </property>
+        <property name="duplicatesEnabled">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QComboBox" name="cb_firstname">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+        <property name="maxVisibleItems">
+         <number>25</number>
+        </property>
+        <property name="duplicatesEnabled">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QComboBox" name="cb_category">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+        <property name="maxVisibleItems">
+         <number>25</number>
+        </property>
+        <property name="duplicatesEnabled">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QComboBox" name="cb_product">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+        <property name="maxVisibleItems">
+         <number>25</number>
+        </property>
+        <property name="duplicatesEnabled">
+         <bool>true</bool>
+        </property>
+        <property name="frame">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QPushButton" name="reset_nickname">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>50</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>RàZ</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QPushButton" name="reset_lastname">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>50</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>RàZ</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QPushButton" name="reset_firstname">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>50</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>RàZ</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QPushButton" name="reset_category">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>50</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>RàZ</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="QPushButton" name="reset_product">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>50</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>RàZ</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="7" column="0" colspan="2">
+    <widget class="QProgressBar" name="progressbar">
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="value">
+      <number>0</number>
+     </property>
+     <property name="format">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="2" rowspan="3">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Action</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QPushButton" name="pushButton_2">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>&amp;Export CSV</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="delete_button">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>Supprimer</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="delete_line_button">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>Supprimer ligne</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>
  </widget>
  <tabstops>
-  <tabstop>input_note</tabstop>
-  <tabstop>input_category</tabstop>
-  <tabstop>input_product</tabstop>
+  <tabstop>pushButton</tabstop>
+  <tabstop>cb_nickname</tabstop>
+  <tabstop>cb_lastname</tabstop>
+  <tabstop>cb_firstname</tabstop>
+  <tabstop>cb_category</tabstop>
+  <tabstop>cb_product</tabstop>
   <tabstop>datetime_from</tabstop>
   <tabstop>datetime_to</tabstop>
   <tabstop>transaction_list</tabstop>
@@ -275,62 +606,14 @@
  <resources/>
  <connections>
   <connection>
-   <sender>input_note</sender>
-   <signal>textChanged(QString)</signal>
-   <receiver>Dialog</receiver>
-   <slot>update_list()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>111</x>
-     <y>22</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>150</x>
-     <y>0</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>input_category</sender>
-   <signal>textChanged(QString)</signal>
-   <receiver>Dialog</receiver>
-   <slot>update_list()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>266</x>
-     <y>21</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>283</x>
-     <y>0</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>input_product</sender>
-   <signal>textChanged(QString)</signal>
-   <receiver>Dialog</receiver>
-   <slot>update_list()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>682</x>
-     <y>30</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>470</x>
-     <y>0</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>datetime_from</sender>
-   <signal>editingFinished()</signal>
+   <signal>dateTimeChanged(QDateTime)</signal>
    <receiver>Dialog</receiver>
-   <slot>rebuild()</slot>
+   <slot>call_update()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>815</x>
-     <y>30</y>
+     <x>469</x>
+     <y>31</y>
     </hint>
     <hint type="destinationlabel">
      <x>646</x>
@@ -340,13 +623,13 @@
   </connection>
   <connection>
    <sender>datetime_to</sender>
-   <signal>editingFinished()</signal>
+   <signal>dateTimeChanged(QDateTime)</signal>
    <receiver>Dialog</receiver>
-   <slot>rebuild()</slot>
+   <slot>call_update()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>948</x>
-     <y>30</y>
+     <x>703</x>
+     <y>31</y>
     </hint>
     <hint type="destinationlabel">
      <x>764</x>
@@ -361,8 +644,8 @@
    <slot>delete()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>948</x>
-     <y>719</y>
+     <x>918</x>
+     <y>569</y>
     </hint>
     <hint type="destinationlabel">
      <x>554</x>
@@ -377,12 +660,332 @@
    <slot>delete_line()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>797</x>
-     <y>574</y>
+     <x>918</x>
+     <y>599</y>
     </hint>
     <hint type="destinationlabel">
      <x>472</x>
      <y>311</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>filter</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>137</x>
+     <y>19</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>137</x>
+     <y>38</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_nickname</sender>
+   <signal>activated(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>call_update()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>540</x>
+     <y>58</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>319</x>
+     <y>3</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_lastname</sender>
+   <signal>activated(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>call_update()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>496</x>
+     <y>88</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>316</x>
+     <y>35</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_firstname</sender>
+   <signal>activated(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>call_update()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>603</x>
+     <y>116</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>593</x>
+     <y>35</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_category</sender>
+   <signal>activated(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>call_update()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>585</x>
+     <y>148</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>510</x>
+     <y>34</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_product</sender>
+   <signal>activated(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>call_update()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>654</x>
+     <y>171</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>609</x>
+     <y>35</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>cb_nickname</receiver>
+   <slot>setFocus()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>207</x>
+     <y>22</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>487</x>
+     <y>61</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>transaction_list</sender>
+   <signal>itemSelectionChanged()</signal>
+   <receiver>Dialog</receiver>
+   <slot>update_summary_selected()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>438</x>
+     <y>375</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>565</x>
+     <y>3</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>reset_nickname</sender>
+   <signal>clicked()</signal>
+   <receiver>cb_nickname</receiver>
+   <slot>clearEditText()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>915</x>
+     <y>61</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>837</x>
+     <y>64</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>reset_lastname</sender>
+   <signal>clicked()</signal>
+   <receiver>cb_lastname</receiver>
+   <slot>clearEditText()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>900</x>
+     <y>87</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>796</x>
+     <y>91</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>reset_firstname</sender>
+   <signal>clicked()</signal>
+   <receiver>cb_firstname</receiver>
+   <slot>clearEditText()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>902</x>
+     <y>118</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>820</x>
+     <y>120</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>reset_category</sender>
+   <signal>clicked()</signal>
+   <receiver>cb_category</receiver>
+   <slot>clearEditText()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>888</x>
+     <y>141</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>822</x>
+     <y>141</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>reset_product</sender>
+   <signal>clicked()</signal>
+   <receiver>cb_product</receiver>
+   <slot>clearEditText()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>895</x>
+     <y>170</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>827</x>
+     <y>175</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_nickname</sender>
+   <signal>editTextChanged(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>cleared_combobox()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>765</x>
+     <y>62</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>794</x>
+     <y>5</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_lastname</sender>
+   <signal>editTextChanged(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>cleared_combobox()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>733</x>
+     <y>86</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>930</x>
+     <y>6</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_product</sender>
+   <signal>editTextChanged(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>cleared_combobox()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>659</x>
+     <y>170</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>472</x>
+     <y>311</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_firstname</sender>
+   <signal>editTextChanged(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>cleared_combobox()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>659</x>
+     <y>114</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>472</x>
+     <y>311</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_category</sender>
+   <signal>editTextChanged(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>cleared_combobox()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>659</x>
+     <y>142</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>472</x>
+     <y>311</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>refresh_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>fetch_transactions()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>842</x>
+     <y>21</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>942</x>
+     <y>32</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>export_csv()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>847</x>
+     <y>525</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>939</x>
+     <y>513</y>
     </hint>
    </hints>
   </connection>
@@ -392,5 +995,10 @@
   <slot>rebuild()</slot>
   <slot>update_list()</slot>
   <slot>delete_line()</slot>
+  <slot>update_summary_selected()</slot>
+  <slot>call_update()</slot>
+  <slot>cleared_combobox()</slot>
+  <slot>fetch_transactions()</slot>
+  <slot>export_csv()</slot>
  </slots>
 </ui>

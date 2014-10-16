@@ -80,6 +80,23 @@ Database
 
             The price of an ecocup
 
+    ECOCUP_NAME
+            **Default value** ``Ecocup``
+
+            The name used to identify ecocup. This name will be displayed in
+            the history and other product list.
+
+    ECOCUP_CATEGORY
+            **Default value** ``Bar``
+
+            Category name of ecocup. Used to display category name on ecocup
+            transaction.
+
+    ECOCUP_PRICE_TYPES
+            **Default value** ``{'take': "Achat", 'repay': "Remboursement"}``
+
+            Prices name displayed for ecocup in take and repay transation.
+
     IMG_BASE_DIR
             **Default value** ``img/``
 
@@ -104,19 +121,38 @@ Database
 """
 
 
-HOST = ""
-USERNAME = "root"
-PASSWORD = ""
-DBNAME = "enibar"
-
+IMG_BASE_DIR = "img/"
 DEBUG = False
 ASK_VALIDATION_VALIDATE = True
 ASK_VALIDATION_REFILL = True
 MAX_HISTORY = 5
 
-ECOCUP_PRICE = 1.0
-IMG_BASE_DIR = "img/"
+#
+# Database settings
+#
+
+HOST = ""
+USERNAME = "root"
+PASSWORD = ""
+DBNAME = "enibar"
+
+
+#
+# Agio settings
+#
 
 AGIO_THRESHOLD = 14
 AGIO_EVERY = 7
 AGIO_PERCENT = 5.0
+
+
+#
+# Ecocup settings
+#
+
+ECOCUP_PRICE = 1.0
+ECOCUP_CATEGORY = "Bar"
+ECOCUP_PRICE_TYPES = {'take': "Achat", 'repay': "Remboursement"}
+# Note that changing the following settings will break ecocup count.
+# Do not change it unless you know what you are doing.
+ECOCUP_NAME = "Ecocup"

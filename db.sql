@@ -104,11 +104,14 @@ CREATE TABLE IF NOT EXISTS transactions(
 	id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
 	date DATETIME,
 	note VARCHAR(127),
+	lastname VARCHAR(127),
+	firstname VARCHAR(127),
 	category VARCHAR(127),
 	product VARCHAR(127),
 	price_name VARCHAR(127),
 	price DECIMAL(10, 2),
-	quantity INTEGER UNSIGNED
+	quantity INTEGER UNSIGNED,
+	deletable BOOLEAN default TRUE
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS panels(
