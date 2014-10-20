@@ -38,17 +38,18 @@ import settings
 class RefillNote(QtWidgets.QDialog):
     # pylint: disable=too-many-instance-attributes
     """ RefillNote window class """
-    def __init__(self, selected_note):
+    def __init__(self, selected_note, performer):
         super().__init__()
         uic.loadUi('ui/refill_note.ui', self)
         self.selected_note = selected_note
         self.to_add.set_validator(api.validator.NUMBER)
         self.to_add.setFocus()
+        self.performer = performer
 
         self.show()
         self.to_add.selectAll()
 
-    def accept(self):
+    def accept(self, performer="-"):
         """ Called when "Ajouter" is clicked
         """
         to_add = float(self.to_add.text().replace(',', '.'))
@@ -62,7 +63,7 @@ class RefillNote(QtWidgets.QDialog):
             api.transactions.log_transaction(
                 self.selected_note,
                 "Note",
-                "-",
+                self.performer,
                 "Rechargement",
                 "1",
                 to_add

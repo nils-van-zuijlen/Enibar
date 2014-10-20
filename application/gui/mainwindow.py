@@ -291,12 +291,12 @@ class MenuBar(QtWidgets.QMenuBar):
         self.cur_window = NotesAction()
         self._connect_window()
 
-    @ask_auth("manage_notes")
-    def refill_note_fnc(self, _):
+    @ask_auth("manage_notes", pass_performer=True)
+    def refill_note_fnc(self, _, _performer=""):
         """ Open a RefillNote window
         """
         self.cur_window = RefillNote(
-            self.parent().notes_list.currentItem().text())
+            self.parent().notes_list.currentItem().text(), performer=_performer)
         self._connect_window()
 
     def refresh_panels_fnc(self, _):

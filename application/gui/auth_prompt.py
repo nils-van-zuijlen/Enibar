@@ -42,17 +42,21 @@ import settings
 import gui.utils
 
 
-def ask_auth(*dargs, fail_callback=None):
+def ask_auth(*dargs, fail_callback=None, pass_performer=False):
     """ Decorator to ask for authorization """
     def decorator(func):
         """ Decorator wrapper """
         def wrapper(*args, **kwargs):
             """ Wrapper """
+            if pass_performer:
+                _performer = ""
             if settings.DEBUG:
                 func(*args, **kwargs)
                 return
             prompt = AuthPrompt(dargs)
             if prompt.is_authorized:
+                if pass_performer:
+                    kwargs["_performer"] = prompt.user
                 func(*args, **kwargs)
             else:
                 if fail_callback is not None:
@@ -69,6 +73,7 @@ class AuthPrompt(QtWidgets.QDialog):
         self.is_authorized = False
         uic.loadUi('ui/authprompt.ui', self)
         filter_ = ", ".join("{key}=1".format(key=key) for key in requirements)
+        self.user = ""
 
         with Cursor() as cursor:
             cursor.prepare("SELECT * FROM admins WHERE " + filter_)
@@ -87,9 +92,10 @@ class AuthPrompt(QtWidgets.QDialog):
 
     def accept(self):
         """ Called when "Login" is clicked """
-        if users.is_authorized(self.login_input.currentText(),
+        self.user= self.login_input.currentText()
+        if users.is_authorized(self.user,
                                self.pass_input.text()):
-            rights = users.get_rights(self.login_input.currentText())
+            rights = users.get_rights(self.user)
             for requirement in self.requirements:
                 if not rights[requirement]:
                     return super().accept()
