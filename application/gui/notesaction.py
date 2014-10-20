@@ -81,11 +81,13 @@ class NotesAction(QtWidgets.QDialog):
         elif id_ == 2:
             self.filter_input.setEnabled(True)
             self.filter_input.setText("0")
-            self.note_list.current_filter = lambda x: x['note'] > 0
+            self.note_list.current_filter = lambda x: x['note'] > 0 and\
+                x['hidden'] == 0
         elif id_ == 3:
             self.filter_input.setEnabled(True)
             self.filter_input.setText("0")
-            self.note_list.current_filter = lambda x: x['note'] < 0
+            self.note_list.current_filter = lambda x: x['note'] < 0 and\
+                x['hidden'] == 0
         self.note_list.rebuild(api.notes.get(self.note_list.current_filter))
 
     def filter_input_changed(self, event):
@@ -96,12 +98,12 @@ class NotesAction(QtWidgets.QDialog):
         try:
             if self.filter_combobox.currentIndex() == 2:
                 self.note_list.current_filter = lambda x: x['note'] >\
-                    float(text)
+                    float(text) and x['hidden'] == 0
                 self.note_list.rebuild(api.notes.get(
                     self.note_list.current_filter))
-            if self.filter_combobox.currentIndex() == 3:
+            elif self.filter_combobox.currentIndex() == 3:
                 self.note_list.current_filter = lambda x: x['note'] <\
-                    float(text)
+                    float(text) and x['hidden'] == 0
                 self.note_list.rebuild(api.notes.get(
                     self.note_list.current_filter))
         except ValueError:
