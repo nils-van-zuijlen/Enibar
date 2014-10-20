@@ -195,7 +195,9 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.selected:
             total = self.product_list.get_total()
             text = "Es tu sûr de vouloir enlever {} € sur la note\
-                    \nde {}".format(total, self.selected.text())
+                    <br/>de {}<br/><br/><span style=\"font-size:12pt;\
+                    font-weight:600; color:#ff0000;\">NE PAS OUBLIER LES\
+                    ECOCUPS !!!!</span>".format(total, self.selected.text())
             prompt = ValidPrompt(text, settings.ASK_VALIDATION_VALIDATE)
             if not prompt.is_ok:
                 return

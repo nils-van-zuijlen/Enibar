@@ -42,6 +42,9 @@
      <property name="text">
       <string/>
      </property>
+     <property name="textFormat">
+      <enum>Qt::RichText</enum>
+     </property>
     </widget>
    </item>
   </layout>
