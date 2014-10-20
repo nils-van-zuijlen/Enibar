@@ -14,8 +14,8 @@
    <string>Recharger une note</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="3" column="0" colspan="2">
-    <layout class="QGridLayout" name="gridLayout">
+   <item row="4" column="0" colspan="2">
+    <layout class="QGridLayout" name="button_layout">
      <item row="0" column="0">
       <widget class="QPushButton" name="valid_button">
        <property name="enabled">
@@ -44,8 +44,16 @@
      </item>
     </layout>
    </item>
-   <item row="2" column="0">
-    <widget class="Input" name="to_add"/>
+   <item row="3" column="0">
+    <layout class="QGridLayout" name="main_layout">
+     <item row="0" column="0">
+      <widget class="Input" name="to_add">
+       <property name="placeholderText">
+        <string>Montant</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

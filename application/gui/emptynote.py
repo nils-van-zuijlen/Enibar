@@ -30,6 +30,7 @@ import api.notes
 import api.transactions
 import api.validator
 import gui.utils
+import gui.input
 
 
 class EmptyNote(QtWidgets.QDialog):
@@ -40,6 +41,10 @@ class EmptyNote(QtWidgets.QDialog):
         uic.loadUi('ui/refill_note.ui', self)
         self.to_add.set_validator(api.validator.NUMBER)
         self.to_add.setFocus()
+        self.reason_input = gui.input.Input(self)
+        self.reason_input.set_validator(api.validator.NAME)
+        self.reason_input.setPlaceholderText("Raison")
+        self.main_layout.addWidget(self.reason_input, 1, 0)
         self.setWindowTitle("Prendre d'une note")
         self.selected_note = selected_note
         self.to_add.setLocale(QtCore.QLocale('English'))
@@ -56,7 +61,7 @@ class EmptyNote(QtWidgets.QDialog):
             api.transactions.log_transaction(
                 self.selected_note,
                 "Note",
-                "-",
+                self.reason_input.text(),
                 "Solde",
                 "1",
                 -to_add
