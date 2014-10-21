@@ -92,7 +92,7 @@ class AuthPrompt(QtWidgets.QDialog):
 
     def accept(self):
         """ Called when "Login" is clicked """
-        self.user= self.login_input.currentText()
+        self.user = self.login_input.currentText()
         if users.is_authorized(self.user,
                                self.pass_input.text()):
             rights = users.get_rights(self.user)
