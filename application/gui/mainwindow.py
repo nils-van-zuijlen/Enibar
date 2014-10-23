@@ -71,9 +71,23 @@ class MainWindow(QtWidgets.QMainWindow):
             QtWidgets.QHeaderView.Stretch)
 
     def select_note(self, index):
+        """ Rebuild the timer so it stays unique. Then call self.refresh_note
+            100ms later if not called again.
+        """
+        self.timer = QtCore.QTimer()
+        self.timer.setInterval(100)
+        def refresh():
+            """ We need that to pass index to self.note_refresh
+            """
+            self.note_refresh(index)
+        self.timer.timeout.connect(refresh)
+        self.timer.start()
+
+    def note_refresh(self, index):
         """
         Called when a note is selected
         """
+        self.timer.stop()
         self.note_box.setEnabled(True)
         self.refill_note.setEnabled(True)
         self.empty_note.setEnabled(True)
