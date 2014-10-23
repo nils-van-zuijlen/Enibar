@@ -28,6 +28,7 @@ import gui.utils
 import api.products
 import api.categories
 import api.prices
+import api.validator
 from .douchette import Douchette
 
 
@@ -38,18 +39,20 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
     def __init__(self):
         super().__init__()
         uic.loadUi('ui/consumptionmanagment.ui', self)
-        self.prices.setEnabled(False)
-        self.category_prices.setEnabled(False)
-        self.input_product_save.setEnabled(False)
-        self.button_cat_save.setEnabled(False)
-        self.button_cat_price.setEnabled(False)
-        self.category_type.setEnabled(False)
+        self.input_cat.set_validator(api.validator.NAME)
+        self.input_product.set_validator(api.validator.NAME)
         self.category = None
         self.products.build()
         self.color_picker = QtWidgets.QColorDialog(self)
         self.win = None
         self.tabs.currentChanged.connect(self.products.rebuild)
         self.show()
+        self.tab_manage_categories.on_change = self.on_change
+        self.tab_manage_consumptions.on_change = self.on_change
+
+    def on_change(self):
+        self.button_cat_add.setEnabled(self.input_cat.valid)
+        self.button_product_add.setEnabled(self.input_product.valid)
 
     def add_product(self):
         """ Add product
@@ -141,6 +144,8 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
                     })
         if not api.prices.set_multiple_values(new_prices):
             gui.utils.error("Impossible de sauvegarder les nouveaux prix")
+        if not len(indexes):
+            return
         if not api.products.set_barcode(indexes[0].data(),
                                         indexes[0].parent().data(),
                                         self.barcode_input.text()):
@@ -264,6 +269,7 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
                 self.color_picker.setCurrentColor(color)
                 self.category_prices.rebuild(item.text())
                 self.category_prices.setEnabled(True)
+                self.checkbox_alcoholic.setEnabled(True)
                 self.button_cat_save.setEnabled(True)
                 self.button_cat_price.setEnabled(True)
                 self.category_type.setEnabled(True)
@@ -276,6 +282,7 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
         self.button_cat_price.setEnabled(False)
         self.category_type.setEnabled(False)
         self.color_button.setEnabled(False)
+        self.checkbox_alcoholic.setEnabled(False)
 
     def select_color(self):
         """ Select color, called when color_button is pressed

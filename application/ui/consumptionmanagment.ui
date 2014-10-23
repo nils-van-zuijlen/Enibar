@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>525</width>
+    <width>537</width>
     <height>556</height>
    </rect>
   </property>
@@ -43,7 +43,7 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="5" column="0">
-        <widget class="QLineEdit" name="input_product">
+        <widget class="Input" name="input_product">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -100,6 +100,9 @@
           </property>
           <item>
            <widget class="QPushButton" name="button_product_add">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -234,6 +237,9 @@
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="6" column="2">
         <widget class="QPushButton" name="button_cat_save">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>Sauvegarder la catégorie</string>
          </property>
@@ -241,6 +247,9 @@
        </item>
        <item row="5" column="2">
         <widget class="QPushButton" name="button_cat_price">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>Ajouter un prix</string>
          </property>
@@ -327,6 +336,9 @@
           </property>
           <item>
            <widget class="QPushButton" name="button_cat_add">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>1</horstretch>
@@ -394,7 +406,7 @@
         </widget>
        </item>
        <item row="5" column="0">
-        <widget class="QLineEdit" name="input_cat">
+        <widget class="Input" name="input_cat">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -418,31 +430,6 @@
            <width>200</width>
            <height>0</height>
           </size>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0" rowspan="5" colspan="2">
-        <widget class="CategoryList" name="categories">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>200</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="selectionMode">
-          <enum>QAbstractItemView::SingleSelection</enum>
          </property>
         </widget>
        </item>
@@ -475,6 +462,9 @@
           </property>
           <item>
            <widget class="QCheckBox" name="checkbox_alcoholic">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Alcoolisé</string>
             </property>
@@ -508,6 +498,31 @@
          </layout>
         </widget>
        </item>
+       <item row="0" column="0" rowspan="5" colspan="2">
+        <widget class="CategoryList" name="categories">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::SingleSelection</enum>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </widget>
@@ -536,6 +551,11 @@
    <class>ConsumptionList</class>
    <extends>QTreeWidget</extends>
    <header>gui/consumptionmanagment</header>
+  </customwidget>
+  <customwidget>
+   <class>Input</class>
+   <extends>QLineEdit</extends>
+   <header>gui.input</header>
   </customwidget>
  </customwidgets>
  <resources/>
