@@ -41,6 +41,7 @@ class PanelManagment(QtWidgets.QDialog):
         super().__init__()
         uic.loadUi('ui/paneladmin.ui', self)
         self.panel_list = []
+        self.name_input.set_validator(api.validator.NAME)
 
         self.create_panel_list()
         self.show()
@@ -228,6 +229,9 @@ class PanelManagment(QtWidgets.QDialog):
         for widget in self.product_list.categories:
             if widget.text(0) in global_opened:
                 widget.setExpanded(True)
+
+    def on_change(self):
+        self.add_button.setEnabled(self.name_input.valid)
 
 
 class PanelList(ConsumptionList):

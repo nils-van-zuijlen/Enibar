@@ -46,6 +46,9 @@
       </property>
       <item>
        <widget class="QPushButton" name="add_button">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>Ajouter</string>
         </property>
@@ -95,7 +98,7 @@
     </widget>
    </item>
    <item row="2" column="0">
-    <widget class="QLineEdit" name="name_input">
+    <widget class="Input" name="name_input">
      <property name="minimumSize">
       <size>
        <width>200</width>
@@ -222,6 +225,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>Input</class>
+   <extends>QLineEdit</extends>
+   <header>gui.input</header>
+  </customwidget>
   <customwidget>
    <class>PanelConsumptionList</class>
    <extends>QTreeWidget</extends>
