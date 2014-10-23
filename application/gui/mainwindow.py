@@ -76,6 +76,7 @@ class MainWindow(QtWidgets.QMainWindow):
         """
         self.timer = QtCore.QTimer()
         self.timer.setInterval(100)
+
         def refresh():
             """ We need that to pass index to self.note_refresh
             """
