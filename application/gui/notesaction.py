@@ -29,6 +29,7 @@ from PyQt5 import QtWidgets, uic, QtCore
 import api.notes
 import api.prices
 import api.categories
+import api.validator
 from .utils import NotesList, valid
 from .panelmanagment import ConsumptionList
 import datetime
@@ -42,6 +43,8 @@ class NotesAction(QtWidgets.QDialog):
         self.current_filter = lambda x: x['hidden'] == 0
         uic.loadUi('ui/notesaction.ui', self)
         self.filter_input.setEnabled(False)
+        self.filter_input.set_validator(api.validator.NUMBER)
+        self.on_change = lambda: False  # Don't do anything.
         self.filter_input.keyPressEvent = self.filter_input_changed
         self.note_list.rebuild(api.notes.get(self.current_filter))
         self.product_list.build()
