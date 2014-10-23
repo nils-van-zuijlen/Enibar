@@ -18,6 +18,9 @@
     <layout class="QGridLayout" name="gridLayout">
      <item row="5" column="0">
       <widget class="QPushButton" name="accept_button">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Login</string>
        </property>
@@ -61,7 +64,7 @@
       </widget>
      </item>
      <item row="3" column="0" colspan="2">
-      <widget class="QLineEdit" name="pass_input">
+      <widget class="Input" name="pass_input">
        <property name="echoMode">
         <enum>QLineEdit::Password</enum>
        </property>
@@ -74,6 +77,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Input</class>
+   <extends>QLineEdit</extends>
+   <header>gui.input</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>pass_input</tabstop>
   <tabstop>accept_button</tabstop>

@@ -37,9 +37,10 @@ match a combination in database.
 
 from PyQt5 import QtWidgets, uic
 from api import users
+import api.validator
 from database import Cursor
-import settings
 import gui.utils
+import settings
 
 
 def ask_auth(*dargs, fail_callback=None, pass_performer=False):
@@ -72,6 +73,7 @@ class AuthPrompt(QtWidgets.QDialog):
         self.requirements = requirements
         self.is_authorized = False
         uic.loadUi('ui/authprompt.ui', self)
+        self.pass_input.set_validator(api.validator.NAME)
         filter_ = ", ".join("{key}=1".format(key=key) for key in requirements)
         self.user = ""
 
@@ -104,3 +106,5 @@ class AuthPrompt(QtWidgets.QDialog):
             self.is_authorized = False
         return super().accept()
 
+    def on_change(self):
+        self.accept_button.setEnabled(self.pass_input.valid)
