@@ -213,7 +213,7 @@ class ProductList(QtWidgets.QTreeWidget):
         self.products = []
         main_window = self.parent().parent().parent()
         main_window.eco_diff = 0
-        main_window.refresh_ecocups()
+        main_window.refresh_ecocup_button()
         main_window.total.setText("0.00 €")
         main_window.notes_list.setFocus()
 

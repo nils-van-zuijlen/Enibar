@@ -551,7 +551,7 @@
      <x>0</x>
      <y>0</y>
      <width>884</width>
-     <height>20</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="administration">
@@ -1040,7 +1040,7 @@
    <sender>notes_list</sender>
    <signal>currentRowChanged(int)</signal>
    <receiver>MainWindow</receiver>
-   <slot>select_note()</slot>
+   <slot>on_note_selection()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>83</x>
@@ -1055,6 +1055,6 @@
  </connections>
  <slots>
   <slot>validate_transaction()</slot>
-  <slot>select_note()</slot>
+  <slot>on_note_selection()</slot>
  </slots>
 </ui>

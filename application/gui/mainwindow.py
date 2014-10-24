@@ -18,7 +18,11 @@
 
 
 """
-Main Window description
+Main Window
+===========
+
+The MainWindow class is the main class of the program.
+
 """
 
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
@@ -48,61 +52,81 @@ class MainWindow(QtWidgets.QMainWindow):
     """
     Main Window
     """
-    notes_list = None
 
     def __init__(self):
         super().__init__()
         uic.loadUi('ui/mainwindow.ui', self)
 
-        self.refresh()
+        # The QListWidget item currently selected.
         self.selected = None
+
+        # The nickname of th currently selected note.
         self.selected_nickname = None
+
+        # The secondary window currently opened. It' here to force having only
+        # one window opened at a time.
         self.win = None
+
+        # Hack to count ecocups to add/delete.
         self.eco_diff = 0
+
+        # Build the notes_list
+        self.rebuild_notes_list()
 
         # Set product list header width
         self.product_list.setColumnWidth(0, 30)
         self.product_list.setColumnWidth(1, 128)
         self.product_list.setColumnWidth(2, 40)
 
+        # Build the panels.
         self.panels.build()
-        self.note_history.header().setStretchLastSection(False)
-        self.note_history.header().setSectionResizeMode(2,
-            QtWidgets.QHeaderView.Stretch)
 
-    def select_note(self, index):
-        """ Rebuild the timer so it stays unique. Then call self.refresh_note
+        # Set the headers of the history in the note details.
+        self.note_history.header().setStretchLastSection(False)
+        self.note_history.header().setSectionResizeMode(
+            2,
+            QtWidgets.QHeaderView.Stretch
+        )
+
+        # Timer used to add a delay when selecting a note.
+        self.timer = None
+
+    def on_note_selection(self, index):
+        """ Called when a note is selected
+            Rebuild the timer so it stays unique. Then call self.refresh_note
             100ms later if not called again.
         """
         self.timer = QtCore.QTimer()
         self.timer.setInterval(100)
 
         def refresh():
-            """ We need that to pass index to self.note_refresh
+            """ We need that to pass index to self._note_refresh
             """
-            self.note_refresh(index)
+            self._note_refresh(index)
         self.timer.timeout.connect(refresh)
         self.timer.start()
 
-    def note_refresh(self, index):
+    def _note_refresh(self, index):
+        """ Build the note infos.
         """
-        Called when a note is selected
-        """
+        # Stop the timer so it doesn't refresh the note every 100ms
         self.timer.stop()
+
+        # Enable the right box and clear the history.
         self.note_box.setEnabled(True)
         self.refill_note.setEnabled(True)
         self.empty_note.setEnabled(True)
         self.note_history.clear()
         if index >= 0:
             self.selected = self.notes_list.item(index)
-        widget = self.notes_list.currentItem()
 
         if self.selected_nickname != self.selected.text():
             self.selected_nickname = self.selected.text()
-            self.refresh_ecocups()
+            self.refresh_ecocup_button()
 
-        # If there are no current selected note.
-        if not widget:
+        # If there are no current selected note, set the default text and diable
+        # everything
+        if not self.selected:
             self.note_name.setText("Surnom - Prénom nom")
             self.note_mail.setText("email@enib.fr")
             self.note_promo.setText("Promo")
@@ -116,22 +140,29 @@ class MainWindow(QtWidgets.QMainWindow):
             self.note_box.setEnabled(False)
             return
 
-        infos = list(api.notes.get(lambda x: widget.text() == x["nickname"]))[0]
+        infos = list(api.notes.get(
+            lambda x: self.selected.text() == x["nickname"]
+        ))[0]
         note_hist = api.transactions.get_reversed(note=self.selected.text())
+
+        # Construct the note history
         for i, product in enumerate(note_hist):
             if i > settings.MAX_HISTORY:
                 break
             name = "{} ({}) - {}".format(product['product'],
                                          product['price_name'],
                                          product['category'])
-            widget = QtWidgets.QTreeWidgetItem([
-                product['date'].toString("yyyy/MM/dd HH:mm:ss"), str(product['quantity']), name,
-                str(-product['price'])])
+            widget = QtWidgets.QTreeWidgetItem(
+                [product['date'].toString("yyyy/MM/dd HH:mm:ss"),
+                 str(product['quantity']),
+                 name,
+                 str(-product['price'])
+                ]
+            )
             self.note_history.addTopLevelItem(widget)
         self.note_history.resizeColumnToContents(0)
         self.note_history.resizeColumnToContents(1)
 
-        # pylint: disable=star-args
         self.note_name.setText("{nickname} - {firstname} {lastname}".format(
             **infos))
         self.note_mail.setText(infos['mail'])
@@ -156,8 +187,8 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.note_box.setStyleSheet("background-color: none;")
 
-    def refresh_ecocups(self):
-        """ Set the state of the repay_ecocup button
+    def refresh_ecocup_button(self):
+        """ Set the state of the repay_ecocup button depending on self.eco_diff
         """
         note = api.notes.get(lambda x: x["nickname"] == self.selected_nickname)
         if list(note)[0]["ecocups"] + self.eco_diff > 0:
@@ -165,13 +196,15 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.repay_ecocup_btn.setEnabled(False)
 
-    def refresh(self):
-        """ Refresh the notes list
+    def rebuild_notes_list(self):
+        """ Rebuild the notes list with only the shown notes.
         """
         self.notes_list.refresh(api.notes.get(lambda x: x['hidden'] == 0))
 
     def event(self, event):
-        """ Rewrite the event loop
+        """ Rewrite the event loop. Used to handle the douchette and the \n key
+            If the " key is pressed, open a Douchette window. If the \n key is
+            pressed, call self.validate_transaction.
         """
         if isinstance(event, QtGui.QKeyEvent) and\
                 event.type() == QtCore.QEvent.KeyPress:
@@ -205,7 +238,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.total.setText(text)
 
     def validate_transaction(self):
-        """ Validate transaction
+        """ Validate transaction if a note is currently selected. And give the
+            focus back to the notes_list.
         """
         if self.selected:
             total = self.product_list.get_total()
@@ -230,9 +264,9 @@ class MainWindow(QtWidgets.QMainWindow):
             if api.transactions.log_transactions(transactions):
                 api.notes.transaction(self.selected.text(), -total)
                 api.notes.change_ecocups(self.selected_nickname, self.eco_diff)
-                self.refresh()
+                self.rebuild_notes_list()
                 self.eco_diff = 0
-                self.refresh_ecocups()
+                self.refresh_ecocup_button()
                 self.product_list.clear()
                 self.notes_list.setFocus()
             else:
@@ -241,7 +275,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
 class MenuBar(QtWidgets.QMenuBar):
     """ MainWindow menu bar """
-    # pylint: disable=too-many-public-methods
     def __init__(self, parent):
         super().__init__(parent)
         self.cur_window = None
@@ -249,7 +282,7 @@ class MenuBar(QtWidgets.QMenuBar):
     def _refresh_parent(self):
         """ Refresh the parent
         """
-        self.parent().refresh()
+        self.parent().rebuild_notes_list()
 
     def _connect_window(self):
         """ Connect the finished signal of the opened window to
@@ -315,6 +348,8 @@ class MenuBar(QtWidgets.QMenuBar):
         self._connect_window()
 
     def refresh_panels_fnc(self, _):
+        """ Refresh the panels of the main window.
+        """
         self.parent().panels.rebuild()
 
     def empty_note_fnc(self, _):
@@ -336,7 +371,7 @@ class MenuBar(QtWidgets.QMenuBar):
         text = "{:.2f} €".format(self.parent().product_list.get_total())
         self.parent().total.setText(text)
         self.parent().eco_diff += 1
-        self.parent().refresh_ecocups()
+        self.parent().refresh_ecocup_button()
 
     def repay_ecocup_fnc(self):
         """ Used to repay an ecocup on a note
@@ -350,7 +385,7 @@ class MenuBar(QtWidgets.QMenuBar):
         text = "{:.2f} €".format(self.parent().product_list.get_total())
         self.parent().total.setText(text)
         self.parent().eco_diff -= 1
-        self.parent().refresh_ecocups()
+        self.parent().refresh_ecocup_button()
 
     def export(self, notes):
         """ Generic export notes function """
