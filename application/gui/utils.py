@@ -90,5 +90,5 @@ class NotesList(QtWidgets.QListWidget):
             new_selection = self.findItems(selected, QtCore.Qt.MatchExactly)[0]
             self.setCurrentItem(new_selection)
         except IndexError:
-            pass
+            self.setCurrentRow(0)
 

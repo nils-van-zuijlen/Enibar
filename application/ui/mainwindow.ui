@@ -584,6 +584,7 @@
     <addaction name="notes_action"/>
     <addaction name="separator"/>
     <addaction name="menuExporter_les_notes"/>
+    <addaction name="find"/>
    </widget>
    <widget class="QMenu" name="menu_Panels">
     <property name="title">
@@ -686,6 +687,14 @@
     <string>&amp;Raffraichir les panels</string>
    </property>
   </action>
+  <action name="find">
+   <property name="text">
+    <string>Recherche</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -717,6 +726,7 @@
     <slot>show_transactions_history()</slot>
     <slot>empty_note_fnc()</slot>
     <slot>refresh_panels_fnc()</slot>
+    <slot>trigger_search()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -1049,6 +1059,22 @@
     <hint type="destinationlabel">
      <x>441</x>
      <y>344</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>find</sender>
+   <signal>triggered()</signal>
+   <receiver>menu_bar</receiver>
+   <slot>trigger_search()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>9</y>
     </hint>
    </hints>
   </connection>

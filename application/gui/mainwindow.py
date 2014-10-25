@@ -39,6 +39,7 @@ from .passwordmanagment import PasswordManagment
 from .refillnote import RefillNote
 from .transactionhistory import TransactionHistory
 from .usermanagment import UserManagmentWindow
+from .searchwindow import SearchWindow
 import api.categories
 import api.notes
 import api.transactions
@@ -106,6 +107,21 @@ class MainWindow(QtWidgets.QMainWindow):
         self.timer.timeout.connect(refresh)
         self.timer.start()
 
+    def reset_note_box(self):
+        """ Reset the note box to default
+        """
+        self.note_name.setText("Surnom - Prénom nom")
+        self.note_mail.setText("email@enib.fr")
+        self.note_promo.setText("Promo")
+        self.note_phone.setText("+336 00 00 00 00")
+        self.note_solde.setText("0.00 €")
+        image = QtGui.QPixmap()
+        self.note_photo.setPixmap(image)
+        self.note_box.setStyleSheet("background-color: none;")
+        self.refill_note.setEnabled(False)
+        self.empty_note.setEnabled(False)
+        self.note_box.setEnabled(False)
+
     def _note_refresh(self, index):
         """ Build the note infos.
         """
@@ -119,6 +135,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.note_history.clear()
         if index >= 0:
             self.selected = self.notes_list.item(index)
+        else:
+            self.reset_note_box()
+            return
 
         if self.selected_nickname != self.selected.text():
             self.selected_nickname = self.selected.text()
@@ -127,17 +146,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # If there are no current selected note, set the default text and diable
         # everything
         if not self.selected:
-            self.note_name.setText("Surnom - Prénom nom")
-            self.note_mail.setText("email@enib.fr")
-            self.note_promo.setText("Promo")
-            self.note_phone.setText("+336 00 00 00 00")
-            self.note_solde.setText("0.00 €")
-            image = QtGui.QPixmap()
-            self.note_photo.setPixmap(image)
-            self.note_box.setStyleSheet("background-color: none;")
-            self.refill_note.setEnabled(False)
-            self.empty_note.setEnabled(False)
-            self.note_box.setEnabled(False)
+            self.reset_note_box()
             return
 
         infos = list(api.notes.get(
@@ -200,6 +209,7 @@ class MainWindow(QtWidgets.QMainWindow):
         """ Rebuild the notes list with only the shown notes.
         """
         self.notes_list.refresh(api.notes.get(lambda x: x['hidden'] == 0))
+        self._note_refresh(self.notes_list.currentRow())
 
     def event(self, event):
         """ Rewrite the event loop. Used to handle the douchette and the \n key
@@ -282,6 +292,7 @@ class MenuBar(QtWidgets.QMenuBar):
     def _refresh_parent(self):
         """ Refresh the parent
         """
+        self.parent().notes_list.current_filter = lambda x: x['hidden'] == 0
         self.parent().rebuild_notes_list()
 
     def _connect_window(self):
@@ -405,5 +416,11 @@ class MenuBar(QtWidgets.QMenuBar):
         """ Show transaction logs
         """
         self.cur_window = TransactionHistory(self)
+        self._connect_window()
+
+    def trigger_search(self):
+        """ Open a search window
+        """
+        self.cur_window = SearchWindow(self)
         self._connect_window()
 
