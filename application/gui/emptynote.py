@@ -34,7 +34,6 @@ import gui.input
 
 
 class EmptyNote(QtWidgets.QDialog):
-    # pylint: disable=too-many-instance-attributes
     """ EmptyNote window class """
     def __init__(self, selected_note):
         super().__init__()

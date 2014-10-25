@@ -36,7 +36,6 @@ import settings
 
 
 class RefillNote(QtWidgets.QDialog):
-    # pylint: disable=too-many-instance-attributes
     """ RefillNote window class """
     def __init__(self, selected_note, performer):
         super().__init__()

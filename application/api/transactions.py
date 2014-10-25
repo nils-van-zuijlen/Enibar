@@ -39,7 +39,6 @@ def log_transaction(nickname, category, product, price_name, quantity, price):
     :param int quantity: Product quantity on this transaction
     :param float price: total price of the transaction
     """
-    # pylint: disable=too-many-arguments
     with Cursor() as cursor:
         cursor.prepare("INSERT INTO transactions(date, note, category, product,\
                 price_name, quantity, price) VALUES(NOW(), :note, :category, \
@@ -130,7 +129,6 @@ def get(**filter_):
 
     :param dict filter_: filter to apply
     """
-    # pylint: disable=global-statement
     global TRANSACTS_FIELDS_CACHE
     cursor = api.base.filtered_getter("transactions", filter_)
     while cursor.next():
@@ -147,7 +145,6 @@ def get_reversed(**filter_):
 
     :param dict filter_: filter to apply
     """
-    # pylint: disable=global-statement
     global TRANSACTS_FIELDS_CACHE
     cursor = api.base.filtered_getter("transactions", filter_)
     if not cursor.last():
@@ -163,6 +160,5 @@ def get_reversed(**filter_):
         yield {field: record.value(TRANSACTS_FIELDS_CACHE[field]) for field
                in TRANSACT_FIELDS}
 
-# pylint: disable=invalid-name
 get_unique = api.base.make_get_unique(get)
 

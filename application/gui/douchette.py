@@ -31,7 +31,6 @@ EQUIVALENCE_TABLE = {"&": 1, "é": 2, "\"": 3, "'": 4, "(": 5,
 
 
 class Douchette(QtWidgets.QDialog):
-    # pylint: disable=too-many-instance-attributes, too-many-public-methods
     """ Douchette window class """
     def __init__(self, callback):
         super().__init__()

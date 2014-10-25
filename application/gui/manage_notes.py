@@ -35,7 +35,6 @@ import settings
 
 
 class ManageNotes(QtWidgets.QDialog):
-    # pylint: disable=too-many-instance-attributes
     """ ManageNotes window class """
     def __init__(self, main_window):
         super().__init__()

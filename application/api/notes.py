@@ -43,7 +43,6 @@ def rebuild_cache():
     """ Build a cache with all notes inside. This improve greatly the perfs of
         get actions
     """
-    # pylint: disable=global-statement
     global NOTES_CACHE, NOTES_FIELDS_CACHE
     NOTES_CACHE = []
     with Cursor() as cursor:
@@ -105,7 +104,6 @@ def unique_file(file_name):
     return filename
 
 
-# pylint: disable=too-many-arguments
 def add(nickname, firstname, lastname, mail, tel, birthdate, promo, photo_path):
     """ Create a note. Copy the image from photo_path to settings.IMG_BASE_DIR
 

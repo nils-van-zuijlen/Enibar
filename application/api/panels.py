@@ -16,8 +16,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
-# pylint: disable=no-value-for-parameter
-# pylint: disable=unexpected-keyword-arg
 
 """
 Panel management functions
@@ -186,7 +184,6 @@ def get_content(**kwargs):
                     'category_id': record.value('category_id'),
                     'category_name': record.value('category_name'),
                 }
-# pylint: disable=invalid-name
 get_unique = api.base.make_get_unique(get)
 
 

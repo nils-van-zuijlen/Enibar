@@ -376,7 +376,6 @@ class ConsumptionList(QtWidgets.QTreeWidget):
     """ Consumption list
     List all consumption in their respective categories
     """
-    # pylint: disable=too-many-public-methods
     def __init__(self, parent):
         super().__init__(parent)
         self.categories = []
@@ -512,7 +511,6 @@ class CategoryList(QtWidgets.QListWidget):
     """ Category list
     Note that no modification are made to database when member method are called
     """
-    # pylint: disable=too-many-public-methods
     def __init__(self, parent):
         super().__init__(parent)
         self.categories = []
@@ -535,7 +533,6 @@ class CategoryList(QtWidgets.QListWidget):
         self.currentTextChanged.connect(self.item_changed)
         self.categories.append(widget)
 
-    # pylint: disable=no-self-use
     def item_changed(self, item):
         """ Item changed. Connected to self.itemChanged
         Used to detect when a category is renamed and so update database.
@@ -547,7 +544,6 @@ class CategoryList(QtWidgets.QListWidget):
             item.rename()
 
 
-# pylint: disable=too-few-public-methods
 class CategoryListItem(QtWidgets.QListWidgetItem):
     """ Category list item
     Used to build the category list.

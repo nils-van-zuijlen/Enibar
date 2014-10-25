@@ -15,8 +15,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
-# pylint: disable=no-value-for-parameter
-# pylint: disable=unexpected-keyword-arg
 
 """
 PanelManagment Window
@@ -35,7 +33,6 @@ from .consumptionmanagment import ConsumptionList
 
 
 class PanelManagment(QtWidgets.QDialog):
-    # pylint: disable=too-many-instance-attributes
     """ AddNote window class """
     def __init__(self):
         super().__init__()
@@ -235,7 +232,6 @@ class PanelManagment(QtWidgets.QDialog):
 
 
 class PanelList(ConsumptionList):
-    # pylint: disable=too-many-public-methods, too-many-ancestors
     """ Base class for the two panels
     """
 
@@ -262,7 +258,6 @@ class PanelList(ConsumptionList):
 
 
 class GlobalConsumptionList(PanelList):
-    # pylint: disable=too-many-public-methods, too-many-ancestors
     """ List containing all products NOT in the panel
     """
     def __init__(self, parent):
@@ -298,8 +293,6 @@ class GlobalConsumptionList(PanelList):
 
 
 class PanelConsumptionList(PanelList):
-    # pylint: disable=too-many-public-methods, too-many-ancestors,
-    # pylint: disable=arguments-differ
     """ List the content of the panel
     """
     def __init__(self, parent):

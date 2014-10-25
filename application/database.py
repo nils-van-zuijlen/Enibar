@@ -41,7 +41,6 @@ import settings
 
 class Database:
     """ Context manager to use the database """
-    # pylint: disable=too-few-public-methods
     database = None
 
     def __init__(self):
@@ -71,7 +70,6 @@ class Database:
 
 
 class Cursor(Database):
-    # pylint: disable=too-few-public-methods
     """ Context manager to use the cursor """
     def __init__(self):
         super().__init__()
@@ -87,7 +85,6 @@ class Cursor(Database):
 
 
 class SqlQuery(QtSql.QSqlQuery):
-    # pylint: disable=too-few-public-methods,invalid-name
     """ Wrapper around QtSql.QSqlQuery to add multiple binding funcion """
     def bindValues(self, kwargs):
         """ Bind multiple values to the query

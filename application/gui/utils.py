@@ -50,7 +50,6 @@ def valid(title, message=""):
 
 
 class NotesList(QtWidgets.QListWidget):
-    # pylint: disable=too-many-public-methods
     """ Notes list on the left of the MainWindow. """
     def __init__(self, parent):
         super().__init__(parent)

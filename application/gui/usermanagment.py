@@ -120,7 +120,6 @@ class UserManagmentWindow(QtWidgets.QDialog):
 
 class UserList(QtWidgets.QListWidget):
     """ Class handling user list """
-    # pylint: disable=too-many-public-methods
     def __init__(self, parent):
         super().__init__(parent)
         super().setSortingEnabled(True)

@@ -36,7 +36,6 @@ import datetime
 
 
 class NotesAction(QtWidgets.QDialog):
-    # pylint: disable=too-many-instance-attributes, too-many-public-methods
     """ NotesAction window class """
     def __init__(self):
         super().__init__()
@@ -180,7 +179,6 @@ class NotesAction(QtWidgets.QDialog):
 
 
 class MultiNotesList(NotesList):
-    # pylint: disable=too-many-public-methods
     """ List of notes with multi-selection
     """
     def __init__(self, parent):
@@ -206,7 +204,6 @@ class MultiNotesList(NotesList):
                 pass
 
 
-# pylint: disable=too-many-public-methods
 class UniqueConsumptionList(ConsumptionList):
     """ A Consumption list where you can select only one item
     """

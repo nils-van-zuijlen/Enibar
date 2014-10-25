@@ -16,7 +16,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
-# pylint: disable=no-value-for-parameter
 
 """
 Panels Widget for Main window
@@ -131,7 +130,6 @@ class PanelTab(QtWidgets.QWidget):
         :param str price: product price name
         :param float value: product price
         """
-        # pylint: disable=too-many-arguments
         if event.angleDelta().y() >= 0:
             self.main_window.product_list.add_product(
                 category,
@@ -153,7 +151,6 @@ class ProductList(QtWidgets.QTreeWidget):
     This is the product list for the main window, whihc is used to build a
     transaction. This this file may not be the right one for this class.
     """
-    # pylint: disable=too-many-public-methods
     def __init__(self, parent):
         super().__init__(parent)
         self.products = []
@@ -397,8 +394,6 @@ class BaseProduct:
     Abstract class inherited by Button and ComboBox which store all required
     products information on the destination widget.
     """
-    # pylint: disable=too-few-public-methods
-    # pylint: disable=too-many-arguments
     def __init__(self, cid, pid, name, cat_name, prices):
         super().__init__()
         self.cid = cid
@@ -426,7 +421,6 @@ class Button(BaseProduct, QtWidgets.QPushButton):
     """ Button
     Button used to display products which contain a single price.
     """
-    # pylint: disable=too-many-arguments
     def __init__(self, cid, pid, name, cat_name, prices):
         BaseProduct.__init__(self, cid, pid, name, cat_name, prices)
         QtWidgets.QPushButton.__init__(self, name)
@@ -439,7 +433,6 @@ class Button(BaseProduct, QtWidgets.QPushButton):
     def wheelEvent(self, event):
         """ WheelEvent
         """
-        # pylint: disable=invalid-name
         if self.wheel_callback:
             self.wheel_callback(
                 event,
@@ -462,7 +455,6 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
     item is clicked so product name is allways displayed while you can still
     select a given price
     """
-    # pylint: disable=too-many-arguments
     def __init__(self, cid, pid, name, cat_name, prices):
         QtWidgets.QComboBox.__init__(self)
         BaseProduct.__init__(self, cid, pid, name, cat_name, prices)
@@ -510,7 +502,6 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
         """ Overwrite qt mouse press event for the ComboBox so product name is
         hidden and user can only click on prices.
         """
-        # pylint: disable=invalid-name
         self.product_view.setRowHidden(0, True)
         self.setCurrentIndex(1)
         self.showPopup()
@@ -519,7 +510,6 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
         """ Overwrite qt mouse release event for the ComboBox so product name
         is displayed and selected when mouse is released.
         """
-        # pylint: disable=invalid-name
         self.product_view.setRowHidden(0, False)
         self.setCurrentIndex(0)
 
@@ -527,15 +517,11 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
         """ Overwrite qt mouse wheel event so the selection do not change when
         using wheel.
         """
-        # pylint: disable=invalid-name
-        # pylint: disable=no-self-use
         return
 
     def keyPressEvent(self, event):
         """ Overwrite qt key press event
         """
-        # pylint: disable=invalid-name
-        # pylint: disable=no-self-use
         event.ignore()
 
     def keyReleaseEvent(self, event):
@@ -547,7 +533,6 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
         """ Overwrite qt hidePopup event so product name is displayed and
         selected again on the combobox.
         """
-        # pylint: disable=invalid-name
         self.product_view.setRowHidden(0, False)
         self.setCurrentIndex(0)
         super().hidePopup()

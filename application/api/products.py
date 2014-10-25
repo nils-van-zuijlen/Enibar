@@ -16,9 +16,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
-# pylint: disable=invalid-name
-# pylint: disable=no-value-for-parameter
-# pylint: disable=unexpected-keyword-arg
 
 """
 Products management function
