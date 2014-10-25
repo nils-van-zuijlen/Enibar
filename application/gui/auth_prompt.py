@@ -60,6 +60,7 @@ def ask_auth(*dargs, fail_callback=None, pass_performer=False):
                     kwargs["_performer"] = prompt.user
                 func(*args, **kwargs)
             else:
+                gui.utils.error("Error", "Erreur d'authentification")
                 if fail_callback is not None:
                     fail_callback()
         return wrapper
