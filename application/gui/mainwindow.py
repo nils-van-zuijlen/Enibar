@@ -253,7 +253,7 @@ class MainWindow(QtWidgets.QMainWindow):
         """
         if self.selected:
             total = self.product_list.get_total()
-            text = "Es tu sûr de vouloir enlever {} € sur la note\
+            text = "Es tu sûr de vouloir enlever {:.2f} € sur la note\
                     <br/>de {}<br/><br/><span style=\"font-size:12pt;\
                     font-weight:600; color:#ff0000;\">NE PAS OUBLIER LES\
                     ECOCUPS !!!!</span>".format(total, self.selected.text())
