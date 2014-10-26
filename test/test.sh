@@ -34,7 +34,7 @@ if [[ $TEST == 1 ]]; then
 		IP=$(docker inspect $DOCKER_MYSQL_ID | python -c 'import json,sys;obj=json.load(sys.stdin);print(obj[0]["NetworkSettings"]["IPAddress"])')
 		sed "s/{IP}/${IP}/" ../test/resources/settings/settings_mysql.py > settings.py
 		echo "[ .... ] Waiting for db..."
-		sleep 10
+		sleep 30
 
 		mysql --user="root" --password="toor" --host="$IP" < ../db.sql
 	fi
