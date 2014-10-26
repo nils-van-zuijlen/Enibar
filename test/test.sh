@@ -56,3 +56,4 @@ if [[ $NODOCKER != 1 && $TEST == 1 ]]; then
 	docker stop $DOCKER_MYSQL_ID
 fi
 exit $TEST_FAILED
+
