@@ -76,7 +76,8 @@ class NotesList(QtWidgets.QListWidget):
         """ Rebuild the note list every 10 seconds
         """
         api.notes.rebuild_cache()
-        self.refresh(api.notes.get(self.current_filter))
+        new_notes = api.notes.get(self.current_filter)
+        self.refresh(new_notes)
 
     def refresh(self, notes_list):
         """ Refresh the note list

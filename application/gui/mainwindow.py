@@ -134,7 +134,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.empty_note.setEnabled(True)
         self.note_history.clear()
         if index >= 0:
-            self.selected = self.notes_list.item(index)
+            self.selected = QtWidgets.QListWidgetItem(self.notes_list.item(index))
         else:
             self.reset_note_box()
             return
