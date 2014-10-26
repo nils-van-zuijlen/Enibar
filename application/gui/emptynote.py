@@ -70,7 +70,7 @@ class EmptyNote(QtWidgets.QDialog):
             gui.utils.error("Erreur", "La valeur à enlever doit etre positive")
 
     def on_change(self):
-        if self.to_add.valid:
+        if self.to_add.valid and self.reason_input.valid:
             self.valid_button.setEnabled(True)
         else:
             self.valid_button.setEnabled(False)
