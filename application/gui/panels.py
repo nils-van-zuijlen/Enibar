@@ -108,6 +108,8 @@ class PanelTab(QtWidgets.QWidget):
         :param int index: Optional selected index.
         """
         widget = self.sender()
+        if not widget.should_accept_adding_products:
+            return
 
         if not index and len(widget.prices) == 1:
             price_name, price_value = tuple(iter(widget.prices.items()))[0]
@@ -120,6 +122,7 @@ class PanelTab(QtWidgets.QWidget):
             price_name,
             price_value
         )
+        widget.should_accept_adding_products = True
 
     def product_wheeled(self, event, category, name, price, value):
         """ Wheel callback
@@ -426,6 +429,7 @@ class Button(BaseProduct, QtWidgets.QPushButton):
         QtWidgets.QPushButton.__init__(self, name)
         self.wheel_callback = None
         self.price_name, self.price_value = tuple(iter(prices.items()))[0]
+        self.should_accept_adding_products = True
 
     def connect_mouse_wheel(self, func):
         self.wheel_callback = func
@@ -453,16 +457,21 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
     ComboBox used to display products which contain multiple prices. It allow
     to change list state when clicked and reset itself when it loses focus or
     item is clicked so product name is allways displayed while you can still
-    select a given price
+    select a given price.
+
+    To avoir adding 2 products when we press on enter, we use the
+    should_accept_adding_products variable. It's True when whe wheel over
+    something or when we click it but not when we press enter.
     """
     def __init__(self, cid, pid, name, cat_name, prices):
         QtWidgets.QComboBox.__init__(self)
         BaseProduct.__init__(self, cid, pid, name, cat_name, prices)
         self.product_view = QtWidgets.QListWidget()
-        self.product_view.wheelEvent = self.caca
+        self.product_view.wheelEvent = self.on_wheel
         self.setModel(self.product_view.model())
         self.widgets = []
         self.call = None
+        self.should_accept_adding_products = False
 
         self.product_view.addItem(QtWidgets.QListWidgetItem(self.name))
         for price in prices:
@@ -472,8 +481,15 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
 
         self.setView(self.product_view)
         self.activated.connect(self.callback)
+        self.product_view.pressed.connect(self.on_click)
 
-    def caca(self, event):
+    def on_click(self, index):
+        """ Called when we click on an item to close the QComboBox and not when
+            we press enter. It allows us to add a product only in this case
+        """
+        self.should_accept_adding_products = True
+
+    def on_wheel(self, event):
         """ Call back when wheel is used
         """
         current_price = self.product_view.currentItem().text()
@@ -484,6 +500,7 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
             current_price,
             self.prices[current_price]
         )
+        self.should_accept_adding_products = False
 
     def get_signal(self):
         return self.activated
