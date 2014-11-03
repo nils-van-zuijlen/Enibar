@@ -152,11 +152,11 @@ class TransactionHistory(QtWidgets.QDialog):
             self.progressbar.setValue(int(count / length * 100))
             if trans['id'] not in self.transactions:
                 if trans['price'] >= 0:
-                    credit = trans['price']
+                    credit = round(trans['price'], 2)
                     debit = "-"
                 else:
                     credit = "-"
-                    debit = -trans['price']
+                    debit = round(-trans['price'], 2)
                 widget = QtWidgets.QTreeWidgetItem(self.transaction_list, (
                     trans['date'].toString("yyyy/MM/dd HH:mm:ss"),
                     trans['note'],
@@ -200,10 +200,9 @@ class TransactionHistory(QtWidgets.QDialog):
                 if price < 0:
                     debited += price
 
-        self.credited.setText("{} €".format(str(round(credited, 2))))
-        self.debited.setText("{} €".format(str(round(debited, 2))))
-        self.total.setText("{} €".format(str(round(credited + debited, 2))))
-        print("called")
+        self.credited.setText("{} €".format(round(credited, 2)))
+        self.debited.setText("{} €".format(round(debited, 2)))
+        self.total.setText("{} €".format(round(credited + debited, 2)))
 
     def update_summary_selected(self):
         """ update debit credit and Total on selected items.
@@ -212,18 +211,18 @@ class TransactionHistory(QtWidgets.QDialog):
         debited = 0
 
         for i, index in enumerate(self.transaction_list.selectedIndexes()):
-            if i % self.transaction_list.columnCount() == 0:
+            # i % (columnCount - 1) because the column with the id is hidden
+            if i % (self.transaction_list.columnCount() - 1) == 0:
                 widget = self.transaction_list.topLevelItem(index.row())
-                if widget.text(6) != "-":
-                    credited += float(widget.text(6))
-                if widget.text(7) != "-":
-                    debited += float(widget.text(7))
+                price = self.transactions[int(widget.text(8))]['price']
+                if price >= 0:
+                    credited += price
+                if price < 0:
+                    debited += price
 
-        self.selected_credited.setText(" {} €".format(str(round(credited, 2))))
-        self.selected_debited.setText("- {} €".format(str(round(debited, 2))))
-        self.selected_solde.setText("{} €".format(
-            str(round(credited - debited, 2))
-        ))
+        self.selected_credited.setText("{} €".format(round(credited, 2)))
+        self.selected_debited.setText("{} €".format(round(debited, 2)))
+        self.selected_solde.setText("{} €".format(round(credited + debited, 2)))
 
     def update_list(self):
         """ Update the list with all filters
@@ -264,7 +263,8 @@ class TransactionHistory(QtWidgets.QDialog):
     def delete(self, _):
         indexes = self.transaction_list.selectedIndexes()
         for i, index in reversed(list(enumerate(indexes))):
-            if i % self.transaction_list.columnCount() != 0:
+            # i % (columnCount - 1) because the column with the id is hidden
+            if i % (self.transaction_list.columnCount() - 1) != 0:
                 continue
 
             widget = self.transaction_list.topLevelItem(index.row())
@@ -312,7 +312,8 @@ class TransactionHistory(QtWidgets.QDialog):
         """
         indexes = self.transaction_list.selectedIndexes()
         for i, index in reversed(list(enumerate(indexes))):
-            if i % self.transaction_list.columnCount() != 0:
+            # i % (columnCount - 1) because the column with the id is hidden
+            if i % (self.transaction_list.columnCount() - 1) != 0:
                 continue
 
             widget = self.transaction_list.topLevelItem(index.row())
@@ -336,7 +337,8 @@ class TransactionHistory(QtWidgets.QDialog):
     def export_csv(self):
         export_trans = []
         for num, index in enumerate(self.transaction_list.selectedIndexes()):
-            if num % self.transaction_list.columnCount() != 0:
+            # i % (columnCount - 1) because the column with the id is hidden
+            if num % (self.transaction_list.columnCount() - 1) != 0:
                 continue
             widget = self.transaction_list.topLevelItem(index.row())
             export_trans.append(self.transactions[int(widget.text(8))])
