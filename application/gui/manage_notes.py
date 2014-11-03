@@ -211,3 +211,21 @@ class ManageNotes(QtWidgets.QDialog):
             if isinstance(obj, Input):
                 action(obj)
 
+
+class ManageNotesList(gui.utils.NotesList):
+    def refresh(self, notes_list):
+        """ Refresh the note list
+        """
+        selected = self.currentItem()
+        if selected:
+            selected = selected.text()
+        self.clear()
+        self.build(notes_list)
+        if self.parent().adding:
+            return
+        try:
+            new_selection = self.findItems(selected, QtCore.Qt.MatchExactly)[0]
+            self.setCurrentItem(new_selection)
+        except IndexError:
+            self.setCurrentRow(0)
+
