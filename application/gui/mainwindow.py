@@ -268,7 +268,8 @@ class MainWindow(QtWidgets.QMainWindow):
                     'product': product['product'],
                     'price_name': product['price_name'],
                     'quantity': product['count'],
-                    'price': -product['price']
+                    'price': -product['price'],
+                    'deletable': product['deletable']
                 }
                 transactions.append(transaction)
             if api.transactions.log_transactions(transactions):
@@ -374,9 +375,9 @@ class MenuBar(QtWidgets.QMenuBar):
         """ Used to take an ecocup on a note
         """
         self.parent().product_list.add_product(
-            "Bar",
-            "Ecocup",
-            "Achat",
+            settings.ECOCUP_CATEGORY,
+            settings.ECOCUP_NAME,
+            settings.ECOCUP_PRICE_TYPES['take'],
             settings.ECOCUP_PRICE
         )
         text = "{:.2f} €".format(self.parent().product_list.get_total())
@@ -388,9 +389,9 @@ class MenuBar(QtWidgets.QMenuBar):
         """ Used to repay an ecocup on a note
         """
         self.parent().product_list.add_product(
-            "Bar",
-            "Ecocup",
-            "Remboursement",
+            settings.ECOCUP_CATEGORY,
+            settings.ECOCUP_NAME,
+            settings.ECOCUP_PRICE_TYPES['repay'],
             -settings.ECOCUP_PRICE
         )
         text = "{:.2f} €".format(self.parent().product_list.get_total())
@@ -401,9 +402,11 @@ class MenuBar(QtWidgets.QMenuBar):
     def export(self, notes):
         """ Generic export notes function """
         path, format_ = QtWidgets.QFileDialog(self).getSaveFileName(
-            self, "Exporter vers", "{}.xml".format(
-                datetime.datetime.now().strftime("%Y-%m-%d")),
-            "XML Files (*.xml)\nCSV Files (*.csv)")
+            self,
+            "Exporter vers",
+            "{}.xml".format(datetime.datetime.now().strftime("%Y-%m-%d")),
+            "XML Files (*.xml)\nCSV Files (*.csv)"
+        )
 
         if path:
             with open(path, "w") as save_file:

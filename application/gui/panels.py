@@ -26,6 +26,7 @@ Panels Widget for Main window
 from PyQt5 import QtWidgets, QtCore, uic, QtGui
 import collections
 import api.panels
+import settings
 from .auth_prompt import ask_auth
 
 
@@ -161,10 +162,16 @@ class ProductList(QtWidgets.QTreeWidget):
         self.setColumnWidth(1, 130)
         self.setColumnWidth(2, 50)
 
-    def add_product(self, category_name, product_name, price_name, price):
+    def add_product(self, cname, pname, price_name, price):
         """ Add product to list
+
+        :param str cname: Category name
+        :param str pname: Product name
+        :param str price_name: Price name
+        :param float price: Price value
+        :param bool ecocup: Product is an ecocup
         """
-        name = "{} ({}) - {}".format(product_name, price_name, category_name)
+        name = "{} ({}) - {}".format(pname, price_name, cname)
         for product in self.products:
             if product['name'] == name:
                 product['price'] += price
@@ -178,9 +185,10 @@ class ProductList(QtWidgets.QTreeWidget):
                 'name': name,
                 'price': price,
                 'count': 1,
-                'category': category_name,
-                'product': product_name,
+                'category': cname,
+                'product': pname,
                 'price_name': price_name,
+                'deletable': False if pname == settings.ECOCUP_NAME else True,
             }
             widget = QtWidgets.QTreeWidgetItem(['1', name, str(price)])
             self.addTopLevelItem(widget)
@@ -193,7 +201,7 @@ class ProductList(QtWidgets.QTreeWidget):
         """
         name = "{} ({}) - {}".format(product_name, price_name, category_name)
         for i, product in enumerate(self.products):
-            if product['name'] == name:
+            if product['name'] == name and product['deletable']:
                 if product['count'] > 1:
                     product['price'] -= price
                     product['price'] = product['price']
@@ -205,6 +213,31 @@ class ProductList(QtWidgets.QTreeWidget):
                     del self.products[i]
 
         self.update_total()
+
+    def keyPressEvent(self, event):
+        item = self.currentItem()
+        if not item:
+            return
+
+        index = self.indexOfTopLevelItem(item)
+        product = self.products[index]
+
+        if event.key() == QtCore.Qt.Key_Delete:
+            if event.modifiers() == QtCore.Qt.ShiftModifier:
+                for i in range(product['count']):
+                    self.del_product(
+                        product['category'],
+                        product['product'],
+                        product['price_name'],
+                        round(product['price'] / product['count'], 2)
+                    )
+            else:
+                self.del_product(
+                    product['category'],
+                    product['product'],
+                    product['price_name'],
+                    round(product['price'] / product['count'], 2)
+                )
 
     def clear(self):
         """ Clear the list

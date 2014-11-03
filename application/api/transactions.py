@@ -29,7 +29,8 @@ import api.base
 import api.notes
 
 
-def log_transaction(nickname, category, product, price_name, quantity, price):
+def log_transaction(nickname, category, product, price_name, quantity, price,
+        deletable=True):
     """ Insert a transaction log line in database
 
     :param str nickname: Note nickname
@@ -40,16 +41,30 @@ def log_transaction(nickname, category, product, price_name, quantity, price):
     :param float price: total price of the transaction
     """
     with Cursor() as cursor:
-        cursor.prepare("INSERT INTO transactions(date, note, category, product,\
-                price_name, quantity, price) VALUES(NOW(), :note, :category, \
-                :product, :price_name, :quantity, :price)")
+        notes = api.notes.get(lambda x: x["nickname"] == nickname)
+        if notes:
+            lastname = notes[0]['lastname']
+            firstname = notes[0]['firstname']
+        else:
+            lastname, firstname = "", ""
+
+        cursor.prepare("""INSERT INTO transactions(date, note, category,
+            product, price_name,quantity, price, firstname, lastname, deletable)
+            VALUES(NOW(), :note, :category, :product, :price_name, :quantity,
+            :price, :firstname, :lastname, :deletable)
+            """
+        )
         cursor.bindValue(':note', nickname)
         cursor.bindValue(':category', category)
         cursor.bindValue(':product', product)
         cursor.bindValue(':price_name', price_name)
         cursor.bindValue(':quantity', quantity)
         cursor.bindValue(':price', price)
-        return cursor.exec_()
+        cursor.bindValue(':firstname', firstname)
+        cursor.bindValue(':lastname', lastname)
+        cursor.bindValue(':deletable', deletable)
+        cursor.exec_()
+        return not cursor.lastError().isValid()
 
 
 def log_transactions(transactions):
@@ -58,20 +73,53 @@ def log_transactions(transactions):
     :param list transactions:
     """
     with Database() as database:
+        cache = {}
         error = False
         database.transaction()
         cursor = QtSql.QSqlQuery(database)
-        cursor.prepare("INSERT INTO transactions(date, note, category, product,\
-                price_name, quantity, price) VALUES(NOW(), :note, :category, \
-                :product, :price_name, :quantity, :price)")
+        cursor.prepare("""INSERT INTO transactions(
+                date, note, category, product, price_name,
+                quantity, price, firstname, lastname, deletable
+            )
+            VALUES(
+                NOW(), :note, :category, :product, :price_name,
+                :quantity, :price, :firstname, :lastname, :deletable
+            )""")
         for trans in transactions:
+            # Fecth firstname and lastname of user with a bit of caching
+            if not trans['note'] in cache:
+                fetching_cursor = QtSql.QSqlQuery(database)
+                fetching_cursor.prepare("""SELECT lastname, firstname
+                    FROM notes WHERE nickname=:nick"""
+                )
+                fetching_cursor.bindValue(':nick', trans['note'])
+                fetching_cursor.exec_()
+                if fetching_cursor.next():
+                    lastname = fetching_cursor.record().value("lastname")
+                    firstname = fetching_cursor.record().value("firstname")
+                else:
+                    # Nickname is a fake one, we must not fill lastname and
+                    # firstname name
+                    lastname, firstname = "", ""
+                cache[trans['note']] = {
+                    'lastname': lastname,
+                    'firstname': firstname
+                }
+            else:
+                lastname = cache[trans['note']]['lastname']
+                firstname = cache[trans['note']]['firstname']
+
             cursor.bindValue(':note', trans['note'])
             cursor.bindValue(':category', trans['category'])
             cursor.bindValue(':product', trans['product'])
             cursor.bindValue(':price_name', trans['price_name'])
             cursor.bindValue(':quantity', trans['quantity'])
             cursor.bindValue(':price', trans['price'])
-            error = error or not cursor.exec_()
+            cursor.bindValue(':firstname', firstname)
+            cursor.bindValue(':lastname', lastname)
+            cursor.bindValue(':deletable', trans.get('deletable', True))
+            cursor.exec_()
+            error = error or cursor.lastError().isValid()
 
     if not error:
         database.commit()
@@ -93,7 +141,9 @@ def rollback_transaction(id_, full=False):
         return False
 
     try:
-        note = list(api.notes.get(lambda x: x['nickname'] == trans['note']))[0]
+        filter_ = lambda x: x['firstname'] == trans['firstname'] and \
+            x['lastname'] == trans['lastname']
+        note = list(api.notes.get(filter_))[0]
     except IndexError:
         return False
 
@@ -105,23 +155,43 @@ def rollback_transaction(id_, full=False):
     with Cursor() as cursor:
         if quantity > 1 and not full:
             cursor.prepare("UPDATE transactions SET quantity=quantity - 1,\
-                    price=? WHERE id=?")
+                    price=? WHERE id=? AND deletable=1")
             price = trans['price'] / quantity
             cursor.addBindValue(trans['price'] - price)
             cursor.addBindValue(trans['id'])
         else:
-            cursor.prepare("DELETE FROM transactions WHERE id=?")
+            cursor.prepare("DELETE FROM transactions WHERE id=? "
+                "AND deletable=1")
             cursor.addBindValue(trans['id'])
             price = trans['price']
 
-        if cursor.exec_():
+        cursor.exec_()
+        if not cursor.lastError().isValid() and cursor.numRowsAffected() > 0:
             return api.notes.transaction(note['nickname'], -price)
         else:
             return False
 
+
+def get_grouped_entries(row):
+    """
+    """
+    with Cursor() as cursor:
+        cursor.prepare("""
+            SELECT {r} FROM transactions
+            GROUP BY binary {r}
+            ORDER BY {r}
+            """.format(r=row)
+        )
+        cursor.exec_()
+        if cursor.lastError().isValid():
+            raise Exception(cursor.lastError().text())
+        while cursor.next():
+            yield cursor.record().value(row)
+
+
 TRANSACTS_FIELDS_CACHE = {}
-TRANSACT_FIELDS = ['id', 'date', 'note', 'category', 'product', 'price_name',
-                   'quantity', 'price']
+TRANSACT_FIELDS = ['id', 'date', 'note', 'lastname', 'firstname', 'category',
+                   'product', 'price_name', 'quantity', 'price']
 
 
 def get(**filter_):

@@ -280,8 +280,9 @@ def transaction(nickname, diff):
         cursor.prepare("UPDATE notes SET note=note+:diff WHERE nickname=:nick")
         cursor.bindValue(":diff", diff)
         cursor.bindValue(":nick", nickname)
+        cursor.exec_()
 
-        value = cursor.exec_()
+        value = not cursor.lastError().isValid()
     rebuild_cache()
     return value
 
