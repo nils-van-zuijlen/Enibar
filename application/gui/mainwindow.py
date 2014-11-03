@@ -64,6 +64,9 @@ class MainWindow(QtWidgets.QMainWindow):
         # The nickname of th currently selected note.
         self.selected_nickname = None
 
+        # Timer used to add a delay when selecting a note.
+        self.timer = None
+
         # The secondary window currently opened. It' here to force having only
         # one window opened at a time.
         self.win = None
@@ -88,9 +91,6 @@ class MainWindow(QtWidgets.QMainWindow):
             2,
             QtWidgets.QHeaderView.Stretch
         )
-
-        # Timer used to add a delay when selecting a note.
-        self.timer = None
 
     def on_note_selection(self, index):
         """ Called when a note is selected
@@ -126,7 +126,8 @@ class MainWindow(QtWidgets.QMainWindow):
         """ Build the note infos.
         """
         # Stop the timer so it doesn't refresh the note every 100ms
-        self.timer.stop()
+        if self.timer:
+            self.timer.stop()
 
         # Enable the right box and clear the history.
         self.note_box.setEnabled(True)

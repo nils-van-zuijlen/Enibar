@@ -115,7 +115,7 @@ class TransactionHistory(QtWidgets.QDialog):
                 if data:
                     combobox.addItem(data)
             combobox.setCurrentIndex(0)
-        self.update_list()
+        self.call_update()
 
     def call_update(self):
         """ Wrapper to call update on transaction list.
@@ -135,7 +135,7 @@ class TransactionHistory(QtWidgets.QDialog):
         """
         if not self.sender().currentText():
             self.sender().setCurrentIndex(0)
-            self.update_list()
+            self.call_update()
 
     def fetch_transactions(self):
         """ Fetch all transactions and build all QtWidgets needed to display
@@ -184,6 +184,7 @@ class TransactionHistory(QtWidgets.QDialog):
                     'show': False,
                 }
         self.progressbar.setFormat("Terminé")
+        self.call_update()
 
     def update_summary(self):
         """ Update debit, credit and Total on the window
@@ -202,6 +203,7 @@ class TransactionHistory(QtWidgets.QDialog):
         self.credited.setText("{} €".format(str(round(credited, 2))))
         self.debited.setText("{} €".format(str(round(debited, 2))))
         self.total.setText("{} €".format(str(round(credited + debited, 2))))
+        print("called")
 
     def update_summary_selected(self):
         """ update debit credit and Total on selected items.
@@ -218,7 +220,7 @@ class TransactionHistory(QtWidgets.QDialog):
                     debited += float(widget.text(7))
 
         self.selected_credited.setText(" {} €".format(str(round(credited, 2))))
-        self.selected_debited.setText("-{} €".format(str(round(debited, 2))))
+        self.selected_debited.setText("- {} €".format(str(round(debited, 2))))
         self.selected_solde.setText("{} €".format(
             str(round(credited - debited, 2))
         ))
@@ -290,15 +292,19 @@ class TransactionHistory(QtWidgets.QDialog):
                 if widget.text(6) != "-":
                     credit = float(widget.text(6))
                     credit -= credit / quantity
-                    credit = credit
+                    credit = round(credit, 2)
                     widget.setText(6, str(credit))
+                    self.transactions[int(widget.text(8))]['price'] = credit
                 elif widget.text(7) != "-":
                     debit = float(widget.text(7))
                     debit -= debit / quantity
-                    debit = debit
+                    debit = round(debit, 2)
                     widget.setText(7, str(debit))
+                    self.transactions[int(widget.text(8))]['price'] = -debit
             else:
                 self.transaction_list.takeTopLevelItem(index.row())
+                del self.transactions[int(widget.text(8))]
+        self.call_update()
 
     @ask_auth("manage_notes")
     def delete_line(self, _):
@@ -324,6 +330,8 @@ class TransactionHistory(QtWidgets.QDialog):
                 continue
             index = self.transaction_list.indexOfTopLevelItem(widget)
             self.transaction_list.takeTopLevelItem(index)
+            del self.transactions[int(widget.text(8))]
+        self.call_update()
 
     def export_csv(self):
         export_trans = []
