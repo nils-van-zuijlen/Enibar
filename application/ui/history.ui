@@ -149,67 +149,6 @@
      </layout>
     </widget>
    </item>
-   <item row="3" column="0" colspan="4">
-    <widget class="QTreeWidget" name="transaction_list">
-     <property name="selectionMode">
-      <enum>QAbstractItemView::ExtendedSelection</enum>
-     </property>
-     <property name="indentation">
-      <number>0</number>
-     </property>
-     <property name="itemsExpandable">
-      <bool>false</bool>
-     </property>
-     <property name="sortingEnabled">
-      <bool>true</bool>
-     </property>
-     <column>
-      <property name="text">
-       <string>Date</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Note</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Categorie</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Consomation</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Type</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Quantité</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Credit</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Debit</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Id</string>
-      </property>
-     </column>
-    </widget>
-   </item>
    <item row="5" column="0" rowspan="2">
     <widget class="QGroupBox" name="groupbox">
      <property name="sizePolicy">
@@ -330,16 +269,6 @@
         <property name="maxVisibleItems">
          <number>25</number>
         </property>
-        <property name="duplicatesEnabled">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>Catégorie</string>
-        </property>
        </widget>
       </item>
       <item row="0" column="0">
@@ -378,9 +307,6 @@
         <property name="maxVisibleItems">
          <number>25</number>
         </property>
-        <property name="duplicatesEnabled">
-         <bool>true</bool>
-        </property>
        </widget>
       </item>
       <item row="2" column="1">
@@ -390,9 +316,6 @@
         </property>
         <property name="maxVisibleItems">
          <number>25</number>
-        </property>
-        <property name="duplicatesEnabled">
-         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -404,9 +327,6 @@
         <property name="maxVisibleItems">
          <number>25</number>
         </property>
-        <property name="duplicatesEnabled">
-         <bool>true</bool>
-        </property>
        </widget>
       </item>
       <item row="4" column="1">
@@ -416,9 +336,6 @@
         </property>
         <property name="maxVisibleItems">
          <number>25</number>
-        </property>
-        <property name="duplicatesEnabled">
-         <bool>true</bool>
         </property>
         <property name="frame">
          <bool>true</bool>
@@ -535,6 +452,13 @@
         </property>
        </widget>
       </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Catégorie</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -588,6 +512,67 @@
        </widget>
       </item>
      </layout>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="4">
+    <widget class="QTreeWidget" name="transaction_list">
+     <property name="selectionMode">
+      <enum>QAbstractItemView::ExtendedSelection</enum>
+     </property>
+     <property name="indentation">
+      <number>0</number>
+     </property>
+     <property name="itemsExpandable">
+      <bool>false</bool>
+     </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
+     <column>
+      <property name="text">
+       <string>Date</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Note</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Categorie</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Consomation</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Type</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Quantité</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Credit</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Debit</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Id</string>
+      </property>
+     </column>
     </widget>
    </item>
   </layout>
