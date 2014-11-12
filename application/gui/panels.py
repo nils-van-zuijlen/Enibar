@@ -509,12 +509,39 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
         self.product_view.addItem(QtWidgets.QListWidgetItem(self.name))
         for price in prices:
             widget = QtWidgets.QListWidgetItem(price)
+            widget.setTextAlignment(QtCore.Qt.AlignHCenter |
+                QtCore.Qt.AlignVCenter)
             widget.setSizeHint(QtCore.QSize(100, 35))
             self.product_view.addItem(widget)
 
         self.setView(self.product_view)
         self.activated.connect(self.callback)
         self.product_view.pressed.connect(self.on_click)
+
+    def paintEvent(self, event):
+        """ Complete rewrite of the paint event. We need this to keep things
+            aligned. See #97
+        """
+        painter = QtWidgets.QStylePainter(self)
+        painter.setPen(self.palette().color(QtGui.QPalette.Text))
+        opt = QtWidgets.QStyleOptionComboBox()
+        self.initStyleOption(opt)
+        painter.drawComplexControl(QtWidgets.QStyle.CC_ComboBox, opt)
+        proxy = self.style().proxy()
+        editRect = proxy.subControlRect(QtWidgets.QStyle.CC_ComboBox,
+                                        opt,
+                                        QtWidgets.QStyle.SC_ComboBoxEditField,
+                                        self)
+        painter.save()
+        painter.setClipRect(editRect)
+        proxy.drawItemText(painter,
+                           editRect.adjusted(17, 0, 0, 0),
+                           QtWidgets.QStyle.visualAlignment(opt.direction,
+                               QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter),
+                           opt.palette,
+                           True,
+                           opt.currentText)
+        painter.restore()
 
     def on_click(self, index):
         """ Called when we click on an item to close the QComboBox and not when
