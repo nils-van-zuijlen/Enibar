@@ -57,7 +57,8 @@ class RefillNote(QtWidgets.QDialog):
             settings.ASK_VALIDATION_REFILL)
         if not prompt.is_ok:
             return
-        if to_add > 0:
+        # See #96
+        if round(to_add, 2) > 0:
             api.notes.transaction(self.selected_note, to_add)
             api.transactions.log_transaction(
                 self.selected_note,
@@ -69,7 +70,8 @@ class RefillNote(QtWidgets.QDialog):
             )
             super().accept()
         else:
-            gui.utils.error("Erreur", "La valeur à ajouter doit etre positive")
+            gui.utils.error("Erreur", "La valeur à ajouter doit etre superieur à\
+                0.01€")
 
     def on_change(self):
         if self.to_add.valid:

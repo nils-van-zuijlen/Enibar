@@ -55,7 +55,8 @@ class EmptyNote(QtWidgets.QDialog):
         """ Called when "Enlever" is clicked
         """
         to_add = float(self.to_add.text().replace(',', '.'))
-        if to_add > 0:
+        # See #96
+        if round(to_add, 2) > 0:
             api.notes.transaction(self.selected_note, -to_add)
             api.transactions.log_transaction(
                 self.selected_note,
@@ -67,7 +68,8 @@ class EmptyNote(QtWidgets.QDialog):
             )
             super().accept()
         else:
-            gui.utils.error("Erreur", "La valeur à enlever doit etre positive")
+            gui.utils.error("Erreur", "La valeur à enlever doit etre superieur\
+            à 0.01€")
 
     def on_change(self):
         if self.to_add.valid and self.reason_input.valid:
