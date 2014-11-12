@@ -579,6 +579,7 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
         """ Overwrite qt mouse press event for the ComboBox so product name is
         hidden and user can only click on prices.
         """
+        self.should_accept_adding_products = False
         self.product_view.setRowHidden(0, True)
         self.setCurrentIndex(1)
         self.showPopup()
