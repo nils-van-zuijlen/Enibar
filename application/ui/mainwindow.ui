@@ -598,6 +598,7 @@
      <string>Au&amp;tre</string>
     </property>
     <addaction name="actionStatistiques"/>
+    <addaction name="actionAbout"/>
    </widget>
    <addaction name="administration"/>
    <addaction name="menuNotes"/>
@@ -707,6 +708,11 @@
     <string>&amp;Statistiques</string>
    </property>
   </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>&amp;A propos</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -740,6 +746,7 @@
     <slot>refresh_panels_fnc()</slot>
     <slot>trigger_search()</slot>
     <slot>stats()</slot>
+    <slot>about()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -1096,6 +1103,22 @@
    <signal>triggered()</signal>
    <receiver>menu_bar</receiver>
    <slot>stats()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>9</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAbout</sender>
+   <signal>triggered()</signal>
+   <receiver>menu_bar</receiver>
+   <slot>about()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

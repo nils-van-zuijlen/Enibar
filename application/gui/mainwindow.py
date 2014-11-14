@@ -41,6 +41,7 @@ from .transactionhistory import TransactionHistory
 from .usermanagment import UserManagmentWindow
 from .searchwindow import SearchWindow
 from .stats_window import StatsWindow
+from .about_window import AboutWindow
 import api.categories
 import api.notes
 import api.transactions
@@ -365,6 +366,12 @@ class MenuBar(QtWidgets.QMenuBar):
         """ Open a StatsWindow
         """
         self.cur_window = StatsWindow()
+        self._connect_window()
+
+    def about(self):
+        """ Open an AboutWindow
+        """
+        self.cur_window = AboutWindow()
         self._connect_window()
 
     def refresh_panels_fnc(self, _):
