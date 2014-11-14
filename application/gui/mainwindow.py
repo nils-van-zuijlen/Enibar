@@ -347,11 +347,11 @@ class MenuBar(QtWidgets.QMenuBar):
         self.cur_window.finished.connect(self.parent().panels.rebuild)
         self._connect_window()
 
-    @ask_auth("manage_notes")
-    def notes_action_fnc(self, _):
+    @ask_auth("manage_notes", pass_performer=True)
+    def notes_action_fnc(self, _, _performer=""):
         """ Open a NotesAction window
         """
-        self.cur_window = NotesAction()
+        self.cur_window = NotesAction(_performer)
         self._connect_window()
 
     @ask_auth("manage_notes", pass_performer=True)

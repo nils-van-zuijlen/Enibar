@@ -58,38 +58,24 @@
      </item>
      <item row="3" column="2">
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="7" column="0" colspan="2">
-        <widget class="QPushButton" name="del_button">
-         <property name="text">
-          <string>Supprimer</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0" colspan="2">
+       <item row="8" column="0" colspan="2">
         <widget class="QPushButton" name="hide_button">
          <property name="text">
           <string>Cacher</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
-        <widget class="QPushButton" name="export_csv_button">
-         <property name="text">
-          <string>Export CSV</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0" colspan="2">
+       <item row="6" column="0" colspan="2">
         <widget class="QPushButton" name="show_button">
          <property name="text">
           <string>Montrer</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
-        <widget class="QPushButton" name="export_xml_button">
+       <item row="9" column="0" colspan="2">
+        <widget class="QPushButton" name="del_button">
          <property name="text">
-          <string>Export XML</string>
+          <string>Supprimer</string>
          </property>
         </widget>
        </item>
@@ -99,13 +85,11 @@
           <string>Consommations</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
-          <item row="1" column="0" colspan="2">
-           <widget class="UniqueConsumptionList" name="product_list">
-            <column>
-             <property name="text">
-              <string>Produits</string>
-             </property>
-            </column>
+          <item row="2" column="0">
+           <widget class="QComboBox" name="price_list">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
            </widget>
           </item>
           <item row="2" column="1">
@@ -118,12 +102,27 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QComboBox" name="price_list">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
+          <item row="1" column="0" colspan="2">
+           <widget class="UniqueConsumptionList" name="product_list">
+            <column>
+             <property name="text">
+              <string>Produits</string>
+             </property>
+            </column>
            </widget>
+          </item>
+          <item row="0" column="1">
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
           <item row="0" column="0">
            <spacer name="horizontalSpacer">
@@ -138,18 +137,35 @@
             </property>
            </spacer>
           </item>
+          <item row="3" column="0" colspan="2">
+           <widget class="QPushButton" name="refill_button">
+            <property name="text">
+             <string>Recharger</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>Export</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="0" column="0">
+           <widget class="QPushButton" name="export_xml_button">
+            <property name="text">
+             <string>Export XML</string>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="1">
-           <spacer name="horizontalSpacer_2">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+           <widget class="QPushButton" name="export_csv_button">
+            <property name="text">
+             <string>Export CSV</string>
             </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -320,6 +336,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>refill_button</sender>
+   <signal>clicked()</signal>
+   <receiver>NotesAction</receiver>
+   <slot>refill_action()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>422</x>
+     <y>414</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>300</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>del_action()</slot>
@@ -330,5 +362,6 @@
   <slot>export_xml_action()</slot>
   <slot>export_csv_action()</slot>
   <slot>take_products_action()</slot>
+  <slot>refill_action()</slot>
  </slots>
 </ui>

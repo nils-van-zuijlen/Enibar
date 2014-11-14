@@ -32,13 +32,15 @@ import api.categories
 import api.validator
 from .utils import NotesList, valid
 from .panelmanagment import ConsumptionList
+from .refillnote import MultiRefillNote
 import datetime
 
 
 class NotesAction(QtWidgets.QDialog):
     """ NotesAction window class """
-    def __init__(self):
+    def __init__(self, performer):
         super().__init__()
+        self.performer = performer
         self.current_filter = lambda x: x['hidden'] == 0
         uic.loadUi('ui/notesaction.ui', self)
         self.filter_input.setEnabled(False)
@@ -120,6 +122,31 @@ class NotesAction(QtWidgets.QDialog):
         """ Called when "Montrer" is clicked
         """
         self._multiple_action(api.notes.show_multiple)
+
+    def refill_action(self):
+        self.cur_window = MultiRefillNote(self.performer)
+
+        def continuation():
+            def refill(notes):
+                notes = list(notes)
+                to_add = self.cur_window.to_add_value
+                if not to_add:
+                    return
+                for note in notes:
+                    name = list(api.notes.get(lambda x: x['id'] == note))
+                    name = name[0]['nickname']
+                    api.notes.transaction(name, to_add)
+                    api.transactions.log_transaction(
+                        name,
+                        "Note",
+                        self.performer,
+                        "Rechargement",
+                        "1",
+                        to_add
+                    )
+            self._multiple_action(refill)
+
+        self.cur_window.finished.connect(continuation)
 
     def take_products_action(self):
         """ Called when "Valider" is clicked

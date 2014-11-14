@@ -79,3 +79,34 @@ class RefillNote(QtWidgets.QDialog):
         else:
             self.valid_button.setEnabled(False)
 
+
+class MultiRefillNote(QtWidgets.QDialog):
+    def __init__(self, performer):
+        super().__init__()
+        uic.loadUi('ui/refill_note.ui', self)
+        self.performer = performer
+        self.to_add.set_validator(api.validator.NUMBER)
+        self.to_add.setFocus()
+        self.to_add_value = 0
+
+        self.show()
+
+    def accept(self):
+        to_add = float(self.to_add.text().replace(',', '.'))
+        prompt = ValidPrompt("Etes vous sûr de vouloir ajouter {} € sur les\
+            \nnotes selectionées".format(self.to_add.text()),
+            settings.ASK_VALIDATION_REFILL)
+        if not prompt.is_ok:
+            return
+        self.to_add_value = to_add
+        if round(to_add, 2) < 0.01:
+            gui.utils.error("Erreur", "La valeur à ajouter doit etre superieur à\
+                0.01€")
+            self.to_add_value = 0
+        super().accept()
+
+    def on_change(self):
+        if self.to_add.valid:
+            self.valid_button.setEnabled(True)
+        else:
+            self.valid_button.setEnabled(False)
