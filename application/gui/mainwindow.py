@@ -40,6 +40,7 @@ from .refillnote import RefillNote
 from .transactionhistory import TransactionHistory
 from .usermanagment import UserManagmentWindow
 from .searchwindow import SearchWindow
+from .stats_window import StatsWindow
 import api.categories
 import api.notes
 import api.transactions
@@ -358,6 +359,12 @@ class MenuBar(QtWidgets.QMenuBar):
         """
         self.cur_window = RefillNote(
             self.parent().notes_list.currentItem().text(), performer=_performer)
+        self._connect_window()
+
+    def stats(self):
+        """ Open a StatsWindow
+        """
+        self.cur_window = StatsWindow()
         self._connect_window()
 
     def refresh_panels_fnc(self, _):

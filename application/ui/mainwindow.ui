@@ -593,9 +593,16 @@
     <addaction name="panel_managment"/>
     <addaction name="refresh_panels"/>
    </widget>
+   <widget class="QMenu" name="menuAutre">
+    <property name="title">
+     <string>Au&amp;tre</string>
+    </property>
+    <addaction name="actionStatistiques"/>
+   </widget>
    <addaction name="administration"/>
    <addaction name="menuNotes"/>
    <addaction name="menu_Panels"/>
+   <addaction name="menuAutre"/>
   </widget>
   <action name="user_managment">
    <property name="checkable">
@@ -695,6 +702,11 @@
     <string>Ctrl+F</string>
    </property>
   </action>
+  <action name="actionStatistiques">
+   <property name="text">
+    <string>&amp;Statistiques</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -727,6 +739,7 @@
     <slot>empty_note_fnc()</slot>
     <slot>refresh_panels_fnc()</slot>
     <slot>trigger_search()</slot>
+    <slot>stats()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -1067,6 +1080,22 @@
    <signal>triggered()</signal>
    <receiver>menu_bar</receiver>
    <slot>trigger_search()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>9</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionStatistiques</sender>
+   <signal>triggered()</signal>
+   <receiver>menu_bar</receiver>
+   <slot>stats()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
