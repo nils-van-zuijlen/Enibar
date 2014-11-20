@@ -132,18 +132,22 @@ class NotesAction(QtWidgets.QDialog):
                 to_add = self.cur_window.to_add_value
                 if not to_add:
                     return
+                names = []
+                transactions = []
                 for note in notes:
                     name = list(api.notes.get(lambda x: x['id'] == note))
                     name = name[0]['nickname']
-                    api.notes.transaction(name, to_add)
-                    api.transactions.log_transaction(
-                        name,
-                        "Note",
-                        self.performer,
-                        "Rechargement",
-                        "1",
-                        to_add
+                    names.append(name)
+                    transactions.append({'note': name,
+                                         'category': "Note",
+                                         'product': self.performer,
+                                         'price_name': "Rechargement",
+                                         'quantity': 1,
+                                         'price': to_add
+                                        }
                     )
+                api.notes.multiple_transaction(names, to_add)
+                api.transactions.log_transactions(transactions)
             self._multiple_action(refill)
 
         self.cur_window.finished.connect(continuation)
