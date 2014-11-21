@@ -117,6 +117,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.note_promo.setText("Promo")
         self.note_phone.setText("+336 00 00 00 00")
         self.note_solde.setText("0.00 €")
+        self.total_cons.setText("0.00 €")
+        self.total_refill.setText("0.00€")
         image = QtGui.QPixmap()
         self.note_photo.setPixmap(image)
         self.note_box.setStyleSheet("background-color: none;")
@@ -179,6 +181,8 @@ class MainWindow(QtWidgets.QMainWindow):
             **infos))
         self.note_mail.setText(infos['mail'])
         self.note_solde.setText("{:.2f} €".format(infos['note']))
+        self.total_cons.setText("{:.2f} €".format(-infos['tot_cons']))
+        self.total_refill.setText("{:.2f} €".format(infos['tot_refill']))
         self.note_promo.setText(infos['promo'])
         self.note_phone.setText(infos['tel'])
 

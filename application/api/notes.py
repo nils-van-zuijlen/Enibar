@@ -55,8 +55,34 @@ def rebuild_cache():
                                           in NOTE_FIELDS}
                 row = {field: record.value(NOTES_FIELDS_CACHE[field]) for field
                        in NOTE_FIELDS}
+                row['tot_cons'] = 0
+                row['tot_refill'] = 0
                 NOTES_CACHE.append(row)
+        _build_stats()
     return True
+
+
+def _build_stats():
+    """ Add stats to the notes in the cache.
+    """
+    global NOTES_CACHE
+    with Cursor() as cursor:
+        cursor.prepare("SELECT note, SUM(IF(price>0, price, 0)) as tot_refill,\
+                        SUM(IF(price<0, price, 0)) AS tot_cons\
+                        FROM transactions GROUP BY note")
+        if cursor.exec_():
+            tot = {}
+            while cursor.next():
+                record = cursor.record()
+                note = record.value('note')
+                tot[note] = {}
+                tot[note]['tot_cons'] = record.value('tot_cons')
+                tot[note]['tot_refill'] = record.value('tot_refill')
+            for note in NOTES_CACHE:
+                if note['nickname'] in tot:
+                    note['tot_cons'] = tot[note['nickname']]['tot_cons']
+                    note['tot_refill'] = tot[note['nickname']]['tot_refill']
+
 
 
 def _request_multiple_ids(ids, request):
