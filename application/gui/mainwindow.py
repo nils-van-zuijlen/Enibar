@@ -300,6 +300,7 @@ class MenuBar(QtWidgets.QMenuBar):
     def _refresh_parent(self):
         """ Refresh the parent
         """
+        self.cur_window = None
         self.parent().notes_list.current_filter = lambda x: x['hidden'] == 0
         self.parent().rebuild_notes_list()
 
