@@ -40,7 +40,7 @@ if [[ $TEST == 1 ]]; then
 	fi
 
 	# -- TEST --
-	python -m unittest discover ../test '*.py' -v || TEST_FAILED=1
+	nosetests ../test/*.py -v --with-coverage --cover-package=api || TEST_FAILED=1
 
 	mv settings.py.bak settings.py
 fi
