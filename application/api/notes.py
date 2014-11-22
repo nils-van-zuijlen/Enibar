@@ -84,7 +84,6 @@ def _build_stats():
                     note['tot_refill'] = tot[note['nickname']]['tot_refill']
 
 
-
 def _request_multiple_ids(ids, request):
     """ Execute the request on multiple ids
 
