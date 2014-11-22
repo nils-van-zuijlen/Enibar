@@ -109,7 +109,7 @@ class NotesTest(unittest.TestCase):
                                  'overdraft_date': PyQt5.QtCore.QDate(),
                                  'ecocups': 0,
                                  'photo_path': 'coucou.jpg',
-                                 'tot_cons': -3.0,
+                                 'tot_cons': 0.0,
                                  'tot_refill': 0.0,
                                  'hidden': 0})
         self.assertTrue(os.path.isfile("img/coucou.jpg"))
@@ -156,8 +156,8 @@ class NotesTest(unittest.TestCase):
                                  'overdraft_date': PyQt5.QtCore.QDate(),
                                  'ecocups': 0,
                                  'photo_path': '',
-                                 'tot_cons': -3.0 if i == 1 else 0,
-                                 'tot_refill': 0,
+                                 'tot_cons': 0.0,
+                                 'tot_refill': 0.0,
                                  'hidden': 0} for i in range(2)])
 
     def test_get_by_minors(self):
@@ -193,7 +193,7 @@ class NotesTest(unittest.TestCase):
                                  'birthdate': dt1,
                                  'promo': '1A',
                                  'note': 0.0,
-                                 'tot_cons': -3.0,
+                                 'tot_cons': 0.0,
                                  'tot_refill': 0.0,
                                  'overdraft_date': PyQt5.QtCore.QDate(),
                                  'ecocups': 0,
