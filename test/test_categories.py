@@ -51,6 +51,8 @@ class CategoriesTest(unittest.TestCase):
         self.assertEqual(self.count_categories(), 2)
         categories.add("Coucou")
         self.assertEqual(self.count_categories(), 2)
+        self.assertIsNone(categories.add(""))
+        self.assertEqual(self.count_categories(), 2)
 
     def test_remove_category(self):
         """ Testing remove_category
@@ -91,6 +93,24 @@ class CategoriesTest(unittest.TestCase):
         categories.add("Lolilonche")
         categories.add("Lolilonche2")
         self.assertEqual(1, len(list(categories.get(name="Lolilonche"))))
+
+    def test_set_color(self):
+        """ Testing set_color
+        """
+        categories.add("Test")
+        categories.set_color("Test", "555555")
+        self.assertEqual("555555", list(categories.get(name='Test'))[0]['color'])
+        categories.set_color("Test", "555556")
+        self.assertEqual("555556", list(categories.get(name='Test'))[0]['color'])
+
+    def test_rename(self):
+        """ Testing rename
+        """
+        categories.add("Test")
+        self.assertEqual("Test", list(categories.get(name='Test'))[0]['name'])
+        categories.rename("Test", "Coucou")
+        self.assertEqual("Coucou", list(categories.get(name='Coucou'))[0]['name'])
+        self.assertEqual(1, self.count_categories())
 
     def test_set_alcoholic(self):
         """ Testing set_alcoholic
