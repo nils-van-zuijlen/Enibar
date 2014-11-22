@@ -30,6 +30,7 @@ class NotesTest(unittest.TestCase):
     def setUp(self):
         with Cursor() as cursor:
             cursor.exec("TRUNCATE TABLE notes")
+            cursor.exec("TRUNCATE TABLE transactions")
 
     def count_notes(self):
         """ Returns the number of notes currently in database """
