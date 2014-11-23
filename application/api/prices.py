@@ -205,7 +205,8 @@ def set_multiple_values(prices):
         for price in prices:
             cursor.bindValue(":id", price['id'])
             cursor.bindValue(":value", price['value'])
-            error = error or not cursor.exec_()
+            cursor.exec_()
+            error = error or not cursor.numRowsAffected()
 
         if error:
             database.rollback()
