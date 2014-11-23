@@ -103,18 +103,35 @@ class TransactionHistory(QtWidgets.QDialog):
         QtCore.QTimer.singleShot(200, self.prepare)
         event.accept()
 
+    def update_filters(self):
+        """ Update filters
+        """
+        # prepare filters
+        filters = {}
+        for row, combobox in self.cbs.items():
+            if combobox.currentText():
+                filters[row] = combobox.currentText()
+
+        for row, combobox in self.cbs.items():
+            combobox.clear()
+            combobox.addItem("")
+            for data in api.transactions.get_grouped_entries(row, filters):
+                if data:
+                    combobox.addItem(data)
+            combobox.setCurrentIndex(0)
+
+        for row, combobox in self.cbs.items():
+            if row in filters:
+                index = combobox.findText(filters[row])
+                if index:
+                    combobox.setCurrentIndex(index)
+
     def prepare(self):
         """ Prepare window by fetching all transactions, required filter fields
         and displaying history.
         """
         self.fetch_transactions()
-        for row, combobox in self.cbs.items():
-            combobox.clear()
-            combobox.addItem("")
-            for data in api.transactions.get_grouped_entries(row):
-                if data:
-                    combobox.addItem(data)
-            combobox.setCurrentIndex(0)
+        self.update_filters()
         self.call_update()
 
     def call_update(self):
@@ -229,6 +246,8 @@ class TransactionHistory(QtWidgets.QDialog):
         """
         if not self.allow_refresh:
             return
+        self.update_filters()
+
         if self.updatetimer.isActive():
             self.updatetimer.stop()
         filter_ = {
