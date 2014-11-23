@@ -181,7 +181,7 @@ class PricesTest(unittest.TestCase):
         prices = []
         for i in range(10):
             id_ = api.prices.add(product, desc_id, 0)
-            prices.append({'id': id_, 'value': i})
+            prices.append({'id': id_, 'value': i + 1})
         self.assertTrue(api.prices.set_multiple_values(prices))
         for price in api.prices.get():
             id_, value = price['id'], price['value']
@@ -190,6 +190,7 @@ class PricesTest(unittest.TestCase):
                     self.assertEqual(value, price['value'])
         # The extra length of api.prices.get is due to product creation
         self.assertEqual(len(prices), len(list(api.prices.get())) - 1)
+        self.assertFalse(api.prices.set_multiple_values([{"id": "&", "value": "&p"}]))
 
 
 
