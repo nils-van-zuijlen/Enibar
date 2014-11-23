@@ -172,21 +172,37 @@ def rollback_transaction(id_, full=False):
             return False
 
 
-def get_grouped_entries(row):
+def get_grouped_entries(col, filters=None):
+    """ Get grouped entries to list all distinct value for given column when
+    row validate filters if any.
+
+    :param str col: db column name
+    :param dict filters: A dict giving carresponding value to columns
     """
-    """
+    if not filters:
+        sqlfilters = []
+    else:
+        sqlfilters = [c + "=:" + c for c in filters if c != col]
+
     with Cursor() as cursor:
         cursor.prepare("""
-            SELECT {r} FROM transactions
-            GROUP BY binary {r}
-            ORDER BY {r}
-            """.format(r=row)
+            SELECT {c} FROM transactions
+            {w} {filters}
+            GROUP BY binary {c}
+            ORDER BY {c}
+            """.format(
+                    c=col,
+                    w="WHERE" *  bool(sqlfilters),
+                    filters=' AND '.join(sqlfilters)
+                )
         )
+        for key, value in filters.items():
+            cursor.bindValue(":{}".format(key), value)
         cursor.exec_()
         if cursor.lastError().isValid():
             raise Exception(cursor.lastError().text())
         while cursor.next():
-            yield cursor.record().value(row)
+            yield cursor.record().value(col)
 
 
 TRANSACTS_FIELDS_CACHE = {}
