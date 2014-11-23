@@ -73,12 +73,12 @@ Database
             **Default value** ``5``
 
             Defines the maximum number of history lines printed on the
-            MainWindow
+            MainWindow.
 
     ECOCUP_PRICE
             **Default value** ``1.0``
 
-            The price of an ecocup
+            The price of an ecocup.
 
     ECOCUP_NAME
             **Default value** ``Ecocup``
@@ -100,7 +100,7 @@ Database
     IMG_BASE_DIR
             **Default value** ``img/``
 
-            The base dir for all images
+            The base dir for all images.
 
     AGIO_THRESHOLD
             **Default value** ``14``
@@ -116,7 +116,7 @@ Database
     AGIO_PERCENT
             **Default value** ``5.0``
 
-            Agio value
+            Agio value.
 
 """
 
