@@ -190,11 +190,8 @@ def get_grouped_entries(col, filters=None):
             {w} {filters}
             GROUP BY binary {c}
             ORDER BY {c}
-            """.format(
-                    c=col,
-                    w="WHERE" *  bool(sqlfilters),
-                    filters=' AND '.join(sqlfilters)
-                )
+            """.format(c=col, w="WHERE" * bool(sqlfilters),
+                filters=' AND '.join(sqlfilters))
         )
         for key, value in filters.items():
             cursor.bindValue(":{}".format(key), value)
