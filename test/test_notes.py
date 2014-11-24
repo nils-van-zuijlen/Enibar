@@ -31,6 +31,26 @@ class NotesTest(unittest.TestCase):
         with Cursor() as cursor:
             cursor.exec("TRUNCATE TABLE notes")
             cursor.exec("TRUNCATE TABLE transactions")
+            try:
+                os.remove("img/coucou.jpg")
+            except FileNotFoundError:
+                pass
+
+            try:
+                os.remove("img/coucou2.jpg")
+            except FileNotFoundError:
+                pass
+
+    def add_note(self, nick):
+        return notes.add(nick,
+            "test1",
+            "test1",
+            "test@pouette.com",
+            "0600000000",
+            '12/12/2001',
+            '1A',
+            ''
+        )
 
     def count_notes(self):
         """ Returns the number of notes currently in database """
@@ -73,15 +93,7 @@ class NotesTest(unittest.TestCase):
 
     def test_remove(self):
         """ Testing removing notes """
-        id_ = notes.add("test1",
-            "test1",
-            "test1",
-            "test@pouette.com",
-            "0600000000",
-            '12/12/2001',
-            '1A',
-            ''
-        )
+        id_ = self.add_note("test1")
 
         self.assertTrue(notes.remove(id_))
         self.assertEqual(self.count_notes(), 0)
@@ -243,15 +255,7 @@ class NotesTest(unittest.TestCase):
 
     def test_transaction(self):
         """ Testing transactions """
-        id1 = notes.add("test1",
-            "test",
-            "test",
-            "test@pouette.com",
-            "0600000000",
-            '12/12/2001',
-            '1A',
-            ''
-        )
+        id1 = self.add_note("test1")
 
         notes.transaction("test1", 10)
         self.assertEqual(notes.get(lambda x: x["nickname"] == "test1")[0]['note'], 10)
@@ -292,24 +296,8 @@ class NotesTest(unittest.TestCase):
     def test_remove_multiple(self):
         """ Testing multiple removing
         """
-        id0 = notes.add("test0",
-            "test",
-            "test",
-            "test@pouette.com",
-            "0600000000",
-            "01/01/1994",
-            '1A',
-            ''
-        )
-        id1 = notes.add("test1",
-            "test",
-            "test",
-            "test@pouette.com",
-            "0600000000",
-            "01/01/1994",
-            '1A',
-            ''
-        )
+        id0 = self.add_note("test0")
+        id1 = self.add_note("test1")
 
         self.assertEqual(self.count_notes(), 2)
         notes.remove_multiple([id0, id1])
@@ -336,15 +324,7 @@ class NotesTest(unittest.TestCase):
     def test_overdraft(self):
         """ Testing overdraft support
         """
-        id0 = notes.add("test0",
-            "test",
-            "test",
-            "test@pouette.com",
-            "0600000000",
-            "01/01/1994",
-            '1A',
-            ''
-        )
+        id0 = self.add_note("test0")
         note = list(notes.get())[0]
         self.assertEqual(note['overdraft_date'], PyQt5.QtCore.QDate())
 
@@ -358,4 +338,45 @@ class NotesTest(unittest.TestCase):
         note = list(notes.get())[0]
         self.assertEqual(note['overdraft_date'], PyQt5.QtCore.QDate())
 
+    def test_unique_file_name(self):
+        """ Testing get_unique_file_name
+        """
+        self.assertNotEqual(notes.unique_file("img/a"), notes.unique_file("img/a"))
+
+    def test_change_photo(self):
+        """ Testing change_photo
+        """
+        id0 = self.add_note("test0")
+
+        notes.change_photo("test0", "../test/resources/coucou2.jpg")
+        note = list(notes.get())[0]
+        self.assertEqual(note['photo_path'], "coucou2.jpg")
+        notes.change_photo("test0", "../test/resources/coucou.jpg")
+        note = list(notes.get())[0]
+        self.assertEqual(note['photo_path'], "coucou.jpg")
+        notes.change_photo("test0", "../test/resources/coucou2.jpg")
+        note = list(notes.get())[0]
+        self.assertIn("coucou2", note['photo_path'])
+        self.assertNotEqual("coucou2.jpg", note['photo_path'])
+
+    def test_get_notes_id(self):
+        id0 = self.add_note("test0")
+        id1 = self.add_note("test1")
+        id2 = self.add_note("test2")
+
+        self.assertEqual([id0, id1], list(notes.get_notes_id(["test0", "test1", "p"])))
+
+    def test_hide_show(self):
+        """ Testing hide and show
+        """
+        id0 = self.add_note("test0")
+
+        note = list(notes.get())[0]
+        self.assertFalse(bool(note['hidden']))
+        notes.hide(id0)
+        note = list(notes.get())[0]
+        self.assertTrue(bool(note['hidden']))
+        notes.show(id0)
+        note = list(notes.get())[0]
+        self.assertFalse(bool(note['hidden']))
 
