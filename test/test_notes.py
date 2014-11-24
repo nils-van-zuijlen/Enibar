@@ -269,6 +269,30 @@ class NotesTest(unittest.TestCase):
         notes.transaction("test1", -4.95)
         self.assertEqual(notes.get(lambda x: x["nickname"] == "test1")[0]['note'], 0.05)
 
+    def test_transaction_multiple(self):
+        """ Testing multiple_transaction
+        """
+
+        id0 = self.add_note("test0")
+        id1 = self.add_note("test1")
+
+        notes.multiple_transaction(['test0', 'test1'], 10)
+        for note in notes.get():
+            self.assertEqual(note['note'], 10)
+        notes.multiple_transaction(['test0', 'test1'], 10)
+        for note in notes.get():
+            self.assertEqual(note['note'], 20)
+        notes.multiple_transaction(['test0', 'test1'], -5)
+        for note in notes.get():
+            self.assertEqual(note['note'], 15)
+        notes.multiple_transaction(['test0', 'test1'], -15)
+        for note in notes.get():
+            self.assertEqual(note['note'], 0)
+        notes.multiple_transaction(['test0', 'test1'], 5)
+        notes.multiple_transaction(['test0', 'test1'], -4.95)
+        for note in notes.get():
+            self.assertEqual(note['note'], 0.05)
+
     def test_export_xml(self):
         """ Testing notes exporting """
         id1 = notes.add("test1",
@@ -292,6 +316,52 @@ class NotesTest(unittest.TestCase):
         xml += "\t</note>\n"
         xml += "</notes>\n"
         self.assertEqual(notes.export(notes.get(), xml=True), xml)
+
+    def test_export_csv(self):
+        """ Testing csv export
+        """
+        id1 = notes.add("test1",
+            "test",
+            "test",
+            "test@pouette.com",
+            "0600000000",
+            '12/12/2001',
+            '1A',
+            ''
+        )
+
+        to_export = ["nickname", "firstname", "lastname", "note", "mail",
+                     "photo_path"]
+        note = list(notes.get())[0]
+        csv = ", ".join(to_export)
+        csv += "\n" + ",".join(str(note[value]) for value in to_export)
+        self.assertEqual(csv, notes.export(notes.get(), csv=True))
+
+    def test_export_by_id(self):
+        id0 = notes.add("test0",
+            "test",
+            "test",
+            "test@pouette.com",
+            "0600000000",
+            '12/12/2001',
+            '1A',
+            ''
+        )
+        id1 = notes.add("test1",
+            "test",
+            "test",
+            "test@pouette.com",
+            "0600000000",
+            '12/12/2001',
+            '1A',
+            ''
+        )
+        to_export = ["nickname", "firstname", "lastname", "note", "mail",
+                     "photo_path"]
+        note = list(notes.get(lambda x: x['nickname'] == "test0"))[0]
+        csv = ", ".join(to_export)
+        csv += "\n" + ",".join(str(note[value]) for value in to_export)
+        self.assertEqual(csv, notes.export_by_id([id0], csv=True))
 
     def test_remove_multiple(self):
         """ Testing multiple removing
@@ -380,3 +450,29 @@ class NotesTest(unittest.TestCase):
         note = list(notes.get())[0]
         self.assertFalse(bool(note['hidden']))
 
+    def test_hide_show_multiple(self):
+        """ Testing show_multiple and hide_multiple
+        """
+        id0 = self.add_note("test0")
+        id1 = self.add_note("test1")
+        id2 = self.add_note("test2")
+
+        for note in notes.get():
+            self.assertFalse(bool(note['hidden']))
+        notes.hide_multiple([id0, id1, id2])
+        for note in notes.get():
+            self.assertTrue(bool(note['hidden']))
+        notes.show_multiple([id0, id1, id2])
+        for note in notes.get():
+            self.assertFalse(bool(note['hidden']))
+
+    def test_change_ecocups(self):
+        """ Testing change_ecocups
+        """
+        id0 = self.add_note("test0")
+        notes.change_ecocups("test0", 5)
+        note = list(notes.get())[0]
+        self.assertEqual(note['ecocups'], 5)
+        notes.change_ecocups("test0", -3)
+        note = list(notes.get())[0]
+        self.assertEqual(note['ecocups'], 2)

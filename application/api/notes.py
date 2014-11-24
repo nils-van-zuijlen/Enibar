@@ -361,8 +361,6 @@ def export(notes, *, csv=False, xml=False):
         for note in notes:
             if note["overdraft_date"] and note["overdraft_date"].isValid():
                 overdraft_date = note["overdraft_date"].toString("yyyy-MM-dd")
-                if not overdraft_date:
-                    overdraft_date = ""  # Because Qt suks
             else:
                 overdraft_date = ""
 
