@@ -37,6 +37,8 @@ if [[ $TEST == 1 ]]; then
 		sleep 30
 
 		mysql --user="root" --password="toor" --host="$IP" < ../db.sql
+	else
+		mysql --user="root" < ../db.sql
 	fi
 
 	# -- TEST --

@@ -1,6 +1,9 @@
-import traceback
+from database import Cursor
 import os
+import traceback
+import unittest
 import warnings
+import subprocess
 
 from unittest.runner import TextTestResult, TextTestRunner
 from unittest.signals import registerResult
@@ -59,6 +62,16 @@ def run(self, test):
     run = result.testsRun
 
     return result
+
+
+class BaseTest(unittest.TestCase):
+    def _reset_db(self):
+        tables = ["admins", "categories", "products", "price_description",
+                  "notes", "prices", "transactions", "panels", "panel_content"]
+        with Cursor() as cursor:
+            for table in tables:
+                cursor.exec_("DELETE FROM {}".format(table))
+                cursor.exec_("ALTER TABLE {} AUTO_INCREMENT = 1".format(table))
 
 
 TextTestResult.getDescription = getDescription

@@ -17,7 +17,6 @@
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 import basetest
-import unittest
 
 from database import Cursor
 import api.stats as stats
@@ -25,11 +24,9 @@ import api.notes as notes
 import api.transactions as transactions
 
 
-class StatsTests(unittest.TestCase):
+class StatsTests(basetest.BaseTest):
     def setUp(self):
-        with Cursor() as cursor:
-            cursor.exec("TRUNCATE TABLE notes")
-            cursor.exec("TRUNCATE TABLE transactions")
+        self._reset_db()
         notes.add("test1",
             "test1",
             "test1",

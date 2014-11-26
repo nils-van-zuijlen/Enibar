@@ -17,16 +17,14 @@
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 import basetest
-import unittest
 
 import api.users as users
 from database import Cursor
 
 
-class UsersTest(unittest.TestCase):
+class UsersTest(basetest.BaseTest):
     def setUp(self):
-        with Cursor() as cursor:
-            cursor.exec("TRUNCATE TABLE admins")
+        self._reset_db()
 
     def count_admins(self):
         """ Test helper, returns the number of admins currently in database """

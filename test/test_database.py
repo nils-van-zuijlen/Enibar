@@ -17,12 +17,11 @@
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 import basetest
-import unittest
 
 from database import Cursor
 
 
-class UtilsTest(unittest.TestCase):
+class UtilsTest(basetest.BaseTest):
     def test_connected(self):
         """ Test if the database connection works """
         with Cursor() as cursor:

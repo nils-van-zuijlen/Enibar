@@ -17,7 +17,6 @@
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 import basetest
-import unittest
 
 import api.products as products
 import api.categories as categories
@@ -28,12 +27,13 @@ from test_prices import PricesTest
 from database import Cursor
 
 
-class CategoriesTest(unittest.TestCase):
+class CategoriesTest(basetest.BaseTest):
     def setUp(self):
-        with Cursor() as cursor:
-            # Erf can't truncate this so just partially clean up
-            cursor.exec("DELETE FROM panels")
-            cursor.exec("DELETE FROM panel_content")
+        self._reset_db()
+        self.cat_eat = categories.add("Manger")
+        self.cat_drink = categories.add("Boire")
+        self.banana = products.add("Banane", category_name="Manger")
+        self.bier = products.add("Biere", category_name="Boire")
 
     @classmethod
     def count_panels(cls):
@@ -81,7 +81,50 @@ class CategoriesTest(unittest.TestCase):
         self.assertEqual(len(list(panels.get())), 3)
         for i, category in enumerate(panels.get()):
             self.assertEqual("Test{}".format(i), category['name'])
+            self.assertFalse(category['hidden'])
         panels.add("Lolilonche")
         panels.add("Lolilonche2")
         self.assertEqual(1, len(list(panels.get(name="Lolilonche"))))
+
+    def test_add_product(self):
+        """ Testing add_product
+        """
+        pan = panels.add("Test")
+        pan2 = panels.add("Test2")
+        pro = products.add("coucou", category_name="Manger")
+        self.assertTrue(panels.add_product(pan, pro))
+        self.assertTrue(panels.add_product(pan2, pro))
+        self.assertEqual(list(panels.get_content(panel_id=pan)), [{'category_id': self.cat_eat,
+            'product_name': 'coucou', 'panel_id': pan, 'category_name': "Manger", 'product_id': pro}])
+
+    def test_add_products(self):
+        """ Testing add_products
+        """
+        pan = panels.add("Test")
+        pan2 = panels.add("Test2")
+        pro = products.add("coucou", category_name="Manger")
+        pro2 = products.add("coucou", category_name="Boire")
+        panels.add_products(pan, [pro, pro2])
+        self.assertEqual(list(panels.get_content(panel_id=pan)), [{'category_id': self.cat_eat,
+            'product_name': 'coucou', 'panel_id': pan, 'category_name': "Manger", 'product_id': pro},
+            {'category_id': self.cat_drink, 'product_name': 'coucou', 'panel_id': pan, 'category_name': "Boire", 'product_id': pro2}, ])
+
+    def test_delete_product(self):
+        """ Testing delete_product
+        """
+        pan = panels.add("Test")
+        pro = products.add("coucou", category_name="Manger")
+        panels.add_product(pan, pro)
+        panels.delete_product(pan, pro)
+        self.assertEqual(list(panels.get_content(panel_id=pan)), [])
+
+    def test_delete_products(self):
+        """ Testing delete_products
+        """
+        pan = panels.add("Test")
+        pro = products.add("coucou", category_name="Manger")
+        pro2 = products.add("coucou", category_name="Boire")
+        panels.add_products(pan, [pro, pro2])
+        panels.delete_products(pan, [pro, pro2])
+        self.assertEqual(list(panels.get_content(panel_id=pan)), [])
 

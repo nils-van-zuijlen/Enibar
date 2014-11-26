@@ -17,19 +17,15 @@
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 import basetest
-import unittest
 
 import api.products as products
 import api.categories as categories
 from database import Cursor
 
 
-class ProductsTest(unittest.TestCase):
+class ProductsTest(basetest.BaseTest):
     def setUp(self):
-        with Cursor() as cursor:
-            # Erf can't truncate this so just partially clean up
-            cursor.exec("DELETE FROM products")
-            cursor.exec("DELETE FROM categories")
+        self._reset_db()
         self.cat_eat = categories.add("Manger")
         self.cat_drink = categories.add("Boire")
         self.cat_soft = categories.add("Soft")

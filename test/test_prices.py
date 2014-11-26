@@ -17,7 +17,6 @@
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 import basetest
-import unittest
 import api.prices
 import api.products
 import api.categories
@@ -25,7 +24,7 @@ import api.categories
 from database import Cursor
 
 
-class PricesTest(unittest.TestCase):
+class PricesTest(basetest.BaseTest):
     @classmethod
     def count_descriptors(cls):
         with Cursor() as cursor:
@@ -41,12 +40,7 @@ class PricesTest(unittest.TestCase):
                 return cursor.record().value(0)
 
     def setUp(self):
-        with Cursor() as cursor:
-            # Erf can't truncate this so just partially clean up
-            cursor.exec("DELETE FROM products")
-            cursor.exec("DELETE FROM categories")
-            cursor.exec("DELETE FROM prices")
-            cursor.exec("DELETE FROM price_description")
+        self._reset_db()
         self.cat_eat = api.categories.add("Manger")
         self.cat_drink = api.categories.add("Boire")
         self.cat_soft = api.categories.add("Soft")

@@ -18,7 +18,6 @@
 
 import basetest
 import datetime
-import unittest
 import time
 import os.path
 import PyQt5
@@ -26,20 +25,18 @@ import api.notes as notes
 from database import Cursor
 
 
-class NotesTest(unittest.TestCase):
+class NotesTest(basetest.BaseTest):
     def setUp(self):
-        with Cursor() as cursor:
-            cursor.exec("TRUNCATE TABLE notes")
-            cursor.exec("TRUNCATE TABLE transactions")
-            try:
-                os.remove("img/coucou.jpg")
-            except FileNotFoundError:
-                pass
+        self._reset_db()
+        try:
+            os.remove("img/coucou.jpg")
+        except FileNotFoundError:
+            pass
 
-            try:
-                os.remove("img/coucou2.jpg")
-            except FileNotFoundError:
-                pass
+        try:
+            os.remove("img/coucou2.jpg")
+        except FileNotFoundError:
+            pass
 
     def add_note(self, nick):
         return notes.add(nick,

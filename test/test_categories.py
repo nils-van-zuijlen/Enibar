@@ -17,7 +17,6 @@
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 import basetest
-import unittest
 
 import api.products as products
 import api.categories as categories
@@ -27,12 +26,9 @@ from test_prices import PricesTest
 from database import Cursor
 
 
-class CategoriesTest(unittest.TestCase):
+class CategoriesTest(basetest.BaseTest):
     def setUp(self):
-        with Cursor() as cursor:
-            # Erf can't truncate this so just partially clean up
-            cursor.exec("DELETE FROM products")
-            cursor.exec("DELETE FROM categories")
+        self._reset_db()
 
     @classmethod
     def count_categories(cls):
