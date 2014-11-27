@@ -68,11 +68,8 @@ def add(name, *, category_name=None, category_id=None):
         product = cursor.lastInsertId()
         cursor.prepare("SELECT id FROM price_description WHERE category=:cat")
         cursor.bindValue(":cat", cat[0]['id'])
-        if not cursor.exec_():
-            database.rollback()
-            return None
+        cursor.exec_()
 
-        error = False
         while cursor.next():
             pcursor = QtSql.QSqlQuery(database)
             pcursor.prepare("INSERT INTO prices(product,\
@@ -84,14 +81,9 @@ def add(name, *, category_name=None, category_id=None):
                 cursor.record().value('id')
             )
             pcursor.bindValue(':value', '0.00')
-            error = error or not pcursor.exec_()
-        if not error:
-            database.commit()
-            return product
-
-        # Something went wrong
-        database.rollback()
-    return None
+            pcursor.exec_()
+        database.commit()
+        return product
 
 
 def remove(id_):
