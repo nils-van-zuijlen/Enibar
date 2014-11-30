@@ -75,6 +75,8 @@ class TransactionsTest(basetest.BaseTest):
         self.assertEqual(self.count_transactions(), 3)
         now = QtCore.QDateTime.currentDateTime()
         now = now.addMSecs(-now.time().msec())  # Remove msec from now.
+        now.setOffsetFromUtc(3600)
+
         self.assertEqual(list(transactions.get()),
             [{'product': 'b',
               'lastname': 'test1',
@@ -132,6 +134,8 @@ class TransactionsTest(basetest.BaseTest):
                                         'price': 5}])
         now = QtCore.QDateTime.currentDateTime()
         now = now.addMSecs(-now.time().msec())  # Remove msec from now.
+        now.setOffsetFromUtc(3600)
+
         self.assertEqual(list(transactions.get()),
             [{'product': 'b',
               'lastname': 'test1',
@@ -204,6 +208,7 @@ class TransactionsTest(basetest.BaseTest):
         )
         now = QtCore.QDateTime.currentDateTime()
         now = now.addMSecs(-now.time().msec())  # Remove msec from now.
+        now.setOffsetFromUtc(3600)
 
         self.assertEqual(self.count_transactions(), 4)
         self.assertTrue(transactions.rollback_transaction(1))
@@ -282,6 +287,8 @@ class TransactionsTest(basetest.BaseTest):
         self.assertEqual(self.count_transactions(), 2)
         now = QtCore.QDateTime.currentDateTime()
         now = now.addMSecs(-now.time().msec())  # Remove msec from now.
+        now.setOffsetFromUtc(3600)
+
         self.assertEqual(list(transactions.get_reversed()),
             [{'product': 'd',
               'lastname': 'test1',
