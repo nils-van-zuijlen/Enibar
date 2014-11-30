@@ -285,6 +285,7 @@ class TransactionsTest(basetest.BaseTest):
             -5
         ))
         self.assertEqual(self.count_transactions(), 2)
+
         now = QtCore.QDateTime.currentDateTime()
         now = now.addMSecs(-now.time().msec())  # Remove msec from now.
         now.setOffsetFromUtc(3600)
