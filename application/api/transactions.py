@@ -64,7 +64,7 @@ def log_transaction(nickname, category, product, price_name, quantity, price,
         cursor.bindValue(':lastname', lastname)
         cursor.bindValue(':deletable', deletable)
         cursor.exec_()
-        return not cursor.lastError().isValid()
+        return True
 
 
 def log_transactions(transactions):
@@ -74,7 +74,6 @@ def log_transactions(transactions):
     """
     with Database() as database:
         cache = {}
-        error = False
         database.transaction()
         cursor = QtSql.QSqlQuery(database)
         cursor.prepare("""INSERT INTO transactions(
@@ -119,14 +118,9 @@ def log_transactions(transactions):
             cursor.bindValue(':lastname', lastname)
             cursor.bindValue(':deletable', trans.get('deletable', True))
             cursor.exec_()
-            error = error or cursor.lastError().isValid()
 
-    if not error:
         database.commit()
         return True
-    else:
-        database.rollback()
-        return False
 
 
 def rollback_transaction(id_, full=False):
@@ -147,10 +141,7 @@ def rollback_transaction(id_, full=False):
     except IndexError:
         return False
 
-    try:
-        quantity = int(trans['quantity'])
-    except ValueError:
-        quantity = 1
+    quantity = int(trans['quantity'])
 
     with Cursor() as cursor:
         if quantity > 1 and not full:
@@ -172,7 +163,7 @@ def rollback_transaction(id_, full=False):
             return False
 
 
-def get_grouped_entries(col, filters=None):
+def get_grouped_entries(col, filters):
     """ Get grouped entries to list all distinct value for given column when
     row validate filters if any.
 
