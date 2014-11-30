@@ -301,6 +301,15 @@ class NotesTest(basetest.BaseTest):
             '1A',
             ''
         )
+        id2 = notes.add("test2",
+            "test2",
+            "test2",
+            "test2@pouette.com",
+            "0700000000",
+            '12/12/2001',
+            '2A',
+            ''
+        )
         notes.transaction("test1", -60)
         with Cursor() as cursor:
             cursor.prepare("UPDATE notes SET overdraft_date=DATE(2014-11-30)")
@@ -314,6 +323,13 @@ class NotesTest(basetest.BaseTest):
         xml += "\t\t<compte>-60.0</compte>\n"
         xml += "\t\t<mail>test</mail>\n"
         xml += "\t\t<date_Decouvert>2014-11-30</date_Decouvert>\n"
+        xml += "\t</note>\n"
+        xml += "\t<note id=\"2\">\n"
+        xml += "\t\t<prenom>test2</prenom>\n"
+        xml += "\t\t<nom>test2</nom>\n"
+        xml += "\t\t<compte>0.0</compte>\n"
+        xml += "\t\t<mail>test2</mail>\n"
+        xml += "\t\t<date_Decouvert></date_Decouvert>\n"
         xml += "\t</note>\n"
         xml += "</notes>\n"
         self.assertEqual(notes.export(notes.get(), xml=True), xml)
