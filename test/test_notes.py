@@ -66,7 +66,7 @@ class NotesTest(basetest.BaseTest):
             "0600000000",
             '12/12/2001',
             '1A',
-            ''
+            '../test/resources/coucou.jpg'
         ), 1)
         self.assertEqual(notes.add("test2",
             "test2",
@@ -75,7 +75,7 @@ class NotesTest(basetest.BaseTest):
             "0600000000",
             '12/12/2001',
             '1A',
-            ''
+            '../test/resources/coucou.jpg'
         ), 2)
         self.assertEqual(notes.add("test2",
             15,
@@ -301,15 +301,19 @@ class NotesTest(basetest.BaseTest):
             '1A',
             ''
         )
+        notes.transaction("test1", -60)
+        with Cursor() as cursor:
+            cursor.prepare("UPDATE notes SET overdraft_date=DATE(2014-11-30)")
+            cursor.exec_()
         xml = "<?xml version=\"1.0\"?>\n"
         xml += "<notes date=\"{}\">\n".format(datetime.datetime.now().strftime(
             "%Y-%m-%d"))
         xml += "\t<note id=\"1\">\n"
         xml += "\t\t<prenom>test</prenom>\n"
         xml += "\t\t<nom>test</nom>\n"
-        xml += "\t\t<compte>0.0</compte>\n"
+        xml += "\t\t<compte>-60.0</compte>\n"
         xml += "\t\t<mail>test</mail>\n"
-        xml += "\t\t<date_Decouvert></date_Decouvert>\n"
+        xml += "\t\t<date_Decouvert>2014-11-30</date_Decouvert>\n"
         xml += "\t</note>\n"
         xml += "</notes>\n"
         self.assertEqual(notes.export(notes.get(), xml=True), xml)
