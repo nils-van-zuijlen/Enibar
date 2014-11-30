@@ -40,6 +40,7 @@ class ProductsTest(basetest.BaseTest):
 
     def test_add_with_cat_name(self):
         """ Testing adding products with category name """
+        self.assertIsNone(products.add("Banane"))
         self.assertIsNotNone(products.add("Banane", category_name="Manger"))
         self.assertIsNotNone(products.add("Biere", category_name="Boire"))
         self.assertIsNone(products.add("Cidre", category_name="Terroir"))
