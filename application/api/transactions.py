@@ -187,8 +187,6 @@ def get_grouped_entries(col, filters):
         for key, value in filters.items():
             cursor.bindValue(":{}".format(key), value)
         cursor.exec_()
-        if cursor.lastError().isValid():
-            raise Exception(cursor.lastError().text())
         while cursor.next():
             yield cursor.record().value(col)
 

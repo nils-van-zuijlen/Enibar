@@ -125,6 +125,7 @@ class TransactionsTest(basetest.BaseTest):
                                         'price_name': "g",
                                         'quantity': 2,
                                         'price': 5}])
+        transactions.TRANSACTS_FIELDS_CACHE = {}  # To test the cache making.
         self.assertDictListEqual(list(transactions.get()),
             [{'product': 'b',
               'lastname': 'test1',
@@ -192,10 +193,19 @@ class TransactionsTest(basetest.BaseTest):
             "a",
             5
         )
+        transactions.log_transaction(
+            "test1",
+            "e",
+            "f",
+            "g",
+            "a",
+            5,
+            False
+        )
 
-        self.assertEqual(self.count_transactions(), 4)
+        self.assertEqual(self.count_transactions(), 5)
         self.assertTrue(transactions.rollback_transaction(1))
-        self.assertEqual(self.count_transactions(), 3)
+        self.assertEqual(self.count_transactions(), 4)
         self.assertTrue(transactions.rollback_transaction(2))
         self.assertDictListEqual(list(transactions.get(id=2)),
              [{'product': 'd',
@@ -209,13 +219,14 @@ class TransactionsTest(basetest.BaseTest):
               'price_name': 'c'}
              ], ignore=['date']
         )
-        self.assertEqual(self.count_transactions(), 3)
+        self.assertEqual(self.count_transactions(), 4)
         self.assertTrue(transactions.rollback_transaction(2, full=True))
-        self.assertEqual(self.count_transactions(), 2)
+        self.assertEqual(self.count_transactions(), 3)
         self.assertFalse(transactions.rollback_transaction(3))
-        self.assertEqual(self.count_transactions(), 2)
+        self.assertEqual(self.count_transactions(), 3)
         self.assertFalse(transactions.rollback_transaction(4))
-        self.assertEqual(self.count_transactions(), 2)
+        self.assertEqual(self.count_transactions(), 3)
+        self.assertFalse(transactions.rollback_transaction(5))
 
     def test_get_grouped_entries(self):
         """ Testing get_grouped_entries
@@ -245,6 +256,7 @@ class TransactionsTest(basetest.BaseTest):
             5
         )
         self.assertEqual(list(transactions.get_grouped_entries("note", {'lastname': ""})), ['test2'])
+        self.assertEqual(list(transactions.get_grouped_entries("note", {})), ['test1', 'test2'])
 
     def test_get_reversed(self):
         """ Testing get_reversed
