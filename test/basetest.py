@@ -73,7 +73,7 @@ class BaseTest(unittest.TestCase):
                 cursor.exec_("DELETE FROM {}".format(table))
                 cursor.exec_("ALTER TABLE {} AUTO_INCREMENT = 1".format(table))
 
-    def assertDictEqual(self, d1, d2, ignore=None):
+    def assertMyDictEqual(self, d1, d2, ignore=None):
         """ ignore is a list of keys to ignore but that should be there in d1
         """
         if ignore is None:
@@ -94,7 +94,7 @@ class BaseTest(unittest.TestCase):
             raise self.failureException()
 
         for d1, d2 in zip(l1, l2):
-            self.assertDictEqual(d1, d2, ignore=ignore)
+            self.assertMyDictEqual(d1, d2, ignore=ignore)
 
 TextTestResult.getDescription = getDescription
 TextTestResult.startTest = startTest
