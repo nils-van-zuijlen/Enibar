@@ -29,16 +29,16 @@ import api.products
 import api.categories
 import api.prices
 import api.validator
-from .douchette import Douchette
+from .douchette_window import DouchetteWindow
 
 
-class ConsumptionManagmentWindow(QtWidgets.QDialog):
+class ProductsManagementWindow(QtWidgets.QDialog):
     """ Consumption ManagmentWindow
     This window allow user to add products, productcategories and prices.
     """
     def __init__(self):
         super().__init__()
-        uic.loadUi('ui/consumptionmanagment.ui', self)
+        uic.loadUi('ui/products_management_window.ui', self)
         self.input_cat.set_validator(api.validator.NAME)
         self.input_product.set_validator(api.validator.NAME)
         self.category = None
@@ -87,7 +87,7 @@ class ConsumptionManagmentWindow(QtWidgets.QDialog):
             if self.tabs.currentIndex() == 0 and\
                     not self.input_product.hasFocus():
                 if event.text() == "\"":
-                    self.win = Douchette(self.barcode_input.setText)
+                    self.win = DouchetteWindow(self.barcode_input.setText)
                     return True
         return super().event(event)
 

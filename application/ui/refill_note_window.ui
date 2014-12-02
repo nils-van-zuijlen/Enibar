@@ -61,7 +61,7 @@
   <customwidget>
    <class>Input</class>
    <extends>QLineEdit</extends>
-   <header>gui/input</header>
+   <header>gui/input_widget</header>
   </customwidget>
  </customwidgets>
  <tabstops>

@@ -290,12 +290,12 @@
   <customwidget>
    <class>Input</class>
    <extends>QLineEdit</extends>
-   <header>gui.input</header>
+   <header>gui/input_widget</header>
   </customwidget>
   <customwidget>
    <class>ManageNotesList</class>
    <extends>QListWidget</extends>
-   <header>gui/manage_notes</header>
+   <header>gui/notes_management_window</header>
   </customwidget>
  </customwidgets>
  <tabstops>

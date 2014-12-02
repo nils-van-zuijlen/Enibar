@@ -26,13 +26,13 @@ from api import users
 import gui.utils
 
 
-class UserManagmentWindow(QtWidgets.QDialog):
+class UsersManagementWindow(QtWidgets.QDialog):
     """
     User managment window
     """
     def __init__(self):
         super().__init__()
-        uic.loadUi('ui/usermanagment.ui', self)
+        uic.loadUi('ui/users_management_window.ui', self)
 
         self.save_button.clicked.connect(self.save)
         self.add_button.clicked.connect(self.add)

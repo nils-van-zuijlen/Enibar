@@ -228,17 +228,17 @@
   <customwidget>
    <class>Input</class>
    <extends>QLineEdit</extends>
-   <header>gui.input</header>
+   <header>gui.input_widget</header>
   </customwidget>
   <customwidget>
    <class>PanelConsumptionList</class>
    <extends>QTreeWidget</extends>
-   <header>gui/panelmanagment</header>
+   <header>gui/panels_management_window</header>
   </customwidget>
   <customwidget>
    <class>GlobalConsumptionList</class>
    <extends>QTreeWidget</extends>
-   <header>gui/panelmanagment</header>
+   <header>gui/panels_management_window</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -29,14 +29,14 @@ from PyQt5 import QtWidgets, uic
 import api.panels
 import api.validator
 import gui.utils
-from .consumptionmanagment import ConsumptionList
+from .products_management_window import ConsumptionList
 
 
-class PanelManagment(QtWidgets.QDialog):
+class PanelsManagementWindow(QtWidgets.QDialog):
     """ AddNote window class """
     def __init__(self):
         super().__init__()
-        uic.loadUi('ui/paneladmin.ui', self)
+        uic.loadUi('ui/panels_management_window.ui', self)
         self.panel_list = []
         self.name_input.set_validator(api.validator.NAME)
 

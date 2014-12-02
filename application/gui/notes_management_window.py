@@ -26,7 +26,7 @@ ManageNotes Window
 
 from PyQt5 import QtWidgets, QtCore, QtGui, uic
 
-from gui.input import Input
+from gui.input_widget import Input
 import api.notes
 import api.validator
 import datetime
@@ -34,11 +34,11 @@ import gui.utils
 import settings
 
 
-class ManageNotes(QtWidgets.QDialog):
+class NotesManagementWindow(QtWidgets.QDialog):
     """ ManageNotes window class """
     def __init__(self, main_window):
         super().__init__()
-        uic.loadUi('ui/manage_notes.ui', self)
+        uic.loadUi('ui/notes_management_window.ui', self)
 
         self.main_window = main_window
         # Add validators on inputs.

@@ -808,7 +808,7 @@
   <customwidget>
    <class>ProductList</class>
    <extends>QTreeWidget</extends>
-   <header>gui/panels</header>
+   <header>gui/panel_widget</header>
   </customwidget>
   <customwidget>
    <class>NotesList</class>
@@ -818,7 +818,7 @@
   <customwidget>
    <class>MenuBar</class>
    <extends>QMenuBar</extends>
-   <header>gui/mainwindow</header>
+   <header>gui/main_window</header>
    <slots>
     <slot>user_managment_fnc()</slot>
     <slot>consumption_managment_fnc()</slot>
@@ -842,7 +842,7 @@
   <customwidget>
    <class>Panels</class>
    <extends>QTabWidget</extends>
-   <header>gui/panels</header>
+   <header>gui/panel_widget</header>
    <container>1</container>
    <slots>
     <slot>rebuild()</slot>

@@ -21,7 +21,7 @@ Transaction hisotry window.
 """
 
 from PyQt5 import QtWidgets, uic, QtCore
-from .auth_prompt import ask_auth
+from .auth_prompt_window import ask_auth
 import api.transactions
 import datetime
 import time
@@ -29,7 +29,7 @@ import gui.utils
 import collections
 
 
-class TransactionHistory(QtWidgets.QDialog):
+class HistoryWindow(QtWidgets.QDialog):
     """ Base class for transaction history
     This class act like a singleton to avoid rebuilding history each time you
     open the window.
@@ -43,7 +43,7 @@ class TransactionHistory(QtWidgets.QDialog):
         """
         cls._instance_count += 1
         if not cls._instance:
-            cls._instance = super(TransactionHistory, cls).__new__(
+            cls._instance = super(HistoryWindow, cls).__new__(
                 cls, *args, **kwargs
             )
         return cls._instance
@@ -51,7 +51,7 @@ class TransactionHistory(QtWidgets.QDialog):
     def __init__(self, parent):
         if self._instance_count == 1:
             super().__init__(parent)
-            uic.loadUi('ui/history.ui', self)
+            uic.loadUi('ui/history_window.ui', self)
 
             self.updatetimer = QtCore.QTimer()
             self.updatetimer.timeout.connect(self.update_list)
@@ -372,7 +372,7 @@ class ExportWindow(QtWidgets.QDialog):
     """
     def __init__(self, trans):
         super().__init__()
-        uic.loadUi('ui/historyexport.ui', self)
+        uic.loadUi('ui/history_export_window.ui', self)
         self.trans = trans
 
     def accept(self, *args):

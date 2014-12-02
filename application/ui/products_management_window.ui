@@ -533,29 +533,29 @@
   <customwidget>
    <class>ConsumptionPrices</class>
    <extends>QGroupBox</extends>
-   <header>gui/consumptionmanagment</header>
+   <header>gui/products_management_window</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>CategoryPrices</class>
    <extends>QGroupBox</extends>
-   <header>gui/consumptionmanagment</header>
+   <header>gui/products_management_window</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>CategoryList</class>
    <extends>QListWidget</extends>
-   <header>gui/consumptionmanagment</header>
+   <header>gui/products_management_window</header>
   </customwidget>
   <customwidget>
    <class>ConsumptionList</class>
    <extends>QTreeWidget</extends>
-   <header>gui/consumptionmanagment</header>
+   <header>gui/products_management_window</header>
   </customwidget>
   <customwidget>
    <class>Input</class>
    <extends>QLineEdit</extends>
-   <header>gui.input</header>
+   <header>gui.input_widget</header>
   </customwidget>
  </customwidgets>
  <resources/>

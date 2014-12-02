@@ -43,7 +43,7 @@
   <customwidget>
    <class>ProductsContainer</class>
    <extends>QWidget</extends>
-   <header>gui/panels</header>
+   <header>gui/panel_widget</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

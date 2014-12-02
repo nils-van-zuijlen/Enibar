@@ -28,12 +28,12 @@ import api.validator
 import gui.utils
 
 
-class PasswordManagment(QtWidgets.QDialog):
+class PasswordManagementWindow(QtWidgets.QDialog):
     """ Password Managment main class
     """
     def __init__(self):
         super().__init__()
-        uic.loadUi('ui/passwordmanagment.ui', self)
+        uic.loadUi('ui/password_management_window.ui', self)
         self.pseudo_input.set_validator(api.validator.NAME)
         self.old_password_input.set_validator(api.validator.NAME)
         self.new_password_input.set_validator(api.validator.NAME)

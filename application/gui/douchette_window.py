@@ -30,12 +30,12 @@ EQUIVALENCE_TABLE = {"&": 1, "é": 2, "\"": 3, "'": 4, "(": 5,
                      "-": 6, "è": 7, "_": 8, "ç": 9, "à": 0, ")": "-"}
 
 
-class Douchette(QtWidgets.QDialog):
+class DouchetteWindow(QtWidgets.QDialog):
     """ Douchette window class """
     def __init__(self, callback):
         super().__init__()
         self.callback = callback
-        uic.loadUi('ui/douchette.ui', self)
+        uic.loadUi('ui/douchette_window.ui', self)
         self.show()
         self.equivalence_table = {"&": 1, "é": 2, "\"": 3, "'": 4, "(": 5,
                                   "-": 6, "è": 7, "_": 8, "ç": 9, "à": 0}

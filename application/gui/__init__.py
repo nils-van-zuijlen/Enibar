@@ -19,7 +19,7 @@
 Provide differents windows
 """
 
-from .auth_prompt import ask_auth, AuthPrompt
-from .mainwindow import MainWindow
-from .input import Input
+from .auth_prompt_window import ask_auth, AuthPromptWindow
+from .main_window import MainWindow
+from .input_widget import Input
 

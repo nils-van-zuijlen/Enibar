@@ -85,7 +85,7 @@
   <customwidget>
    <class>UserList</class>
    <extends>QListWidget</extends>
-   <header>gui/usermanagment</header>
+   <header>gui/users_management_window</header>
   </customwidget>
  </customwidgets>
  <tabstops>

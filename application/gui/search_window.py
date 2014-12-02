@@ -36,7 +36,7 @@ class SearchWindow(QtWidgets.QDialog):
     """ SearchWindow class """
     def __init__(self, parent):
         super().__init__(parent)
-        uic.loadUi('ui/searchwindow.ui', self)
+        uic.loadUi('ui/search_window.ui', self)
         self.setWindowFlags(QtCore.Qt.Tool | QtCore.Qt.WindowStaysOnTopHint)
         self.name_input.set_validator(api.validator.NAME)
         self.firstname_input.set_validator(api.validator.NAME)

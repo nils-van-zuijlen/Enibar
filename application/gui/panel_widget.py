@@ -27,7 +27,7 @@ from PyQt5 import QtWidgets, QtCore, uic, QtGui
 import collections
 import api.panels
 import settings
-from .auth_prompt import ask_auth
+from .auth_prompt_window import ask_auth
 
 
 def fail_callback_dummy():
@@ -83,7 +83,7 @@ class PanelTab(QtWidgets.QWidget):
         super().__init__()
         self.panel_id = panel_id
         self.main_window = main_window
-        uic.loadUi('ui/panel.ui', self)
+        uic.loadUi('ui/panel_widget.ui', self)
         self.scroll_area_content.panel_id = self.panel_id
         self.scroll_area_content.build()
         self.connect_signals()

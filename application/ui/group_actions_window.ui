@@ -190,17 +190,17 @@
   <customwidget>
    <class>Input</class>
    <extends>QLineEdit</extends>
-   <header>gui.input</header>
+   <header>gui/input_widget</header>
   </customwidget>
   <customwidget>
    <class>MultiNotesList</class>
    <extends>QListWidget</extends>
-   <header>gui/notesaction</header>
+   <header>gui/group_actions_window</header>
   </customwidget>
   <customwidget>
    <class>UniqueConsumptionList</class>
    <extends>QTreeWidget</extends>
-   <header>gui/notesaction</header>
+   <header>gui/group_actions_window</header>
    <slots>
     <slot>on_selection()</slot>
    </slots>

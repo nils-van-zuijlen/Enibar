@@ -54,7 +54,7 @@ def ask_auth(*dargs, fail_callback=None, pass_performer=False):
             if settings.DEBUG:
                 func(*args, **kwargs)
                 return
-            prompt = AuthPrompt(dargs)
+            prompt = AuthPromptWindow(dargs)
             if prompt.is_authorized:
                 if pass_performer:
                     kwargs["_performer"] = prompt.user
@@ -67,13 +67,13 @@ def ask_auth(*dargs, fail_callback=None, pass_performer=False):
     return decorator
 
 
-class AuthPrompt(QtWidgets.QDialog):
+class AuthPromptWindow(QtWidgets.QDialog):
     """ Authorization prompt class """
     def __init__(self, requirements):
         super().__init__()
         self.requirements = requirements
         self.is_authorized = False
-        uic.loadUi('ui/authprompt.ui', self)
+        uic.loadUi('ui/auth_prompt_window.ui', self)
         self.pass_input.set_validator(api.validator.NAME)
         filter_ = ", ".join("{key}=1".format(key=key) for key in requirements)
         self.user = ""
@@ -109,3 +109,4 @@ class AuthPrompt(QtWidgets.QDialog):
 
     def on_change(self):
         self.accept_button.setEnabled(self.pass_input.valid)
+

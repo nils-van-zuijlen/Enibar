@@ -30,17 +30,17 @@ import api.notes
 import api.transactions
 import api.validator
 import gui.utils
-import gui.input
+from gui.input_widget import Input
 
 
-class EmptyNote(QtWidgets.QDialog):
+class EmptyNoteWindow(QtWidgets.QDialog):
     """ EmptyNote window class """
     def __init__(self, selected_note):
         super().__init__()
-        uic.loadUi('ui/refill_note.ui', self)
+        uic.loadUi('ui/refill_note_window.ui', self)
         self.to_add.set_validator(api.validator.NUMBER)
         self.to_add.setFocus()
-        self.reason_input = gui.input.Input(self)
+        self.reason_input = Input(self)
         self.reason_input.set_validator(api.validator.NAME)
         self.reason_input.setPlaceholderText("Raison")
         self.main_layout.addWidget(self.reason_input, 1, 0)

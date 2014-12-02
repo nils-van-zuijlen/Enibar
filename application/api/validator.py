@@ -23,7 +23,7 @@ Some validators to use with our fancy Input.
 
 from PyQt5 import QtGui
 from PyQt5 import QtCore
-from gui.input import Input
+from gui.input_widget import Input
 
 
 PHONE_NUMBER = QtGui.QRegExpValidator(QtCore.QRegExp(r"(?:\+[0-9])?[0-9]{10}"))

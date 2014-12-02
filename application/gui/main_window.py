@@ -27,19 +27,19 @@ The MainWindow class is the main class of the program.
 
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 
-from .auth_prompt import ask_auth
-from .validation_window import ValidPrompt
-from .consumptionmanagment import ConsumptionManagmentWindow
-from .douchette import Douchette
-from .emptynote import EmptyNote
-from .manage_notes import ManageNotes
-from .notesaction import NotesAction
-from .panelmanagment import PanelManagment
-from .passwordmanagment import PasswordManagment
-from .refillnote import RefillNote
-from .transactionhistory import TransactionHistory
-from .usermanagment import UserManagmentWindow
-from .searchwindow import SearchWindow
+from .auth_prompt_window import ask_auth
+from .validation_window import ValidationWindow
+from .products_management_window import ProductsManagementWindow
+from .douchette_window import DouchetteWindow
+from .empty_note_window import EmptyNoteWindow
+from .notes_management_window import NotesManagementWindow
+from .group_actions_window import GroupActionsWindow
+from .panels_management_window import PanelsManagementWindow
+from .password_management_window import PasswordManagementWindow
+from .refill_note_window import RefillNoteWindow
+from .history_window import HistoryWindow
+from .users_management_window import UsersManagementWindow
+from .search_window import SearchWindow
 from .stats_window import StatsWindow
 from .about_window import AboutWindow
 import api.categories
@@ -52,13 +52,12 @@ import time
 
 
 class MainWindow(QtWidgets.QMainWindow):
-    """
-    Main Window
+    """Main Window
     """
 
     def __init__(self):
         super().__init__()
-        uic.loadUi('ui/mainwindow.ui', self)
+        uic.loadUi('ui/main_window.ui', self)
 
         # The QListWidget item currently selected.
         self.selected = None
@@ -264,7 +263,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     <br/>de {}<br/><br/><span style=\"font-size:12pt;\
                     font-weight:600; color:#ff0000;\">NE PAS OUBLIER LES\
                     ECOCUPS !!!!</span>".format(total, self.selected.text())
-            prompt = ValidPrompt(text, settings.ASK_VALIDATION_VALIDATE)
+            prompt = ValidationWindow(text, settings.ASK_VALIDATION_VALIDATE)
             if not prompt.is_ok:
                 return
             transactions = []
@@ -313,13 +312,13 @@ class MenuBar(QtWidgets.QMenuBar):
     @ask_auth("manage_users")
     def user_managment_fnc(self, _):
         """ Call user managment window """
-        self.cur_window = UserManagmentWindow()
+        self.cur_window = UsersManagementWindow()
         self._connect_window()
 
     @ask_auth("manage_products")
     def consumption_managment_fnc(self, _):
         """ Call consumption managment window """
-        self.cur_window = ConsumptionManagmentWindow()
+        self.cur_window = ProductsManagementWindow()
         self.cur_window.finished.connect(self.parent().panels.rebuild)
         self._connect_window()
 
@@ -327,7 +326,7 @@ class MenuBar(QtWidgets.QMenuBar):
     def manage_note_fnc(self, _):
         """ Open an ManageNotes window
         """
-        self.cur_window = ManageNotes(self.parent())
+        self.cur_window = NotesManagementWindow(self.parent())
         self._connect_window()
 
     def export_notes_with_profs_fnc(self, _):
@@ -341,14 +340,14 @@ class MenuBar(QtWidgets.QMenuBar):
     def change_password_fnc(self, _):
         """ Open a PasswordManagment window
         """
-        self.cur_window = PasswordManagment()
+        self.cur_window = PasswordManagementWindow()
         self._connect_window()
 
     @ask_auth("manage_products")
     def panel_managment_fnc(self, _):
         """ Open a PanelManagment window
         """
-        self.cur_window = PanelManagment()
+        self.cur_window = PanelsManagementWindow()
         self.cur_window.finished.connect(self.parent().panels.rebuild)
         self._connect_window()
 
@@ -356,14 +355,14 @@ class MenuBar(QtWidgets.QMenuBar):
     def notes_action_fnc(self, _, _performer=""):
         """ Open a NotesAction window
         """
-        self.cur_window = NotesAction(_performer)
+        self.cur_window = GroupActionsWindow(_performer)
         self._connect_window()
 
     @ask_auth("manage_notes", pass_performer=True)
     def refill_note_fnc(self, _, _performer=""):
         """ Open a RefillNote window
         """
-        self.cur_window = RefillNote(
+        self.cur_window = RefillNoteWindow(
             self.parent().notes_list.currentItem().text(), performer=_performer)
         self._connect_window()
 
@@ -387,7 +386,7 @@ class MenuBar(QtWidgets.QMenuBar):
     def empty_note_fnc(self, _):
         """ Open a EmptyNote window
         """
-        self.cur_window = EmptyNote(
+        self.cur_window = EmptyNoteWindow(
             self.parent().notes_list.currentItem().text())
         self._connect_window()
 
@@ -438,7 +437,7 @@ class MenuBar(QtWidgets.QMenuBar):
     def show_transactions_history(self):
         """ Show transaction logs
         """
-        self.cur_window = TransactionHistory(self)
+        self.cur_window = HistoryWindow(self)
         self._connect_window()
 
     def trigger_search(self):

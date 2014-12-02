@@ -30,16 +30,16 @@ import api.notes
 import api.transactions
 import api.validator
 import gui.utils
-from .validation_window import ValidPrompt
-from .input import Input
+from .validation_window import ValidationWindow
+from .input_widget import Input
 import settings
 
 
-class RefillNote(QtWidgets.QDialog):
+class RefillNoteWindow(QtWidgets.QDialog):
     """ RefillNote window class """
     def __init__(self, selected_note, performer):
         super().__init__()
-        uic.loadUi('ui/refill_note.ui', self)
+        uic.loadUi('ui/refill_note_window.ui', self)
         self.selected_note = selected_note
         self.to_add.set_validator(api.validator.NUMBER)
         self.to_add.setFocus()
@@ -52,7 +52,7 @@ class RefillNote(QtWidgets.QDialog):
         """ Called when "Ajouter" is clicked
         """
         to_add = float(self.to_add.text().replace(',', '.'))
-        prompt = ValidPrompt("Etes vous sûr de vouloir ajouter {} € sur la note\
+        prompt = ValidationWindow("Etes vous sûr de vouloir ajouter {} € sur la note\
             \nde {}".format(self.to_add.text(), self.selected_note),
             settings.ASK_VALIDATION_REFILL)
         if not prompt.is_ok:
@@ -80,10 +80,10 @@ class RefillNote(QtWidgets.QDialog):
             self.valid_button.setEnabled(False)
 
 
-class MultiRefillNote(QtWidgets.QDialog):
+class MultiRefillNoteWindow(QtWidgets.QDialog):
     def __init__(self, performer):
         super().__init__()
-        uic.loadUi('ui/refill_note.ui', self)
+        uic.loadUi('ui/refill_note_window.ui', self)
         self.performer = performer
         self.to_add.set_validator(api.validator.NUMBER)
         self.to_add.setFocus()
@@ -93,7 +93,7 @@ class MultiRefillNote(QtWidgets.QDialog):
 
     def accept(self):
         to_add = float(self.to_add.text().replace(',', '.'))
-        prompt = ValidPrompt("Etes vous sûr de vouloir ajouter {} € sur les\
+        prompt = ValidationWindow("Etes vous sûr de vouloir ajouter {} € sur les\
             \nnotes selectionées".format(self.to_add.text()),
             settings.ASK_VALIDATION_REFILL)
         if not prompt.is_ok:
