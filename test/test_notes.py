@@ -311,9 +311,6 @@ class NotesTest(basetest.BaseTest):
             ''
         )
         notes.transaction("test1", -60)
-        with Cursor() as cursor:
-            cursor.prepare("UPDATE notes SET overdraft_date=DATE(2014-11-30)")
-            cursor.exec_()
         xml = "<?xml version=\"1.0\"?>\n"
         xml += "<notes date=\"{}\">\n".format(datetime.datetime.now().strftime(
             "%Y-%m-%d"))
@@ -322,7 +319,7 @@ class NotesTest(basetest.BaseTest):
         xml += "\t\t<nom>test</nom>\n"
         xml += "\t\t<compte>-60.0</compte>\n"
         xml += "\t\t<mail>test</mail>\n"
-        xml += "\t\t<date_Decouvert>2014-11-30</date_Decouvert>\n"
+        xml += "\t\t<date_Decouvert>{}</date_Decouvert>\n".format(datetime.datetime.now().strftime("%Y-%m-%d"))
         xml += "\t</note>\n"
         xml += "\t<note id=\"2\">\n"
         xml += "\t\t<prenom>test2</prenom>\n"

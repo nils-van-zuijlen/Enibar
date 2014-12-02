@@ -184,7 +184,4 @@ class PricesTest(basetest.BaseTest):
                     self.assertEqual(value, price['value'])
         # The extra length of api.prices.get is due to product creation
         self.assertEqual(len(prices), len(list(api.prices.get())) - 1)
-        self.assertFalse(api.prices.set_multiple_values([{"id": "&", "value": "&p"}]))
-
-
 

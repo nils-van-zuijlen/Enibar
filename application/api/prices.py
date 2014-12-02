@@ -197,7 +197,6 @@ def set_multiple_values(prices):
 
     :param list prices: List of prices
     """
-    error = False
     with Database() as database:
         database.transaction()
         cursor = QtSql.QSqlQuery(database)
@@ -206,14 +205,9 @@ def set_multiple_values(prices):
             cursor.bindValue(":id", price['id'])
             cursor.bindValue(":value", price['value'])
             cursor.exec_()
-            error = error or not cursor.numRowsAffected()
 
-        if error:
-            database.rollback()
-            return False
-        else:
-            database.commit()
-            return True
+        database.commit()
+        return True
 
 
 get_unique = api.base.make_get_unique(get)
