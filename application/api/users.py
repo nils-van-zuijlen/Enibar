@@ -17,8 +17,8 @@
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-Admin management functions
-==========================
+Users
+=====
 
 """
 

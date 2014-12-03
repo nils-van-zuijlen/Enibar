@@ -18,8 +18,8 @@
 
 
 """
-Categories API
-==============
+Categories
+==========
 
 This api handle category managment.
 

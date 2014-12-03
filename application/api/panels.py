@@ -18,8 +18,8 @@
 
 
 """
-Panel management functions
-==========================
+Panels
+======
 
 """
 

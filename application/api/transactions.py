@@ -17,8 +17,8 @@
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-Transaction API
-===============
+Transactions
+============
 
 Provide usefull api to interact with transaction hisotry and log, every
 consumption bought.

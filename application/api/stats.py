@@ -17,8 +17,8 @@
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-Stats API
-=========
+Stats
+=====
 
 This api provides some neat stats.
 """

@@ -18,8 +18,8 @@
 
 
 """
-Products management function
-=================================
+Products
+========
 
 """
 

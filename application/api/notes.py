@@ -17,8 +17,8 @@
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-Notes management functions
-==========================
+Notes
+=====
 
 """
 
