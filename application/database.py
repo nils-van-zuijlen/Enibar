@@ -89,7 +89,7 @@ class SqlQuery(QtSql.QSqlQuery):
     def bindValues(self, kwargs):
         """ Bind multiple values to the query
 
-        :param dict **kwargs: A dict formed like that: {":placeholder": value, }
+        :param dict \*\*kwargs: A dict formed like that: {":placeholder": value, }
 
         :return None:
         """

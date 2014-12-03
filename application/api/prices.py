@@ -64,15 +64,15 @@ def add_descriptor(name, category):
         return None
 
 
-def remove_descriptor(id_):
+def remove_descriptor(descriptor_id):
     """ Remove price from category
 
-    :param int id_: Price descriptor id_
+    :param int descriptor_id: Price descriptor id
     :return bool: True if operation succeed
     """
     with Cursor() as cursor:
         cursor.prepare("DELETE FROM price_description WHERE id=:id")
-        cursor.bindValue(":id", id_)
+        cursor.bindValue(":id", descriptor_id)
         return cursor.exec_()
 
 
@@ -92,7 +92,7 @@ def rename_descriptor(id_, name):
 def get_descriptor(**kwargs):
     """ Get price descriptor
 
-    :param **kwargs: filters to apply
+    :param \*\*kwargs: filters to apply
     """
     with Cursor() as cursor:
         request_filters = []
@@ -133,21 +133,21 @@ def add(product, price_description, value):
         return cursor.lastInsertId()
 
 
-def remove(id_):
+def remove(price_id):
     """ Remove price
 
-    :param int id_: Price id
+    :param int price_id: Price id
     """
     with Cursor() as cursor:
         cursor.prepare("DELETE FROM prices WHERE id=:id")
-        cursor.bindValue(':id', id_)
+        cursor.bindValue(':id', price_id)
         return cursor.exec_()
 
 
 def get(**kwargs):
     """ Get prices filtered by given values
 
-    :param **kwargs: filters to apply
+    :param \*\*kwargs: filters to apply
     """
     with Cursor() as cursor:
         filters = []

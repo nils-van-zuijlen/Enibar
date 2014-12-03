@@ -28,6 +28,8 @@ from PyQt5 import QtWidgets, uic
 
 
 class AboutWindow(QtWidgets.QDialog):
+    """ AboutWindow class
+    """
     def __init__(self):
         super().__init__()
         uic.loadUi('ui/about_window.ui', self)

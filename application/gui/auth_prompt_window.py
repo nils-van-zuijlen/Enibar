@@ -108,5 +108,7 @@ class AuthPromptWindow(QtWidgets.QDialog):
         return super().accept()
 
     def on_change(self):
+        """  Called when the password input changes
+        """
         self.accept_button.setEnabled(self.pass_input.valid)
 

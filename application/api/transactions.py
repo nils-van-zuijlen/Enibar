@@ -18,6 +18,7 @@
 
 """
 Transaction API
+===============
 
 Provide usefull api to interact with transaction hisotry and log, every
 consumption bought.

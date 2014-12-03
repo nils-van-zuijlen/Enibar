@@ -11,11 +11,17 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   users
-   products
-   notes
+   categories
    database
+   notes
+   panels
+   prices
+   products
    settings
+   stats
+   transactions
+   users
+   validator
 
 
 

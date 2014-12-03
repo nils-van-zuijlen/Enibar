@@ -219,16 +219,18 @@ def change_photo(nickname, new_photo):
     return value
 
 
-def get(filter_=None):
-    """ Get notes with a filter. filter_ should be a function like
-            lamda x: x["id"] == 1
+def get(filter_function=None):
+    """ Get notes with a filter. filter_function should be a function like \
+            `lamda x: x["id"] == 1` \
         to keep only notes with the id 1
+
+        :param callable filter_function: The filter to apply.
     """
-    rows = []
     if filter_ is None:
         return NOTES_CACHE
+    rows = []
     for row in NOTES_CACHE:
-        if filter_(row):
+        if filter_function(row):
             rows.append(row)
     return rows
 
