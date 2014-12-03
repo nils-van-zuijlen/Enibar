@@ -226,7 +226,7 @@ def get(filter_function=None):
 
         :param callable filter_function: The filter to apply.
     """
-    if filter_ is None:
+    if filter_function is None:
         return NOTES_CACHE
     rows = []
     for row in NOTES_CACHE:
