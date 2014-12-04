@@ -22,9 +22,9 @@
 Settings
 ========
 
+
 Database
 ^^^^^^^^
-
 .. glossary::
     :sorted:
 
@@ -53,6 +53,65 @@ Database
 
             The name of the database used by the software.
 
+
+Ecocups
+^^^^^^^
+
+.. glossary::
+    :sorted:
+
+    ECOCUP_PRICE
+            **Default value** ``1.0``
+
+            The price of an ecocup.
+
+    ECOCUP_NAME
+            **Default value** ``Ecocup``
+
+            The name used to identify ecocup. This name will be displayed in
+            the history and other products list.
+
+    ECOCUP_CATEGORY
+            **Default value** ``Bar``
+
+            Category name of ecocup. Used to display category name on ecocup
+            transaction.
+
+    ECOCUP_PRICE_TYPES
+            **Default value** ``{'take': "Achat", 'repay': "Remboursement"}``
+
+            Prices name displayed for ecocup in take and repay transation.
+
+
+Agios
+^^^^^
+
+.. glossary::
+    :sorted:
+
+    AGIO_THRESHOLD
+            **Default value** ``14``
+
+            Time lapse after which agio are applied if a note stay in the red\
+            (in days).
+
+    AGIO_EVERY
+            **Default value** ``7``
+
+            Delay between two agio strike in days.
+
+    AGIO_PERCENT
+            **Default value** ``5.0``
+
+            Agio value.
+
+
+Other
+^^^^^
+
+.. glossary::
+    :sorted:
+
     DEBUG
             **Default value** ``False``
 
@@ -75,48 +134,10 @@ Database
             Defines the maximum number of history lines printed on the
             MainWindow.
 
-    ECOCUP_PRICE
-            **Default value** ``1.0``
-
-            The price of an ecocup.
-
-    ECOCUP_NAME
-            **Default value** ``Ecocup``
-
-            The name used to identify ecocup. This name will be displayed in
-            the history and other product list.
-
-    ECOCUP_CATEGORY
-            **Default value** ``Bar``
-
-            Category name of ecocup. Used to display category name on ecocup
-            transaction.
-
-    ECOCUP_PRICE_TYPES
-            **Default value** ``{'take': "Achat", 'repay': "Remboursement"}``
-
-            Prices name displayed for ecocup in take and repay transation.
-
     IMG_BASE_DIR
             **Default value** ``img/``
 
             The base dir for all images.
-
-    AGIO_THRESHOLD
-            **Default value** ``14``
-
-            Period after which agio are applied if a note stay in the red in
-            days.
-
-    AGIO_EVERY
-            **Default value** ``7``
-
-            Delay between two agio strike in days.
-
-    AGIO_PERCENT
-            **Default value** ``5.0``
-
-            Agio value.
 
 """
 
@@ -156,3 +177,4 @@ ECOCUP_PRICE_TYPES = {'take': "Achat", 'repay': "Remboursement"}
 # Note that changing the following settings will break ecocup count.
 # Do not change it unless you know what you are doing.
 ECOCUP_NAME = "Ecocup"
+
