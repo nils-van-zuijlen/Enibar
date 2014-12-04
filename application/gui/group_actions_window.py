@@ -59,17 +59,17 @@ class GroupActionsWindow(QtWidgets.QDialog):
         for index in reversed(indexes):
             to_del.append(index.data())
             self.note_list.takeItem(index.row())
-        api.notes.remove_multiple(api.notes.get_notes_id(to_del))
+        api.notes.remove(to_del)
         self.note_list.rebuild(api.notes.get(self.note_list.current_filter))
 
     def _multiple_action(self, fnc, *args, **kwargs):
         """ Execute a function on the currently selected notes
         """
         indexes = self.note_list.selectedIndexes()
-        notes_id = []
+        notes_nicks = []
         for index in indexes:
-            notes_id.append(index.data())
-        val = fnc(api.notes.get_notes_id(notes_id), *args, **kwargs)
+            notes_nicks.append(index.data())
+        val = fnc(notes_nicks, *args, **kwargs)
         self.note_list.rebuild(api.notes.get(self.note_list.current_filter))
         return val
 
@@ -116,12 +116,12 @@ class GroupActionsWindow(QtWidgets.QDialog):
     def hide_action(self):
         """ Called when "cacher" is clicked
         """
-        self._multiple_action(api.notes.hide_multiple)
+        self._multiple_action(api.notes.hide)
 
     def show_action(self):
         """ Called when "Montrer" is clicked
         """
-        self._multiple_action(api.notes.show_multiple)
+        self._multiple_action(api.notes.show)
 
     def refill_action(self):
         self.cur_window = MultiRefillNoteWindow(self.performer)
@@ -132,13 +132,9 @@ class GroupActionsWindow(QtWidgets.QDialog):
                 to_add = self.cur_window.to_add_value
                 if not to_add:
                     return
-                names = []
                 transactions = []
                 for note in notes:
-                    name = list(api.notes.get(lambda x: x['id'] == note))
-                    name = name[0]['nickname']
-                    names.append(name)
-                    transactions.append({'note': name,
+                    transactions.append({'note': note,
                                          'category': "Note",
                                          'product': self.performer,
                                          'price_name': "Rechargement",
@@ -146,7 +142,7 @@ class GroupActionsWindow(QtWidgets.QDialog):
                                          'price': to_add
                                         }
                     )
-                api.notes.multiple_transaction(names, to_add)
+                api.notes.transactions(notes, to_add)
                 api.transactions.log_transactions(transactions)
             self._multiple_action(refill)
 
@@ -181,7 +177,7 @@ class GroupActionsWindow(QtWidgets.QDialog):
             transactions.append(transaction)
             notes.append(note.text())
         if api.transactions.log_transactions(transactions):
-            api.notes.multiple_transaction(notes, -price['value'])
+            api.notes.transactions(notes, -price['value'])
             valid("OK", "Transaction effectuée")
 
     def export_csv_action(self):

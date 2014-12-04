@@ -59,7 +59,7 @@ class RefillNoteWindow(QtWidgets.QDialog):
             return
         # See #96
         if round(to_add, 2) > 0:
-            api.notes.transaction(self.selected_note, to_add)
+            api.notes.transactions([self.selected_note, ], to_add)
             api.transactions.log_transaction(
                 self.selected_note,
                 "Note",

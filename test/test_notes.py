@@ -88,13 +88,6 @@ class NotesTest(basetest.BaseTest):
         ), -1)
         self.assertEqual(self.count_notes(), 2)
 
-    def test_remove(self):
-        """ Testing removing notes """
-        id_ = self.add_note("test1")
-
-        self.assertTrue(notes.remove(id_))
-        self.assertEqual(self.count_notes(), 0)
-
     def test_get_by_id(self):
         """ Testing get_by_id """
         id_ = notes.add("test1",
@@ -250,43 +243,27 @@ class NotesTest(basetest.BaseTest):
                                  'photo_path': '',
                                  'hidden': 0}])
 
-    def test_transaction(self):
-        """ Testing transactions """
-        id1 = self.add_note("test1")
-
-        notes.transaction("test1", 10)
-        self.assertEqual(notes.get(lambda x: x["nickname"] == "test1")[0]['note'], 10)
-        notes.transaction("test1", 10)
-        self.assertEqual(notes.get(lambda x: x["nickname"] == "test1")[0]['note'], 20)
-        notes.transaction("test1", -5)
-        self.assertEqual(notes.get(lambda x: x["nickname"] == "test1")[0]['note'], 15)
-        notes.transaction("test1", -15)
-        self.assertEqual(notes.get(lambda x: x["nickname"] == "test1")[0]['note'], 0)
-        notes.transaction("test1", 5)
-        notes.transaction("test1", -4.95)
-        self.assertEqual(notes.get(lambda x: x["nickname"] == "test1")[0]['note'], 0.05)
-
     def test_transaction_multiple(self):
-        """ Testing multiple_transaction
+        """ Testing transactions
         """
 
         id0 = self.add_note("test0")
         id1 = self.add_note("test1")
 
-        notes.multiple_transaction(['test0', 'test1'], 10)
+        notes.transactions(['test0', 'test1'], 10)
         for note in notes.get():
             self.assertEqual(note['note'], 10)
-        notes.multiple_transaction(['test0', 'test1'], 10)
+        notes.transactions(['test0', 'test1'], 10)
         for note in notes.get():
             self.assertEqual(note['note'], 20)
-        notes.multiple_transaction(['test0', 'test1'], -5)
+        notes.transactions(['test0', 'test1'], -5)
         for note in notes.get():
             self.assertEqual(note['note'], 15)
-        notes.multiple_transaction(['test0', 'test1'], -15)
+        notes.transactions(['test0', 'test1'], -15)
         for note in notes.get():
             self.assertEqual(note['note'], 0)
-        notes.multiple_transaction(['test0', 'test1'], 5)
-        notes.multiple_transaction(['test0', 'test1'], -4.95)
+        notes.transactions(['test0', 'test1'], 5)
+        notes.transactions(['test0', 'test1'], -4.95)
         for note in notes.get():
             self.assertEqual(note['note'], 0.05)
 
@@ -310,7 +287,7 @@ class NotesTest(basetest.BaseTest):
             '2A',
             ''
         )
-        notes.transaction("test1", -60)
+        notes.transactions(["test1", ], -60)
         xml = "<?xml version=\"1.0\"?>\n"
         xml += "<notes date=\"{}\">\n".format(datetime.datetime.now().strftime(
             "%Y-%m-%d"))
@@ -377,14 +354,14 @@ class NotesTest(basetest.BaseTest):
         csv += "\n" + ",".join(str(note[value]) for value in to_export)
         self.assertEqual(csv, notes.export_by_id([id0], csv=True))
 
-    def test_remove_multiple(self):
+    def test_remove(self):
         """ Testing multiple removing
         """
         id0 = self.add_note("test0")
         id1 = self.add_note("test1")
 
         self.assertEqual(self.count_notes(), 2)
-        notes.remove_multiple([id0, id1])
+        notes.remove(["test0", "test1"])
         self.assertEqual(self.count_notes(), 0)
 
     def test_modif_note(self):
@@ -412,13 +389,13 @@ class NotesTest(basetest.BaseTest):
         note = list(notes.get())[0]
         self.assertEqual(note['overdraft_date'], PyQt5.QtCore.QDate())
 
-        notes.transaction("test0", -1)
+        notes.transactions(["test0", ], -1)
         note = list(notes.get())[0]
         now = PyQt5.QtCore.QDateTime()
         now.setMSecsSinceEpoch(time.time() * 1000)
         self.assertEqual(note['overdraft_date'], now.date())
 
-        notes.transaction("test0", 1)
+        notes.transactions(["test0", ], 1)
         note = list(notes.get())[0]
         self.assertEqual(note['overdraft_date'], PyQt5.QtCore.QDate())
 
@@ -443,29 +420,8 @@ class NotesTest(basetest.BaseTest):
         self.assertIn("coucou2", note['photo_path'])
         self.assertNotEqual("coucou2.jpg", note['photo_path'])
 
-    def test_get_notes_id(self):
-        id0 = self.add_note("test0")
-        id1 = self.add_note("test1")
-        id2 = self.add_note("test2")
-
-        self.assertEqual([id0, id1], list(notes.get_notes_id(["test0", "test1", "p"])))
-
     def test_hide_show(self):
-        """ Testing hide and show
-        """
-        id0 = self.add_note("test0")
-
-        note = list(notes.get())[0]
-        self.assertFalse(bool(note['hidden']))
-        notes.hide(id0)
-        note = list(notes.get())[0]
-        self.assertTrue(bool(note['hidden']))
-        notes.show(id0)
-        note = list(notes.get())[0]
-        self.assertFalse(bool(note['hidden']))
-
-    def test_hide_show_multiple(self):
-        """ Testing show_multiple and hide_multiple
+        """ Testing show and hide
         """
         id0 = self.add_note("test0")
         id1 = self.add_note("test1")
@@ -473,10 +429,10 @@ class NotesTest(basetest.BaseTest):
 
         for note in notes.get():
             self.assertFalse(bool(note['hidden']))
-        notes.hide_multiple([id0, id1, id2])
+        notes.hide(["test0", "test1", "test2"])
         for note in notes.get():
             self.assertTrue(bool(note['hidden']))
-        notes.show_multiple([id0, id1, id2])
+        notes.show(["test0", "test1", "test2"])
         for note in notes.get():
             self.assertFalse(bool(note['hidden']))
 

@@ -36,7 +36,7 @@ class StatsTests(basetest.BaseTest):
             '1A',
             ''
         )
-        notes.transaction("test1", -7)
+        notes.transactions(["test1", ], -7)
         notes.add("test2",
             "test1",
             "test1",
@@ -46,7 +46,7 @@ class StatsTests(basetest.BaseTest):
             '1A',
             ''
         )
-        notes.transaction("test2", 10)
+        notes.transactions(["test2", ], 10)
         notes.add("test3",
             "test1",
             "test1",
@@ -56,7 +56,7 @@ class StatsTests(basetest.BaseTest):
             '1A',
             ''
         )
-        notes.transaction("test3", -10)
+        notes.transactions(["test3", ], -10)
         notes.add("test4",
             "test1",
             "test1",
@@ -66,7 +66,7 @@ class StatsTests(basetest.BaseTest):
             '1A',
             ''
         )
-        notes.transaction("test4", 8)
+        notes.transactions(["test4", ], 8)
 
         # Hitory
 

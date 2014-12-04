@@ -159,7 +159,7 @@ def rollback_transaction(id_, full=False):
 
         cursor.exec_()
         if not cursor.lastError().isValid() and cursor.numRowsAffected() > 0:
-            return api.notes.transaction(note['nickname'], -price)
+            return api.notes.transactions([note['nickname'], ], -price)
         else:
             return False
 

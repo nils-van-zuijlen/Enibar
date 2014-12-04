@@ -84,10 +84,11 @@ def _build_stats():
                     note['tot_refill'] = tot[note['nickname']]['tot_refill']
 
 
-def _request_multiple_ids(ids, request):
-    """ Execute the request on multiple ids
+def _request_multiple_nicks(nicks, request):
+    """ Execute the request on multiple notes
 
-    :param list ids: Ids on wich the request will be executed
+    :param list nicks: Nicknames of the notes on wich the request\
+    will be executed
     :param str request: The request
     """
 
@@ -95,8 +96,8 @@ def _request_multiple_ids(ids, request):
         database.transaction()
         cursor = QtSql.QSqlQuery(database)
         cursor.prepare(request)
-        for id_ in ids:
-            cursor.bindValue(':id', id_)
+        for nick in nicks:
+            cursor.bindValue(':nick', nick)
             cursor.exec_()
         value = database.commit()
     rebuild_cache()
@@ -171,29 +172,14 @@ def add(nickname, firstname, lastname, mail, tel, birthdate, promo, photo_path):
         return -1
 
 
-def remove(id_):
-    """ Remove a note
-
-    :param int id_: The id of the note to delete
-
-    :return bool: True if success else False.
-    """
-    with Cursor() as cursor:
-        cursor.prepare("DELETE FROM notes WHERE id=:id")
-        cursor.bindValue(':id', id_)
-        value = cursor.exec_()
-    rebuild_cache()
-    return value
-
-
-def remove_multiple(ids):
+def remove(nicks):
     """ Remove a list of notes
 
-    :param list ids: The list of notes to delete
+    :param list nicks: The list of notes to delete
 
     :return bool: True if success else False.
     """
-    _request_multiple_ids(ids, "DELETE FROM notes WHERE id=:id")
+    _request_multiple_nicks(nicks, "DELETE FROM notes WHERE nickname=:nick")
 
 
 def change_photo(nickname, new_photo):
@@ -235,86 +221,29 @@ def get(filter_function=None):
     return rows
 
 
-def get_notes_id(nicknames):
-    """ Get multiple notes id from nicknames
-
-    :param list nicknames: The list of nicknames you want the id.
-    """
-    for row in NOTES_CACHE:
-        if row["nickname"] in nicknames:
-            yield row["id"]
-
-
-def hide(id_):
-    """ Hide a note
-
-    :param int id_: The id of the note you want to hide
-
-    :return bool: True if success else False
-    """
-    with Cursor() as cursor:
-        cursor.prepare("UPDATE notes SET hidden=1 WHERE id=:id")
-        cursor.bindValue(':id', id_)
-        value = cursor.exec_()
-    rebuild_cache()
-    return value
-
-
-def hide_multiple(ids):
+def hide(nicks):
     """ Hide multiple notes.
 
-    :param list ids: The list of notes to hide
+    :param list nicks: The list of notes to hide
 
     :return bool: True if success else False
     """
-    return _request_multiple_ids(ids, "UPDATE notes SET hidden=1 WHERE id=:id")
+    return _request_multiple_nicks(nicks, "UPDATE notes SET hidden=1\
+        WHERE nickname=:nick")
 
 
-def show(id_):
-    """ Show a note
-
-    :param int id_: The id of the note you want to show
-
-    :return bool: True if success else False
-    """
-    with Cursor() as cursor:
-        cursor.prepare("UPDATE notes SET hidden=0 WHERE id=:id")
-        cursor.bindValue(':id', id_)
-        value = cursor.exec_()
-    rebuild_cache()
-    return value
-
-
-def show_multiple(ids):
+def show(nicks):
     """ Show multiple notes
 
-    :param int id_: The list of notes to show
+    :param int nicks: The list of notes to show
 
     :return bool: True if success else False
     """
-    return _request_multiple_ids(ids, "UPDATE notes SET hidden=0 WHERE id=:id")
+    return _request_multiple_nicks(nicks, "UPDATE notes SET hidden=0\
+        WHERE nickname=:nick")
 
 
-def transaction(nickname, diff):
-    """ Change the note of a note.
-
-    :param str nickname: The nickname of the note
-    :param float diff: Will add the diff to the note.
-
-    :return bool: True if success else False
-    """
-    with Cursor() as cursor:
-        cursor.prepare("UPDATE notes SET note=note+:diff WHERE nickname=:nick")
-        cursor.bindValue(":diff", diff)
-        cursor.bindValue(":nick", nickname)
-        cursor.exec_()
-
-        value = not cursor.lastError().isValid()
-    rebuild_cache()
-    return value
-
-
-def multiple_transaction(notes, diff):
+def transactions(notes, diff):
     """ Change the note on multiple notes
 
         :param str nickname: The nickname of the note

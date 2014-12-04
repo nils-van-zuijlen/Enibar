@@ -164,8 +164,8 @@ class NotesManagementWindow(QtWidgets.QDialog):
     def del_fnc(self):
         """ Called when "Supprimer" is clicked
         """
-        api.notes.remove(list(api.notes.get(
-            lambda x: x["nickname"] == self.current_nickname))[0]['id'])
+        api.notes.remove(note['nickname'] for note in list(
+            api.notes.get(lambda x: x["nickname"] == self.current_nickname)))
         self.note_list.refresh(api.notes.get())
         self.disable_inputs()
         self.empty_inputs()

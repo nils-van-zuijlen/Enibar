@@ -279,7 +279,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 }
                 transactions.append(transaction)
             if api.transactions.log_transactions(transactions):
-                api.notes.transaction(self.selected.text(), -total)
+                api.notes.transactions([self.selected.text(), ], -total)
                 api.notes.change_ecocups(self.selected_nickname, self.eco_diff)
                 self.rebuild_notes_list()
                 self.eco_diff = 0
