@@ -316,11 +316,11 @@ def export(notes, *, csv=False, xml=False):
         return csv
 
 
-def export_by_id(notes_ids, *args, **kwargs):
-    """ Export notes but taking ids
+def export_by_nick(notes_nicks, *args, **kwargs):
+    """ Export notes but taking nicknames.
     """
-    notes_ids = list(notes_ids)
-    return export([note for note in NOTES_CACHE if note['id'] in notes_ids],
+    notes_nicks = list(notes_nicks)
+    return export([note for note in NOTES_CACHE if note['nickname'] in notes_nicks],
                   *args,
                   **kwargs)
 

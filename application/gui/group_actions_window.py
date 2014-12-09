@@ -189,7 +189,7 @@ class GroupActionsWindow(QtWidgets.QDialog):
             "CSV Files (*.csv)")
         if path:
             with open(path, "w") as save_file:
-                save_file.write(self._multiple_action(api.notes.export_by_id,
+                save_file.write(self._multiple_action(api.notes.export_by_nick,
                                                       csv=True))
 
     def export_xml_action(self):
