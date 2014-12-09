@@ -352,7 +352,7 @@ class NotesTest(basetest.BaseTest):
         note = list(notes.get(lambda x: x['nickname'] == "test0"))[0]
         csv = ", ".join(to_export)
         csv += "\n" + ",".join(str(note[value]) for value in to_export)
-        self.assertEqual(csv, notes.export_by_id([id0], csv=True))
+        self.assertEqual(csv, notes.export_by_nick(list(["test0"]), csv=True))
 
     def test_remove(self):
         """ Testing multiple removing
