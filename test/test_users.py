@@ -38,6 +38,8 @@ class UsersTest(basetest.BaseTest):
         self.assertTrue(users.add("test", "test"))
         self.assertTrue(users.add("test2", "test"))
         self.assertFalse(users.add("test", "test"))
+        self.assertFalse(users.add("", "test"))
+        self.assertFalse(users.add("aaa", ""))
         self.assertEqual(self.count_admins(), 2)
 
     def test_remove_user(self):

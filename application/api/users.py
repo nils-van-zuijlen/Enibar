@@ -35,6 +35,8 @@ def add(pseudo, password):
     :return bool: True if success else False.
     """
     with Cursor() as cursor:
+        if not pseudo or not password:
+            return False
         cursor.prepare("INSERT INTO admins VALUES(:login, :pass, 0, 0, 0)")
         cursor.bindValue(':login', pseudo)
         cursor.bindValue(':pass', bcrypt.hashpw(password,
