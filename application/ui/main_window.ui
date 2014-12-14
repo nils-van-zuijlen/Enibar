@@ -326,34 +326,6 @@
        <property name="horizontalSpacing">
         <number>0</number>
        </property>
-       <item row="0" column="3">
-        <widget class="QLabel" name="note_solde">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>20</pointsize>
-           <weight>75</weight>
-           <bold>true</bold>
-           <stylestrategy>PreferAntialias</stylestrategy>
-           <kerning>true</kerning>
-          </font>
-         </property>
-         <property name="text">
-          <string>0.00 €</string>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="1" colspan="3">
         <widget class="QWidget" name="widget_3" native="true">
          <property name="maximumSize">
@@ -430,6 +402,34 @@
          </property>
          <property name="text">
           <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="QLabel" name="note_solde">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>20</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+           <stylestrategy>PreferAntialias</stylestrategy>
+           <kerning>true</kerning>
+          </font>
+         </property>
+         <property name="text">
+          <string>0.00 €</string>
          </property>
         </widget>
        </item>
@@ -641,7 +641,7 @@
      <x>0</x>
      <y>0</y>
      <width>884</width>
-     <height>19</height>
+     <height>15</height>
     </rect>
    </property>
    <widget class="QMenu" name="administration">
@@ -687,8 +687,8 @@
     <property name="title">
      <string>Au&amp;tre</string>
     </property>
-    <addaction name="actionStatistiques"/>
-    <addaction name="actionAbout"/>
+    <addaction name="stats"/>
+    <addaction name="about"/>
    </widget>
    <addaction name="administration"/>
    <addaction name="menuNotes"/>
@@ -793,12 +793,12 @@
     <string>Ctrl+F</string>
    </property>
   </action>
-  <action name="actionStatistiques">
+  <action name="stats">
    <property name="text">
     <string>&amp;Statistiques</string>
    </property>
   </action>
-  <action name="actionAbout">
+  <action name="about">
    <property name="text">
     <string>&amp;A propos</string>
    </property>
@@ -1189,7 +1189,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionStatistiques</sender>
+   <sender>stats</sender>
    <signal>triggered()</signal>
    <receiver>menu_bar</receiver>
    <slot>stats()</slot>
@@ -1205,7 +1205,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionAbout</sender>
+   <sender>about</sender>
    <signal>triggered()</signal>
    <receiver>menu_bar</receiver>
    <slot>about()</slot>

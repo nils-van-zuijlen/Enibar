@@ -45,6 +45,8 @@ class StatsWindow(QtWidgets.QDialog):
         green = api.stats.get_green()
         sold_items = list(api.stats.get_sold_items())
         consumers = list(api.stats.get_consumers())
+        if not sold_items or not consumers:
+            return
         most_sold = sorted(sold_items, key=lambda x: x['nb'])[-1]
         most_refilled = sorted(consumers, key=lambda x: x['refilled'])[-1]
         most_bought = sorted(consumers, key=lambda x: x['bought'])[-1]
