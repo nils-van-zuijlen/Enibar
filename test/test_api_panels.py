@@ -22,8 +22,8 @@ import api.products as products
 import api.categories as categories
 import api.prices as prices
 import api.panels as panels
-from test_products import ProductsTest
-from test_prices import PricesTest
+from test_api_products import ProductsTest
+from test_api_prices import PricesTest
 from database import Cursor
 
 
