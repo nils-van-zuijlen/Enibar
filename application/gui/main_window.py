@@ -309,15 +309,21 @@ class MenuBar(QtWidgets.QMenuBar):
         """
         self.cur_window.finished.connect(self._refresh_parent)
 
+    def _close_window(self):
+        if self.cur_window is not None:
+            self.cur_window.close()
+
     @ask_auth("manage_users")
     def user_managment_fnc(self, _):
         """ Call user managment window """
+        self._close_window()
         self.cur_window = UsersManagementWindow()
         self._connect_window()
 
     @ask_auth("manage_products")
     def consumption_managment_fnc(self, _):
         """ Call consumption managment window """
+        self._close_window()
         self.cur_window = ProductsManagementWindow()
         self.cur_window.finished.connect(self.parent().panels.rebuild)
         self._connect_window()
@@ -326,6 +332,7 @@ class MenuBar(QtWidgets.QMenuBar):
     def manage_note_fnc(self, _):
         """ Open an ManageNotes window
         """
+        self._close_window()
         self.cur_window = NotesManagementWindow(self.parent())
         self._connect_window()
 
@@ -340,6 +347,7 @@ class MenuBar(QtWidgets.QMenuBar):
     def change_password_fnc(self, _):
         """ Open a PasswordManagment window
         """
+        self._close_window()
         self.cur_window = PasswordManagementWindow()
         self._connect_window()
 
@@ -347,6 +355,7 @@ class MenuBar(QtWidgets.QMenuBar):
     def panel_managment_fnc(self, _):
         """ Open a PanelManagment window
         """
+        self._close_window()
         self.cur_window = PanelsManagementWindow()
         self.cur_window.finished.connect(self.parent().panels.rebuild)
         self._connect_window()
@@ -355,6 +364,7 @@ class MenuBar(QtWidgets.QMenuBar):
     def notes_action_fnc(self, _, _performer=""):
         """ Open a NotesAction window
         """
+        self._close_window()
         self.cur_window = GroupActionsWindow(_performer)
         self._connect_window()
 
@@ -362,6 +372,7 @@ class MenuBar(QtWidgets.QMenuBar):
     def refill_note_fnc(self, _, _performer=""):
         """ Open a RefillNote window
         """
+        self._close_window()
         self.cur_window = RefillNoteWindow(
             self.parent().notes_list.currentItem().text(), performer=_performer)
         self._connect_window()
@@ -369,12 +380,14 @@ class MenuBar(QtWidgets.QMenuBar):
     def stats(self):
         """ Open a StatsWindow
         """
+        self._close_window()
         self.cur_window = StatsWindow()
         self._connect_window()
 
     def about(self):
         """ Open an AboutWindow
         """
+        self._close_window()
         self.cur_window = AboutWindow()
         self._connect_window()
 
@@ -386,6 +399,7 @@ class MenuBar(QtWidgets.QMenuBar):
     def empty_note_fnc(self, _):
         """ Open a EmptyNote window
         """
+        self._close_window()
         self.cur_window = EmptyNoteWindow(
             self.parent().notes_list.currentItem().text())
         self._connect_window()
@@ -437,12 +451,14 @@ class MenuBar(QtWidgets.QMenuBar):
     def show_transactions_history(self):
         """ Show transaction logs
         """
+        self._close_window()
         self.cur_window = HistoryWindow(self)
         self._connect_window()
 
     def trigger_search(self):
         """ Open a search window
         """
+        self._close_window()
         self.cur_window = SearchWindow(self)
         self._connect_window()
 

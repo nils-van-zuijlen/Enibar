@@ -69,8 +69,12 @@ def ask_auth(*dargs, fail_callback=None, pass_performer=False):
 
 class AuthPromptWindow(QtWidgets.QDialog):
     """ Authorization prompt class """
+    # used to keep track of the window in tests. It has no other uses.
+    _instance = None
+
     def __init__(self, requirements):
         super().__init__()
+        AuthPromptWindow._instance = self
         self.requirements = requirements
         self.is_authorized = False
         uic.loadUi('ui/auth_prompt_window.ui', self)
