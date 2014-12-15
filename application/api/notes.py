@@ -40,7 +40,7 @@ NOTES_FIELDS_CACHE = {}
 NOTES_STATS_FIELDS_CACHE = {}
 
 
-def rebuild_cache():
+def rebuild_cache(build_stats=True):
     """ Build a cache with all notes inside. This improve greatly the perfs of
         get actions
     """
@@ -59,7 +59,8 @@ def rebuild_cache():
                 row['tot_cons'] = 0
                 row['tot_refill'] = 0
                 NOTES_CACHE.append(row)
-        _build_stats()
+        if build_stats:
+            _build_stats()
     return True
 
 
@@ -339,7 +340,4 @@ def export_by_nick(notes_nicks, *args, **kwargs):
     return export([note for note in NOTES_CACHE if note['nickname'] in notes_nicks],
                   *args,
                   **kwargs)
-
-
-rebuild_cache()
 
