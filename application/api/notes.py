@@ -37,6 +37,7 @@ NOTE_FIELDS = ['id', 'nickname', 'lastname', 'firstname', 'mail', 'tel',
 
 NOTES_CACHE = []
 NOTES_FIELDS_CACHE = {}
+NOTES_STATS_FIELDS_CACHE = {}
 
 
 def rebuild_cache():
@@ -65,16 +66,35 @@ def rebuild_cache():
 def _build_stats():
     """ Add stats to the notes in the cache.
     """
-    global NOTES_CACHE
+    global NOTES_CACHE, NOTES_STATS_FIELDS_CACHE
     with Cursor() as cursor:
-        cursor.prepare("SELECT note, SUM(IF(price>0, price, 0)) as tot_refill,\
+        cursor.prepare("SELECT firstname, lastname, SUM(IF(price>0, price, 0)) as tot_refill,\
                         SUM(IF(price<0, price, 0)) AS tot_cons\
-                        FROM transactions GROUP BY note")
+                        FROM transactions GROUP BY firstname, lastname")
         if cursor.exec_():
             tot = {}
             while cursor.next():
                 record = cursor.record()
-                note = record.value('note')
+                if NOTES_STATS_FIELDS_CACHE == {}:
+                    NOTES_STATS_FIELDS_CACHE = {field: record.indexOf(field)
+                                                for field in ('lastname',
+                                                              'firstname',
+                                                              'tot_cons',
+                                                              'tot_refill'
+                                                             )
+                                               }
+
+                try:
+                    note = list(get(lambda x:
+                        x['lastname'] ==
+                        record.value(NOTES_STATS_FIELDS_CACHE["lastname"]) and
+                        x['firstname'] ==
+                        record.value(NOTES_STATS_FIELDS_CACHE["firstname"]
+                        )
+                    )
+                    )[0]['nickname']
+                except IndexError:
+                    continue
                 tot[note] = {}
                 tot[note]['tot_cons'] = record.value('tot_cons')
                 tot[note]['tot_refill'] = record.value('tot_refill')
@@ -214,11 +234,7 @@ def get(filter_function=None):
     """
     if filter_function is None:
         return NOTES_CACHE
-    rows = []
-    for row in NOTES_CACHE:
-        if filter_function(row):
-            rows.append(row)
-    return rows
+    return list(filter(filter_function, NOTES_CACHE))
 
 
 def hide(nicks):
