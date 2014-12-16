@@ -3,7 +3,7 @@ VENV="enibar-venv"
 DIR=$(dirname "$0")
 
 if [ -e "$DIR/$VENV" ]; then
-	PYTHON="$DIR/../$VENV/bin/python3"
+	PYTHON="../$VENV/bin/python3"
 else
 	echo ''
 	echo "WARNING: The venv does\'nt exist, you should probably"
