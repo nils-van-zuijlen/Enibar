@@ -777,7 +777,7 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Prendre sur une note</string>
+    <string>P&amp;rendre sur une note</string>
    </property>
   </action>
   <action name="refresh_panels">
