@@ -57,7 +57,6 @@ class NotesList(QtWidgets.QListWidget):
         self.minors_color = QtGui.QColor(255, 192, 203)
         self.overdraft_color = QtCore.Qt.red
         self.refresh_timer = QtCore.QTimer(self)
-        self.on_timer()
         self.refresh_timer.setInterval(10 * 1000)  # 10 seconds
         self.refresh_timer.timeout.connect(self.on_timer)
         self.refresh_timer.start()
