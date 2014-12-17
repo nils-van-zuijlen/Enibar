@@ -62,6 +62,8 @@ class Database:
             Database.database.setDatabaseName(settings.DBNAME)
             Database.database.setConnectOptions("MYSQL_OPT_RECONNECT=1")
             if not Database.database.open():
+                import gui.utils
+                gui.utils.error("Error", "Can't join database")
                 print("Can't join database")
                 sys.exit(1)
             cursor = SqlQuery(self.database)
