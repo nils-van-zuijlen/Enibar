@@ -124,6 +124,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.refill_note.setEnabled(False)
         self.empty_note.setEnabled(False)
         self.note_box.setEnabled(False)
+        self.repay_ecocup_btn.setEnabled(False)
+        self.take_ecocup_btn.setEnabled(False)
 
     def _note_refresh(self, index):
         """ Build the note infos.
@@ -136,6 +138,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.note_box.setEnabled(True)
         self.refill_note.setEnabled(True)
         self.empty_note.setEnabled(True)
+        self.repay_ecocup_btn.setEnabled(True)
+        self.take_ecocup_btn.setEnabled(True)
         self.note_history.clear()
         if index >= 0:
             self.selected = QtWidgets.QListWidgetItem(self.notes_list.item(index))
