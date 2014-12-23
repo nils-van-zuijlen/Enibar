@@ -138,8 +138,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.note_box.setEnabled(True)
         self.refill_note.setEnabled(True)
         self.empty_note.setEnabled(True)
-        self.repay_ecocup_btn.setEnabled(True)
-        self.take_ecocup_btn.setEnabled(True)
         self.note_history.clear()
         if index >= 0:
             self.selected = QtWidgets.QListWidgetItem(self.notes_list.item(index))
@@ -263,7 +261,7 @@ class MainWindow(QtWidgets.QMainWindow):
         """
         if self.selected:
 
-            note = api.notes.get(lambda x: x["nickname"] ==\
+            note = api.notes.get(lambda x: x["nickname"] ==
                 self.selected_nickname)[0]
             if note['ecocups'] < -self.eco_diff:
                 gui.utils.error("Erreur", "Verifiez le nombre d'écocups.")
