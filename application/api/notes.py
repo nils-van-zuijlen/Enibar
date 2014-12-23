@@ -368,4 +368,5 @@ def import_csv(csv):
         )
         nb_exec += 1
     return nb_exec
+rebuild_cache()
 
