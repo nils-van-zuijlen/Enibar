@@ -1,7 +1,10 @@
-application/__pycache__
-test/__pycache__
-documentation/build
 application/.coverage
-application/gui/__pycache__
+application/__pycache__
 application/api/__pycache__
+application/gui/__pycache__
+application/img
+documentation/build
+documentation/html
+enibar-venv/
 img/*
+test/__pycache__
