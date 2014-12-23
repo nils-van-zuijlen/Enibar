@@ -23,8 +23,10 @@ Notes
 """
 
 from PyQt5 import QtSql
+import api.transactions
 from database import Cursor, Database
 import datetime
+import re
 import os.path
 import settings
 import shutil
@@ -340,4 +342,30 @@ def export_by_nick(notes_nicks, *args, **kwargs):
     return export([note for note in NOTES_CACHE if note['nickname'] in notes_nicks],
                   *args,
                   **kwargs)
+
+
+def import_csv(csv):
+    """ Import a csv file. There are no checks done here.
+    CSV pattern: Nom,Prenom,Surnom,Note,Email,Date de naissance,Majeur,Debit,Motif
+
+    Returns the number of line executed.
+    """
+    nb_exec = 0
+    re.sub("\"(\d+?),(\d+?)\"", "\1.\2", csv)
+    for line in csv.split():
+        try:
+            _, _, _, note, _, _, _, amount, motive = line.split(',')
+        except ValueError:
+            continue
+        transactions([note, ], -float(amount))
+        api.transactions.log_transaction(
+            note,
+            "CSV import",
+            motive,
+            "Solde",
+            "1",
+            -float(amount)
+        )
+        nb_exec += 1
+    return nb_exec
 
