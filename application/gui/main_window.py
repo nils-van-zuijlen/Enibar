@@ -262,6 +262,12 @@ class MainWindow(QtWidgets.QMainWindow):
             focus back to the notes_list.
         """
         if self.selected:
+
+            note = api.notes.get(lambda x: x["nickname"] ==\
+                self.selected_nickname)[0]
+            if note['ecocups'] < -self.eco_diff:
+                gui.utils.error("Erreur", "Verifiez le nombre d'écocups.")
+                return
             total = self.product_list.get_total()
             text = "Es tu sûr de vouloir enlever {:.2f} € sur la note\
                     <br/>de {}<br/><br/><span style=\"font-size:12pt;\
