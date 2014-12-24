@@ -42,6 +42,7 @@ from .users_management_window import UsersManagementWindow
 from .search_window import SearchWindow
 from .stats_window import StatsWindow
 from .about_window import AboutWindow
+from .csv_import_window import CsvImportWindow
 import api.categories
 import api.notes
 import api.transactions
@@ -384,6 +385,22 @@ class MenuBar(QtWidgets.QMenuBar):
         self.cur_window = RefillNoteWindow(
             self.parent().notes_list.currentItem().text(), performer=_performer)
         self._connect_window()
+
+    # XXX: Penser aux auths.
+    def csv_import_fnc(self):
+        """ Open a CsvImportWindow
+        """
+        self._close_window()
+        path, _ = QtWidgets.QFileDialog(self).getOpenFileName(
+            self,
+            "Imported",
+            "",
+            "CSV Files (*.csv)"
+        )
+
+        if path:
+            self.cur_window = CsvImportWindow(path)
+            self._connect_window()
 
     def stats(self):
         """ Open a StatsWindow

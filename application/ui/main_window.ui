@@ -672,6 +672,7 @@
     <addaction name="separator"/>
     <addaction name="manage_notes"/>
     <addaction name="notes_action"/>
+    <addaction name="import_csv"/>
     <addaction name="separator"/>
     <addaction name="menuExporter_les_notes"/>
     <addaction name="find"/>
@@ -803,6 +804,11 @@
     <string>&amp;A propos</string>
    </property>
   </action>
+  <action name="import_csv">
+   <property name="text">
+    <string>&amp;Importer un fichier CSV</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -837,6 +843,7 @@
     <slot>trigger_search()</slot>
     <slot>stats()</slot>
     <slot>about()</slot>
+    <slot>csv_import_fnc()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -1115,8 +1122,8 @@
    <slot>take_ecocup_fnc()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>817</x>
-     <y>560</y>
+     <x>873</x>
+     <y>605</y>
     </hint>
     <hint type="destinationlabel">
      <x>441</x>
@@ -1131,8 +1138,8 @@
    <slot>repay_ecocup_fnc()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>717</x>
-     <y>560</y>
+     <x>759</x>
+     <y>605</y>
     </hint>
     <hint type="destinationlabel">
      <x>441</x>
@@ -1217,6 +1224,22 @@
     <hint type="destinationlabel">
      <x>441</x>
      <y>9</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>import_csv</sender>
+   <signal>triggered()</signal>
+   <receiver>menu_bar</receiver>
+   <slot>csv_import_fnc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>7</y>
     </hint>
    </hints>
   </connection>
