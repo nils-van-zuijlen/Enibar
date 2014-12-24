@@ -60,7 +60,8 @@ def ask_auth(*dargs, fail_callback=None, pass_performer=False):
                     kwargs["_performer"] = prompt.user
                 func(*args, **kwargs)
             else:
-                gui.utils.error("Error", "Erreur d'authentification")
+                if prompt.show_error:
+                    gui.utils.error("Error", "Erreur d'authentification")
                 if fail_callback is not None:
                     fail_callback()
         return wrapper
@@ -73,6 +74,7 @@ class AuthPromptWindow(QtWidgets.QDialog):
         super().__init__()
         self.requirements = requirements
         self.is_authorized = False
+        self.show_error = False
         uic.loadUi('ui/auth_prompt_window.ui', self)
         self.pass_input.set_validator(api.validator.NAME)
         filter_ = ", ".join("{key}=1".format(key=key) for key in requirements)
@@ -104,6 +106,7 @@ class AuthPromptWindow(QtWidgets.QDialog):
                     return super().accept()
             self.is_authorized = True
         else:
+            self.show_error = True
             self.is_authorized = False
         return super().accept()
 
