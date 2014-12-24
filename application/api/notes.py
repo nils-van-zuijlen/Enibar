@@ -352,21 +352,23 @@ def import_csv(csv):
     """
     nb_exec = 0
     re.sub("\"(\d+?),(\d+?)\"", "\1.\2", csv)
+    trs = []
     for line in csv.split():
         try:
             _, _, _, note, _, _, _, amount, motive = line.split(',')
         except ValueError:
             continue
         transactions([note, ], -float(amount))
-        api.transactions.log_transaction(
-            note,
-            "CSV import",
-            motive,
-            "Solde",
-            "1",
-            -float(amount)
+        trs.append({
+            'note': note,
+            'category': "CSV import",
+            'product': motive,
+            'price_name': "Solde",
+            'quantity': "1",
+            'price': -float(amount)}
         )
         nb_exec += 1
+    api.transactions.log_transactions(trs)
     return nb_exec
 rebuild_cache()
 

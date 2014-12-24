@@ -67,9 +67,6 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="selectionMode">
-        <enum>QAbstractItemView::ExtendedSelection</enum>
-       </property>
        <property name="indentation">
         <number>0</number>
        </property>
@@ -91,10 +88,15 @@
        </column>
        <column>
         <property name="text">
-         <string>Montant</string>
+         <string>Crédit</string>
         </property>
         <property name="textAlignment">
          <set>AlignLeft|AlignVCenter</set>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Débit</string>
         </property>
        </column>
       </widget>

@@ -19,6 +19,7 @@
 
 from PyQt5 import QtWidgets, QtCore, uic
 import api.notes
+import gui.utils
 import re
 
 
@@ -27,8 +28,10 @@ class CsvImportWindow(QtWidgets.QDialog):
         super().__init__()
         uic.loadUi('ui/csv_import_window.ui', self)
         self.file_path = path
+        self.recap.header().setStretchLastSection(False)
+        self.recap.header().setSectionResizeMode(1,
+            QtWidgets.QHeaderView.Stretch)
         self._build_recap()
-
         self.show()
 
     def _parse_line(self, line):
@@ -37,7 +40,7 @@ class CsvImportWindow(QtWidgets.QDialog):
         _, _, _, note, _, _, _, amount, motive = line.split(',')
         if all([note, amount, motive]):
             if api.notes.get(lambda x: x['nickname'].lower() == note.lower()):
-                return note, float(amount), motive
+                return note.strip(), float(amount), motive.strip()
         raise ValueError
 
     def _build_recap(self):
@@ -50,13 +53,20 @@ class CsvImportWindow(QtWidgets.QDialog):
                     note, amount, motive = self._parse_line(line)
                 except ValueError:
                     continue
+                amount = round(amount, 2)
                 w = QtWidgets.QTreeWidgetItem(
-                        self.recap,
-                        (note, motive, "{} €".format(round(amount, 2)))
+                    self.recap,
+                    (note,
+                     motive,
+                     "{} €".format(-amount) if amount < 0 else "-",
+                     "{} €".format(amount) if amount > 0 else "-"
+                    )
                 )
 
     def on_validation(self):
         with open(self.file_path, 'r') as fd:
-            api.notes.import_csv(fd.read())
+            nb_op = api.notes.import_csv(fd.read())
+        gui.utils.valid("{} opération{s} effectuée{s}".format(nb_op,
+            s="s" * (nb_op > 1)))
         self.close()
 

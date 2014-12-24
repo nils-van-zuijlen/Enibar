@@ -386,8 +386,8 @@ class MenuBar(QtWidgets.QMenuBar):
             self.parent().notes_list.currentItem().text(), performer=_performer)
         self._connect_window()
 
-    # XXX: Penser aux auths.
-    def csv_import_fnc(self):
+    @ask_auth("manage_notes")
+    def csv_import_fnc(self, _):
         """ Open a CsvImportWindow
         """
         self._close_window()
