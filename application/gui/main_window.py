@@ -228,7 +228,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if isinstance(event, QtGui.QKeyEvent) and\
                 event.type() == QtCore.QEvent.KeyPress:
             if event.text() == "\"":
-                self.win = Douchette(self.on_douchette)
+                self.win = DouchetteWindow(self.on_douchette)
                 return True
             if event.key() == 0x01000004 or event.key() == 0x01000005:
                 self.validate_transaction()
@@ -237,22 +237,20 @@ class MainWindow(QtWidgets.QMainWindow):
     def on_douchette(self, text):
         """ Called after the douchette is fired !
         """
-        product = api.products.get_unique(barcode=text)
-        if not product:
+        price = api.prices.get_unique(barcode=text)
+        if not price:
             return
-        catname = api.categories.get_unique(id=product["category"])
+        catname = api.categories.get_unique(id=price["category"])
         if not catname:
             return
-        prices = list(api.prices.get(product=product["id"]))
-        if not prices:
-            return
-        if not len(product):
+        product = api.products.get_unique(id=price["product"])
+        if not product:
             return
         self.product_list.add_product(
             catname["name"],
             product["name"],
-            prices[0]["label"],
-            prices[0]["value"])
+            price["label"],
+            price["value"])
         text = "{:.2f} €".format(self.product_list.get_total())
         self.total.setText(text)
 

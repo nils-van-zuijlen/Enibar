@@ -132,7 +132,8 @@ class PricesTest(basetest.BaseTest):
             'label': "Unité",
             'value': 0,
             'product': pid,
-            'category': self.cat_drink
+            'category': self.cat_drink,
+            'barcode': ''
         }])
         api.prices.add(None, price_desc_id, 0)
         self.assertTrue(self.count_prices(), 2)
@@ -141,7 +142,8 @@ class PricesTest(basetest.BaseTest):
             'label': "Unité",
             'value': 0,
             'product': pid,
-            'category': self.cat_drink
+            'category': self.cat_drink,
+            'barcode': ''
         }])
 
     def test_get_unique(self):
@@ -157,7 +159,8 @@ class PricesTest(basetest.BaseTest):
             'label': "Unité",
             'value': 0,
             'product': pid,
-            'category': self.cat_eat
+            'category': self.cat_eat,
+            'barcode': ''
         })
 
     def test_set_value(self):
@@ -184,4 +187,14 @@ class PricesTest(basetest.BaseTest):
                     self.assertEqual(value, price['value'])
         # The extra length of api.prices.get is due to product creation
         self.assertEqual(len(prices), len(list(api.prices.get())) - 1)
+
+    def test_set_barcode(self):
+        """ Testing set_barcode
+        """
+        pid = api.products.add("Lapin", category_id=self.cat_eat)
+        desc_id = api.prices.add_descriptor("Unité", self.cat_eat)
+        price = api.prices.add(pid, desc_id, 1)
+        self.assertEqual(api.prices.get_unique(id=price)['barcode'], "")
+        self.assertTrue(api.prices.set_barcode(price, "123456"))
+        self.assertEqual(api.prices.get_unique(id=price)['barcode'], "123456")
 

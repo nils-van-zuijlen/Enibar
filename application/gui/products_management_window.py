@@ -29,7 +29,7 @@ import api.products
 import api.categories
 import api.prices
 import api.validator
-from .douchette_window import DouchetteWindow
+from .douchette_window import DouchetteWindow, AskDouchetteWindow
 
 
 class ProductsManagementWindow(QtWidgets.QDialog):
@@ -79,17 +79,6 @@ class ProductsManagementWindow(QtWidgets.QDialog):
             self.input_product.setText("")
         elif cat_name:
             gui.utils.error("Impossible d'ajouter le produit")
-
-    def event(self, event):
-        """ Rewrite the event loop
-        """
-        if isinstance(event, QtGui.QKeyEvent):
-            if self.tabs.currentIndex() == 0 and\
-                    not self.input_product.hasFocus():
-                if event.text() == "\"":
-                    self.win = DouchetteWindow(self.barcode_input.setText)
-                    return True
-        return super().event(event)
 
     def remove_product(self):
         """ Remove product
@@ -146,10 +135,6 @@ class ProductsManagementWindow(QtWidgets.QDialog):
             gui.utils.error("Impossible de sauvegarder les nouveaux prix")
         if not len(indexes):
             return
-        if not api.products.set_barcode(indexes[0].data(),
-                                        indexes[0].parent().data(),
-                                        self.barcode_input.text()):
-            gui.utils.error("Impossible de sauvegarder le code barre")
 
     def select_product(self):
         """ Select product
@@ -159,14 +144,19 @@ class ProductsManagementWindow(QtWidgets.QDialog):
         parent = None
         invalid = False
         indexes = self.products.selectedIndexes()
+
         if not indexes:
             self.prices.setEnabled(False)
             self.input_product_save.setEnabled(False)
-            self.barcode_input.setEnabled(False)
             return
-        item = indexes[-1]
 
-        for index in self.products.selectedIndexes():
+        if len(indexes) > 1:
+            # If more than 1 product is selected, we must disable the douchette.
+            ConsumptionPricesItem.BUTTON_ENABLED = False
+        else:
+            ConsumptionPricesItem.BUTTON_ENABLED = True
+
+        for index in indexes:
             if not index.parent().isValid():
                 continue
             if parent and index.parent() != parent:
@@ -174,21 +164,15 @@ class ProductsManagementWindow(QtWidgets.QDialog):
                 break
             parent = index.parent()
 
+        item = indexes[-1]
         if item.parent().isValid() and not invalid:
             self.prices.rebuild(item.data(), item.parent().data())
             self.prices.setEnabled(True)
             self.input_product_save.setEnabled(True)
-            if len(indexes) < 2:
-                self.barcode_input.setEnabled(True)
-                category = api.categories.get_unique(name=item.parent().data())
-                product = api.products.get_unique(name=item.data(),
-                                                  category=category['id'])
-                self.barcode_input.setText(product['barcode'])
         else:
             self.prices.clean()
             self.prices.setEnabled(False)
             self.input_product_save.setEnabled(False)
-            self.barcode_input.setEnabled(False)
 
     def add_category(self):
         """ Add category to category list.
@@ -310,14 +294,14 @@ class ConsumptionPrices(QtWidgets.QGroupBox):
         super().__init__(parent)
         self.widgets = []
 
-    def add_price(self, id_, name, value):
+    def add_price(self, id_, name, value, barcode):
         """ Add price to product's price list
 
         :param int id_: Price id
         :param str name: Price name
         :param float value: Price value
         """
-        item = ConsumptionPricesItem(id_, name, value)
+        item = ConsumptionPricesItem(id_, name, value, barcode)
         self.layout().insertWidget(len(self.widgets), item)
         self.widgets.append(item)
 
@@ -351,25 +335,60 @@ class ConsumptionPrices(QtWidgets.QGroupBox):
         if not product:
             return
 
-        for prices in api.prices.get(product=product['id']):
-            self.add_price(prices['id'], prices['label'], prices['value'])
+        for price in api.prices.get(product=product['id']):
+            self.add_price(price['id'], price['label'], price['value'],
+                price['barcode'])
 
 
 class ConsumptionPricesItem(QtWidgets.QWidget):
-    """ Simple widget wrapper to hangle each label, price pair as a unique item
+    """ Simple widget wrapper to handle each label, price pair as a unique item
     """
-    def __init__(self, id_, name, value):
+    BUTTON_ENABLED = True
+
+    def __init__(self, id_, name, value, barcode):
         super().__init__()
         self.id_ = id_
+        self.name = name
+        self.value = value
+        self.barcode = barcode
+
         self.label = QtWidgets.QLabel(name)
         self.input = QtWidgets.QDoubleSpinBox()
-        self.input.setValue(value)
+        self.barcode_btn = QtWidgets.QPushButton()
         self.input.setMaximum(999.99)
         self.input.setLocale(QtCore.QLocale('English'))
         self.label.setBuddy(self.input)
+        self.barcode_btn.clicked.connect(self.add_barcode)
+        self.barcode_btn.setSizePolicy(QtWidgets.QSizePolicy.Maximum,
+            QtWidgets.QSizePolicy.Maximum)
+
+        self._build()
+
         self.layout = QtWidgets.QHBoxLayout(self)
         self.layout.addWidget(self.label)
         self.layout.addWidget(self.input)
+        self.layout.addWidget(self.barcode_btn)
+
+    def _build(self):
+        """ Fill the inputs with walues and update the douchette button
+        """
+        self.label = QtWidgets.QLabel(self.name)
+        self.input.setValue(self.value)
+
+        if self.barcode and ConsumptionPricesItem.BUTTON_ENABLED:
+            self.barcode_btn.setStyleSheet('* {background-color: #A3C1DA;}')
+        if not ConsumptionPricesItem.BUTTON_ENABLED:
+            self.barcode_btn.setStyleSheet('* {background-color: #FF0000;}')
+        self.barcode_btn.setEnabled(ConsumptionPricesItem.BUTTON_ENABLED)
+
+    def add_barcode(self):
+        """ Called when the button for the barcode is pressed
+        """
+        def set_barcode(barcode):
+            api.prices.set_barcode(self.id_, barcode)
+            self.barcode = barcode
+            self._build()
+        self.win = AskDouchetteWindow(set_barcode)
 
 
 class ConsumptionList(QtWidgets.QTreeWidget):

@@ -106,10 +106,11 @@ def get_descriptor(**kwargs):
             cursor.bindValue(":{}".format(key), arg)
         cursor.exec_()
         while cursor.next():
+            record = cursor.record()
             yield {
-                'id': cursor.record().value('id'),
-                'label': cursor.record().value('label'),
-                'category': cursor.record().value('category'),
+                'id': record.value('id'),
+                'label': record.value('label'),
+                'category': record.value('category'),
             }
 
 
@@ -156,6 +157,7 @@ def get(**kwargs):
         cursor.prepare("SELECT prices.id as id,\
             prices.product as product,\
             prices.value as value,\
+            prices.barcode as barcode,\
             price_description.label as label,\
             price_description.category as category \
             from prices INNER JOIN price_description \
@@ -166,13 +168,25 @@ def get(**kwargs):
 
         if cursor.exec_():
             while cursor.next():
+                record = cursor.record()
                 yield {
-                    'id': cursor.record().value('id'),
-                    'label': cursor.record().value('label'),
-                    'value': cursor.record().value('value'),
-                    'product': cursor.record().value('product'),
-                    'category': cursor.record().value('category'),
+                    'id': record.value('id'),
+                    'label': record.value('label'),
+                    'value': record.value('value'),
+                    'product': record.value('product'),
+                    'category': record.value('category'),
+                    'barcode': record.value('barcode'),
                 }
+
+
+def set_barcode(id_, barcode):
+    """ Change the barcod assiociated to a product
+    """
+    with Cursor() as cursor:
+        cursor.prepare("UPDATE prices SET barcode=:barcode WHERE id=:id")
+        cursor.bindValue(":barcode", barcode)
+        cursor.bindValue(":id", id_)
+        return cursor.exec_()
 
 
 def set_value(id_, value):

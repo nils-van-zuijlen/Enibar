@@ -59,21 +59,21 @@ class ProductsTest(basetest.BaseTest):
         self.assertTrue(products.remove(id_))
         self.assertEqual(self.count_products(), 0)
 
-    def test_barcode(self):
-        """ Testing set_barcode
-        """
-        products.add("Banane", category_id=self.cat_eat)
-        products.set_barcode("Banane", "Manger", "000010000")
-        self.assertEqual(list(products.get(name="Banane"))[0]['barcode'], "000010000")
-        products.set_barcode("Banane", "Manger", "000020000")
-        self.assertEqual(list(products.get(name="Banane"))[0]['barcode'], "000020000")
-
     def test_search_by_name(self):
         """ Testing search_by_name
         """
         products.add("Banane", category_id=self.cat_eat)
         products.add("Banana split", category_id=self.cat_eat)
         self.assertEqual(list(products.search_by_name("banan")),
-            [{'category': self.cat_eat, 'name': "Banana split", 'barcode': ""},
-             {'category': self.cat_eat, 'name': "Banane", 'barcode': ""}])
+            [{'category': self.cat_eat, 'name': "Banana split"},
+             {'category': self.cat_eat, 'name': "Banane"}])
+
+    def test_get(self):
+        """ Testing get
+        """
+        id1 = products.add("Banane", category_id=self.cat_eat)
+        id2 = products.add("Banana split", category_id=self.cat_eat)
+        self.assertEqual(list(products.get()),
+            [{'id': id2, 'category': self.cat_eat, 'name': "Banana split"},
+             {'id': id1, 'category': self.cat_eat, 'name': "Banane"}])
 
