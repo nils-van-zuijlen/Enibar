@@ -88,10 +88,11 @@ def get_rights(username):
             """)
         cursor.bindValue(':login', username)
         if cursor.exec_() and cursor.next():
+            record = cursor.record()
             return {
-                'manage_users': cursor.record().value('manage_users'),
-                'manage_notes': cursor.record().value('manage_notes'),
-                'manage_products': cursor.record().value('manage_products'),
+                'manage_users': record.value('manage_users'),
+                'manage_notes': record.value('manage_notes'),
+                'manage_products': record.value('manage_products'),
             }
         else:
             return {

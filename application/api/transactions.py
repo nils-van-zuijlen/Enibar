@@ -95,8 +95,9 @@ def log_transactions(transactions):
                 fetching_cursor.bindValue(':nick', trans['note'])
                 fetching_cursor.exec_()
                 if fetching_cursor.next():
-                    lastname = fetching_cursor.record().value("lastname")
-                    firstname = fetching_cursor.record().value("firstname")
+                    record = fetching_cursor.record()
+                    lastname = record.value("lastname")
+                    firstname = record.value("firstname")
                 else:
                     # Nickname is a fake one, we must not fill lastname and
                     # firstname name

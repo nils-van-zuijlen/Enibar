@@ -36,8 +36,9 @@ def get_red():
             FROM notes WHERE note < 0")
         cursor.exec_()
         cursor.next()
-        return {'total_red': cursor.record().value('total_red'),
-                'nb_notes': cursor.record().value('nb_notes'), }
+        record = cursor.record()
+        return {'total_red': record.value('total_red'),
+                'nb_notes': record.value('nb_notes'), }
 
 
 def get_green():
@@ -48,8 +49,9 @@ def get_green():
             FROM notes WHERE note > 0")
         cursor.exec_()
         cursor.next()
-        return {'total_green': cursor.record().value('total_green'),
-                'nb_notes': cursor.record().value('nb_notes'), }
+        record = cursor.record()
+        return {'total_green': record.value('total_green'),
+                'nb_notes': record.value('nb_notes'), }
 
 
 def get_sold_items():

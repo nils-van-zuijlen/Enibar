@@ -112,7 +112,8 @@ def search_by_name(name):
         cursor.exec_()
 
         while cursor.next():
-            yield {field: cursor.record().value(field) for field in
+            record = cursor.record()
+            yield {field: record.value(field) for field in
                    PRODUCT_FIELDS}
 
 
