@@ -17,6 +17,7 @@
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 from PyQt5 import QtWidgets, QtCore, QtGui
+import api.notes
 import time
 
 
