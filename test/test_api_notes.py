@@ -456,3 +456,12 @@ class NotesTest(basetest.BaseTest):
                                           "a,a,test,test,a,a,2.5,Onololo\n"), 1)  # %issing one field
         self.assertEqual(notes.get(lambda x: x['nickname'] == "test")[0]['note'], -2.5)
 
+    def test_do_not(self):
+        """ Testing do_not arg.
+        """
+        self.add_note("test")
+        notes.transactions(['test'], 10, do_not=True)
+        self.assertEqual(notes.get()[0]['note'], 0)
+        notes.rebuild_cache()
+        self.assertEqual(notes.get()[0]['note'], 10)
+

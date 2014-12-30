@@ -42,10 +42,12 @@ NOTES_FIELDS_CACHE = {}
 NOTES_STATS_FIELDS_CACHE = {}
 
 
-def rebuild_cache(build_stats=True):
+def rebuild_cache(build_stats=True, *, do_not=False):
     """ Build a cache with all notes inside. This improve greatly the perfs of
         get actions
     """
+    if do_not:
+        return True
     global NOTES_CACHE, NOTES_FIELDS_CACHE
     NOTES_CACHE = []
     with Cursor() as cursor:
@@ -107,7 +109,7 @@ def _build_stats():
                     note['tot_refill'] = tot[note['nickname']]['tot_refill']
 
 
-def _request_multiple_nicks(nicks, request):
+def _request_multiple_nicks(nicks, request, *, do_not=False):
     """ Execute the request on multiple notes
 
     :param list nicks: Nicknames of the notes on wich the request\
@@ -123,11 +125,11 @@ def _request_multiple_nicks(nicks, request):
             cursor.bindValue(':nick', nick)
             cursor.exec_()
         value = database.commit()
-    rebuild_cache()
+    rebuild_cache(do_not=do_not)
     return value
 
 
-def change_values(nick, **kwargs):
+def change_values(nick, *, do_not=False, **kwargs):
     """ Change the value of the columns for the note with the nickname
         `nickname`
     """
@@ -139,7 +141,7 @@ def change_values(nick, **kwargs):
             cursor.bindValue(':{}'.format(key), value)
         cursor.bindValue(':nick', nick)
         value = cursor.exec_()
-    rebuild_cache()
+    rebuild_cache(do_not=do_not)
     return value
 
 
@@ -224,7 +226,7 @@ def change_photo(nickname, new_photo):
                         WHERE nickname=:nickname")
         cursor.bindValues({':photo_path': name, ':nickname': nickname})
         value = cursor.exec_()
-    rebuild_cache()
+    rebuild_cache(False)
     return value
 
 
@@ -262,7 +264,7 @@ def show(nicks):
         WHERE nickname=:nick")
 
 
-def transactions(notes, diff):
+def transactions(notes, diff, *, do_not=False):
     """ Change the note on multiple notes
 
         :param str nickname: The nickname of the note
@@ -279,7 +281,7 @@ def transactions(notes, diff):
             cursor.bindValue(':diff', diff)
             cursor.exec_()
         value = database.commit()
-    rebuild_cache()
+    rebuild_cache(do_not=do_not)
     return value
 
 
@@ -344,7 +346,7 @@ def export_by_nick(notes_nicks, *args, **kwargs):
                   **kwargs)
 
 
-def import_csv(csv):
+def import_csv(csv, *, do_not=False):
     """ Import a csv file. There are no checks done here.
     CSV pattern: Nom,Prenom,Surnom,Note,Email,Date de naissance,Majeur,Debit,Motif
 
@@ -358,7 +360,7 @@ def import_csv(csv):
             _, _, _, note, _, _, _, amount, motive = line.split(',')
         except ValueError:
             continue
-        transactions([note, ], -float(amount))
+        transactions([note, ], -float(amount), do_not=do_not)
         trs.append({
             'note': note,
             'category': "CSV import",
@@ -370,5 +372,7 @@ def import_csv(csv):
         nb_exec += 1
     api.transactions.log_transactions(trs)
     return nb_exec
+
+
 rebuild_cache()
 

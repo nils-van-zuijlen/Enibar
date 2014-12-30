@@ -65,7 +65,8 @@ class CsvImportWindow(QtWidgets.QDialog):
 
     def on_validation(self):
         with open(self.file_path, 'r') as fd:
-            nb_op = api.notes.import_csv(fd.read())
+            nb_op = api.notes.import_csv(fd.read(), do_not=True)
+        api.notes.rebuild_cache()
         gui.utils.valid("{} opération{s} effectuée{s}".format(nb_op,
             s="s" * (nb_op > 1)))
         self.close()
