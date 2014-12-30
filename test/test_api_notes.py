@@ -323,7 +323,7 @@ class NotesTest(basetest.BaseTest):
 
         to_export = ["nickname", "firstname", "lastname", "note", "mail",
                      "photo_path"]
-        note = list(notes.get())[0]
+        note = notes.get()[0]
         csv = ", ".join(to_export)
         csv += "\n" + ",".join(str(note[value]) for value in to_export)
         self.assertEqual(csv, notes.export(notes.get(), csv=True))
@@ -349,7 +349,7 @@ class NotesTest(basetest.BaseTest):
         )
         to_export = ["nickname", "firstname", "lastname", "note", "mail",
                      "photo_path"]
-        note = list(notes.get(lambda x: x['nickname'] == "test0"))[0]
+        note = notes.get(lambda x: x['nickname'] == "test0")[0]
         csv = ", ".join(to_export)
         csv += "\n" + ",".join(str(note[value]) for value in to_export)
         self.assertEqual(csv, notes.export_by_nick(list(["test0"]), csv=True))
@@ -378,7 +378,7 @@ class NotesTest(basetest.BaseTest):
         )
 
         notes.change_values("test0", tel="0200000000", promo="3A")
-        note = list(notes.get())[0]
+        note = notes.get()[0]
         self.assertEqual(note["tel"], "0200000000")
         self.assertEqual(note["promo"], "3A")
 
@@ -386,17 +386,17 @@ class NotesTest(basetest.BaseTest):
         """ Testing overdraft support
         """
         id0 = self.add_note("test0")
-        note = list(notes.get())[0]
+        note = notes.get()[0]
         self.assertEqual(note['overdraft_date'], PyQt5.QtCore.QDate())
 
         notes.transactions(["test0", ], -1)
-        note = list(notes.get())[0]
+        note = notes.get()[0]
         now = PyQt5.QtCore.QDateTime()
         now.setMSecsSinceEpoch(time.time() * 1000)
         self.assertEqual(note['overdraft_date'], now.date())
 
         notes.transactions(["test0", ], 1)
-        note = list(notes.get())[0]
+        note = notes.get()[0]
         self.assertEqual(note['overdraft_date'], PyQt5.QtCore.QDate())
 
     def test_unique_file_name(self):
@@ -410,13 +410,13 @@ class NotesTest(basetest.BaseTest):
         id0 = self.add_note("test0")
 
         notes.change_photo("test0", "../test/resources/coucou2.jpg")
-        note = list(notes.get())[0]
+        note = notes.get()[0]
         self.assertEqual(note['photo_path'], "coucou2.jpg")
         notes.change_photo("test0", "../test/resources/coucou.jpg")
-        note = list(notes.get())[0]
+        note = notes.get()[0]
         self.assertEqual(note['photo_path'], "coucou.jpg")
         notes.change_photo("test0", "../test/resources/coucou2.jpg")
-        note = list(notes.get())[0]
+        note = notes.get()[0]
         self.assertIn("coucou2", note['photo_path'])
         self.assertNotEqual("coucou2.jpg", note['photo_path'])
 
@@ -441,10 +441,10 @@ class NotesTest(basetest.BaseTest):
         """
         id0 = self.add_note("test0")
         notes.change_ecocups("test0", 5)
-        note = list(notes.get())[0]
+        note = notes.get()[0]
         self.assertEqual(note['ecocups'], 5)
         notes.change_ecocups("test0", -3)
-        note = list(notes.get())[0]
+        note = notes.get()[0]
         self.assertEqual(note['ecocups'], 2)
 
     def test_import_csv(self):

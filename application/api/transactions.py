@@ -139,7 +139,7 @@ def rollback_transaction(id_, full=False):
     try:
         filter_ = lambda x: x['firstname'] == trans['firstname'] and \
             x['lastname'] == trans['lastname']
-        note = list(api.notes.get(filter_))[0]
+        note = api.notes.get(filter_)[0]
     except IndexError:
         return False
 
