@@ -30,7 +30,8 @@ import api.notes
 import api.prices
 import api.categories
 import api.validator
-from .utils import NotesList, valid
+from .utils import valid
+from .notes_list_widget import NotesList
 from .panels_management_window import ConsumptionList
 from .refill_note_window import MultiRefillNoteWindow
 import datetime

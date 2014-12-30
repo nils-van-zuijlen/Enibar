@@ -34,7 +34,7 @@ You can use the DB class like that:
 """
 
 
-from PyQt5 import QtSql
+from PyQt5 import QtSql, QtWidgets
 import sys
 import settings
 
@@ -62,7 +62,9 @@ class Database:
             Database.database.setDatabaseName(settings.DBNAME)
             Database.database.setConnectOptions("MYSQL_OPT_RECONNECT=1")
             if not Database.database.open():
+                # We need this to create an app before opening a window.
                 import gui.utils
+                self.tmp = QtWidgets.QApplication(sys.argv)
                 gui.utils.error("Error", "Can't join database")
                 print("Can't join database")
                 sys.exit(1)

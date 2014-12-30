@@ -819,7 +819,7 @@
   <customwidget>
    <class>NotesList</class>
    <extends>QListWidget</extends>
-   <header>gui/utils</header>
+   <header>gui/notes_list_widget</header>
   </customwidget>
   <customwidget>
    <class>MenuBar</class>

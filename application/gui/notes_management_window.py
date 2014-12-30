@@ -30,7 +30,7 @@ from gui.input_widget import Input
 import api.notes
 import api.validator
 import datetime
-import gui.utils
+import gui.notes_list_widget
 import settings
 
 
@@ -212,7 +212,7 @@ class NotesManagementWindow(QtWidgets.QDialog):
                 action(obj)
 
 
-class ManageNotesList(gui.utils.NotesList):
+class ManageNotesList(gui.notes_list_widget.NotesList):
     def refresh(self, notes_list):
         """ Refresh the note list
         """
