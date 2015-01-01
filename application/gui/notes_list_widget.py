@@ -32,6 +32,7 @@ class NotesList(QtWidgets.QListWidget):
         self.refresh_timer.setInterval(10 * 1000)  # 10 seconds
         self.refresh_timer.timeout.connect(self.on_timer)
         self.refresh_timer.start()
+        self.refreshing = False
 
     def build(self, notes_list):
         """ Fill the list with notes from notes_list, coloring negatives one
@@ -47,13 +48,18 @@ class NotesList(QtWidgets.QListWidget):
     def on_timer(self):
         """ Rebuild the note list every 10 seconds
         """
-        api.notes.rebuild_cache()
-        new_notes = api.notes.get(self.current_filter)
-        self.refresh(new_notes)
+        if not self.refreshing:
+            self.refreshing = True
+            api.notes.rebuild_cache()
+            new_notes = api.notes.get(self.current_filter)
+            self.refreshing = False
+            self.refresh(new_notes)
 
     def refresh(self, notes_list):
         """ Refresh the note list
         """
+        if self.refreshing:
+            return
         selected = self.currentItem()
         if selected:
             selected = selected.text()
