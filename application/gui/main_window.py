@@ -309,7 +309,7 @@ class MenuBar(QtWidgets.QMenuBar):
         """
         self.parent().notes_list.current_filter = lambda x: x['hidden'] == 0
         self.parent().rebuild_notes_list()
-        self.cur_window = None
+        self._close_window()
 
     def _connect_window(self):
         """ Connect the finished signal of the opened window to
