@@ -8,3 +8,4 @@ documentation/html
 enibar-venv/
 img/*
 test/__pycache__
+.ropeproject/*
