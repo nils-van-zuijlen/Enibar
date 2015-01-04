@@ -230,7 +230,8 @@ class MainWindow(QtWidgets.QMainWindow):
             if event.text() == "\"":
                 self.win = DouchetteWindow(self.on_douchette)
                 return True
-            if event.key() == 0x01000004 or event.key() == 0x01000005:
+            if event.key() == QtCore.Qt.Key_Return or\
+                    event.key() == QtCore.Qt.Key_Enter:
                 self.validate_transaction()
         return super().event(event)
 
