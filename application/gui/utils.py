@@ -25,7 +25,6 @@ Somme shortcut to do repetitive actions more easely
 """
 
 from PyQt5 import QtWidgets
-import time
 
 
 def error(title, message=""):

@@ -53,6 +53,8 @@ class Database:
         pass
 
     def connect(self):
+        """ Connect to the database and set some parameters.
+        """
         if Database.database is None:
             Database.database = QtSql.QSqlDatabase("QMYSQL")
 

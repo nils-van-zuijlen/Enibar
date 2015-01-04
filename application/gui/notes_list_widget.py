@@ -16,6 +16,14 @@
 # You should have received a copy of the GNU General Public License
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
+"""
+NotesList
+=========
+
+A custom QListWidget that  ontains the list of notes.
+It refreshes itself every 10 seconds.
+"""
+
 from PyQt5 import QtWidgets, QtCore, QtGui
 import api.notes
 import time

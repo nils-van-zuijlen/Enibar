@@ -54,6 +54,7 @@ class HistoryWindow(QtWidgets.QDialog):
             super().__init__(parent)
             uic.loadUi('ui/history_window.ui', self)
 
+            self.allow_refresh = False
             self.updatetimer = QtCore.QTimer()
             self.updatetimer.timeout.connect(self.update_list)
             self.updatetimer.setInterval(175)
@@ -87,15 +88,15 @@ class HistoryWindow(QtWidgets.QDialog):
         window is shown.
         """
         self.allow_refresh = False
-        for row, combobox in self.cbs.items():
+        for _, combobox in self.cbs.items():
             combobox.setCurrentIndex(0)
         self.allow_refresh = True
 
-        datetime = QtCore.QDateTime()
-        datetime.setMSecsSinceEpoch((time.time() - 24 * 3600 * 7) * 1000)
-        self.datetime_from.setDateTime(datetime)
-        datetime.setMSecsSinceEpoch(time.time() * 1000)
-        self.datetime_to.setDateTime(datetime)
+        date = QtCore.QDateTime()
+        date.setMSecsSinceEpoch((time.time() - 24 * 3600 * 7) * 1000)
+        self.datetime_from.setDateTime(date)
+        date.setMSecsSinceEpoch(time.time() * 1000)
+        self.datetime_to.setDateTime(date)
 
         self.progressbar.reset()
         self.progressbar.setRange(0, 0)
@@ -145,7 +146,7 @@ class HistoryWindow(QtWidgets.QDialog):
             self.updatetimer.stop()
         self.updatetimer.start()
 
-    def cleared_combobox(self, event):
+    def cleared_combobox(self, _):
         """ Clear combo box.
         Check if combobox text is empty and select the first item of the
         combobox. This must be called when editing a combobox to detect when
@@ -210,7 +211,7 @@ class HistoryWindow(QtWidgets.QDialog):
         credited = 0
         debited = 0
 
-        for id_, transaction in self.transactions.items():
+        for _, transaction in self.transactions.items():
             if transaction['show']:
                 price = float(transaction['price'])
                 if price >= 0:
@@ -281,6 +282,8 @@ class HistoryWindow(QtWidgets.QDialog):
 
     @ask_auth("manage_notes")
     def delete(self, _):
+        """ Delete a product from a line in the history
+        """
         indexes = self.transaction_list.selectedIndexes()
         for i, index in reversed(list(enumerate(indexes))):
             # i % (columnCount - 1) because the column with the id is hidden
@@ -355,6 +358,8 @@ class HistoryWindow(QtWidgets.QDialog):
         self.call_update()
 
     def export_csv(self):
+        """ Export the selected lines in a csv file
+        """
         export_trans = []
         for num, index in enumerate(self.transaction_list.selectedIndexes()):
             # i % (columnCount - 1) because the column with the id is hidden
@@ -376,7 +381,7 @@ class ExportWindow(QtWidgets.QDialog):
         uic.loadUi('ui/history_export_window.ui', self)
         self.trans = trans
 
-    def accept(self, *args):
+    def accept(self, *_):
         """ Accept
         Rewrite of QDialog::accept so it can handle export when user is done
         selecting what he want to export

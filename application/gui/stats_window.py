@@ -33,8 +33,7 @@ from gui.tree_item_widget import TreeWidget
 class StatsWindow(QtWidgets.QDialog):
     """Stats window class
     """
-    def __init__(self, by_note=True, note_filter=None, cat_filter=None,
-            widget=None):
+    def __init__(self, by_note=True, note_filter=None, cat_filter=None):
         super().__init__()
         uic.loadUi('ui/stats_window.ui', self)
 
@@ -44,6 +43,8 @@ class StatsWindow(QtWidgets.QDialog):
         self.total_cache = defaultdict(lambda: defaultdict(lambda: 0))
 
         self.note_widgets = []
+        self.win = None
+
         self.tot_debit = 0
         self.tot_credit = 0
         if by_note:
@@ -64,10 +65,14 @@ class StatsWindow(QtWidgets.QDialog):
         self.show()
 
     def _resize_columns(self):
+        """ Resize all columns to the content
+        """
         for i in range(4):
             self.tree.resizeColumnToContents(i)
 
     def _update(self):
+        """ Callback for the timer to update the tree
+        """
         if self.note_mode:
             self.build_stats_notes(self.note_filter)
             self.build_widgets_notes()
@@ -76,6 +81,8 @@ class StatsWindow(QtWidgets.QDialog):
             self.build_widgets_categories()
 
     def build_stats_categories(self, category_filter):
+        """ Build stats when we want them by category
+        """
         self.progressbar.setFormat("Construction du cache")
         self.progressbar.setValue(20)
         for line in api.stats.get_notes_stats():
@@ -99,6 +106,8 @@ class StatsWindow(QtWidgets.QDialog):
             self.total_cache[line['category']]['qt'] += line['quantity']
 
     def build_widgets_categories(self):
+        """ Build the tree when we have stats by category
+        """
         self.progressbar.setFormat("Construction des widgets")
         nb, i = len(self.stats_cache.keys()), 0
         for key, value in self.stats_cache.items():
@@ -176,6 +185,8 @@ class StatsWindow(QtWidgets.QDialog):
             self.total_cache[line['nickname']]['qt'] += line['quantity']
 
     def build_widgets_notes(self):
+        """ Build the tree when we have stats by note
+        """
         self.progressbar.setFormat("Construction des widgets")
         nb, i = len(self.stats_cache.keys()), 0
         for key, value in self.stats_cache.items():
@@ -229,6 +240,8 @@ class StatsWindow(QtWidgets.QDialog):
         self._resize_columns()
 
     def show_details(self):
+        """ Called when we click on "details"
+        """
         selected = self.tree.selectedItems()
         if selected:
             selected = selected[0]
@@ -245,6 +258,8 @@ class StatsWindow(QtWidgets.QDialog):
                     self.win = StatsWindow(note_filter=selected.text(0))
 
     def on_selection(self):
+        """ Set state of the details button
+        """
         selected = self.tree.selectedItems()
         if not selected:
             self.details_button.setEnabled(False)

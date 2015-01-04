@@ -215,6 +215,8 @@ class ProductList(QtWidgets.QTreeWidget):
         self.update_total()
 
     def keyPressEvent(self, event):
+        """ We need to rewrite this to allow deletion of products
+        """
         item = self.currentItem()
         if not item:
             return
@@ -224,7 +226,7 @@ class ProductList(QtWidgets.QTreeWidget):
 
         if event.key() == QtCore.Qt.Key_Delete:
             if event.modifiers() == QtCore.Qt.ShiftModifier:
-                for i in range(product['count']):
+                for _ in range(product['count']):
                     self.del_product(
                         product['category'],
                         product['product'],
@@ -518,7 +520,7 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
         self.activated.connect(self.callback)
         self.product_view.pressed.connect(self.on_click)
 
-    def paintEvent(self, event):
+    def paintEvent(self, _):
         """ Complete rewrite of the paint event. We need this to keep things
             aligned. See #97
         """
@@ -543,7 +545,7 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
                            opt.currentText)
         painter.restore()
 
-    def on_click(self, index):
+    def on_click(self, _):
         """ Called when we click on an item to close the QComboBox and not when
             we press enter. It allows us to add a product only in this case
         """

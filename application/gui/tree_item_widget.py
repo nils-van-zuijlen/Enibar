@@ -16,16 +16,29 @@
 # You should have received a copy of the GNU General Public License
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
+
+"""
+
+TreeWidget
+==========
+
+This is a custom implementation of a QTreeWidgetItem.
+It changes the function to sort the Widgets between them
+to allow a sort by numbers.
+"""
+
 from PyQt5 import QtWidgets
 
 
 class TreeWidget(QtWidgets.QTreeWidgetItem):
+    """ TreeWidget class
+    """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.a = self.treeWidget()
+        self.tree_widget = self.treeWidget()
 
     def __lt__(self, other):
-        column = self.a.sortColumn()
+        column = self.tree_widget.sortColumn()
         try:
             return float(self.text(column)) < float(other.text(column))
         except:

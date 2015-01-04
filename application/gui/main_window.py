@@ -318,6 +318,8 @@ class MenuBar(QtWidgets.QMenuBar):
         self.cur_window.finished.connect(self._refresh_parent)
 
     def _close_window(self):
+        """ Close the current open window
+        """
         if self.cur_window is not None:
             self.cur_window.close()
 
@@ -480,11 +482,15 @@ class MenuBar(QtWidgets.QMenuBar):
         self._connect_window()
 
     def stats_by_note_fnc(self):
+        """ Open a StatsWindow by note
+        """
         self._close_window()
         self.cur_window = StatsWindow()
         self._connect_window()
 
     def stats_by_category_fnc(self):
+        """ Open a StatsWindow by category
+        """
         self._close_window()
         self.cur_window = StatsWindow(by_note=False)
         self._connect_window()

@@ -71,7 +71,7 @@ def rebuild_cache(build_stats=True, *, do_not=False):
 def _build_stats():
     """ Add stats to the notes in the cache.
     """
-    global NOTES_CACHE, NOTES_STATS_FIELDS_CACHE
+    global NOTES_STATS_FIELDS_CACHE
     with Cursor() as cursor:
         cursor.prepare("SELECT firstname, lastname, SUM(IF(price>0, price, 0)) as tot_refill,\
                         SUM(IF(price<0, price, 0)) AS tot_cons\

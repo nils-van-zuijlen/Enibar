@@ -28,8 +28,6 @@ according to the things in its inputs.
 
 from PyQt5 import QtWidgets, uic, QtCore
 import api.validator
-from database import Cursor
-import gui.utils
 
 
 class SearchWindow(QtWidgets.QDialog):
@@ -43,7 +41,11 @@ class SearchWindow(QtWidgets.QDialog):
         self.show()
 
     def on_change(self):
+        """ Called when an Input changes
+        """
         def notes_filter(note):
+            """ Filter function to apply to a NotesList
+            """
             if note["hidden"]:
                 return False
             if self.name_input.valid:

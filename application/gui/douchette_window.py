@@ -63,10 +63,14 @@ class DouchetteWindow(QtWidgets.QDialog):
 
 
 class AskDouchetteWindow(QtWidgets.QDialog):
+    """ This window will ask to fire the doucheette and then call the callback
+        with the result.
+    """
     def __init__(self, callback):
         super().__init__()
         uic.loadUi('ui/ask_douchette_window.ui', self)
         self.callback = callback
+        self.win = None
         self.show()
 
     def event(self, event):

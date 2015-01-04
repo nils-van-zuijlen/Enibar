@@ -24,11 +24,13 @@ This api provides some neat stats.
 """
 
 from database import Cursor
-import api.base
-import settings
 
 
 def get_notes_stats():
+    """ Yield dicts representing stats.
+
+        {'nickname', 'product', 'price_name', 'price', 'category', 'quantity'}
+    """
     with Cursor() as cursor:
         cursor.prepare("SELECT notes.nickname AS nickname,\
                         transactions.product AS product,\

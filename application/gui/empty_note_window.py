@@ -72,7 +72,10 @@ class EmptyNoteWindow(QtWidgets.QDialog):
             à 0.01€")
 
     def on_change(self):
+        """ Set the state of the validation button
+        """
         if self.to_add.valid and self.reason_input.valid:
             self.valid_button.setEnabled(True)
         else:
             self.valid_button.setEnabled(False)
+

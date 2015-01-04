@@ -15,15 +15,22 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
+"""
+CsvImportWindow
+===============
 
+A window that show a recap of a csv import
+"""
 
-from PyQt5 import QtWidgets, QtCore, uic
+from PyQt5 import QtWidgets, uic
 import api.notes
 import gui.utils
 import re
 
 
 class CsvImportWindow(QtWidgets.QDialog):
+    """ CsvImportWindow class
+    """
     def __init__(self, path):
         super().__init__()
         uic.loadUi('ui/csv_import_window.ui', self)
@@ -54,7 +61,7 @@ class CsvImportWindow(QtWidgets.QDialog):
                 except ValueError:
                     continue
                 amount = round(amount, 2)
-                w = QtWidgets.QTreeWidgetItem(
+                QtWidgets.QTreeWidgetItem(
                     self.recap,
                     (note,
                      motive,
@@ -64,6 +71,8 @@ class CsvImportWindow(QtWidgets.QDialog):
                 )
 
     def on_validation(self):
+        """ Called when "Valider" is clicked
+        """
         with open(self.file_path, 'r') as fd:
             nb_op = api.notes.import_csv(fd.read(), do_not=True)
         api.notes.rebuild_cache()

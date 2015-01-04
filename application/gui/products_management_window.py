@@ -29,7 +29,7 @@ import api.products
 import api.categories
 import api.prices
 import api.validator
-from .douchette_window import DouchetteWindow, AskDouchetteWindow
+from .douchette_window import AskDouchetteWindow
 
 
 class ProductsManagementWindow(QtWidgets.QDialog):
@@ -51,6 +51,8 @@ class ProductsManagementWindow(QtWidgets.QDialog):
         self.tab_manage_consumptions.on_change = self.on_change
 
     def on_change(self):
+        """ Called when the inputs change
+        """
         self.button_cat_add.setEnabled(self.input_cat.valid)
         self.button_product_add.setEnabled(self.input_product.valid)
 
@@ -351,6 +353,7 @@ class ConsumptionPricesItem(QtWidgets.QWidget):
         self.name = name
         self.value = value
         self.barcode = barcode
+        self.win = None
 
         self.label = QtWidgets.QLabel(name)
         self.input = QtWidgets.QDoubleSpinBox()
@@ -385,6 +388,8 @@ class ConsumptionPricesItem(QtWidgets.QWidget):
         """ Called when the button for the barcode is pressed
         """
         def set_barcode(barcode):
+            """ Callback for the AskDouchetteWindow
+            """
             api.prices.set_barcode(self.id_, barcode)
             self.barcode = barcode
             self._build()
