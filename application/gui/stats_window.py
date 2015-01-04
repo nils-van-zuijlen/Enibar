@@ -249,9 +249,9 @@ class StatsWindow(QtWidgets.QDialog):
         if not selected:
             self.details_button.setEnabled(False)
         selected = selected[0]
-        if selected and ((not selected.childCount() and not self.note_mode) or\
+        if selected and ((not selected.childCount() and not self.note_mode) or
                 (selected.child(0) and
-                 (not selected.child(0).childCount() and self.note_mode)) or\
+                 (not selected.child(0).childCount() and self.note_mode)) or
                 selected.child(0) and selected.child(0).childCount()):
             self.details_button.setEnabled(True)
         else:
