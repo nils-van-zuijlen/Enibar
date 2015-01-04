@@ -33,7 +33,8 @@ from gui.tree_item_widget import TreeWidget
 class StatsWindow(QtWidgets.QDialog):
     """Stats window class
     """
-    def __init__(self, by_note=True, note_filter=None, cat_filter=None):
+    def __init__(self, by_note=True, note_filter=None, cat_filter=None,
+            widget=None):
         super().__init__()
         uic.loadUi('ui/stats_window.ui', self)
 
@@ -134,7 +135,7 @@ class StatsWindow(QtWidgets.QDialog):
                 self.note_widgets.append(w1)
                 for note, qt in product.items():
                     product_price = qt * self.prices[key][name]
-                    w2 = QtWidgets.TreeWidget(w1, [
+                    w2 = TreeWidget(w1, [
                         note,
                         str(int(qt)),
                         str(round(product_price, 2)) if product_price > 0 else "0",
@@ -239,9 +240,19 @@ class StatsWindow(QtWidgets.QDialog):
                     self.win = StatsWindow(by_note=False,
                                            cat_filter=selected.text(0)
                     )
+            else:
+                if self.note_mode:
+                    self.win = StatsWindow(note_filter=selected.text(0))
 
     def on_selection(self):
-        if self.tree.selectedItems():
+        selected = self.tree.selectedItems()
+        if not selected:
+            self.details_button.setEnabled(False)
+        selected = selected[0]
+        if selected and ((not selected.childCount() and not self.note_mode) or\
+                (selected.child(0) and
+                 (not selected.child(0).childCount() and self.note_mode)) or\
+                selected.child(0) and selected.child(0).childCount()):
             self.details_button.setEnabled(True)
         else:
             self.details_button.setEnabled(False)
