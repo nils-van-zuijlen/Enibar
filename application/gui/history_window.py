@@ -23,6 +23,7 @@ Transaction hisotry window.
 from PyQt5 import QtWidgets, uic, QtCore
 from .auth_prompt_window import ask_auth
 import api.transactions
+from gui.tree_item_widget import TreeWidget
 import datetime
 import time
 import gui.utils
@@ -174,7 +175,7 @@ class HistoryWindow(QtWidgets.QDialog):
                 else:
                     credit = "-"
                     debit = round(-trans['price'], 2)
-                widget = QtWidgets.QTreeWidgetItem(self.transaction_list, (
+                widget = TreeWidget(self.transaction_list, (
                     trans['date'].toString("yyyy/MM/dd HH:mm:ss"),
                     trans['note'],
                     trans['category'],

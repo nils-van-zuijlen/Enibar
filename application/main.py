@@ -19,7 +19,6 @@
 """
 Main file of the Application
 """
-
 import sys
 import gui.main_window
 from PyQt5 import QtWidgets

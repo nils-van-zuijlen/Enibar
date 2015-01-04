@@ -688,7 +688,14 @@
     <property name="title">
      <string>Au&amp;tre</string>
     </property>
-    <addaction name="stats"/>
+    <widget class="QMenu" name="menu_Statistiques">
+     <property name="title">
+      <string>&amp;Statistiques</string>
+     </property>
+     <addaction name="stats_by_note"/>
+     <addaction name="stats_by_category"/>
+    </widget>
+    <addaction name="menu_Statistiques"/>
     <addaction name="about"/>
    </widget>
    <addaction name="administration"/>
@@ -794,11 +801,6 @@
     <string>Ctrl+F</string>
    </property>
   </action>
-  <action name="stats">
-   <property name="text">
-    <string>&amp;Statistiques</string>
-   </property>
-  </action>
   <action name="about">
    <property name="text">
     <string>&amp;A propos</string>
@@ -807,6 +809,16 @@
   <action name="import_csv">
    <property name="text">
     <string>&amp;Importer un fichier CSV</string>
+   </property>
+  </action>
+  <action name="stats_by_note">
+   <property name="text">
+    <string>Par note</string>
+   </property>
+  </action>
+  <action name="stats_by_category">
+   <property name="text">
+    <string>Par catégorie</string>
    </property>
   </action>
  </widget>
@@ -844,6 +856,8 @@
     <slot>stats()</slot>
     <slot>about()</slot>
     <slot>csv_import_fnc()</slot>
+    <slot>stats_by_note_fnc()</slot>
+    <slot>stats_by_category_fnc()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -1196,22 +1210,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>stats</sender>
-   <signal>triggered()</signal>
-   <receiver>menu_bar</receiver>
-   <slot>stats()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>441</x>
-     <y>9</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>about</sender>
    <signal>triggered()</signal>
    <receiver>menu_bar</receiver>
@@ -1232,6 +1230,38 @@
    <signal>triggered()</signal>
    <receiver>menu_bar</receiver>
    <slot>csv_import_fnc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>7</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>stats_by_note</sender>
+   <signal>triggered()</signal>
+   <receiver>menu_bar</receiver>
+   <slot>stats_by_note_fnc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>441</x>
+     <y>344</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>7</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>stats_by_category</sender>
+   <signal>triggered()</signal>
+   <receiver>menu_bar</receiver>
+   <slot>stats_by_category_fnc()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

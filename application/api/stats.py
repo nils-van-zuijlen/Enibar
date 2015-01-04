@@ -28,61 +28,30 @@ import api.base
 import settings
 
 
-def get_red():
-    """ Returns the sum of negative notes
-    """
+def get_notes_stats():
     with Cursor() as cursor:
-        cursor.prepare("SELECT SUM(note) AS total_red, COUNT(id) as nb_notes\
-            FROM notes WHERE note < 0")
-        cursor.exec_()
-        cursor.next()
-        record = cursor.record()
-        return {'total_red': record.value('total_red'),
-                'nb_notes': record.value('nb_notes'), }
-
-
-def get_green():
-    """ Returns the sum of positive notes
-    """
-    with Cursor() as cursor:
-        cursor.prepare("SELECT SUM(note) AS total_green, COUNT(id) as nb_notes\
-            FROM notes WHERE note > 0")
-        cursor.exec_()
-        cursor.next()
-        record = cursor.record()
-        return {'total_green': record.value('total_green'),
-                'nb_notes': record.value('nb_notes'), }
-
-
-def get_sold_items():
-    """ Returns stats on sold items excluding ecocups, refilling and emptying
-    """
-    with Cursor() as cursor:
-        cursor.prepare("SELECT COUNT(*) AS nb, product, category, price_name\
-            FROM transactions GROUP BY category, product, price_name")
+        cursor.prepare("SELECT notes.nickname AS nickname,\
+                        transactions.product AS product,\
+                        transactions.price_name AS price_name,\
+                        transactions.price/quantity AS price,\
+                        transactions.category AS category,\
+                        SUM(transactions.quantity) AS quantity\
+                        FROM transactions INNER JOIN notes WHERE\
+                        (notes.lastname = transactions.lastname AND\
+                        notes.firstname = transactions.firstname) OR\
+                        notes.nickname = transactions.note\
+                        GROUP BY notes.nickname, transactions.product,\
+                        transactions.price_name, transactions.price")
         cursor.exec_()
         while cursor.next():
             record = cursor.record()
-            if record.value('product') not in ('', '-', settings.ECOCUP_NAME) and\
-                    record.value('price_name') not in ('Solde', 'Rechargement'):
-                yield {'product': record.value("product"),
-                       'nb': record.value('nb'),
-                       'category': record.value('category'),
-                       'price_name': record.value('price_name'), }
 
-
-def get_consumers():
-    """ Return a list of consurmers with the amount bought.
-    """
-    with Cursor() as cursor:
-        cursor.prepare("SELECT\
-            SUM(CASE WHEN price > 0 THEN price ELSE 0 END) AS refilled,\
-            SUM(CASE WHEN price < 0 THEN price ELSE 0 END) AS bought,\
-            note FROM transactions GROUP BY note")
-        cursor.exec_()
-        while cursor.next():
-            record = cursor.record()
-            yield {'note': record.value('note'),
-                   'bought': -record.value('bought'),
-                   'refilled': record.value('refilled')}
+            yield {field: record.value(field) for field in (
+                'nickname',
+                'product',
+                'price_name',
+                'price',
+                'category',
+                'quantity')
+            }
 

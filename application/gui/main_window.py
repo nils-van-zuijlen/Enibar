@@ -401,13 +401,6 @@ class MenuBar(QtWidgets.QMenuBar):
             self.cur_window = CsvImportWindow(path)
             self._connect_window()
 
-    def stats(self):
-        """ Open a StatsWindow
-        """
-        self._close_window()
-        self.cur_window = StatsWindow()
-        self._connect_window()
-
     def about(self):
         """ Open an AboutWindow
         """
@@ -484,5 +477,15 @@ class MenuBar(QtWidgets.QMenuBar):
         """
         self._close_window()
         self.cur_window = SearchWindow(self)
+        self._connect_window()
+
+    def stats_by_note_fnc(self):
+        self._close_window()
+        self.cur_window = StatsWindow()
+        self._connect_window()
+
+    def stats_by_category_fnc(self):
+        self._close_window()
+        self.cur_window = StatsWindow(by_note=False)
         self._connect_window()
 

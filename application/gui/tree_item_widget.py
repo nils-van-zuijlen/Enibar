@@ -16,34 +16,18 @@
 # You should have received a copy of the GNU General Public License
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
-
-"""
-Gui Utils
-=========
-
-Somme shortcut to do repetitive actions more easely
-"""
-
 from PyQt5 import QtWidgets
-import time
 
 
-def error(title, message=""):
-    """ Display error with title and message
-    """
-    err = QtWidgets.QMessageBox()
-    err.setText(title)
-    err.setInformativeText(message)
-    err.setIcon(QtWidgets.QMessageBox.Critical)
-    err.exec()
+class TreeWidget(QtWidgets.QTreeWidgetItem):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.a = self.treeWidget()
 
-
-def valid(title, message=""):
-    """ Display validation with title and message
-    """
-    err = QtWidgets.QMessageBox()
-    err.setText(title)
-    err.setInformativeText(message)
-    err.setIcon(QtWidgets.QMessageBox.Information)
-    err.exec()
+    def __lt__(self, other):
+        column = self.a.sortColumn()
+        try:
+            return float(self.text(column)) < float(other.text(column))
+        except:
+            return super().__lt__(other)
 
