@@ -41,6 +41,7 @@ class RefillNoteWindow(QtWidgets.QDialog):
         uic.loadUi('ui/refill_note_window.ui', self)
         self.selected_note = selected_note
         self.to_add.set_validator(api.validator.NUMBER)
+        self.reason.set_validator(api.validator.NOTHING)
         self.to_add.setFocus()
         self.performer = performer
 
@@ -58,11 +59,12 @@ class RefillNoteWindow(QtWidgets.QDialog):
             return
         # See #96
         if round(to_add, 2) > 0:
+            reason = self.reason.text()
             api.notes.transactions([self.selected_note, ], to_add)
             api.transactions.log_transaction(
                 self.selected_note,
                 "Note",
-                self.performer,
+                "{} {}".format(self.performer, "[{}]".format(reason) if reason else ""),
                 "Rechargement",
                 "1",
                 to_add

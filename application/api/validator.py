@@ -31,6 +31,7 @@ from gui.input_widget import Input
 
 PHONE_NUMBER = QtGui.QRegExpValidator(QtCore.QRegExp(r"(?:\+[0-9])?[0-9]{10}"))
 NAME = QtGui.QRegExpValidator(QtCore.QRegExp(".+"))
+NOTHING = QtGui.QRegExpValidator(QtCore.QRegExp(".*"))
 NUMBER = QtGui.QRegExpValidator(QtCore.QRegExp("[0-9]+([,.][0-9]+)?"))
 MAIL = QtGui.QRegExpValidator(QtCore.QRegExp(
     r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]{2,4}$"))
