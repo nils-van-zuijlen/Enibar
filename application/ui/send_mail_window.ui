@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="main_layout">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="4" column="3" colspan="2">
+     <widget class="QPushButton" name="send_button">
+      <property name="text">
+       <string>Envoyer</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1" colspan="4">
+     <widget class="QLineEdit" name="subject_input"/>
+    </item>
+    <item row="0" column="1" colspan="4">
+     <widget class="QLineEdit" name="destinateur_input"/>
+    </item>
+    <item row="3" column="0" colspan="5">
+     <widget class="MailMessageInput" name="message_input"/>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="destinateur_label">
+      <property name="text">
+       <string>Destinateur</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0" colspan="2">
+     <spacer name="spacer_1">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="1" column="1" colspan="4">
+     <widget class="QLineEdit" name="filter_input">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="2">
+     <spacer name="spacer_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="subject_label">
+      <property name="text">
+       <string>Objet</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QComboBox" name="filter_selector">
+      <item>
+       <property name="text">
+        <string>Toutes les notes</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Notes suivantes</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Notes supérieures au montant</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Notes inférieures au montant</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFichier">
+    <property name="title">
+     <string>Fichier</string>
+    </property>
+    <addaction name="actionOuvrir"/>
+    <addaction name="actionSauvegarder"/>
+   </widget>
+   <addaction name="menuFichier"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionSauvegarder">
+   <property name="text">
+    <string>Sauvegarder en tant que model</string>
+   </property>
+  </action>
+  <action name="actionCharger">
+   <property name="text">
+    <string>Charger</string>
+   </property>
+  </action>
+  <action name="actionOuvrir">
+   <property name="text">
+    <string>Ouvrir</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MailMessageInput</class>
+   <extends>QTextEdit</extends>
+   <header>gui/mail_message_input_widget</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>destinateur_input</tabstop>
+  <tabstop>filter_selector</tabstop>
+  <tabstop>filter_input</tabstop>
+  <tabstop>subject_input</tabstop>
+  <tabstop>message_input</tabstop>
+  <tabstop>send_button</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>filter_selector</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_filter_selector_change()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>41</x>
+     <y>66</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>send_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>send()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>750</x>
+     <y>557</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>send()</slot>
+  <slot>on_filter_selector_change()</slot>
+  <slot>on_filter_input_click()</slot>
+ </slots>
+</ui>
