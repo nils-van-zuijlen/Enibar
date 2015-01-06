@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # Enibar documentation build configuration file, created by
-# sphinx-quickstart on Sat Jun 21 19:47:13 2014.
+# sphinx-quickstart on Sat Jun 21 19:47:13 2014-2015.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -54,7 +54,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'Enibar'
-copyright = '2014, Orivel Bastien and Levaufre Arnaud'
+copyright = '2014-2015, Orivel Bastien and Levaufre Arnaud'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

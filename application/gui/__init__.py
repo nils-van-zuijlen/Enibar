@@ -1,5 +1,5 @@
-# Copyright (C) 2014 Bastien Orivel <b2orivel@enib.fr>
-# Copyright (C) 2014 Arnaud Levaufre <a2levauf@enib.fr>
+# Copyright (C) 2014-2015 Bastien Orivel <b2orivel@enib.fr>
+# Copyright (C) 2014-2015 Arnaud Levaufre <a2levauf@enib.fr>
 #
 # This file is part of Enibar.
 #
@@ -15,6 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
+
 """
 Provide differents windows
 """
