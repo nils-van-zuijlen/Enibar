@@ -18,31 +18,29 @@
 
 
 """
-Gui Utils
-=========
 
-Somme shortcut to do repetitive actions more easely
+TreeWidget
+==========
+
+This is a custom implementation of a QTreeWidgetItem.
+It changes the function to sort the Widgets between them
+to allow a sort by numbers.
 """
 
 from PyQt5 import QtWidgets
 
 
-def error(title, message=""):
-    """ Display error with title and message
+class TreeWidget(QtWidgets.QTreeWidgetItem):
+    """ TreeWidget class
     """
-    err = QtWidgets.QMessageBox()
-    err.setText(title)
-    err.setInformativeText(message)
-    err.setIcon(QtWidgets.QMessageBox.Critical)
-    err.exec()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.tree_widget = self.treeWidget()
 
-
-def valid(title, message=""):
-    """ Display validation with title and message
-    """
-    err = QtWidgets.QMessageBox()
-    err.setText(title)
-    err.setInformativeText(message)
-    err.setIcon(QtWidgets.QMessageBox.Information)
-    err.exec()
+    def __lt__(self, other):
+        column = self.tree_widget.sortColumn()
+        try:
+            return float(self.text(column)) < float(other.text(column))
+        except:
+            return super().__lt__(other)
 

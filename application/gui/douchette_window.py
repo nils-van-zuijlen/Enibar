@@ -24,7 +24,7 @@ Douchette Window
 """
 
 
-from PyQt5 import QtWidgets, uic, QtGui
+from PyQt5 import QtWidgets, uic, QtGui, QtCore
 
 EQUIVALENCE_TABLE = {"&": 1, "é": 2, "\"": 3, "'": 4, "(": 5,
                      "-": 6, "è": 7, "_": 8, "ç": 9, "à": 0, ")": "-"}
@@ -59,5 +59,29 @@ class DouchetteWindow(QtWidgets.QDialog):
                     return True
             except KeyError:
                 pass
+        return super().event(event)
+
+
+class AskDouchetteWindow(QtWidgets.QDialog):
+    """ This window will ask to fire the doucheette and then call the callback
+        with the result.
+    """
+    def __init__(self, callback):
+        super().__init__()
+        uic.loadUi('ui/ask_douchette_window.ui', self)
+        self.callback = callback
+        self.win = None
+        self.show()
+
+    def event(self, event):
+        """ Rewrite the event loop. Used to handle the douchette.
+            If the " key is pressed, open a Douchette window.
+        """
+        if isinstance(event, QtGui.QKeyEvent) and\
+                event.type() == QtCore.QEvent.KeyPress:
+            if event.text() == "\"":
+                self.win = DouchetteWindow(self.callback)
+                self.win.finished.connect(self.close)
+                return True
         return super().event(event)
 

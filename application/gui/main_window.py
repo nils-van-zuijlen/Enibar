@@ -162,9 +162,9 @@ class MainWindow(QtWidgets.QMainWindow):
             self.reset_note_box()
             return
 
-        infos = list(api.notes.get(
+        infos = api.notes.get(
             lambda x: self.selected.text() == x["nickname"]
-        ))[0]
+        )[0]
         note_hist = api.transactions.get_reversed(note=self.selected.text())
 
         # Construct the note history
@@ -234,31 +234,30 @@ class MainWindow(QtWidgets.QMainWindow):
         if isinstance(event, QtGui.QKeyEvent) and\
                 event.type() == QtCore.QEvent.KeyPress:
             if event.text() == "\"":
-                self.win = Douchette(self.on_douchette)
+                self.win = DouchetteWindow(self.on_douchette)
                 return True
-            if event.key() == 0x01000004 or event.key() == 0x01000005:
+            if event.key() == QtCore.Qt.Key_Return or\
+                    event.key() == QtCore.Qt.Key_Enter:
                 self.validate_transaction()
         return super().event(event)
 
     def on_douchette(self, text):
         """ Called after the douchette is fired !
         """
-        product = api.products.get_unique(barcode=text)
-        if not product:
+        price = api.prices.get_unique(barcode=text)
+        if not price:
             return
-        catname = api.categories.get_unique(id=product["category"])
+        catname = api.categories.get_unique(id=price["category"])
         if not catname:
             return
-        prices = list(api.prices.get(product=product["id"]))
-        if not prices:
-            return
-        if not len(product):
+        product = api.products.get_unique(id=price["product"])
+        if not product:
             return
         self.product_list.add_product(
             catname["name"],
             product["name"],
-            prices[0]["label"],
-            prices[0]["value"])
+            price["label"],
+            price["value"])
         text = "{:.2f} €".format(self.product_list.get_total())
         self.total.setText(text)
 
@@ -266,7 +265,7 @@ class MainWindow(QtWidgets.QMainWindow):
         """ Validate transaction if a note is currently selected. And give the
             focus back to the notes_list.
         """
-        if self.selected:
+        if self.selected and self.product_list.products:
 
             note = api.notes.get(lambda x: x["nickname"] ==
                 self.selected_nickname)[0]
@@ -294,7 +293,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 }
                 transactions.append(transaction)
             if api.transactions.log_transactions(transactions):
-                api.notes.transactions([self.selected.text(), ], -total)
+                api.notes.transactions([self.selected.text(), ], -total,
+                    do_not=True)
                 api.notes.change_ecocups(self.selected_nickname, self.eco_diff)
                 self.rebuild_notes_list()
                 self.eco_diff = 0
@@ -316,7 +316,7 @@ class MenuBar(QtWidgets.QMenuBar):
         """
         self.parent().notes_list.current_filter = lambda x: x['hidden'] == 0
         self.parent().rebuild_notes_list()
-        self.cur_window = None
+        self._close_window()
 
     def _connect_window(self):
         """ Connect the finished signal of the opened window to
@@ -325,6 +325,8 @@ class MenuBar(QtWidgets.QMenuBar):
         self.cur_window.finished.connect(self._refresh_parent)
 
     def _close_window(self):
+        """ Close the current open window
+        """
         if self.cur_window is not None:
             self.cur_window.close()
 
@@ -407,13 +409,6 @@ class MenuBar(QtWidgets.QMenuBar):
         if path:
             self.cur_window = CsvImportWindow(path)
             self._connect_window()
-
-    def stats(self):
-        """ Open a StatsWindow
-        """
-        self._close_window()
-        self.cur_window = StatsWindow()
-        self._connect_window()
 
     def about(self):
         """ Open an AboutWindow
@@ -503,4 +498,18 @@ class MenuBar(QtWidgets.QMenuBar):
 
     def mail_models_fnc(self):
         pass
+
+    def stats_by_note_fnc(self):
+        """ Open a StatsWindow by note
+        """
+        self._close_window()
+        self.cur_window = StatsWindow()
+        self._connect_window()
+
+    def stats_by_category_fnc(self):
+        """ Open a StatsWindow by category
+        """
+        self._close_window()
+        self.cur_window = StatsWindow(by_note=False)
+        self._connect_window()
 

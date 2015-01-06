@@ -42,6 +42,7 @@ if [[ $TEST == 1 ]]; then
 	fi
 
 	# -- TEST --
+	rm -f $APPLICATION_DIR/.coverage
 	nosetests ../test/*.py -v --with-coverage --cover-package=api || TEST_FAILED=1
 
 	mv settings.py.bak settings.py
@@ -51,7 +52,7 @@ rm -f img/coucou.jpg
 
 if [[ $PEP == 1 ]]; then
 	# Pep8 Validation
-	pep8 --exclude=documentation,enibar-venv --ignore=E501,W391,E128,E124 ../ || TEST_FAILED=1
+	pep8 --exclude=documentation,enibar-venv,.ropeproject --ignore=E501,W391,E128,E124 ../ || TEST_FAILED=1
 fi
 
 if [[ $NODOCKER != 1 && $TEST == 1 ]]; then

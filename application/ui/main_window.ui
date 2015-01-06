@@ -641,7 +641,7 @@
      <x>0</x>
      <y>0</y>
      <width>884</width>
-     <height>19</height>
+     <height>15</height>
     </rect>
    </property>
    <widget class="QMenu" name="administration">
@@ -688,22 +688,19 @@
     <property name="title">
      <string>Au&amp;tre</string>
     </property>
-    <addaction name="stats"/>
+    <widget class="QMenu" name="menu_Statistiques">
+     <property name="title">
+      <string>&amp;Statistiques</string>
+     </property>
+     <addaction name="stats_by_note"/>
+     <addaction name="stats_by_category"/>
+    </widget>
+    <addaction name="menu_Statistiques"/>
     <addaction name="about"/>
-   </widget>
-   <widget class="QMenu" name="menuMails">
-    <property name="title">
-     <string>&amp;Mails</string>
-    </property>
-    <addaction name="send_mail"/>
-    <addaction name="mail_scheduler"/>
-    <addaction name="separator"/>
-    <addaction name="mail_models"/>
    </widget>
    <addaction name="administration"/>
    <addaction name="menuNotes"/>
    <addaction name="menu_Panels"/>
-   <addaction name="menuMails"/>
    <addaction name="menuAutre"/>
   </widget>
   <action name="user_managment">
@@ -804,11 +801,6 @@
     <string>Ctrl+F</string>
    </property>
   </action>
-  <action name="stats">
-   <property name="text">
-    <string>&amp;Statistiques</string>
-   </property>
-  </action>
   <action name="about">
    <property name="text">
     <string>&amp;A propos</string>
@@ -819,19 +811,14 @@
     <string>&amp;Importer un fichier CSV</string>
    </property>
   </action>
-  <action name="send_mail">
+  <action name="stats_by_note">
    <property name="text">
-    <string>&amp;Envoi direct</string>
+    <string>Par note</string>
    </property>
   </action>
-  <action name="mail_scheduler">
+  <action name="stats_by_category">
    <property name="text">
-    <string>&amp;Planificateur d'envoi</string>
-   </property>
-  </action>
-  <action name="mail_models">
-   <property name="text">
-    <string>Edition des &amp;models</string>
+    <string>Par catégorie</string>
    </property>
   </action>
  </widget>
@@ -844,7 +831,7 @@
   <customwidget>
    <class>NotesList</class>
    <extends>QListWidget</extends>
-   <header>gui/utils</header>
+   <header>gui/notes_list_widget</header>
   </customwidget>
   <customwidget>
    <class>MenuBar</class>
@@ -869,9 +856,8 @@
     <slot>stats()</slot>
     <slot>about()</slot>
     <slot>csv_import_fnc()</slot>
-    <slot>send_mail_fnc()</slot>
-    <slot>mail_scheduler_fnc()</slot>
-    <slot>mail_models_fnc()</slot>
+    <slot>stats_by_note_fnc()</slot>
+    <slot>stats_by_category_fnc()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -1224,22 +1210,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>stats</sender>
-   <signal>triggered()</signal>
-   <receiver>menu_bar</receiver>
-   <slot>stats()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>441</x>
-     <y>9</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>about</sender>
    <signal>triggered()</signal>
    <receiver>menu_bar</receiver>
@@ -1272,10 +1242,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>send_mail</sender>
+   <sender>stats_by_note</sender>
    <signal>triggered()</signal>
    <receiver>menu_bar</receiver>
-   <slot>send_mail_fnc()</slot>
+   <slot>stats_by_note_fnc()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>441</x>
@@ -1283,15 +1253,15 @@
     </hint>
     <hint type="destinationlabel">
      <x>441</x>
-     <y>9</y>
+     <y>7</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>mail_scheduler</sender>
+   <sender>stats_by_category</sender>
    <signal>triggered()</signal>
    <receiver>menu_bar</receiver>
-   <slot>mail_scheduler_fnc()</slot>
+   <slot>stats_by_category_fnc()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -1299,23 +1269,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>441</x>
-     <y>9</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mail_models</sender>
-   <signal>triggered()</signal>
-   <receiver>menu_bar</receiver>
-   <slot>mail_models_fnc()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>441</x>
-     <y>9</y>
+     <y>7</y>
     </hint>
    </hints>
   </connection>

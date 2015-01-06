@@ -228,6 +228,8 @@ class PanelsManagementWindow(QtWidgets.QDialog):
                 widget.setExpanded(True)
 
     def on_change(self):
+        """ Set the status of the name input
+        """
         self.add_button.setEnabled(self.name_input.valid)
 
 

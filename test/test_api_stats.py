@@ -95,21 +95,15 @@ class StatsTests(basetest.BaseTest):
             -2
         )
 
-    def test_get_red(self):
-        self.assertEqual(stats.get_red(), {"total_red": -17, 'nb_notes': 2})
-
-    def test_get_green(self):
-        self.assertEqual(stats.get_green(), {"total_green": 18, 'nb_notes': 2})
-
-    def test_get_sold(self):
-        self.assertEqual(list(stats.get_sold_items()),
-            [{'product': 'b', 'nb': 2, 'price_name': 'c', 'category': 'a'},
-             {'product': 'e', 'nb': 1, 'price_name': 'f', 'category': 'd'}]
-        )
-
-    def test_get_consumers(self):
-        self.assertEqual(list(stats.get_consumers()),
-            [{'refilled': 0.0, 'bought': 3.0, 'note': 'test1'},
-             {'refilled': 0.0, 'bought': 1.0, 'note': 'test2'}]
+    def test_get_stats(self):
+        self.assertEqual(list(stats.get_notes_stats()),
+            [{'price_name': 'c', 'category': 'a', 'nickname': 'test1', 'price': -1.0, 'quantity': 2.0, 'product': 'b'},
+             {'price_name': 'f', 'category': 'd', 'nickname': 'test1', 'price': -2.0, 'quantity': 1.0, 'product': 'e'},
+             {'price_name': 'c', 'category': 'a', 'nickname': 'test2', 'price': -1.0, 'quantity': 2.0, 'product': 'b'},
+             {'price_name': 'f', 'category': 'd', 'nickname': 'test2', 'price': -2.0, 'quantity': 1.0, 'product': 'e'},
+             {'price_name': 'c', 'category': 'a', 'nickname': 'test3', 'price': -1.0, 'quantity': 2.0, 'product': 'b'},
+             {'price_name': 'f', 'category': 'd', 'nickname': 'test3', 'price': -2.0, 'quantity': 1.0, 'product': 'e'},
+             {'price_name': 'c', 'category': 'a', 'nickname': 'test4', 'price': -1.0, 'quantity': 2.0, 'product': 'b'},
+             {'price_name': 'f', 'category': 'd', 'nickname': 'test4', 'price': -2.0, 'quantity': 1.0, 'product': 'e'}]
         )
 

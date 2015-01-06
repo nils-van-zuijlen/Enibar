@@ -78,8 +78,7 @@ CREATE TABLE IF NOT EXISTS products(
 	id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
 	name VARCHAR(127) NOT NULL,
 	category INTEGER UNSIGNED,
-	barcode VARCHAR(127) DEFAULT "",
-	UNIQUE (name, category, barcode),
+	UNIQUE (name, category),
 	FOREIGN KEY (`category`) REFERENCES categories(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
@@ -96,6 +95,7 @@ CREATE TABLE IF NOT EXISTS prices(
 	price_description INTEGER UNSIGNED,
 	product INTEGER UNSIGNED,
 	value DECIMAL(10,2),
+	barcode VARCHAR(127) DEFAULT "",
 	FOREIGN KEY (price_description) REFERENCES price_description (id) ON DELETE CASCADE,
 	FOREIGN KEY (product) REFERENCES products (id) ON DELETE CASCADE
 ) ENGINE=InnoDB;

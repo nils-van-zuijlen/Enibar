@@ -47,6 +47,7 @@ class Input(QtWidgets.QLineEdit):
         change his border.
         """
         self.setValidator(validator)
+        self.on_change()
 
     def event(self, event):
         """ Overwrite event management from qt to catch the focus of the input

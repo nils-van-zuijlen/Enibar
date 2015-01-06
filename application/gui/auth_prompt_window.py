@@ -49,8 +49,6 @@ def ask_auth(*dargs, fail_callback=None, pass_performer=False):
         """ Decorator wrapper """
         def wrapper(*args, **kwargs):
             """ Wrapper """
-            if pass_performer:
-                _performer = ""
             if settings.DEBUG:
                 func(*args, **kwargs)
                 return

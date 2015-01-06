@@ -73,6 +73,12 @@ def add_product(paid, product):
 
 
 def hide(name):
+    """ Hide a panel
+
+    :param str name: The name of the panel
+
+    :return bool: True if success else False
+    """
     with Cursor() as cursor:
         cursor.prepare("UPDATE panels SET hidden=1 WHERE name=:name")
         cursor.bindValue(":name", name)
@@ -80,6 +86,12 @@ def hide(name):
 
 
 def show(name):
+    """ Show a panel
+
+    :param str name: The name of the panel
+
+    :return bool: True if success else False
+    """
     with Cursor() as cursor:
         cursor.prepare("UPDATE panels SET hidden=0 WHERE name=:name")
         cursor.bindValue(":name", name)

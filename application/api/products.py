@@ -28,7 +28,7 @@ from database import Cursor, Database
 import api.categories
 import api.base
 
-PRODUCT_FIELDS = ['name', 'category', 'barcode']
+PRODUCT_FIELDS = ['name', 'category']
 
 
 def add(name, *, category_name=None, category_id=None):
@@ -98,26 +98,6 @@ def remove(id_):
         return cursor.exec_()
 
 
-def set_barcode(name, category, barcode):
-    """ Set the barcode of a product in a category
-
-        :param str name: The name of the product
-        :param str category: The name of the category
-        :return bool: True if success else False.
-    """
-
-    with Cursor() as cursor:
-        cursor.prepare("UPDATE products SET barcode=:barcode WHERE name=:name\
-                        AND category=:cat")
-
-        category = api.categories.get_unique(name=category)
-        cursor.bindValue(':barcode', barcode)
-        cursor.bindValue(':name', name)
-        cursor.bindValue(':cat', category['id'])
-
-        return cursor.exec_()
-
-
 def search_by_name(name):
     """ Search products by name
 
@@ -132,7 +112,8 @@ def search_by_name(name):
         cursor.exec_()
 
         while cursor.next():
-            yield {field: cursor.record().value(field) for field in
+            record = cursor.record()
+            yield {field: record.value(field) for field in
                    PRODUCT_FIELDS}
 
 
@@ -144,11 +125,11 @@ def get(**filter_):
     """
     cursor = api.base.filtered_getter("products", filter_)
     while cursor.next():
+        record = cursor.record()
         yield {
-            'id': cursor.record().value('id'),
-            'name': cursor.record().value('name'),
-            'category': cursor.record().value('category'),
-            'barcode': cursor.record().value('barcode'),
+            'id': record.value('id'),
+            'name': record.value('name'),
+            'category': record.value('category'),
         }
 
 

@@ -15,58 +15,80 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
+"""
+CsvImportWindow
+===============
 
+A window that show a recap of a csv import
+"""
 
-from PyQt5 import QtWidgets, QtCore, uic
+from PyQt5 import QtWidgets, uic, QtCore
 import api.notes
+import api.validator
+import csv
 import gui.utils
-import re
 
 
 class CsvImportWindow(QtWidgets.QDialog):
+    """ CsvImportWindow class
+    """
     def __init__(self, path):
         super().__init__()
         uic.loadUi('ui/csv_import_window.ui', self)
         self.file_path = path
+        self.notes = []
+        self.on_change = lambda: False
+        self.amount.setValidator(api.validator.NUMBER)
+        self.reason.setValidator(api.validator.NAME)
         self.recap.header().setStretchLastSection(False)
         self.recap.header().setSectionResizeMode(1,
             QtWidgets.QHeaderView.Stretch)
         self._build_recap()
         self.show()
 
-    def _parse_line(self, line):
-        """ Parse a CSV line and returns a recap
-        """
-        _, _, _, note, _, _, _, amount, motive = line.split(',')
-        if all([note, amount, motive]):
-            if api.notes.get(lambda x: x['nickname'].lower() == note.lower()):
-                return note.strip(), float(amount), motive.strip()
-        raise ValueError
-
     def _build_recap(self):
         """ Parse a CSV file and try to build lines from it.
         """
-        with open(self.file_path, 'r') as fd:
-            for line in fd:
-                re.sub("\"(\d+?),(\d+?)\"", "\1.\2", line)
+        with open(self.file_path, 'r', encoding="ISO8859") as fd:
+            reader = csv.DictReader(fd)
+            for line in reader:
                 try:
-                    note, amount, motive = self._parse_line(line)
+                    mail = line['Email']
+                    note = api.notes.get(lambda x: x['mail'] == mail)
+                    if note:
+                        note = note[0]['nickname']
+                        self.notes.append(note)
                 except ValueError:
                     continue
-                amount = round(amount, 2)
-                w = QtWidgets.QTreeWidgetItem(
-                    self.recap,
-                    (note,
-                     motive,
-                     "{} €".format(-amount) if amount < 0 else "-",
-                     "{} €".format(amount) if amount > 0 else "-"
+                if note:
+                    QtWidgets.QTreeWidgetItem(
+                        self.recap,
+                        (note,
+                         mail
+                        )
                     )
-                )
+                else:
+                    w = QtWidgets.QTreeWidgetItem(
+                        self.recap,
+                        ("[{} {}]".format(line["Nom"], line["Prenom"]),
+                         mail
+                        )
+                    )
+                    for i in range(2):
+                        w.setBackground(i, QtCore.Qt.red)
 
     def on_validation(self):
-        with open(self.file_path, 'r') as fd:
-            nb_op = api.notes.import_csv(fd.read())
-        gui.utils.valid("{} opération{s} effectuée{s}".format(nb_op,
-            s="s" * (nb_op > 1)))
-        self.close()
+        """ Called when "Valider" is clicked
+        """
+        if float(self.amount.text()) > 0.01:
+            api.notes.import_csv(
+                self.notes,
+                self.reason.text(),
+                -float(self.amount.text()),
+                do_not=True
+            )
+            api.notes.rebuild_cache()
+            self.close()
+        else:
+            gui.utilse.error("Erreur", "Verifiez le montant")
 
