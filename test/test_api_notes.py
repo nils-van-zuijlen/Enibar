@@ -452,9 +452,9 @@ class NotesTest(basetest.BaseTest):
         """
         self.add_note("test")
         self.add_note("test2")
-        self.assertEqual(notes.import_csv("a,a,a,test,a,a,a,2.5,Onololo\n"
-                                          "a,a,test,test,a,a,2.5,Onololo\n"), 1)  # %issing one field
+        self.assertTrue(notes.import_csv(["test", ], "couocu", -2.5))
         self.assertEqual(notes.get(lambda x: x['nickname'] == "test")[0]['note'], -2.5)
+        self.assertEqual(notes.get(lambda x: x['nickname'] == "test2")[0]['note'], 0)
 
     def test_do_not(self):
         """ Testing do_not arg.

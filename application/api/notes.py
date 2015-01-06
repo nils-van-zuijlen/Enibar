@@ -346,32 +346,27 @@ def export_by_nick(notes_nicks, *args, **kwargs):
                   **kwargs)
 
 
-def import_csv(csv, *, do_not=False):
+def import_csv(notes, reason, amount, *, do_not=False):
     """ Import a csv file. There are no checks done here.
     CSV pattern: Nom,Prenom,Surnom,Note,Email,Date de naissance,Majeur,Debit,Motif
 
     Returns the number of line executed.
     """
-    nb_exec = 0
-    re.sub("\"(\d+?),(\d+?)\"", "\1.\2", csv)
     trs = []
-    for line in csv.split():
-        try:
-            _, _, _, note, _, _, _, amount, motive = line.split(',')
-        except ValueError:
-            continue
-        transactions([note, ], -float(amount), do_not=do_not)
+    for note in notes:
         trs.append({
             'note': note,
             'category': "CSV import",
-            'product': motive,
+            'product': reason,
             'price_name': "Solde",
             'quantity': "1",
-            'price': -float(amount)}
+            'price': amount}
         )
-        nb_exec += 1
-    api.transactions.log_transactions(trs)
-    return nb_exec
+    if transactions(notes, amount):
+        if api.transactions.log_transactions(trs):
+            rebuild_cache(do_not=do_not)
+            return True
+    return False
 
 
 rebuild_cache()
