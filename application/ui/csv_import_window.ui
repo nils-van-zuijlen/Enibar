@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>838</width>
-    <height>540</height>
+    <height>538</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -155,6 +155,13 @@
    <header>gui/input_widget</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>recap</tabstop>
+  <tabstop>reason</tabstop>
+  <tabstop>amount</tabstop>
+  <tabstop>validation_button</tabstop>
+  <tabstop>cancel_button</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
