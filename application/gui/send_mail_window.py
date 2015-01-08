@@ -19,6 +19,8 @@
 from PyQt5 import QtCore, QtWidgets, uic
 from .mail_selector_window import MailSelectorWindow
 import api.mail
+from .save_mail_model_window import SaveMailModelWindow
+from .load_mail_model_window import LoadMailModelWindow
 
 
 class SendMailWindow(QtWidgets.QMainWindow):
@@ -84,4 +86,23 @@ class SendMailWindow(QtWidgets.QMainWindow):
         arg = self.filter_input.text()
         return api.notes.get(lambda x: filter_fnc(x, arg))
 
+    def save_model(self):
+        popup = SaveMailModelWindow(self)
+        if popup.exec() and popup.input.text():
+            print(api.mail.save_model(
+                popup.input.text(),
+                self.subject_input.text(),
+                self.message_input.toPlainText(),
+                self.filter_selector.currentIndex(),
+                self.filter_input.text()
+            ))
 
+    def open_model(self):
+        popup = LoadMailModelWindow(self)
+        if popup.exec():
+            model = popup.get_selected()
+            model_data = api.mail.get_unique_model(name=model)
+            self.subject_input.setText(model_data['subject'])
+            self.message_input.setText(model_data['message'])
+            self.filter_selector.setCurrentIndex(model_data['filter'])
+            self.filter_input.setText(model_data['filter_value'])

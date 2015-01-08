@@ -120,15 +120,18 @@
     <property name="title">
      <string>Fichier</string>
     </property>
-    <addaction name="actionOuvrir"/>
-    <addaction name="actionSauvegarder"/>
+    <addaction name="open_model_btn"/>
+    <addaction name="save_model_btn"/>
    </widget>
    <addaction name="menuFichier"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionSauvegarder">
+  <action name="save_model_btn">
    <property name="text">
     <string>Sauvegarder en tant que model</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
    </property>
   </action>
   <action name="actionCharger">
@@ -136,9 +139,12 @@
     <string>Charger</string>
    </property>
   </action>
-  <action name="actionOuvrir">
+  <action name="open_model_btn">
    <property name="text">
-    <string>Ouvrir</string>
+    <string>Ouvrir un model</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
  </widget>
@@ -191,10 +197,44 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>open_model_btn</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>open_model()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>save_model_btn</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>save_model()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>send()</slot>
   <slot>on_filter_selector_change()</slot>
   <slot>on_filter_input_click()</slot>
+  <slot>open_model()</slot>
+  <slot>save_model()</slot>
  </slots>
 </ui>

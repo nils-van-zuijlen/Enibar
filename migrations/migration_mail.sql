@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS mail_models(
-	id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+	name varchar(255) PRIMARY KEY,
 	subject TEXT default "",
 	message TEXT default "",
 	filter INTEGER UNSIGNED,
