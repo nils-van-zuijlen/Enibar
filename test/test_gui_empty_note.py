@@ -51,5 +51,3 @@ class EmpttNoteTest(basetest.BaseGuiTest):
         timer = QtCore.QTimer.singleShot(200, callback)
         self.win.accept()
 
-
-
