@@ -74,6 +74,7 @@ class AuthPromptWindow(QtWidgets.QDialog):
         self.is_authorized = False
         self.show_error = False
         uic.loadUi('ui/auth_prompt_window.ui', self)
+        self.on_change = api.validator.on_change(self, self.accept_button)
         self.pass_input.set_validator(api.validator.NAME)
         filter_ = ", ".join("{key}=1".format(key=key) for key in requirements)
         self.user = ""
@@ -107,9 +108,4 @@ class AuthPromptWindow(QtWidgets.QDialog):
             self.show_error = True
             self.is_authorized = False
         return super().accept()
-
-    def on_change(self):
-        """  Called when the password input changes
-        """
-        self.accept_button.setEnabled(self.pass_input.valid)
 

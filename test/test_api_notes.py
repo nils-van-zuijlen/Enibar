@@ -38,17 +38,6 @@ class NotesTest(basetest.BaseTest):
         except FileNotFoundError:
             pass
 
-    def add_note(self, nick):
-        return notes.add(nick,
-            "test1",
-            "test1",
-            "test@pouette.com",
-            "0600000000",
-            '12/12/2001',
-            '1A',
-            ''
-        )
-
     def count_notes(self):
         """ Returns the number of notes currently in database """
         with Cursor() as cursor:

@@ -17,12 +17,17 @@
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from PyQt5 import QtCore, QtWidgets
 from database import Cursor
+from pyvirtualdisplay import Display
+import api.users
+import api.notes
 import os
+import subprocess
+import sys
 import traceback
 import unittest
 import warnings
-import subprocess
 
 from unittest.runner import TextTestResult, TextTestRunner
 from unittest.signals import registerResult
@@ -91,6 +96,7 @@ class BaseTest(unittest.TestCase):
             for table in tables:
                 cursor.exec_("DELETE FROM {}".format(table))
                 cursor.exec_("ALTER TABLE {} AUTO_INCREMENT = 1".format(table))
+        api.notes.rebuild_cache()
 
     def assertMyDictEqual(self, d1, d2, ignore=None):
         """ ignore is a list of keys to ignore but that should be there in d1
@@ -114,6 +120,48 @@ class BaseTest(unittest.TestCase):
 
         for d1, d2 in zip(l1, l2):
             self.assertMyDictEqual(d1, d2, ignore=ignore)
+
+    def add_note(self, nick):
+        return api.notes.add(nick,
+            "test1",
+            "test1",
+            "test@pouette.com",
+            "0600000000",
+            '12/12/2001',
+            '1A',
+            ''
+        )
+
+
+class BaseGuiTest(BaseTest):
+    def setUp(self):
+        if int(os.environ['USE_VD']):
+            self.display = Display(visible=0, size=(800, 600))
+            self.display.start()
+        self.app = QtWidgets.QApplication(sys.argv)
+
+    def tearDown(self):
+        self.app = None  # Need this to avoid X11 crash. It may cause segfault.
+        if int(os.environ['USE_VD']):
+            self.display.stop()
+
+    def _reset_db(self):
+        """ Reset the db but add an user that can do anything
+        """
+        super()._reset_db()
+        api.users.add("azerty", "azerty")
+        api.users.set_rights("azerty", {'manage_users': True,
+                                        'manage_notes': True,
+                                        'manage_products': True}
+        )
+
+    def connect(self):
+        def connect_callback():
+            auth_window = self.app.activeWindow()
+            auth_window.pass_input.setText("azerty")
+            auth_window.accept_button.click()
+        timer = QtCore.QTimer().singleShot(200, connect_callback)
+
 
 TextTestResult.getDescription = getDescription
 TextTestResult.startTest = startTest
