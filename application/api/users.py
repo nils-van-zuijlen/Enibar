@@ -26,38 +26,38 @@ import bcrypt
 from database import Cursor
 
 
-def add(pseudo, password):
+def add(username, password):
     """ Add an admin.
 
-    :param str pseudo: Pseudo
+    :param str username: Username
     :param str password: Password
 
     :return bool: True if success else False.
     """
     with Cursor() as cursor:
-        if not pseudo or not password:
+        if not username or not password:
             return False
         cursor.prepare("INSERT INTO admins VALUES(:login, :pass, 0, 0, 0)")
-        cursor.bindValue(':login', pseudo)
+        cursor.bindValue(':login', username)
         cursor.bindValue(':pass', bcrypt.hashpw(password,
                                                 bcrypt.gensalt()))
 
         return cursor.exec_()
 
 
-def remove(pseudo):
+def remove(username):
     """ Remove an admin.
 
-    :param str pseudo: Admin pseudo
+    :param str username: Admin username
 
     :return bool: True if success else False.
     """
     with Cursor() as cursor:
         cursor.prepare("DELETE FROM admins WHERE ((SELECT * FROM (SELECT \
-        manage_users FROM admins WHERE login=:pseudo) AS t)=0 OR (SELECT * \
+        manage_users FROM admins WHERE login=:username) AS t)=0 OR (SELECT * \
         FROM(SELECT COUNT(*) FROM admins WHERE manage_users=1) AS p)>1) AND \
-        login=:pseudo")
-        cursor.bindValue(':pseudo', pseudo)
+        login=:username")
+        cursor.bindValue(':username', username)
 
         return cursor.exec_()
 
@@ -105,6 +105,12 @@ def get_rights(username):
 def set_rights(username, rights):
     """ Set user rights
 
+    :param str username: The username
+    :param dict rights: A dict that contains the rights. example:\
+    ``{'manage_users': True,
+     'manage_notes': False,
+     'manage_products': True}``
+
     :return bool: Operation status
     """
     with Cursor() as cursor:
@@ -124,34 +130,34 @@ def set_rights(username, rights):
         return cursor.exec_()
 
 
-def change_password(pseudo, new_password):
+def change_password(username, new_password):
     """ Change password of an admin.
 
-    :param str pseudo: Admin pseudo
+    :param str username: Admin username
     :param str new_password: New password
 
     :return bool: True if success else False.
     """
     with Cursor() as cursor:
         cursor.prepare("UPDATE admins SET password=:pass WHERE login=:login")
-        cursor.bindValue(':login', pseudo)
+        cursor.bindValue(':login', username)
         cursor.bindValue(':pass', bcrypt.hashpw(new_password,
                                                 bcrypt.gensalt()))
 
         return cursor.exec_()
 
 
-def is_authorized(pseudo, password):
-    """ Check if a combination of pseudo/password match an admin in database.
+def is_authorized(username, password):
+    """ Check if a combination of username/password match an admin in database.
 
-    :param str pseudo: Pseudo
+    :param str username: username
     :param str password: Password
 
     :return bool: True if authorized else False.
     """
     with Cursor() as cursor:
         cursor.prepare("SELECT password FROM admins WHERE login=:login")
-        cursor.bindValue(':login', pseudo)
+        cursor.bindValue(':login', username)
         cursor.exec_()
 
         if not cursor.next():
