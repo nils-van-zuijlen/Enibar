@@ -34,10 +34,10 @@ class PasswordManagementWindow(QtWidgets.QDialog):
     def __init__(self):
         super().__init__()
         uic.loadUi('ui/password_management_window.ui', self)
+        self.on_change = api.validator.on_change(self, self.accept_button)
         self.pseudo_input.set_validator(api.validator.NAME)
         self.old_password_input.set_validator(api.validator.NAME)
         self.new_password_input.set_validator(api.validator.NAME)
-        self.on_change = api.validator.on_change(self, self.accept_button)
         self.show()
 
     def accept(self):
