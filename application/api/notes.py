@@ -365,8 +365,7 @@ def import_csv(notes, reason, amount, *, do_not=False):
     if transactions(notes, amount):
         if api.transactions.log_transactions(trs):
             rebuild_cache(do_not=do_not)
-            return True
-    return False
+            return len(trs)
 
 
 rebuild_cache()

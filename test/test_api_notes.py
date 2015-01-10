@@ -441,7 +441,7 @@ class NotesTest(basetest.BaseTest):
         """
         self.add_note("test")
         self.add_note("test2")
-        self.assertTrue(notes.import_csv(["test", ], "couocu", -2.5))
+        self.assertEqual(notes.import_csv(["test", ], "couocu", -2.5), 1)
         self.assertEqual(notes.get(lambda x: x['nickname'] == "test")[0]['note'], -2.5)
         self.assertEqual(notes.get(lambda x: x['nickname'] == "test2")[0]['note'], 0)
 
