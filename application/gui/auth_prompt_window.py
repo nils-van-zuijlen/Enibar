@@ -99,10 +99,6 @@ class AuthPromptWindow(QtWidgets.QDialog):
         self.user = self.login_input.currentText()
         if users.is_authorized(self.user,
                                self.pass_input.text()):
-            rights = users.get_rights(self.user)
-            for requirement in self.requirements:
-                if not rights[requirement]:
-                    return super().accept()
             self.is_authorized = True
         else:
             self.show_error = True
