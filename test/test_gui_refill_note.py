@@ -62,6 +62,21 @@ class RefillNoteTest(basetest.BaseGuiTest):
         timer = QtCore.QTimer.singleShot(200, callback)
         self.win.accept()
 
+    def test_refill_note_cancel(self):
+        """ Testing refill note when we cancel
+        """
+        def callback():
+            def verif():
+                self.assertEqual(api.notes.get(lambda x: x['nickname'] == "test")[0]['note'], 0)
+            validation = self.app.activeWindow()
+            self.assertIsInstance(validation, gui.validation_window.ValidationWindow)
+            timer = QtCore.QTimer.singleShot(200, verif)
+            validation.reject()
+        self.win.to_add.setText("20")
+        self.win.reason.setText("coucou")
+        timer = QtCore.QTimer.singleShot(200, callback)
+        self.win.accept()
+
 
 class RefillNoteMultiTest(basetest.BaseGuiTest):
     def setUp(self):
@@ -100,3 +115,16 @@ class RefillNoteMultiTest(basetest.BaseGuiTest):
         timer = QtCore.QTimer.singleShot(200, callback)
         self.win.accept()
 
+    def test_refill_notes_cancel(self):
+        """ Testing refill notes when we cancel
+        """
+        def callback():
+            def verif():
+                self.assertEqual(0, self.win.to_add_value)
+            win = self.app.activeWindow()
+            timer = QtCore.QTimer.singleShot(200, verif)
+            win.reject()
+        self.win.to_add.setText("20")
+        self.win.reason.setText("coucou")
+        timer = QtCore.QTimer.singleShot(200, callback)
+        self.win.accept()
