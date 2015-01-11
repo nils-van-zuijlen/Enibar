@@ -44,6 +44,7 @@ from .stats_window import StatsWindow
 from .about_window import AboutWindow
 from .csv_import_window import CsvImportWindow
 from .send_mail_window import SendMailWindow
+from .mail_scheduler_window import MailSchedulerWindow
 import api.categories
 import api.notes
 import api.transactions
@@ -491,10 +492,12 @@ class MenuBar(QtWidgets.QMenuBar):
     def send_mail_fnc(self):
         """ Open send mail window
         """
-        self.mail_window = SendMailWindow(self)
+        SendMailWindow(self)
 
     def mail_scheduler_fnc(self):
-        pass
+        """ Open mail scheduler window
+        """
+        MailSchedulerWindow(self)
 
     def mail_models_fnc(self):
         pass

@@ -131,7 +131,7 @@
     <string>Sauvegarder en tant que model</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+S</string>
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="actionCharger">
