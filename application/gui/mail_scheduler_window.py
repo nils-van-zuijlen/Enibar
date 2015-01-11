@@ -42,17 +42,14 @@ class MailSchedulerWindow(QtWidgets.QMainWindow):
         if mail:
             self.name_input.setText(mail['name'])
             self.active_checkbox.setChecked(mail['active'])
-            interval, index = api.mail.convert_interval(mail['schedule_interval'])
-            self.schedule_interval.setValue(interval)
-            self.schedule_interval_unit.setCurrentIndex(index)
+            self.schedule_interval.setValue(mail['schedule_interval'])
+            self.schedule_interval_unit.setCurrentIndex(api.mail.INTERVAL_UNITS.index(mail['schedule_unit']))
             self.schedule_day.setCurrentIndex(mail['schedule_day'])
             self.filter_selector.setCurrentIndex(mail['filter'])
             self.filter_input.setText(mail['filter_value'])
             self.subject_input.setText(mail['subject'])
             self.sender_input.setText(mail['sender'])
             self.message_input.setPlainText(mail['message'])
-
-
 
 
     def save_model_fnc(self):
@@ -103,18 +100,18 @@ class MailSchedulerWindow(QtWidgets.QMainWindow):
     def save_scheduled_mail_fnc(self):
         """ Save scheduled mail action
         """
-        unit = api.mail.FILTER_UNITS[self.schedule_interval_unit.currentIndex()]
-
         save_success = api.mail.save_scheduled_mails(
             self.name_input.text(),
             self.active_checkbox.isChecked(),
-            self.schedule_interval.value() * unit,
+            self.schedule_interval.value(),
+            api.mail.INTERVAL_UNITS[self.schedule_interval_unit.currentIndex()],
             self.schedule_day.currentIndex(),
             self.filter_selector.currentIndex(),
             self.filter_input.text(),
             self.subject_input.text(),
             self.sender_input.text(),
             self.message_input.toPlainText(),
+            None
         )
 
         if save_success:

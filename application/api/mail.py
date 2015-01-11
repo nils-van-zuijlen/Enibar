@@ -25,10 +25,10 @@ COMPLETION_FIELD = {
 }
 
 
-FILTER_UNITS = [
-    24 * 3600,
-    7 * 24 * 3600,
-    30 * 24 * 3600,
+INTERVAL_UNITS = [
+    "day",
+    "week",
+    "month",
 ]
 
 def send_mail(to, subject, message, from_="cafeteria@enib.fr"):
@@ -91,26 +91,31 @@ def get_scheduled_mails(**filter_):
             'name': record.value('name'),
             'active': record.value('active'),
             'schedule_interval': record.value('schedule_interval'),
+            'schedule_unit': record.value('schedule_unit'),
             'schedule_day': record.value('schedule_day'),
             'subject': record.value('subject'),
             'message': record.value('message'),
             'filter': record.value('filter'),
             'filter_value': record.value('filter_value'),
             'sender': record.value('sender'),
+            'last_sent': record.value('last_sent'),
         }
 
-def save_scheduled_mails(name, active, sched_int, sched_day, filter_,
-        filter_val, subject, sender, message):
+def save_scheduled_mails(name, active, sched_int, sched_unit, sched_day,
+        filter_, filter_val, subject, sender, message, last_sent):
     with Cursor() as cursor:
         cursor.prepare("""
             INSERT INTO scheduled_mails(name, active, schedule_interval,
-                schedule_day, filter, filter_value, subject, sender, message)
+                schedule_day, filter, filter_value, subject, sender, message,
+                schedule_unit, last_sent)
             VALUES(:name, :active, :sched_interval, :sched_day, :filter,
-                :filter_val, :subject, :sender, :message)
+                :filter_val, :subject, :sender, :message, :schedule_unit,
+                :last_sent)
             ON DUPLICATE KEY UPDATE name=:name, active=:active,
                 schedule_interval=:sched_interval, schedule_day=:sched_day,
                 filter=:filter, filter_value=:filter_val, subject=:subject,
-                message=:message, sender=:sender
+                message=:message, sender=:sender, schedule_unit=:schedule_unit,
+                last_sent=:last_sent
             """
         )
 
@@ -123,6 +128,8 @@ def save_scheduled_mails(name, active, sched_int, sched_day, filter_,
         cursor.bindValue(':subject', subject)
         cursor.bindValue(':sender', sender)
         cursor.bindValue(':message', message)
+        cursor.bindValue(':schedule_unit', sched_unit)
+        cursor.bindValue(':last_sent', last_sent)
 
         cursor.exec_()
         return not cursor.lastError().isValid()
@@ -134,6 +141,7 @@ def delete_scheduled_mail(name):
         cursor.bindValue(':name', name)
         cursor.exec_()
         return not cursor.lastError().isValid()
+
 
 def rename_scheduled_mail(name, newname):
     with Cursor() as cursor:
@@ -148,10 +156,6 @@ def rename_scheduled_mail(name, newname):
         cursor.exec_()
         return not cursor.lastError().isValid()
 
-def convert_interval(interval):
-    for i, unit in reversed(list(enumerate(FILTER_UNITS))):
-        if interval // unit == interval / unit:
-            return (interval // unit, FILTER_UNITS.index(unit))
 
 get_unique_model = api.base.make_get_unique(get_models)
 get_unique_scheduled_mails = api.base.make_get_unique(get_scheduled_mails)
