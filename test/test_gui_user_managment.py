@@ -88,7 +88,7 @@ class UsersManagementTest(basetest.BaseGuiTest):
             self.assertIsInstance(win, gui.users_management_window.AddUserPrompt)
             win.username_input.setText("test")
             win.password_input.setText("coucou")
-            timer = QtCore.QTimer.singleShot(500, verif)
+            timer = QtCore.QTimer.singleShot(1500, verif)
             win.validation_button.click()
             self.win.close()
             win.close()
