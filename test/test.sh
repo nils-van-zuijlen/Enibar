@@ -65,7 +65,7 @@ if [[ $TEST == 1 ]]; then
 	fi
 
 	# -- TEST --
-	rm -f $APPLICATION_DIR/.coverage
+	rm -f .coverage
 	nosetests ../test/*.py -v --with-coverage --cover-package=api,gui || TEST_FAILED=1
 
 	mv settings.py.bak settings.py
