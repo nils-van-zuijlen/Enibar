@@ -64,10 +64,6 @@ class UsersManagementWindow(QtWidgets.QDialog):
     def update_form(self):
         """ Fetch user rights of newly selected user
         """
-        # May break if you touch it
-        if not self.selected:
-            self.set_form_checkable(False)
-            return
         rights = users.get_rights(self.selected.text())
         for right in rights:
             self.rights[right].setChecked(rights[right])
@@ -83,18 +79,14 @@ class UsersManagementWindow(QtWidgets.QDialog):
         """ Callback to delete user when button is pushed
         """
         if not self.selected:
-            gui.utils.error("Aucun utilisateur selectionné")
+            gui.utils.error("Impossible de supprimer l'utilisateur",
+                            "Aucun utilisateur selectionné")
             return
-        if users.remove(self.selected.text()):
-            self.user_list.refresh()
-        else:
-            gui.utils.error(
-                "Impossible de supprimer cet utilisateur",
-                "Aucune idée du pourquoi du comment."
-            )
+        users.remove(self.selected.text())
+        self.user_list.refresh()
 
     def add(self):
-        """ Callbock to add user when button is pushed
+        """ Callback to add user when button is pushed
         """
         prompt = AddUserPrompt()
         if prompt.exec():
@@ -110,11 +102,7 @@ class UsersManagementWindow(QtWidgets.QDialog):
             )
             return
         rights = {key: value.isChecked() for key, value in self.rights.items()}
-        if not users.set_rights(self.selected.text(), rights):
-            gui.utils.error(
-                "Impossible de sauvegarder les droits",
-                "erreur de communication avec la base de donnée."
-            )
+        users.set_rights(self.selected.text(), rights)
         self.user_list.refresh()
 
 
@@ -135,7 +123,7 @@ class UserList(QtWidgets.QListWidget):
         """
         user_list = list(users.get_list())
         # Add added users
-        for user in users.get_list():
+        for user in user_list:
             if user not in [w.text() for w in self.widgets]:
                 self.widgets.append(QtWidgets.QListWidgetItem(user, self))
 
@@ -182,10 +170,6 @@ class AddUserPrompt(QtWidgets.QDialog):
         if users.add(self.username_input.text(), self.password_input.text()):
             super().accept()
         else:
-            error = QtWidgets.QMessageBox()
-            error.setText("Impossible d'ajouter cet utilisateur.")
-            error.setInformativeText("Le nom d'utilisateur est peut "
-                                     "être déja pris.")
-            error.setIcon(QtWidgets.QMessageBox.Critical)
-            error.exec()
+            gui.utils.error("Impossible d'ajouter cet utilisateur.",
+                            "Le nom d'utilisateur est peut être déjà pris.")
 

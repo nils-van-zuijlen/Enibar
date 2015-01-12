@@ -162,6 +162,9 @@ class BaseGuiTest(BaseTest):
             auth_window.accept_button.click()
         timer = QtCore.QTimer().singleShot(200, connect_callback)
 
+    def get_items(self, qlist):
+        return [qlist.item(i).text() for i in range(qlist.count())]
+
 
 TextTestResult.getDescription = getDescription
 TextTestResult.startTest = startTest

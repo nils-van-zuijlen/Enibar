@@ -32,9 +32,6 @@ class SearchTest(basetest.BaseGuiTest):
         self.main_win = gui.main_window.MainWindow()
         self.search_window = gui.search_window.SearchWindow(self.main_win.menu_bar)
 
-    def get_items(self, qlist):
-        return [qlist.item(i).text() for i in range(qlist.count())]
-
     def test_search_by_firstname(self):
         """ Testing search by firstname
         """
