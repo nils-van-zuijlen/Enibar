@@ -56,17 +56,17 @@ class UsersManagementWindow(QtWidgets.QDialog):
 
         :param bool checkable: Futur checkbox state
         """
-        for right in self.rights:
-            self.rights[right].setCheckable(checkable)
+        for right in self.rights.values():
+            right.setCheckable(checkable)
             if not checkable:
-                self.rights[right].setCheckState(0)
+                right.setCheckState(0)
 
     def update_form(self):
         """ Fetch user rights of newly selected user
         """
         rights = users.get_rights(self.selected.text())
-        for right in rights:
-            self.rights[right].setChecked(rights[right])
+        for right, value in rights.items():
+            self.rights[right].setChecked(value)
         self.set_form_checkable(True)
 
     def select_user(self, item):
