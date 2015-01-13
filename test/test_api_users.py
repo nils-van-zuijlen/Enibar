@@ -19,19 +19,11 @@
 import basetest
 
 import api.users as users
-from database import Cursor
 
 
 class UsersTest(basetest.BaseTest):
     def setUp(self):
         self._reset_db()
-
-    def count_admins(self):
-        """ Test helper, returns the number of admins currently in database """
-        with Cursor() as cursor:
-            cursor.exec("SELECT COUNT(*) FROM admins")
-            if cursor.next():
-                return cursor.record().value(0)
 
     def test_add_user(self):
         """ Test adding an user  """

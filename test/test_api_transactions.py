@@ -20,8 +20,6 @@ import basetest
 
 import api.transactions as transactions
 import api.notes as notes
-from PyQt5 import QtCore
-from database import Cursor
 
 
 class TransactionsTest(basetest.BaseTest):
@@ -36,14 +34,6 @@ class TransactionsTest(basetest.BaseTest):
             '1A',
             ''
         )
-
-    @classmethod
-    def count_transactions(cls):
-        """ Returns the number of transactions currently in database """
-        with Cursor() as cursor:
-            cursor.exec("SELECT COUNT(*) FROM transactions")
-            if cursor.next():
-                return cursor.record().value(0)
 
     def test_log_transaction(self):
         """ Testing log_transaction

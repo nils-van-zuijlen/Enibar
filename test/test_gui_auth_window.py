@@ -19,7 +19,6 @@
 from PyQt5 import QtWidgets, QtCore
 import basetest
 from gui.auth_prompt_window import ask_auth
-import api.users
 import settings
 
 

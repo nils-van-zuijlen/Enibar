@@ -18,7 +18,6 @@
 
 import basetest
 
-from database import Cursor
 import api.stats as stats
 import api.notes as notes
 import api.transactions as transactions

@@ -21,7 +21,6 @@ from PyQt5 import QtCore, QtWidgets
 import api.notes
 import gui.refill_note_window
 import gui.validation_window
-import settings
 
 
 class RefillNoteTest(basetest.BaseGuiTest):

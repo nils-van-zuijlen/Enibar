@@ -23,11 +23,9 @@ from pyvirtualdisplay import Display
 import api.users
 import api.notes
 import os
-import subprocess
 import sys
 import traceback
 import unittest
-import warnings
 
 from unittest.runner import TextTestResult, TextTestRunner
 from unittest.signals import registerResult
@@ -131,6 +129,44 @@ class BaseTest(unittest.TestCase):
             '1A',
             ''
         )
+
+    def _count(self, db):
+        with Cursor() as cursor:
+            cursor.exec("SELECT COUNT(*) FROM {}".format(db))
+            if cursor.next():
+                return cursor.record().value(0)
+
+    def count_categories(self):
+        """ Returns the number of categories currently in database """
+        return self._count("categories")
+
+    def count_transactions(self):
+        """ Returns the number of transactions currently in database """
+        return self._count("transactions")
+
+    def count_descriptors(self):
+        """ Returns the number of descriptions currently in database """
+        return self._count("price_description")
+
+    def count_prices(self):
+        """ Returns the number of prices currently in database """
+        return self._count("prices")
+
+    def count_products(self):
+        """ Returns the number of products currently in database """
+        return self._count("products")
+
+    def count_notes(self):
+        """ Returns the number of notes currently in database """
+        return self._count("notes")
+
+    def count_panels(self):
+        """ Returns the number of panels currently in database """
+        return self._count("panels")
+
+    def count_admins(self):
+        """ Test helper, returns the number of admins currently in database """
+        return self._count("admins")
 
 
 class BaseGuiTest(BaseTest):

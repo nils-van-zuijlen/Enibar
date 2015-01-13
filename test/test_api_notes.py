@@ -22,7 +22,6 @@ import time
 import os.path
 import PyQt5
 import api.notes as notes
-from database import Cursor
 
 
 class NotesTest(basetest.BaseTest):
@@ -37,13 +36,6 @@ class NotesTest(basetest.BaseTest):
             os.remove("img/coucou2.jpg")
         except FileNotFoundError:
             pass
-
-    def count_notes(self):
-        """ Returns the number of notes currently in database """
-        with Cursor() as cursor:
-            cursor.exec("SELECT COUNT(*) FROM notes")
-            if cursor.next():
-                return cursor.record().value(0)
 
     def test_add(self):
         """ Testing adding notes """

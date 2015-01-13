@@ -21,22 +21,11 @@ import basetest
 import api.products as products
 import api.categories as categories
 import api.prices as prices
-from test_api_products import ProductsTest
-from test_api_prices import PricesTest
-from database import Cursor
 
 
 class CategoriesTest(basetest.BaseTest):
     def setUp(self):
         self._reset_db()
-
-    @classmethod
-    def count_categories(cls):
-        """ Returns the number of categories currently in database """
-        with Cursor() as cursor:
-            cursor.exec("SELECT COUNT(*) FROM categories")
-            if cursor.next():
-                return cursor.record().value(0)
 
     def test_add_category(self):
         """ Testing add_category
@@ -66,16 +55,16 @@ class CategoriesTest(basetest.BaseTest):
         p3 = products.add("Coucou3", category_id=id2)
 
         self.assertEqual(2, self.count_categories())
-        self.assertEqual(6, PricesTest.count_prices())
-        self.assertEqual(4, PricesTest.count_descriptors())
-        self.assertEqual(3, ProductsTest.count_products())
+        self.assertEqual(6, self.count_prices())
+        self.assertEqual(4, self.count_descriptors())
+        self.assertEqual(3, self.count_products())
 
         self.assertTrue(categories.remove("Test1"))
 
         self.assertEqual(1, self.count_categories())
-        self.assertEqual(2, PricesTest.count_prices())
-        self.assertEqual(1, ProductsTest.count_products())
-        self.assertEqual(2, PricesTest.count_descriptors())
+        self.assertEqual(2, self.count_prices())
+        self.assertEqual(1, self.count_products())
+        self.assertEqual(2, self.count_descriptors())
 
     def test_get(self):
         """ Testing get_category
