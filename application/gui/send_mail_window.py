@@ -24,6 +24,8 @@ from .load_mail_model_window import LoadMailModelWindow
 
 
 class SendMailWindow(QtWidgets.QMainWindow):
+    """ Main window used to send simple mail.
+    """
     def __init__(self, parent=None):
         super().__init__()
         uic.loadUi('ui/send_mail_window.ui', self)
@@ -34,18 +36,12 @@ class SendMailWindow(QtWidgets.QMainWindow):
         # Bind mouse event of filter input
         self.filter_input.mousePressEvent = self.on_filter_input_click
 
-        # Filters function used to select valid notes from selected filter
-        self.filters = [
-            lambda x, y: True,
-            lambda x, y: x['mail'] in y.split(','),
-            lambda x, y: x['note'] >= float(y),
-            lambda x, y: x['note'] < float(y),
-        ]
-
         # Show window
         self.show()
 
     def send(self):
+        """ Send mail
+        """
         recipients = self.get_recipient_list()
         for recipient in recipients:
             api.mail.send_mail(
@@ -56,6 +52,12 @@ class SendMailWindow(QtWidgets.QMainWindow):
             )
 
     def on_filter_selector_change(self, selected):
+        """ On filter selector change
+        Is called when combobox filter is changed. Clean filter_input and set
+        correct placeholder text.
+
+        :param int selected: New value of the combobox.
+        """
         if selected == 0:
             self.filter_input.setEnabled(False)
         else:
@@ -70,6 +72,13 @@ class SendMailWindow(QtWidgets.QMainWindow):
                 self.filter_input.setPlaceholderText("Montant à comparer")
 
     def on_filter_input_click(self, event):
+        """ On filter input click
+        Trigger the opening of a note selction list in a new QDialog and fill
+        the filter_input with a list of mail address separated by comma. This
+        format will be used latter when applying filters.
+
+        :param QKeyboardEvent: Keyboard event given by Qt
+        """
         if self.filter_selector.currentIndex() != 1:
             return
         popup = MailSelectorWindow(self, self.filter_input.text().split(','))
@@ -78,8 +87,13 @@ class SendMailWindow(QtWidgets.QMainWindow):
             self.filter_input.setText(','.join(mails))
 
     def get_recipient_list(self):
+        """ Get recipient list
+        Fetch notes which match current selected filter.
+
+        :return generator: Matching note list
+        """
         try:
-            filter_fnc = self.filters[self.filter_selector.currentIndex()]
+            filter_fnc = api.mail.FILTERS[self.filter_selector.currentIndex()]
         except KeyError:
             return
 
@@ -87,6 +101,8 @@ class SendMailWindow(QtWidgets.QMainWindow):
         return api.notes.get(lambda x: filter_fnc(x, arg))
 
     def save_model(self):
+        """ Save mail model
+        """
         popup = SaveMailModelWindow(self)
         if popup.exec() and popup.input.text():
             print(api.mail.save_model(
@@ -98,6 +114,8 @@ class SendMailWindow(QtWidgets.QMainWindow):
             ))
 
     def open_model(self):
+        """ Open mail model. Fill all fields in the ui.
+        """
         popup = LoadMailModelWindow(self)
         if popup.exec():
             model = popup.get_selected()
@@ -106,3 +124,4 @@ class SendMailWindow(QtWidgets.QMainWindow):
             self.message_input.setText(model_data['message'])
             self.filter_selector.setCurrentIndex(model_data['filter'])
             self.filter_input.setText(model_data['filter_value'])
+

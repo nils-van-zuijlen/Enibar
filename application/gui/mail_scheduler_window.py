@@ -16,6 +16,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
+"""
+Mail scheduler window
+=====================
+
+"""
+
 from .save_mail_model_window import SaveMailModelWindow
 from .load_mail_model_window import LoadMailModelWindow
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
@@ -23,6 +29,8 @@ import api.mail
 
 
 class MailSchedulerWindow(QtWidgets.QMainWindow):
+    """ Mail scheduler window
+    """
     def __init__(self, parent):
         super().__init__(parent)
         uic.loadUi("ui/mail_scheduler_window.ui", self)
@@ -33,10 +41,15 @@ class MailSchedulerWindow(QtWidgets.QMainWindow):
         self.show()
 
     def build_mail_list(self):
+        """ Build mail list. Fetch all scheduled mail and add them to the list
+        """
         for mail in api.mail.get_scheduled_mails():
             self.scheduled_mails_list.addItem(mail['name'])
 
     def on_selected_mail_change(self):
+        """ Callback used to detect mail selection change from the list and
+        update current mail view.
+        """
         item = self.scheduled_mails_list.currentItem()
         mail = api.mail.get_unique_scheduled_mails(name=item.text())
         if mail:
@@ -51,7 +64,25 @@ class MailSchedulerWindow(QtWidgets.QMainWindow):
             self.sender_input.setText(mail['sender'])
             self.message_input.setPlainText(mail['message'])
 
+    def rename_current_mail(self):
+        """ REname current selected mail
+        """
+        item = self.scheduled_mails_list.currentItem()
+        if not item:
+            return
 
+        if item.text() == self.name_input.text():
+            return
+
+        if not api.mail.rename_scheduled_mail(item.text(), self.name_input.text()):
+            return
+
+        self.statusbar.showMessage("Mail «{}» renomé en «{}»".format(
+            item.text(), self.name_input.text()
+        ))
+        item.setText(self.name_input.text())
+
+    # Menubar
     def save_model_fnc(self):
         """ Save as model action
         """
@@ -64,6 +95,18 @@ class MailSchedulerWindow(QtWidgets.QMainWindow):
                 self.filter_selector.currentIndex(),
                 self.filter_input.text()
             ))
+
+    def load_model_fnc(self):
+        """ Load mail action
+        """
+        popup = LoadMailModelWindow(self)
+        if popup.exec():
+            model = popup.get_selected()
+            model_data = api.mail.get_unique_model(name=model)
+            self.subject_input.setText(model_data['subject'])
+            self.message_input.setText(model_data['message'])
+            self.filter_selector.setCurrentIndex(model_data['filter'])
+            self.filter_input.setText(model_data['filter_value'])
 
     def new_mail_fnc(self):
         """ Create new mail action
@@ -84,18 +127,6 @@ class MailSchedulerWindow(QtWidgets.QMainWindow):
         self.subject_input.setText("")
         self.sender_input.setText("cafeteria@enib.fr")
         self.message_input.setPlainText("")
-
-    def load_model_fnc(self):
-        """ Load mail action
-        """
-        popup = LoadMailModelWindow(self)
-        if popup.exec():
-            model = popup.get_selected()
-            model_data = api.mail.get_unique_model(name=model)
-            self.subject_input.setText(model_data['subject'])
-            self.message_input.setText(model_data['message'])
-            self.filter_selector.setCurrentIndex(model_data['filter'])
-            self.filter_input.setText(model_data['filter_value'])
 
     def save_scheduled_mail_fnc(self):
         """ Save scheduled mail action
@@ -121,29 +152,20 @@ class MailSchedulerWindow(QtWidgets.QMainWindow):
                 self.name_input.text()
             ))
 
-    def rename_current_mail(self):
-        item = self.scheduled_mails_list.currentItem()
-        if not item:
-            return
-
-        if item.text() == self.name_input.text():
-            return
-
-        if not api.mail.rename_scheduled_mail(item.text(), self.name_input.text()):
-            return
-
-        self.statusbar.showMessage("Mail «{}» renomé en «{}»".format(
-            item.text(), self.name_input.text()
-        ))
-        item.setText(self.name_input.text())
 
 
 
 class ScheduledMailsList(QtWidgets.QListWidget):
+    """ Scheduled mail list. Required to rewrite keyPressEvent in a clean way
+    """
     def __init__(self, parent):
         super().__init__(parent)
 
     def keyPressEvent(self, event):
+        """ QtListWidget keyPressEvent used to handle scheduled mail deletion
+
+        :param event QKeyboadEvent: Qt keyboard event
+        """
         if event.key() == QtCore.Qt.Key_Delete:
             item = self.currentItem()
             if not item:

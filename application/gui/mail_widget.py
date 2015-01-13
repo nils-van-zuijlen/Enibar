@@ -16,6 +16,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
+"""
+Mail widget
+===========
+
+A collection of widget which are used in almost all related mail window
+"""
 
 from PyQt5 import QtCore, QtWidgets, QtGui
 import weakref
@@ -26,15 +32,29 @@ from .mail_selector_window import MailSelectorWindow
 
 
 class MailFilterSelector(QtWidgets.QComboBox):
+    """ Mail filter selector used to select which filter should be used to match
+    notes to send email to. Filters are defined in api.mail
+    """
     def __init__(self, parent):
         super().__init__(parent)
         self.filter_input = None
 
     def set_filter_input(self, filter_input):
+        """ Set filter input. Link input to the selector so it can disable or
+        enable input when it's relevant and update placeholder text to match
+        filter.
+
+        :param MailFilterInput filter_input: Input you wan to link
+        """
         self.filter_input = filter_input
         self.filter_input.filter_selector = weakref.proxy(self)
 
     def update_filter(self, selected):
+        """ Qt callback to QCombobox.currentIndexChanged to update linked input
+        according to the new selected item
+
+        :param int selected: Current item index
+        """
         if not self.filter_input:
             return
 
@@ -53,11 +73,16 @@ class MailFilterSelector(QtWidgets.QComboBox):
 
 
 class MailFilterInput(QtWidgets.QLineEdit):
+    """ Mail filter input used define filter value.
+    """
     def __init__(self, parent):
         super().__init__(parent)
         self.filter_selector = None
 
     def mousePressEvent(self, event):
+        """ Rewrite of QLineEdit mouse press event so it open a mail selection
+        window when it's clicked and current filter is set to "following notes".
+        """
         if not self.filter_selector or self.filter_selector.currentIndex() != 1:
             return
 

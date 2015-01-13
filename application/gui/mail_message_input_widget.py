@@ -16,12 +16,21 @@
 # You should have received a copy of the GNU General Public License
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
+"""
+Message input widget
+====================
+"""
+
 from PyQt5 import QtCore, QtWidgets, QtGui
 import api.mail
 import re
 
 
 class MailMessageInput(QtWidgets.QTextEdit):
+    """ Mail message input
+    Qt widget used as mail editor which provide tabcompletion of available note
+    fields.
+    """
     def __init__(self, parent=None):
         super().__init__(parent)
         self.completer = QtWidgets.QCompleter(sorted([k for k in api.mail.COMPLETION_FIELD]), self)
@@ -30,6 +39,12 @@ class MailMessageInput(QtWidgets.QTextEdit):
         self.completer.setModelSorting(QtWidgets.QCompleter.CaseSensitivelySortedModel)
 
     def insert_completion(self, completion):
+        """ Insert completion
+        Qt completer callback which insert completion at the current cursor
+        position. Actually it replace the whole word with the one from the
+        completion, allowing us to insert extra { and } before and after the
+        word.
+        """
         text_cursor = self.textCursor()
         for i in range(len(self.completer.completionPrefix())):
             text_cursor.deletePreviousChar()
@@ -38,15 +53,23 @@ class MailMessageInput(QtWidgets.QTextEdit):
         self.setTextCursor(text_cursor);
 
     def focusInEvent(self, event):
+        """ QTextEdit focusInEvent
+        Necessary to avoid Qt errors
+        """
         self.completer.setWidget(self)
         super().focusInEvent(event)
 
     def text_under_cursor(self):
+        """ Get the current word under the cursor
+        """
         text_cursor = self.textCursor()
         text_cursor.select(QtGui.QTextCursor.WordUnderCursor)
         return text_cursor.selectedText()
 
     def keyPressEvent(self, event):
+        """ Qt QTextEdit keyPressEvent
+        Handle tab completion.
+        """
         if self.completer.popup().isVisible():
             blacklisted_keys = [
                 QtCore.Qt.Key_Enter,
@@ -81,3 +104,4 @@ class MailMessageInput(QtWidgets.QTextEdit):
         cr = self.cursorRect()
         cr.setWidth(self.completer.popup().sizeHintForColumn(0) + self.completer.popup().verticalScrollBar().sizeHint().width());
         self.completer.complete(cr);
+
