@@ -158,7 +158,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
         infos = api.notes.get(
             lambda x: self.selected.text() == x["nickname"]
-        )[0]
+        )
+        if infos:
+            infos = infos[0]
         note_hist = api.transactions.get_reversed(note=self.selected.text())
 
         # Construct the note history
