@@ -73,9 +73,14 @@ def _build_stats():
     """
     global NOTES_STATS_FIELDS_CACHE
     with Cursor() as cursor:
-        cursor.prepare("SELECT firstname, lastname, SUM(IF(price>0, price, 0)) as tot_refill,\
+        cursor.prepare("SELECT nickname, notes.firstname, notes.lastname,\
+                        SUM(IF(price>0, price, 0)) as tot_refill,\
                         SUM(IF(price<0, price, 0)) AS tot_cons\
-                        FROM transactions GROUP BY firstname, lastname")
+                        FROM transactions INNER JOIN notes ON\
+                        notes.firstname=transactions.firstname AND\
+                        notes.lastname=transactions.lastname\
+                        GROUP BY firstname, lastname")
+
         if cursor.exec_():
             tot = {}
             while cursor.next():
@@ -83,26 +88,17 @@ def _build_stats():
                 if NOTES_STATS_FIELDS_CACHE == {}:
                     NOTES_STATS_FIELDS_CACHE = {field: record.indexOf(field)
                                                 for field in ('lastname',
+                                                              'nickname',
                                                               'firstname',
                                                               'tot_cons',
                                                               'tot_refill'
                                                              )
                                                }
 
-                try:
-                    note = list(get(lambda x:
-                        x['lastname'] ==
-                        record.value(NOTES_STATS_FIELDS_CACHE["lastname"]) and
-                        x['firstname'] ==
-                        record.value(NOTES_STATS_FIELDS_CACHE["firstname"]
-                        )
-                    )
-                    )[0]['nickname']
-                except IndexError:
-                    continue
+                note = record.value(NOTES_STATS_FIELDS_CACHE['nickname'])
                 tot[note] = {}
-                tot[note]['tot_cons'] = record.value('tot_cons')
-                tot[note]['tot_refill'] = record.value('tot_refill')
+                tot[note]['tot_cons'] = record.value(NOTES_STATS_FIELDS_CACHE['tot_cons'])
+                tot[note]['tot_refill'] = record.value(NOTES_STATS_FIELDS_CACHE['tot_refill'])
             for note in NOTES_CACHE:
                 if note['nickname'] in tot:
                     note['tot_cons'] = tot[note['nickname']]['tot_cons']
