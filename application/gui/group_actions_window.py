@@ -248,6 +248,39 @@ class UniqueConsumptionList(ConsumptionList):
     def __init__(self, parent):
         super().__init__(parent)
 
+    def add_product(self, name, category):
+        """ Add product to consumption list. If the products has no null price
+            only.
+
+        :param str name: Product name
+        :param str category: Category Name
+        """
+        # Find category widget
+        cat_widget = None
+        for cat in self.categories:
+            if category == cat.text(0):
+                cat_widget = cat
+        if not cat_widget:
+            return
+
+        category = api.categories.get_unique(name=category)
+        product = api.products.get_unique(
+            category=category['id'],
+            name=name
+        )
+        if not product:
+            return
+
+        for price in api.prices.get(product=product['id']):
+            if float(price['value']) != 0:
+                break
+        else:
+            return
+
+        prod_widget = QtWidgets.QTreeWidgetItem([name])
+        cat_widget.addChild(prod_widget)
+        self.products.append(prod_widget)
+
     def get_selected_product(self):
         """ Return the current selected product
         """
@@ -277,7 +310,8 @@ class UniqueConsumptionList(ConsumptionList):
         valid_button.setEnabled(False)
         if selected is not None:
             for price in api.prices.get(product=selected["id"]):
-                cb_box.setEnabled(True)
-                valid_button.setEnabled(True)
-                cb_box.addItem(price['label'])
+                if float(price['value']) > 0:
+                    cb_box.setEnabled(True)
+                    valid_button.setEnabled(True)
+                    cb_box.addItem(price['label'])
 
