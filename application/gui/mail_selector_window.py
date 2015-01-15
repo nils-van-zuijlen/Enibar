@@ -44,7 +44,7 @@ class MailSelectorWindow(QtWidgets.QDialog):
         :param list mails: Preselected mails
         """
         for note in api.notes.get():
-            widget = QtWidgets.QTreeWidgetItem(self.mail_list,(
+            widget = QtWidgets.QTreeWidgetItem(self.mail_list, (
                 note['nickname'],
                 note['mail'],
                 note['firstname'],

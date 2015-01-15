@@ -50,7 +50,7 @@ class MailMessageInput(QtWidgets.QTextEdit):
             text_cursor.deletePreviousChar()
         text_cursor.movePosition(QtGui.QTextCursor.EndOfWord)
         text_cursor.insertText("{" + completion + "}")
-        self.setTextCursor(text_cursor);
+        self.setTextCursor(text_cursor)
 
     def focusInEvent(self, event):
         """ QTextEdit focusInEvent
@@ -87,7 +87,7 @@ class MailMessageInput(QtWidgets.QTextEdit):
 
         ctrlOrShift = event.modifiers() and (QtCore.Qt.ControlModifier or QtCore.Qt.ShiftModifier)
         if ctrlOrShift and not event.text():
-            return;
+            return
 
         eow = "~!@#$%^&*()_+|:\"<>?,./;'[]\\-={}"
         hasModifier = (event.modifiers() != QtCore.Qt.NoModifier) and not ctrlOrShift
@@ -99,9 +99,11 @@ class MailMessageInput(QtWidgets.QTextEdit):
 
         if completionPrefix != self.completer.completionPrefix():
             self.completer.setCompletionPrefix(completionPrefix)
-            self.completer.popup().setCurrentIndex(self.completer.completionModel().index(0,0))
+            self.completer.popup().setCurrentIndex(
+                self.completer.completionModel().index(0, 0)
+            )
 
         cr = self.cursorRect()
-        cr.setWidth(self.completer.popup().sizeHintForColumn(0) + self.completer.popup().verticalScrollBar().sizeHint().width());
-        self.completer.complete(cr);
+        cr.setWidth(self.completer.popup().sizeHintForColumn(0) + self.completer.popup().verticalScrollBar().sizeHint().width())
+        self.completer.complete(cr)
 

@@ -154,6 +154,7 @@ def get_models(**filter_):
             'filter_value': record.value('filter_value'),
         }
 
+
 def delete_model(name):
     """ Delete model with given name
 

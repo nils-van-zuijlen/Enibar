@@ -153,8 +153,6 @@ class MailSchedulerWindow(QtWidgets.QMainWindow):
             ))
 
 
-
-
 class ScheduledMailsList(QtWidgets.QListWidget):
     """ Scheduled mail list. Required to rewrite keyPressEvent in a clean way
     """
