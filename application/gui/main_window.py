@@ -494,12 +494,14 @@ class MenuBar(QtWidgets.QMenuBar):
         self.cur_window = SearchWindow(self)
         self._connect_window()
 
-    def send_mail_fnc(self):
+    @ask_auth("manage_products")
+    def send_mail_fnc(self, _):
         """ Open send mail window
         """
         SendMailWindow(self)
 
-    def mail_scheduler_fnc(self):
+    @ask_auth("manage_products")
+    def mail_scheduler_fnc(self, _):
         """ Open mail scheduler window
         """
         MailSchedulerWindow(self)
