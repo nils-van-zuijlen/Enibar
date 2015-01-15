@@ -16,6 +16,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
+"""
+Send mail window
+================
+"""
+
 from PyQt5 import QtCore, QtWidgets, uic
 from .mail_selector_window import MailSelectorWindow
 import api.mail
@@ -27,14 +32,12 @@ class SendMailWindow(QtWidgets.QMainWindow):
     """ Main window used to send simple mail.
     """
     def __init__(self, parent=None):
-        super().__init__()
+        super().__init__(parent)
         uic.loadUi('ui/send_mail_window.ui', self)
 
         # Default value for inputs
         self.destinateur_input.setText("cafeteria@enib.fr")
-
-        # Bind mouse event of filter input
-        self.filter_input.mousePressEvent = self.on_filter_input_click
+        self.filter_selector.set_filter_input(self.filter_input)
 
         # Show window
         self.show()
@@ -50,41 +53,6 @@ class SendMailWindow(QtWidgets.QMainWindow):
                 api.mail.format_message(self.message_input.toPlainText(), recipient),
                 self.destinateur_input.text(),
             )
-
-    def on_filter_selector_change(self, selected):
-        """ On filter selector change
-        Is called when combobox filter is changed. Clean filter_input and set
-        correct placeholder text.
-
-        :param int selected: New value of the combobox.
-        """
-        if selected == 0:
-            self.filter_input.setEnabled(False)
-        else:
-            self.filter_input.setEnabled(True)
-            self.filter_input.setText("")
-
-            if selected == 1:
-                self.filter_input.setPlaceholderText(
-                    "Cliquez pour selctionner des notes"
-                )
-            elif selected >= 2:
-                self.filter_input.setPlaceholderText("Montant à comparer")
-
-    def on_filter_input_click(self, event):
-        """ On filter input click
-        Trigger the opening of a note selction list in a new QDialog and fill
-        the filter_input with a list of mail address separated by comma. This
-        format will be used latter when applying filters.
-
-        :param QKeyboardEvent: Keyboard event given by Qt
-        """
-        if self.filter_selector.currentIndex() != 1:
-            return
-        popup = MailSelectorWindow(self, self.filter_input.text().split(','))
-        if popup.exec():
-            mails = popup.get_mail_list()
-            self.filter_input.setText(','.join(mails))
 
     def get_recipient_list(self):
         """ Get recipient list

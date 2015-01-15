@@ -18,21 +18,8 @@
   </property>
   <widget class="QWidget" name="main_layout">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="4" column="3" colspan="2">
-     <widget class="QPushButton" name="send_button">
-      <property name="text">
-       <string>Envoyer</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1" colspan="4">
-     <widget class="QLineEdit" name="subject_input"/>
-    </item>
     <item row="0" column="1" colspan="4">
      <widget class="QLineEdit" name="destinateur_input"/>
-    </item>
-    <item row="3" column="0" colspan="5">
-     <widget class="MailMessageInput" name="message_input"/>
     </item>
     <item row="0" column="0">
      <widget class="QLabel" name="destinateur_label">
@@ -41,21 +28,35 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="0" colspan="2">
-     <spacer name="spacer_1">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
+    <item row="2" column="1" colspan="4">
+     <widget class="QLineEdit" name="subject_input"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="MailFilterSelector" name="filter_selector">
+      <item>
+       <property name="text">
+        <string>Toutes les notes</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Notes suivantes</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Notes supérieures au montant</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Notes inférieures au montant</string>
+       </property>
+      </item>
+     </widget>
     </item>
     <item row="1" column="1" colspan="4">
-     <widget class="QLineEdit" name="filter_input">
+     <widget class="MailFilterInput" name="filter_input">
       <property name="enabled">
        <bool>false</bool>
       </property>
@@ -81,29 +82,28 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
-     <widget class="QComboBox" name="filter_selector">
-      <item>
-       <property name="text">
-        <string>Toutes les notes</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Notes suivantes</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Notes supérieures au montant</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Notes inférieures au montant</string>
-       </property>
-      </item>
+    <item row="4" column="0" colspan="2">
+     <spacer name="spacer_1">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="4" column="3" colspan="2">
+     <widget class="QPushButton" name="send_button">
+      <property name="text">
+       <string>Envoyer</string>
+      </property>
      </widget>
+    </item>
+    <item row="3" column="0" colspan="5">
+     <widget class="MailMessageInput" name="message_input"/>
     </item>
    </layout>
   </widget>
@@ -154,6 +154,22 @@
    <extends>QTextEdit</extends>
    <header>gui/mail_message_input_widget</header>
   </customwidget>
+  <customwidget>
+   <class>MailFilterSelector</class>
+   <extends>QComboBox</extends>
+   <header>gui/mail_widget</header>
+   <slots>
+    <slot>update_filter(int)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>MailFilterInput</class>
+   <extends>QLineEdit</extends>
+   <header>gui/mail_widget</header>
+   <slots>
+    <slot>on_click()</slot>
+   </slots>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>destinateur_input</tabstop>
@@ -168,16 +184,16 @@
   <connection>
    <sender>filter_selector</sender>
    <signal>currentIndexChanged(int)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_filter_selector_change()</slot>
+   <receiver>filter_selector</receiver>
+   <slot>update_filter(int)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>41</x>
      <y>66</y>
     </hint>
     <hint type="destinationlabel">
-     <x>399</x>
-     <y>299</y>
+     <x>107</x>
+     <y>66</y>
     </hint>
    </hints>
   </connection>
