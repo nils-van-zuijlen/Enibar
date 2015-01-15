@@ -139,6 +139,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.note_box.setEnabled(True)
         self.refill_note.setEnabled(True)
         self.empty_note.setEnabled(True)
+        # We need that beaucause of #114
+        self.take_ecocup_btn.setEnabled(True)
+
         self.note_history.clear()
         if index >= 0:
             self.selected = QtWidgets.QListWidgetItem(self.notes_list.item(index))

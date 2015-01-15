@@ -20,6 +20,7 @@ import basetest
 import gui.search_window
 import gui.main_window
 import api.notes
+from PyQt5 import QtTest
 
 
 class SearchTest(basetest.BaseGuiTest):
@@ -50,4 +51,16 @@ class SearchTest(basetest.BaseGuiTest):
         self.assertEqual(self.get_items(self.main_win.notes_list), ['test', 'test1'])
         self.search_window.name_input.setText("rty")
         self.assertEqual(self.get_items(self.main_win.notes_list), ['test2'])
+
+    def test_regression_114(self):
+        """ Testing #114 regression
+        """
+        self.search_window.firstname_input.setText("z")
+        self.search_window.firstname_input.setText("za")
+        self.assertEqual(self.get_items(self.main_win.notes_list), [])
+        QtTest.QTest.qWait(500)
+        self.assertFalse(self.main_win.take_ecocup_btn.isEnabled())
+        self.search_window.firstname_input.setText("")
+        QtTest.QTest.qWait(500)
+        self.assertTrue(self.main_win.take_ecocup_btn.isEnabled())
 
