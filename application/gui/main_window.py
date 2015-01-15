@@ -504,9 +504,6 @@ class MenuBar(QtWidgets.QMenuBar):
         """
         MailSchedulerWindow(self)
 
-    def mail_models_fnc(self):
-        pass
-
     def stats_by_note_fnc(self):
         """ Open a StatsWindow by note
         """

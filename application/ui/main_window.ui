@@ -704,8 +704,6 @@
     </property>
     <addaction name="send_mail"/>
     <addaction name="mail_scheduler"/>
-    <addaction name="separator"/>
-    <addaction name="mail_manage_models"/>
    </widget>
    <addaction name="administration"/>
    <addaction name="menuNotes"/>
@@ -885,7 +883,6 @@
     <slot>stats_by_category_fnc()</slot>
     <slot>send_mail_fnc()</slot>
     <slot>mail_scheduler_fnc()</slot>
-    <slot>mail_models_fnc()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -1306,22 +1303,6 @@
    <signal>triggered()</signal>
    <receiver>menu_bar</receiver>
    <slot>mail_scheduler_fnc()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>441</x>
-     <y>9</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mail_manage_models</sender>
-   <signal>triggered()</signal>
-   <receiver>menu_bar</receiver>
-   <slot>mail_models_fnc()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
