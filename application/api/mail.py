@@ -154,6 +154,17 @@ def get_models(**filter_):
             'filter_value': record.value('filter_value'),
         }
 
+def delete_model(name):
+    """ Delete model with given name
+
+    :param str name: Model name
+    """
+    with Cursor() as cursor:
+        cursor.prepare("DELETE FROM mail_models WHERE name=:name")
+        cursor.bindValue(':name', name)
+        cursor.exec_()
+        return not cursor.lastError().isValid()
+
 
 def get_scheduled_mails(**filter_):
     """ Get scheduled mails

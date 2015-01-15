@@ -16,6 +16,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
+"""
+Save mail model window
+======================
+
+"""
+
 from PyQt5 import QtCore, QtWidgets, uic
 
 
