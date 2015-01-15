@@ -17,6 +17,6 @@ CREATE TABLE IF NOT EXISTS scheduled_mails(
 	schedule_interval SMALLINT UNSIGNED default 1,
 	schedule_unit enum('day', 'week', 'month') default "day",
 	schedule_day TINYINT default 0,
-	last_sent DATETIME
+	last_sent DATE
 ) ENGINE=InnoDB
 
