@@ -20,11 +20,7 @@ import basetest
 
 import api.products as products
 import api.categories as categories
-import api.prices as prices
 import api.panels as panels
-from test_api_products import ProductsTest
-from test_api_prices import PricesTest
-from database import Cursor
 
 
 class CategoriesTest(basetest.BaseTest):
@@ -34,14 +30,6 @@ class CategoriesTest(basetest.BaseTest):
         self.cat_drink = categories.add("Boire")
         self.banana = products.add("Banane", category_name="Manger")
         self.bier = products.add("Biere", category_name="Boire")
-
-    @classmethod
-    def count_panels(cls):
-        """ Returns the number of panels currently in database """
-        with Cursor() as cursor:
-            cursor.exec("SELECT COUNT(*) FROM panels")
-            if cursor.next():
-                return cursor.record().value(0)
 
     def test_add_panel(self):
         """ Testing add_panel

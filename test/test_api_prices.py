@@ -25,20 +25,6 @@ from database import Cursor
 
 
 class PricesTest(basetest.BaseTest):
-    @classmethod
-    def count_descriptors(cls):
-        with Cursor() as cursor:
-            cursor.exec("SELECT COUNT(*) FROM price_description")
-            if cursor.next():
-                return cursor.record().value(0)
-
-    @classmethod
-    def count_prices(cls):
-        with Cursor() as cursor:
-            cursor.exec("SELECT COUNT(*) FROM prices")
-            if cursor.next():
-                return cursor.record().value(0)
-
     def setUp(self):
         self._reset_db()
         self.cat_eat = api.categories.add("Manger")

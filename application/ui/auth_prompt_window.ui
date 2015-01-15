@@ -85,6 +85,7 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>login_input</tabstop>
   <tabstop>pass_input</tabstop>
   <tabstop>accept_button</tabstop>
   <tabstop>cancel_button</tabstop>

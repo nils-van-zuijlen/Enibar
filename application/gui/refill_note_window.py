@@ -52,27 +52,28 @@ class RefillNoteWindow(QtWidgets.QDialog):
         """ Called when "Ajouter" is clicked
         """
         to_add = float(self.to_add.text().replace(',', '.'))
+        # See #96
+        if not round(to_add, 2) > 0:
+            gui.utils.error("Erreur", "La valeur à ajouter doit etre superieur à\
+                0.01€")
+            return
+
         prompt = ValidationWindow("Etes vous sûr de vouloir ajouter {} € sur la note\
             \nde {}".format(self.to_add.text(), self.selected_note),
             settings.ASK_VALIDATION_REFILL)
         if not prompt.is_ok:
             return
-        # See #96
-        if round(to_add, 2) > 0:
-            reason = self.reason.text()
-            api.notes.transactions([self.selected_note, ], to_add)
-            api.transactions.log_transaction(
-                self.selected_note,
-                "Note",
-                "{} {}".format(self.performer, "[{}]".format(reason) if reason else ""),
-                "Rechargement",
-                "1",
-                to_add
-            )
-            super().accept()
-        else:
-            gui.utils.error("Erreur", "La valeur à ajouter doit etre superieur à\
-                0.01€")
+        reason = self.reason.text()
+        api.notes.transactions([self.selected_note, ], to_add)
+        api.transactions.log_transaction(
+            self.selected_note,
+            "Note",
+            "{} {}".format(self.performer, "[{}]".format(reason) if reason else ""),
+            "Rechargement",
+            "1",
+            to_add
+        )
+        super().accept()
 
     def on_change(self):
         """ Set state of the validation button.
@@ -92,6 +93,7 @@ class MultiRefillNoteWindow(QtWidgets.QDialog):
         uic.loadUi('ui/refill_note_window.ui', self)
         self.performer = performer
         self.to_add.set_validator(api.validator.NUMBER)
+        self.reason.set_validator(api.validator.NOTHING)
         self.to_add.setFocus()
         self.to_add_value = 0
 
@@ -101,16 +103,16 @@ class MultiRefillNoteWindow(QtWidgets.QDialog):
         """ Called when "Ajouter" is clicked
         """
         to_add = float(self.to_add.text().replace(',', '.'))
+        if round(to_add, 2) < 0.01:
+            gui.utils.error("Erreur", "La valeur à ajouter doit etre superieur à\
+                0.01€")
+            return
         prompt = ValidationWindow("Etes vous sûr de vouloir ajouter {} € sur les\
             \nnotes selectionées".format(self.to_add.text()),
             settings.ASK_VALIDATION_REFILL)
         if not prompt.is_ok:
             return
         self.to_add_value = to_add
-        if round(to_add, 2) < 0.01:
-            gui.utils.error("Erreur", "La valeur à ajouter doit etre superieur à\
-                0.01€")
-            self.to_add_value = 0
         super().accept()
 
     def on_change(self):

@@ -40,10 +40,8 @@ class EmptyNoteWindow(QtWidgets.QDialog):
         uic.loadUi('ui/refill_note_window.ui', self)
         self.to_add.set_validator(api.validator.NUMBER)
         self.to_add.setFocus()
-        self.reason_input = Input(self)
-        self.reason_input.set_validator(api.validator.NAME)
-        self.reason_input.setPlaceholderText("Raison")
-        self.main_layout.addWidget(self.reason_input, 1, 0)
+        self.reason.set_validator(api.validator.NAME)
+        self.reason.setPlaceholderText("Raison")
         self.setWindowTitle("Prendre d'une note")
         self.selected_note = selected_note
         self.to_add.setLocale(QtCore.QLocale('English'))
@@ -61,7 +59,7 @@ class EmptyNoteWindow(QtWidgets.QDialog):
             api.transactions.log_transaction(
                 self.selected_note,
                 "Note",
-                self.reason_input.text(),
+                self.reason.text(),
                 "Solde",
                 "1",
                 -to_add
@@ -74,7 +72,7 @@ class EmptyNoteWindow(QtWidgets.QDialog):
     def on_change(self):
         """ Set the state of the validation button
         """
-        if self.to_add.valid and self.reason_input.valid:
+        if self.to_add.valid and self.reason.valid:
             self.valid_button.setEnabled(True)
         else:
             self.valid_button.setEnabled(False)

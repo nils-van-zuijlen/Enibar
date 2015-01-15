@@ -39,6 +39,8 @@ class ProductsManagementWindow(QtWidgets.QDialog):
     def __init__(self):
         super().__init__()
         uic.loadUi('ui/products_management_window.ui', self)
+        self.tab_manage_categories.on_change = self.on_change
+        self.tab_manage_consumptions.on_change = self.on_change
         self.input_cat.set_validator(api.validator.NAME)
         self.input_product.set_validator(api.validator.NAME)
         self.category = None
@@ -47,8 +49,6 @@ class ProductsManagementWindow(QtWidgets.QDialog):
         self.win = None
         self.tabs.currentChanged.connect(self.products.rebuild)
         self.show()
-        self.tab_manage_categories.on_change = self.on_change
-        self.tab_manage_consumptions.on_change = self.on_change
 
     def on_change(self):
         """ Called when the inputs change

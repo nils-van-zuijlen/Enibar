@@ -20,7 +20,6 @@ import basetest
 
 import api.products as products
 import api.categories as categories
-from database import Cursor
 
 
 class ProductsTest(basetest.BaseTest):
@@ -29,14 +28,6 @@ class ProductsTest(basetest.BaseTest):
         self.cat_eat = categories.add("Manger")
         self.cat_drink = categories.add("Boire")
         self.cat_soft = categories.add("Soft")
-
-    @classmethod
-    def count_products(cls):
-        """ Returns the number of products currently in database """
-        with Cursor() as cursor:
-            cursor.exec("SELECT COUNT(*) FROM products")
-            if cursor.next():
-                return cursor.record().value(0)
 
     def test_add_with_cat_name(self):
         """ Testing adding products with category name """

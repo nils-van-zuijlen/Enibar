@@ -18,10 +18,11 @@
 
 
 TEST_FAILED=0
+export USE_VD=1
 APPLICATION_DIR="application"
 cd $APPLICATION_DIR
 
-TEMP=`getopt -o tp --long test,pep,no-docker -- "$@"`
+TEMP=`getopt -o tp --long test,pep,no-docker,no-vd -- "$@"`
 eval set -- "$TEMP"
 
 # == EXTRACT OPTIONS
@@ -35,6 +36,9 @@ while true ; do
 			shift ;;
 		--no-docker)
 			NODOCKER=1
+			shift;;
+		--no-vd)
+			export USE_VD=0
 			shift;;
 		--) shift ; break ;;
 		*) echo "Internal error!" ; exit 1 ;;
@@ -61,8 +65,8 @@ if [[ $TEST == 1 ]]; then
 	fi
 
 	# -- TEST --
-	rm -f $APPLICATION_DIR/.coverage
-	nosetests ../test/*.py -v --with-coverage --cover-package=api || TEST_FAILED=1
+	rm -f .coverage
+	nosetests ../test/*.py -v --with-coverage --cover-package=api,gui || TEST_FAILED=1
 
 	mv settings.py.bak settings.py
 fi

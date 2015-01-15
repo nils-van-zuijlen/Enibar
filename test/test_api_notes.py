@@ -22,7 +22,6 @@ import time
 import os.path
 import PyQt5
 import api.notes as notes
-from database import Cursor
 
 
 class NotesTest(basetest.BaseTest):
@@ -37,24 +36,6 @@ class NotesTest(basetest.BaseTest):
             os.remove("img/coucou2.jpg")
         except FileNotFoundError:
             pass
-
-    def add_note(self, nick):
-        return notes.add(nick,
-            "test1",
-            "test1",
-            "test@pouette.com",
-            "0600000000",
-            '12/12/2001',
-            '1A',
-            ''
-        )
-
-    def count_notes(self):
-        """ Returns the number of notes currently in database """
-        with Cursor() as cursor:
-            cursor.exec("SELECT COUNT(*) FROM notes")
-            if cursor.next():
-                return cursor.record().value(0)
 
     def test_add(self):
         """ Testing adding notes """
@@ -452,7 +433,7 @@ class NotesTest(basetest.BaseTest):
         """
         self.add_note("test")
         self.add_note("test2")
-        self.assertTrue(notes.import_csv(["test", ], "couocu", -2.5))
+        self.assertEqual(notes.import_csv(["test", ], "couocu", -2.5), 1)
         self.assertEqual(notes.get(lambda x: x['nickname'] == "test")[0]['note'], -2.5)
         self.assertEqual(notes.get(lambda x: x['nickname'] == "test2")[0]['note'], 0)
 

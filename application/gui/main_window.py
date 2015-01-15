@@ -146,6 +146,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.note_box.setEnabled(True)
         self.refill_note.setEnabled(True)
         self.empty_note.setEnabled(True)
+        # We need that beaucause of #114
+        self.take_ecocup_btn.setEnabled(True)
+
         self.note_history.clear()
         if index >= 0:
             self.selected = QtWidgets.QListWidgetItem(self.notes_list.item(index))
@@ -165,7 +168,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
         infos = api.notes.get(
             lambda x: self.selected.text() == x["nickname"]
-        )[0]
+        )
+        if infos:
+            infos = infos[0]
         note_hist = api.transactions.get_reversed(note=self.selected.text())
 
         # Construct the note history
