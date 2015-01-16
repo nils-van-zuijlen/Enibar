@@ -59,12 +59,12 @@ class PricesTest(basetest.BaseTest):
     def test_remove_description_extended(self):
         """ Testing advanced feature of description removing """
         did1 = api.prices.add_descriptor("Unité", self.cat_eat)
-        pid11 = api.products.add("Lapin", category_id=self.cat_eat)
-        pid12 = api.products.add("Lapine", category_id=self.cat_eat)
+        api.products.add("Lapin", category_id=self.cat_eat)
+        api.products.add("Lapine", category_id=self.cat_eat)
 
-        did2 = api.prices.add_descriptor("Unité", self.cat_drink)
-        pid21 = api.products.add("Lapon", category_id=self.cat_drink)
-        pid22 = api.products.add("Lapone", category_id=self.cat_drink)
+        api.prices.add_descriptor("Unité", self.cat_drink)
+        api.products.add("Lapon", category_id=self.cat_drink)
+        api.products.add("Lapone", category_id=self.cat_drink)
 
         self.assertEqual(self.count_prices(), 4)
         self.assertTrue(api.prices.remove_descriptor(did1))
@@ -138,7 +138,7 @@ class PricesTest(basetest.BaseTest):
         desc_id1 = api.prices.add_descriptor("Unité", self.cat_eat)
         desc_id2 = api.prices.add_descriptor("Kilo", self.cat_eat)
         id1 = api.prices.add(pid, desc_id1, 0)
-        id2 = api.prices.add(pid, desc_id2, 0)
+        api.prices.add(pid, desc_id2, 0)
         self.assertIsNone(api.prices.get_unique(value=0))
         self.assertEqual(api.prices.get_unique(id=id1), {
             'id': id1,

@@ -68,8 +68,8 @@ class UsersTest(basetest.BaseTest):
     def test_rights(self):
         """ Testing rights """
 
-        id1 = users.add("test", "test")
-        id2 = users.add("test2", "test")
+        users.add("test", "test")
+        users.add("test2", "test")
 
         self.assertTrue(users.set_rights("test", {'manage_users': True,
                                   'manage_notes': False,
@@ -90,9 +90,9 @@ class UsersTest(basetest.BaseTest):
     def test_issue_24(self):
         """ Testing issue #24 regression.
         """
-        id1 = users.add("test", "test")
-        id2 = users.add("test2", "test")
-        id3 = users.add("test3", "test")
+        users.add("test", "test")
+        users.add("test2", "test")
+        users.add("test3", "test")
         users.set_rights("test", {'manage_users': True,
                                   'manage_notes': False,
                                   'manage_products': False})
@@ -108,9 +108,9 @@ class UsersTest(basetest.BaseTest):
     def test_issue_43(self):
         """ Testing issue #43 regression.
         """
-        id1 = users.add("test", "test")
-        id2 = users.add("test2", "test")
-        id3 = users.add("test3", "test")
+        users.add("test", "test")
+        users.add("test2", "test")
+        users.add("test3", "test")
         self.assertTrue(users.set_rights("test", {'manage_users': True,
                                                   'manage_notes': False,
                                                   'manage_products': False}))
@@ -130,9 +130,9 @@ class UsersTest(basetest.BaseTest):
     def test_issue_69(self):
         """ Testing issue #69 regression.
         """
-        id1 = users.add("test", "test")
-        id2 = users.add("test2", "test")
-        id3 = users.add("test3", "test")
+        users.add("test", "test")
+        users.add("test2", "test")
+        users.add("test3", "test")
         users.set_rights("test", {'manage_users': True,
                                   'manage_notes': False,
                                   'manage_products': False})

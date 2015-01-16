@@ -51,8 +51,8 @@ class UsersManagementTest(basetest.BaseGuiTest):
             win.username_input.setText("coucou")
             win.password_input.setText("coucou")
             win.validation_button.click()
-            timer = QtCore.QTimer.singleShot(200, verif)
-        timer = QtCore.QTimer.singleShot(200, callback)
+            QtCore.QTimer.singleShot(200, verif)
+        QtCore.QTimer.singleShot(200, callback)
         self.win.add_button.click()
 
     def test_remove_user(self):
@@ -88,12 +88,12 @@ class UsersManagementTest(basetest.BaseGuiTest):
             self.assertIsInstance(win, gui.users_management_window.AddUserPrompt)
             win.username_input.setText("test")
             win.password_input.setText("coucou")
-            timer = QtCore.QTimer.singleShot(1500, verif)
+            QtCore.QTimer.singleShot(1500, verif)
             win.validation_button.click()
             self.win.close()
             win.close()
         api.users.add('test', 'test')
-        timer = QtCore.QTimer.singleShot(200, callback)
+        QtCore.QTimer.singleShot(200, callback)
         self.win.add_button.click()
 
     def test_save_no_user(self):
@@ -106,7 +106,7 @@ class UsersManagementTest(basetest.BaseGuiTest):
             win.accept()
         self.delete_users()
         self.win = gui.users_management_window.UsersManagementWindow()
-        timer = QtCore.QTimer.singleShot(200, callback)
+        QtCore.QTimer.singleShot(200, callback)
         self.win.save_button.click()
 
     def test_delete_no_user(self):
@@ -119,5 +119,5 @@ class UsersManagementTest(basetest.BaseGuiTest):
             win.accept()
         self.delete_users()
         self.win = gui.users_management_window.UsersManagementWindow()
-        timer = QtCore.QTimer.singleShot(200, callback)
+        QtCore.QTimer.singleShot(200, callback)
         self.win.delete_button.click()

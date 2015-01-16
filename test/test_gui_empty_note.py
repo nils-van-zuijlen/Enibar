@@ -48,6 +48,6 @@ class EmpttNoteTest(basetest.BaseGuiTest):
             win.accept()
         self.win.to_add.setText("0.001")
         self.win.reason.setText("coucou")
-        timer = QtCore.QTimer.singleShot(200, callback)
+        QtCore.QTimer.singleShot(200, callback)
         self.win.accept()
 

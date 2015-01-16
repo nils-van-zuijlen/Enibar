@@ -64,7 +64,7 @@ class TestAuthPrompt(basetest.BaseGuiTest):
     def fill_fail_auth(self, callback):
         """ Used to fill the window
         """
-        timer = QtCore.QTimer.singleShot(1000, callback)
+        QtCore.QTimer.singleShot(1000, callback)
         win = self.app.activeWindow()
         win.pass_input.setText("coucuo")
         win.accept()
@@ -78,13 +78,13 @@ class TestAuthPrompt(basetest.BaseGuiTest):
             self.assertIn("Personne n'a", win.informativeText())
             win.accept()
             self.assertFalse(self.func_called)
-        timer = QtCore.QTimer.singleShot(200, callback)
+        QtCore.QTimer.singleShot(200, callback)
         self.func_inexistant()
 
     def test_bad_passwd(self):
         """ Testing bad password auth
         """
-        def second_callback():
+        def callback():
             """ used to make verif
             """
             win = self.app.activeWindow()
@@ -92,7 +92,7 @@ class TestAuthPrompt(basetest.BaseGuiTest):
             self.assertIn("Erreur d'auth", win.informativeText())
             win.accept()
             self.assertFalse(self.func_called)
-        timer = QtCore.QTimer.singleShot(200, lambda: self.fill_fail_auth(callback))
+        QtCore.QTimer.singleShot(200, lambda: self.fill_fail_auth(callback))
 
     def test_fail_callback(self):
         """ Testing fail callback in auth
@@ -102,7 +102,7 @@ class TestAuthPrompt(basetest.BaseGuiTest):
             self.assertFalse(self.func_called)
             win.accept()
 
-        timer = QtCore.QTimer.singleShot(500, lambda: self.fill_fail_auth(callback))
+        QtCore.QTimer.singleShot(500, lambda: self.fill_fail_auth(callback))
         self.func_callback()
 
     def test_pass_performer(self):
@@ -112,6 +112,6 @@ class TestAuthPrompt(basetest.BaseGuiTest):
             win = self.app.activeWindow()
             win.pass_input.setText("azerty")
             win.accept()
-        timer = QtCore.QTimer.singleShot(200, callback)
+        QtCore.QTimer.singleShot(200, callback)
         self.func_performer()
 

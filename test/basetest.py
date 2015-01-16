@@ -81,7 +81,6 @@ def run(self, test):
         stopTestRun = getattr(result, 'stopTestRun', None)
         if stopTestRun is not None:
             stopTestRun()
-    run = result.testsRun
 
     return result
 
@@ -100,7 +99,7 @@ class BaseTest(unittest.TestCase):
         """ ignore is a list of keys to ignore but that should be there in d1
         """
         if ignore is None:
-            self.assertEqual(d1 == d2)
+            self.assertEqual(d1, d2)
         else:
             for key, value in d1.items():
                 if key not in ignore:
@@ -196,7 +195,7 @@ class BaseGuiTest(BaseTest):
             auth_window = self.app.activeWindow()
             auth_window.pass_input.setText("azerty")
             auth_window.accept_button.click()
-        timer = QtCore.QTimer().singleShot(200, connect_callback)
+        QtCore.QTimer().singleShot(200, connect_callback)
 
     def get_items(self, qlist):
         return [qlist.item(i).text() for i in range(qlist.count())]

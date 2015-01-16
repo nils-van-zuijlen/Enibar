@@ -89,7 +89,7 @@ class CategoriesTest(basetest.BaseTest):
         """ Testing add_products
         """
         pan = panels.add("Test")
-        pan2 = panels.add("Test2")
+        panels.add("Test2")
         pro = products.add("coucou", category_name="Manger")
         pro2 = products.add("coucou", category_name="Boire")
         panels.add_products(pan, [pro, pro2])
