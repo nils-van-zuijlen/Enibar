@@ -118,11 +118,11 @@ class BaseTest(unittest.TestCase):
         for d1, d2 in zip(l1, l2):
             self.assertMyDictEqual(d1, d2, ignore=ignore)
 
-    def add_note(self, nick, name="test1", first_name="test1"):
+    def add_note(self, nick, name="test1", first_name="test1", mail="test@pouette.fr"):
         return api.notes.add(nick,
             first_name,
             name,
-            "test@pouette.com",
+            mail,
             "0600000000",
             '12/12/2001',
             '1A',
@@ -199,6 +199,9 @@ class BaseGuiTest(BaseTest):
 
     def get_items(self, qlist):
         return [qlist.item(i).text() for i in range(qlist.count())]
+
+    def get_tree(self, qtree):
+        return [[qtree.topLevelItem(i).text(j) for j in range(qtree.topLevelItem(i).columnCount())] for i in range(qtree.topLevelItemCount())]
 
 
 TextTestResult.getDescription = getDescription
