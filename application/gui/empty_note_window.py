@@ -30,7 +30,6 @@ import api.notes
 import api.transactions
 import api.validator
 import gui.utils
-from gui.input_widget import Input
 
 
 class EmptyNoteWindow(QtWidgets.QDialog):

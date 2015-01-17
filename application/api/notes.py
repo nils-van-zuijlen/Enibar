@@ -26,7 +26,6 @@ from PyQt5 import QtSql
 import api.transactions
 from database import Cursor, Database
 import datetime
-import re
 import os.path
 import settings
 import shutil
