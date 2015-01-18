@@ -18,8 +18,10 @@
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 from PyQt5 import QtCore, QtWidgets, QtTest, QtGui
+import time
 import basetest
 import gui.send_mail_window
+import gui.mail_selector_window
 import api.notes
 import api.mail
 
@@ -100,4 +102,79 @@ class MailTest(basetest.BaseGuiTest):
             win.accept()
         QtCore.QTimer.singleShot(200, callback)
         self.win.open_model_btn.trigger()
+
+    def test_filter_selector(self):
+        """ Testing filter selector
+        """
+        self.win.filter_selector.setCurrentIndex(0)
+        self.assertFalse(self.win.filter_input.isEnabled())
+        for i in [1,2,3]:
+            self.win.filter_selector.setCurrentIndex(i)
+            self.assertTrue(self.win.filter_input.isEnabled())
+
+    def test_filter_input_click(self):
+        """ Testing filter input click
+        """
+        def callback():
+            win = self.app.activeWindow()
+            instance = isinstance(win, gui.mail_selector_window.MailSelectorWindow)
+            self.assertFalse(instance)
+            if instance:
+                win.accept()
+
+        self.win.filter_selector.setCurrentIndex(0)
+        QtCore.QTimer.singleShot(200, callback)
+        QtTest.QTest.mouseClick(self.win.filter_input, QtCore.Qt.LeftButton)
+
+        time.sleep(0.300)
+        self.win.filter_selector.setCurrentIndex(2)
+        QtCore.QTimer.singleShot(200, callback)
+        QtTest.QTest.mouseClick(self.win.filter_input, QtCore.Qt.LeftButton)
+
+        time.sleep(0.300)
+        self.win.filter_selector.setCurrentIndex(3)
+        QtCore.QTimer.singleShot(200, callback)
+        QtTest.QTest.mouseClick(self.win.filter_input, QtCore.Qt.LeftButton)
+
+        def callback():
+            win = self.app.activeWindow()
+            instance = isinstance(win, gui.mail_selector_window.MailSelectorWindow)
+            self.assertTrue(instance)
+            item = win.mail_list.topLevelItem(0)
+            win.mail_list.setCurrentItem(item)
+            win.accept()
+
+        time.sleep(0.300)
+        self.win.filter_selector.setCurrentIndex(1)
+        QtCore.QTimer.singleShot(200, callback)
+        QtTest.QTest.mouseClick(self.win.filter_input, QtCore.Qt.LeftButton)
+        self.assertEqual(self.win.filter_input.text(), "n2name@enib.fr")
+
+        def callback():
+            win = self.app.activeWindow()
+            instance = isinstance(win, gui.mail_selector_window.MailSelectorWindow)
+            self.assertTrue(instance)
+            items = win.mail_list.selectedItems()
+            self.assertEqual(len(items), 1)
+            win.accept()
+
+        time.sleep(0.300)
+        QtCore.QTimer.singleShot(200, callback)
+        self.win.filter_input.setText("n2name@enib.fr")
+        QtTest.QTest.mouseClick(self.win.filter_input, QtCore.Qt.LeftButton)
+
+        def callback():
+            win = self.app.activeWindow()
+            instance = isinstance(win, gui.mail_selector_window.MailSelectorWindow)
+            self.assertTrue(instance)
+            items = win.mail_list.selectedItems()
+            print(items)
+            self.assertEqual(len(items), 0)
+            win.accept()
+
+        time.sleep(0.300)
+        QtCore.QTimer.singleShot(200, callback)
+        self.win.filter_input.setText("")
+        QtTest.QTest.mouseClick(self.win.filter_input, QtCore.Qt.LeftButton)
+
 
