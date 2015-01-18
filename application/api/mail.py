@@ -29,6 +29,7 @@ import smtplib
 import ssl
 import sys
 import re
+import datetime
 from email.mime.text import MIMEText
 from database import Cursor
 import api.base
@@ -85,6 +86,7 @@ def get_recipients(filter_, filter_arg):
     except KeyError:
         return []
 
+
 def send_mail(to, subject, message, from_="cafeteria@enib.fr"):
     """ Send mail
 
@@ -117,10 +119,20 @@ def format_message(message, note):
     :param dict note: A dict describing a note
     :return str: text with converted placeholders to their values
     """
+    note = dict(note) # Create a copy of note to avoid modify the real note
     for field in COMPLETION_FIELD:
         message = re.sub(
             "{" + field + "}", "{" + COMPLETION_FIELD[field] + "}", message
         )
+
+    # Change all date to readable format
+    note['birthdate'] = datetime.date.fromtimestamp(note['birthdate'])
+    note['birthdate'] = note['birthdate'].strftime("%d/%m/%Y")
+    if note['overdraft_date'].isValid():
+        note['overdraft_date'] = note['overdraft_date'].toString("dd/MM/yyyy")
+    else:
+        note['overdraft_date'] = "Jamais"
+
     return message.format(**note)
 
 
