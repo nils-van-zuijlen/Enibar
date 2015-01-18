@@ -44,7 +44,10 @@ class LoadMailModelWindow(QtWidgets.QDialog):
     def get_selected(self):
         """ Get current selected name
         """
-        return self.model_list.currentItem().text()
+        if self.model_list.currentItem():
+            return self.model_list.currentItem().text()
+        else:
+            return None
 
     def keyPressEvent(self, event):
         """ Rewrite QDialog KeyPressEvent to enable on the fly model deletion
