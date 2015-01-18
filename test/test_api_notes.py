@@ -100,7 +100,7 @@ class NotesTest(basetest.BaseTest):
 
     def test_get_by_name(self):
         """ Testing get_by_name """
-        id1 = notes.add("test0",
+        notes.add("test0",
             "test",
             "test",
             "test@pouette.com",
@@ -109,7 +109,7 @@ class NotesTest(basetest.BaseTest):
             '1A',
             ''
         )
-        id2 = notes.add("test1",
+        notes.add("test1",
             "test",
             "test",
             "test@pouette.com",
@@ -118,7 +118,7 @@ class NotesTest(basetest.BaseTest):
             '1A',
             ''
         )
-        id3 = notes.add("pouette",
+        notes.add("pouette",
             "test",
             "test",
             "test@pouette.com",
@@ -149,7 +149,7 @@ class NotesTest(basetest.BaseTest):
         time0 = round(time.time() - 19 * 365 * 24 * 3600)
         time1 = round(time.time() - 17 * 365 * 24 * 3600)
         dt1 = int(datetime.datetime.fromtimestamp(time1).replace(hour=0, minute=0, second=0).timestamp())
-        id0 = notes.add("test0",
+        notes.add("test0",
             "test",
             "test",
             "test@pouette.com",
@@ -198,7 +198,7 @@ class NotesTest(basetest.BaseTest):
             '1A',
             ''
         )
-        id1 = notes.add("test1",
+        notes.add("test1",
             "test",
             "test",
             "test@pouette.com",
@@ -228,8 +228,8 @@ class NotesTest(basetest.BaseTest):
         """ Testing transactions
         """
 
-        id0 = self.add_note("test0")
-        id1 = self.add_note("test1")
+        self.add_note("test0")
+        self.add_note("test1")
 
         notes.transactions(['test0', 'test1'], 10)
         for note in notes.get():
@@ -250,7 +250,7 @@ class NotesTest(basetest.BaseTest):
 
     def test_export_xml(self):
         """ Testing notes exporting """
-        id1 = notes.add("test1",
+        notes.add("test1",
             "test",
             "test",
             "test@pouette.com",
@@ -259,7 +259,7 @@ class NotesTest(basetest.BaseTest):
             '1A',
             ''
         )
-        id2 = notes.add("test2",
+        notes.add("test2",
             "test2",
             "test2",
             "test2@pouette.com",
@@ -292,7 +292,7 @@ class NotesTest(basetest.BaseTest):
     def test_export_csv(self):
         """ Testing csv export
         """
-        id1 = notes.add("test1",
+        notes.add("test1",
             "test",
             "test",
             "test@pouette.com",
@@ -310,7 +310,7 @@ class NotesTest(basetest.BaseTest):
         self.assertEqual(csv, notes.export(notes.get(), csv=True))
 
     def test_export_by_id(self):
-        id0 = notes.add("test0",
+        notes.add("test0",
             "test",
             "test",
             "test@pouette.com",
@@ -319,7 +319,7 @@ class NotesTest(basetest.BaseTest):
             '1A',
             ''
         )
-        id1 = notes.add("test1",
+        notes.add("test1",
             "test",
             "test",
             "test@pouette.com",
@@ -338,8 +338,8 @@ class NotesTest(basetest.BaseTest):
     def test_remove(self):
         """ Testing multiple removing
         """
-        id0 = self.add_note("test0")
-        id1 = self.add_note("test1")
+        self.add_note("test0")
+        self.add_note("test1")
 
         self.assertEqual(self.count_notes(), 2)
         notes.remove(["test0", "test1"])
@@ -348,7 +348,7 @@ class NotesTest(basetest.BaseTest):
     def test_modif_note(self):
         """ Testing modifying a note.
         """
-        id0 = notes.add("test0",
+        notes.add("test0",
             "test",
             "test",
             "test@pouette.com",
@@ -366,7 +366,7 @@ class NotesTest(basetest.BaseTest):
     def test_overdraft(self):
         """ Testing overdraft support
         """
-        id0 = self.add_note("test0")
+        self.add_note("test0")
         note = notes.get()[0]
         self.assertEqual(note['overdraft_date'], PyQt5.QtCore.QDate())
 
@@ -388,7 +388,7 @@ class NotesTest(basetest.BaseTest):
     def test_change_photo(self):
         """ Testing change_photo
         """
-        id0 = self.add_note("test0")
+        self.add_note("test0")
 
         notes.change_photo("test0", "../test/resources/coucou2.jpg")
         note = notes.get()[0]
@@ -404,9 +404,9 @@ class NotesTest(basetest.BaseTest):
     def test_hide_show(self):
         """ Testing show and hide
         """
-        id0 = self.add_note("test0")
-        id1 = self.add_note("test1")
-        id2 = self.add_note("test2")
+        self.add_note("test0")
+        self.add_note("test1")
+        self.add_note("test2")
 
         for note in notes.get():
             self.assertFalse(bool(note['hidden']))
@@ -420,7 +420,7 @@ class NotesTest(basetest.BaseTest):
     def test_change_ecocups(self):
         """ Testing change_ecocups
         """
-        id0 = self.add_note("test0")
+        self.add_note("test0")
         notes.change_ecocups("test0", 5)
         note = notes.get()[0]
         self.assertEqual(note['ecocups'], 5)

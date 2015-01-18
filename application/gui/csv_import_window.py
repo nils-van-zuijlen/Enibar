@@ -53,14 +53,11 @@ class CsvImportWindow(QtWidgets.QDialog):
         with open(self.file_path, 'r', encoding="ISO8859") as fd:
             reader = csv.DictReader(fd)
             for line in reader:
-                try:
-                    mail = line['Email']
-                    note = api.notes.get(lambda x: x['mail'] == mail)
-                    if note:
-                        note = note[0]['nickname']
-                        self.notes.append(note)
-                except ValueError:
-                    continue
+                mail = line['Email']
+                note = api.notes.get(lambda x: x['mail'] == mail)
+                if note:
+                    note = note[0]['nickname']
+                    self.notes.append(note)
                 if note:
                     QtWidgets.QTreeWidgetItem(
                         self.recap,
@@ -91,5 +88,5 @@ class CsvImportWindow(QtWidgets.QDialog):
             api.notes.rebuild_cache()
             self.close()
         else:
-            gui.utilse.error("Erreur", "Verifiez le montant")
+            gui.utils.error("Erreur", "Verifiez le montant")
 

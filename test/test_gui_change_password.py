@@ -49,6 +49,6 @@ class ChangePasswordTest(basetest.BaseGuiTest):
         self.win.pseudo_input.setText("azerty")
         self.win.old_password_input.setText("qsdfgh")
         self.win.new_password_input.setText("osef")
-        timer = QtCore.QTimer.singleShot(1000, callback)
+        QtCore.QTimer.singleShot(1000, callback)
         self.win.accept()
 

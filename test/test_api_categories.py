@@ -45,14 +45,14 @@ class CategoriesTest(basetest.BaseTest):
         id1 = categories.add("Test1")
         id2 = categories.add("Test2")
 
-        pd1 = prices.add_descriptor("A", id1)
+        prices.add_descriptor("A", id1)
         prices.add_descriptor("B", id1)
         prices.add_descriptor("C", id2)
-        pd2 = prices.add_descriptor("D", id2)
+        prices.add_descriptor("D", id2)
 
-        p1 = products.add("Coucou", category_id=id1)
-        p2 = products.add("Coucou2", category_id=id1)
-        p3 = products.add("Coucou3", category_id=id2)
+        products.add("Coucou", category_id=id1)
+        products.add("Coucou2", category_id=id1)
+        products.add("Coucou3", category_id=id2)
 
         self.assertEqual(2, self.count_categories())
         self.assertEqual(6, self.count_prices())
