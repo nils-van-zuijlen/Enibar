@@ -136,6 +136,24 @@ def format_message(message, note):
     return message.format(**note)
 
 
+def get_models(**filter_):
+    """ Get model list
+
+    :param kwargs **filters: Filter to apply when fetching models
+    :return generator: Models
+    """
+    cursor = api.base.filtered_getter("mail_models", filter_)
+    while cursor.next():
+        record = cursor.record()
+        yield {
+            'name': record.value('name'),
+            'subject': record.value('subject'),
+            'message': record.value('message'),
+            'filter': record.value('filter'),
+            'filter_value': record.value('filter_value'),
+        }
+
+
 def save_model(name, subject, message, filter_, filter_value):
     """ Save mail model
 
@@ -161,24 +179,6 @@ def save_model(name, subject, message, filter_, filter_value):
         cursor.bindValue(':filter_value', filter_value)
         cursor.exec_()
         return not cursor.lastError().isValid()
-
-
-def get_models(**filter_):
-    """ Get model list
-
-    :param kwargs **filters: Filter to apply when fetching models
-    :return generator: Models
-    """
-    cursor = api.base.filtered_getter("mail_models", filter_)
-    while cursor.next():
-        record = cursor.record()
-        yield {
-            'name': record.value('name'),
-            'subject': record.value('subject'),
-            'message': record.value('message'),
-            'filter': record.value('filter'),
-            'filter_value': record.value('filter_value'),
-        }
 
 
 def delete_model(name):
@@ -265,18 +265,6 @@ def save_scheduled_mails(name, active, sched_int, sched_unit, sched_day,
         cursor.exec_()
         return not cursor.lastError().isValid()
 
-def delete_scheduled_mail(name):
-    """ Delete scheduled mail
-
-    :param str name: Name of the mail you want to delete
-    :return bool: Operation success
-    """
-    with Cursor() as cursor:
-        cursor.prepare("DELETE FROM scheduled_mails WHERE name=:name")
-        cursor.bindValue(':name', name)
-        cursor.exec_()
-        return not cursor.lastError().isValid()
-
 
 def rename_scheduled_mail(name, newname):
     """ Rename scheduled mail
@@ -294,6 +282,19 @@ def rename_scheduled_mail(name, newname):
         )
         cursor.bindValue(':name', name)
         cursor.bindValue(':newname', newname)
+        cursor.exec_()
+        return not cursor.lastError().isValid()
+
+
+def delete_scheduled_mail(name):
+    """ Delete scheduled mail
+
+    :param str name: Name of the mail you want to delete
+    :return bool: Operation success
+    """
+    with Cursor() as cursor:
+        cursor.prepare("DELETE FROM scheduled_mails WHERE name=:name")
+        cursor.bindValue(':name', name)
         cursor.exec_()
         return not cursor.lastError().isValid()
 
