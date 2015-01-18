@@ -45,7 +45,10 @@ class SendMailWindow(QtWidgets.QMainWindow):
     def send(self):
         """ Send mail
         """
-        recipients = self.get_recipient_list()
+        recipients = api.mail.get_recipients(
+            self.filter_selector.currentIndex(),
+            self.filter_input.text()
+        )
         for recipient in recipients:
             api.mail.send_mail(
                 recipient['mail'],
@@ -53,20 +56,6 @@ class SendMailWindow(QtWidgets.QMainWindow):
                 api.mail.format_message(self.message_input.toPlainText(), recipient),
                 self.destinateur_input.text(),
             )
-
-    def get_recipient_list(self):
-        """ Get recipient list
-        Fetch notes which match current selected filter.
-
-        :return generator: Matching note list
-        """
-        try:
-            filter_fnc = api.mail.FILTERS[self.filter_selector.currentIndex()]
-        except KeyError:
-            return
-
-        arg = self.filter_input.text()
-        return api.notes.get(lambda x: filter_fnc(x, arg))
 
     def save_model(self):
         """ Save mail model

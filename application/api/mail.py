@@ -32,6 +32,7 @@ import re
 from email.mime.text import MIMEText
 from database import Cursor
 import api.base
+import api.notes
 
 SMTP_SERVER_IP = 'smtp.enib.fr'
 SMTP_SEVER_PORT = 25
@@ -70,6 +71,19 @@ FILTERS = [
     lambda x, y: x['note'] < float(y),
 ]
 
+
+def get_recipients(filter_, filter_arg):
+    """ Get a list of all notes matching filter
+
+    :param int filter_: Selected filter
+    :param str filter_arg: Argument provided to filter
+    :return list: Matching notes
+    """
+    try:
+        filter_fnc = FILTERS[filter_]
+        return api.notes.get(lambda x: filter_fnc(x, filter_arg))
+    except KeyError:
+        return []
 
 def send_mail(to, subject, message, from_="cafeteria@enib.fr"):
     """ Send mail
@@ -238,7 +252,6 @@ def save_scheduled_mails(name, active, sched_int, sched_unit, sched_day,
 
         cursor.exec_()
         return not cursor.lastError().isValid()
-
 
 def delete_scheduled_mail(name):
     """ Delete scheduled mail
