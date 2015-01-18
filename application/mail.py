@@ -59,7 +59,7 @@ def send_scheduled_mails():
 
             # Exlude mail when it's too soon to send them
             if record.value('last_sent').isValid():
-                if not unit in UNIT_TO_FUNC:
+                if unit not in UNIT_TO_FUNC:
                     continue
                 send_date = UNIT_TO_FUNC[unit](
                     record.value('last_sent'),
