@@ -25,6 +25,7 @@ import PyQt5
 import api.mail
 import api.notes
 
+
 class MailTest(basetest.BaseTest):
     def setUp(self):
         self._reset_db()
@@ -162,13 +163,9 @@ class MailTest(basetest.BaseTest):
         """
         models = self._populate_models()
         self.assertEqual(models, list(api.mail.get_models()))
-        self.assertEqual({
-                'name': "model name 0",
-                'subject': "model subject 0",
-                'message': "message ",
-                'filter': 0,
-                'filter_value': "",
-            }, api.mail.get_unique_model(name="model name 0")
+        self.assertEqual({'name': "model name 0", 'subject': "model subject 0",
+            'message': "message ", 'filter': 0, 'filter_value': ""},
+            api.mail.get_unique_model(name="model name 0")
         )
 
     def test_save_model(self):
