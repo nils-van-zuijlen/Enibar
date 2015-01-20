@@ -56,7 +56,7 @@ class MailFilterSelector(QtWidgets.QComboBox):
         :param int selected: Current item index
         """
         if not self.filter_input:
-            return
+            raise ValueError
 
         if selected == 0:
             self.filter_input.setEnabled(False)

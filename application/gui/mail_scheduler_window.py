@@ -43,6 +43,7 @@ class MailSchedulerWindow(QtWidgets.QMainWindow):
     def build_mail_list(self):
         """ Build mail list. Fetch all scheduled mail and add them to the list
         """
+        self.scheduled_mails_list.clear()
         for mail in api.mail.get_scheduled_mails():
             self.scheduled_mails_list.addItem(mail['name'])
 
@@ -51,6 +52,13 @@ class MailSchedulerWindow(QtWidgets.QMainWindow):
         update current mail view.
         """
         item = self.scheduled_mails_list.currentItem()
+        if not item:
+            self.description_groupbox.setEnabled(False)
+            self.status_groupbox.setEnabled(False)
+            self.schedule_groupbox.setEnabled(False)
+            self.message_groupbox.setEnabled(False)
+            self.filter_groupbox.setEnabled(False)
+            return
         mail = api.mail.get_unique_scheduled_mails(name=item.text())
         if mail:
             self.name_input.setText(mail['name'])
@@ -63,20 +71,21 @@ class MailSchedulerWindow(QtWidgets.QMainWindow):
             self.subject_input.setText(mail['subject'])
             self.sender_input.setText(mail['sender'])
             self.message_input.setPlainText(mail['message'])
+        self.description_groupbox.setEnabled(True)
+        self.status_groupbox.setEnabled(True)
+        self.schedule_groupbox.setEnabled(True)
+        self.message_groupbox.setEnabled(True)
+        self.filter_groupbox.setEnabled(True)
 
     def rename_current_mail(self):
         """ REname current selected mail
         """
         item = self.scheduled_mails_list.currentItem()
-        if not item:
-            return
 
         if item.text() == self.name_input.text():
             return
 
-        if not api.mail.rename_scheduled_mail(item.text(), self.name_input.text()):
-            return
-
+        api.mail.rename_scheduled_mail(item.text(), self.name_input.text())
         self.statusbar.showMessage("Mail «{}» renomé en «{}»".format(
             item.text(), self.name_input.text()
         ))
@@ -168,10 +177,7 @@ class ScheduledMailsList(QtWidgets.QListWidget):
             item = self.currentItem()
             if not item:
                 return
-
-            if not api.mail.delete_scheduled_mail(item.text()):
-                return
-
+            api.mail.delete_scheduled_mail(item.text())
             self.takeItem(self.row(item))
             self.parent().parent().statusbar.showMessage(
                 "Mail «{}» supprimé.".format(item.text())

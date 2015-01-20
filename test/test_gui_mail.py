@@ -108,7 +108,7 @@ class MailTest(basetest.BaseGuiTest):
         """
         self.win.filter_selector.setCurrentIndex(0)
         self.assertFalse(self.win.filter_input.isEnabled())
-        for i in [1,2,3]:
+        for i in [1, 2, 3]:
             self.win.filter_selector.setCurrentIndex(i)
             self.assertTrue(self.win.filter_input.isEnabled())
 
@@ -126,15 +126,23 @@ class MailTest(basetest.BaseGuiTest):
         QtCore.QTimer.singleShot(200, callback)
         QtTest.QTest.mouseClick(self.win.filter_input, QtCore.Qt.LeftButton)
 
-        time.sleep(0.300)
+        QtTest.QTest.qWait(300)
         self.win.filter_selector.setCurrentIndex(2)
         QtCore.QTimer.singleShot(200, callback)
         QtTest.QTest.mouseClick(self.win.filter_input, QtCore.Qt.LeftButton)
 
-        time.sleep(0.300)
+        QtTest.QTest.qWait(300)
         self.win.filter_selector.setCurrentIndex(3)
         QtCore.QTimer.singleShot(200, callback)
         QtTest.QTest.mouseClick(self.win.filter_input, QtCore.Qt.LeftButton)
+
+        # test Standaloe MailFilterSelector
+        mfs = gui.mail_widget.MailFilterSelector(self.win)
+        self.assertRaises(ValueError, mfs.update_filter, 0)
+        mfi = gui.mail_widget.MailFilterInput(self.win)
+        mfs.set_filter_input(mfi)
+        mfs.update_filter(0)
+        self.assertFalse(mfs.filter_input.isEnabled())
 
         def callback():
             win = self.app.activeWindow()
@@ -144,7 +152,7 @@ class MailTest(basetest.BaseGuiTest):
             win.mail_list.setCurrentItem(item)
             win.accept()
 
-        time.sleep(0.300)
+        QtTest.QTest.qWait(300)
         self.win.filter_selector.setCurrentIndex(1)
         QtCore.QTimer.singleShot(200, callback)
         QtTest.QTest.mouseClick(self.win.filter_input, QtCore.Qt.LeftButton)
@@ -158,7 +166,7 @@ class MailTest(basetest.BaseGuiTest):
             self.assertEqual(len(items), 1)
             win.accept()
 
-        time.sleep(0.300)
+        QtTest.QTest.qWait(300)
         QtCore.QTimer.singleShot(200, callback)
         self.win.filter_input.setText("n2name@enib.fr")
         QtTest.QTest.mouseClick(self.win.filter_input, QtCore.Qt.LeftButton)
@@ -172,9 +180,21 @@ class MailTest(basetest.BaseGuiTest):
             self.assertEqual(len(items), 0)
             win.accept()
 
-        time.sleep(0.300)
+        QtTest.QTest.qWait(300)
         QtCore.QTimer.singleShot(200, callback)
         self.win.filter_input.setText("")
         QtTest.QTest.mouseClick(self.win.filter_input, QtCore.Qt.LeftButton)
 
+    def test_completion(self):
+        """ Testing message completion
+        """
+        QtTest.QTest.mousePress(self.win.message_input, QtCore.Qt.LeftButton)
+        self.win.message_input.setText("sur")
+        QtTest.QTest.qWait(300)
+        QtTest.QTest.keyPress(self.win.message_input, QtCore.Qt.Key_Right)
+        QtTest.QTest.keyPress(self.win.message_input, QtCore.Qt.Key_Right)
+        QtTest.QTest.keyPress(self.win.message_input, QtCore.Qt.Key_Right)
+        QtTest.QTest.keyPress(self.win.message_input, QtCore.Qt.Key_Tab)
+        QtTest.QTest.keyPress(self.win.message_input, QtCore.Qt.Key_Enter)
+        self.assertTrue(self.win.message_input.toPlainText(), "{surnom}")
 

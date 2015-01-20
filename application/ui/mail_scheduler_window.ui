@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -17,6 +20,9 @@
    <layout class="QGridLayout" name="gridLayout">
     <item row="3" column="1">
      <widget class="QGroupBox" name="filter_groupbox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="title">
        <string>Filtres</string>
       </property>
@@ -69,6 +75,9 @@
     </item>
     <item row="0" column="1">
      <widget class="QGroupBox" name="description_groupbox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="title">
        <string>Description</string>
       </property>
@@ -92,6 +101,9 @@
     </item>
     <item row="2" column="1">
      <widget class="QGroupBox" name="schedule_groupbox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="title">
        <string>Planification</string>
       </property>
@@ -181,6 +193,9 @@
     </item>
     <item row="4" column="1">
      <widget class="QGroupBox" name="message_groupbox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="title">
        <string>Message</string>
       </property>
@@ -239,6 +254,9 @@
     </item>
     <item row="1" column="1">
      <widget class="QGroupBox" name="status_groupbox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="title">
        <string>Status</string>
       </property>
@@ -387,8 +405,8 @@
    <slot>new_mail_fnc()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>240</x>
-     <y>67</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
      <x>399</x>
@@ -403,8 +421,8 @@
    <slot>save_model_fnc()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>108</x>
-     <y>298</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
      <x>399</x>
@@ -419,8 +437,8 @@
    <slot>load_model_fnc()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>399</x>
-     <y>299</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
      <x>399</x>
