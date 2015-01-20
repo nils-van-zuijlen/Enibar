@@ -34,9 +34,7 @@ from email.mime.text import MIMEText
 from database import Cursor
 import api.base
 import api.notes
-
-SMTP_SERVER_IP = 'smtp.enib.fr'
-SMTP_SEVER_PORT = 25
+import settings
 
 
 # Data used to convert french completion word to english database column name
@@ -97,13 +95,9 @@ def send_mail(to, subject, message, from_="cafeteria@enib.fr"):
     :param str message: Mail message
     :param str from_: Mail sender
     """
-    print("From:   ", from_)
-    print("To:     ", to)
-    print("Subject:", subject)
-    print(message)
-    return
 
-    with smtplib.SMTP(SMTP_SERVER_IP, SMTP_SEVER_PORT) as server:
+    srv, port = settings.SMTP_SERVER_ADDR, settings.SMTP_SERVER_PORT
+    with smtplib.SMTP(srv, port) as server:
         message = MIMEText(message)
         message['subject'] = subject
         message['from'] = from_
@@ -111,6 +105,13 @@ def send_mail(to, subject, message, from_="cafeteria@enib.fr"):
         message['bcc'] = bcc
         message['cc'] = cc
         server.send_message(message)
+
+
+def dummy_send_mail(to, subject, message, from_="cafeteria@enib.fr"):
+    print("From:   ", from_)
+    print("To:     ", to)
+    print("Subject:", subject)
+    print(message)
 
 
 def format_message(message, note):

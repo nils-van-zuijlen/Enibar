@@ -34,6 +34,7 @@ class MailTest(basetest.BaseGuiTest):
         api.notes.add("Nick", "Nick", "Name", "n2name@enib.fr", "+33605040302",
             "01/02/1994", "3A", "")
         api.mail.save_model("Stock model", "Subject", "message", 0, "")
+        api.mail.send_mail = api.mail.dummy_send_mail
 
     def test_send_mail(self):
         """ Testing gui send mail

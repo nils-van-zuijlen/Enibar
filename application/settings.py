@@ -105,6 +105,22 @@ Agios
 
             Agio value.
 
+Mail
+^^^^
+
+..glossary::
+    :sorter:
+
+
+    SMTP_SERVER_ADDR
+            **Default value** ``smtp.enib.fr``
+
+            Smtp server used to send mail
+
+    SMTP_SERVER_PORT
+            **Default value** ``25``
+
+            Smtp port used to connect to server
 
 Other
 ^^^^^
@@ -178,3 +194,9 @@ ECOCUP_PRICE_TYPES = {'take': "Achat", 'repay': "Remboursement"}
 # Do not change it unless you know what you are doing.
 ECOCUP_NAME = "Ecocup"
 
+
+#
+# MAIL
+#
+SMTP_SERVER_ADDR = 'smtp.enib.fr'
+SMTP_SERVER_PORT = 25
