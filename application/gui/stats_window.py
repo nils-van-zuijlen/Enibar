@@ -132,6 +132,7 @@ class StatsWindow(QtWidgets.QDialog):
                         tot_product_credit += qt * self.prices[key][name]
                     else:
                         tot_product_debit += qt * self.prices[key][name]
+                    tot_product_qt += qt
 
                 w1 = TreeWidget(w, [
                     name,
