@@ -231,7 +231,7 @@ class MainWindow(QtWidgets.QMainWindow):
             pressed, call self.validate_transaction.
         """
         if isinstance(event, QtGui.QKeyEvent) and\
-                event.type() == QtCore.QEvent.KeyPress:
+                event.type() == QtCore.QEvent.KeyRelease:
             if event.text() == "\"":
                 self.win = DouchetteWindow(self.on_douchette)
                 return True
