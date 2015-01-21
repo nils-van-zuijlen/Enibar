@@ -34,6 +34,7 @@ from .utils import valid
 from .notes_list_widget import NotesList
 from .panels_management_window import ConsumptionList
 from .refill_note_window import MultiRefillNoteWindow
+from .validation_window import ValidationWindow
 import datetime
 
 
@@ -58,6 +59,9 @@ class GroupActionsWindow(QtWidgets.QDialog):
     def del_action(self, _):
         """ Called when "Supprimer" is clicked
         """
+        prompt = ValidationWindow("Etes vous sûr de vouloir supprimer ces notes ?")
+        if not prompt.is_ok:
+            return
         indexes = self.note_list.selectedIndexes()
         to_del = []
         for index in reversed(indexes):
