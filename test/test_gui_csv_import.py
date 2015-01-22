@@ -36,11 +36,7 @@ class CsvImportTest(basetest.BaseGuiTest):
         self.win.amount.setText("20")
         self.win.validation_button.click()
         self.assertEqual(self.get_tree(self.win.recap),
-            [['test2', 'test2@test.fr'],
-             ['test', 'test@test.fr'],
-             ['[test test]', 'test3@test.fr'],
-             ['[a b]', '']]
-        )
+        [{('test2', 'test2@test.fr'): []}, {('test', 'test@test.fr'): []}, {('[test test]', 'test3@test.fr'): []}, {('[a b]', ''): []}])
         self.assertEqual(self.win.recap.topLevelItem(2).background(0), QtCore.Qt.red)
         self.assertEqual(self.win.recap.topLevelItem(3).background(0), QtCore.Qt.red)
         for note in api.notes.get():
