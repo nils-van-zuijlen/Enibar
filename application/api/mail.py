@@ -102,8 +102,6 @@ def send_mail(to, subject, message, from_="cafeteria@enib.fr"):
         message['subject'] = subject
         message['from'] = from_
         message['to'] = to
-        message['bcc'] = bcc
-        message['cc'] = cc
         server.send_message(message)
 
 
