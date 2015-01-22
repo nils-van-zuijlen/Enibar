@@ -201,7 +201,17 @@ class BaseGuiTest(BaseTest):
         return [qlist.item(i).text() for i in range(qlist.count())]
 
     def get_tree(self, qtree):
-        return [[qtree.topLevelItem(i).text(j) for j in range(qtree.topLevelItem(i).columnCount())] for i in range(qtree.topLevelItemCount())]
+        tree = []
+
+        def get_child(item, first=False):
+            if item.childCount():
+                if first:
+                    return {tuple(item.text(i) for i in range(item.columnCount())): [get_child(item.child(j)) for j in range(item.childCount())]}
+                return [{tuple(item.text(i) for i in range(item.columnCount())): get_child(item.child(j))} for j in range(item.childCount())]
+            return {tuple(item.text(i) for i in range(item.columnCount())): []}
+        for i in range(qtree.topLevelItemCount()):
+            tree.append(get_child(qtree.topLevelItem(i), first=True))
+        return tree
 
 
 TextTestResult.getDescription = getDescription

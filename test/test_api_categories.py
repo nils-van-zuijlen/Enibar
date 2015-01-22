@@ -36,8 +36,6 @@ class CategoriesTest(basetest.BaseTest):
         self.assertEqual(self.count_categories(), 2)
         categories.add("Coucou")
         self.assertEqual(self.count_categories(), 2)
-        self.assertIsNone(categories.add(""))
-        self.assertEqual(self.count_categories(), 2)
 
     def test_remove_category(self):
         """ Testing remove_category

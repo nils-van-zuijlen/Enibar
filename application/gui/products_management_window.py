@@ -92,14 +92,10 @@ class ProductsManagementWindow(QtWidgets.QDialog):
                 continue
             parent = self.products.topLevelItem(index.parent().row())
             category = api.categories.get_unique(name=parent.text(0))
-            if not category:
-                continue
             product = api.products.get_unique(
                 name=index.data(),
                 category=category['id']
             )
-            if not product:
-                continue
             if api.products.remove(product['id']):
                 child = parent.takeChild(index.row())
                 del child
@@ -134,7 +130,7 @@ class ProductsManagementWindow(QtWidgets.QDialog):
                         'value': widget.input.value()
                     })
         if not api.prices.set_multiple_values(new_prices):
-            gui.utils.error("Impossible de sauvegarder les nouveaux prix")
+            gui.utils.error("Erreur", "Impossible de sauvegarder les nouveaux prix")
         if not len(indexes):
             return
 
@@ -180,8 +176,6 @@ class ProductsManagementWindow(QtWidgets.QDialog):
         """ Add category to category list.
         """
         cat_name = self.input_cat.text()
-        if not cat_name:
-            return
         if api.categories.add(cat_name):
             self.categories.add_category(cat_name)
             self.input_cat.setText('')
@@ -198,36 +192,20 @@ class ProductsManagementWindow(QtWidgets.QDialog):
             if api.categories.remove(index.data()):
                 item = self.categories.takeItem(index.row())
                 del item
-            else:
-                gui.utils.error(
-                    "Impossible de suppimer la categorie {}".format(
-                        index.data()
-                    )
-                )
 
     def save_category(self):
         """ Callback to save category
         """
-        if not self.category:
-            return
         cat = api.categories.get_unique(name=self.category.text())
-        if not cat:
-            return
 
         for widget in self.category_prices.widgets:
             if widget.id_ and widget.input.text():
                 api.prices.rename_descriptor(widget.id_, widget.input.text())
-            elif widget.id_:
-                if not api.prices.remove_descriptor(widget.id_):
-                    gui.utils.error("Impossible de supprimer le prix")
             elif widget.input.text():
-                try:
-                    widget.id_ = api.prices.add_descriptor(
-                        widget.input.text(),
-                        cat['id']
-                    )
-                except IndexError:
-                    gui.utils.error("La catégorie sélectionnée n'existe pas.")
+                widget.id_ = api.prices.add_descriptor(
+                    widget.input.text(),
+                    cat['id']
+                )
         is_alcoholic = self.checkbox_alcoholic.isChecked()
         api.categories.set_alcoholic(cat['id'], is_alcoholic)
 
