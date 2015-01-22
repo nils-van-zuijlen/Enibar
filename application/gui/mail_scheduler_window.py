@@ -96,20 +96,20 @@ class MailSchedulerWindow(QtWidgets.QMainWindow):
         """ Save as model action
         """
         popup = SaveMailModelWindow(self)
-        if popup.exec() and popup.input.text():
-            print(api.mail.save_model(
+        if popup.exec_() and popup.input.text():
+            api.mail.save_model(
                 popup.input.text(),
                 self.subject_input.text(),
                 self.message_input.toPlainText(),
                 self.filter_selector.currentIndex(),
                 self.filter_input.text()
-            ))
+            )
 
     def load_model_fnc(self):
         """ Load mail action
         """
         popup = LoadMailModelWindow(self)
-        if popup.exec():
+        if popup.exec_():
             model = popup.get_selected()
             model_data = api.mail.get_unique_model(name=model)
             self.subject_input.setText(model_data['subject'])
@@ -184,3 +184,4 @@ class ScheduledMailsList(QtWidgets.QListWidget):
             )
         else:
             super().keyPressEvent(event)
+

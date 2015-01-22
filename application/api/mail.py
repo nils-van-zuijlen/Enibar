@@ -122,7 +122,7 @@ def format_message(message, note):
     :param dict note: A dict describing a note
     :return str: text with converted placeholders to their values
     """
-    note = dict(note)  # Create a copy of note to avoid modify the real note
+    note = dict(note)  # Create a copy of note to avoid modifying the real note
     for field in COMPLETION_FIELD:
         message = re.sub(
             "{" + field + "}", "{" + COMPLETION_FIELD[field] + "}", message

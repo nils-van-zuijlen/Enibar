@@ -33,11 +33,8 @@ class LoadMailModelWindow(QtWidgets.QDialog):
     def __init__(self, parent):
         super().__init__(parent)
         uic.loadUi("ui/load_mail_model_window.ui", self)
-        self.load_model_names()
 
-    def load_model_names(self):
-        """ Load model names from database.
-        """
+        # Load model names from database.
         for model in api.mail.get_models():
             self.model_list.addItem(model['name'])
 
@@ -58,3 +55,4 @@ class LoadMailModelWindow(QtWidgets.QDialog):
                 return
             if api.mail.delete_model(item.text()):
                 self.model_list.takeItem(self.model_list.row(item))
+

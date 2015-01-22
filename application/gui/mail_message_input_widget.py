@@ -33,7 +33,7 @@ class MailMessageInput(QtWidgets.QTextEdit):
     """
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.completer = QtWidgets.QCompleter(sorted([k for k in api.mail.COMPLETION_FIELD]), self)
+        self.completer = QtWidgets.QCompleter(sorted(api.mail.COMPLETION_FIELD.keys()), self)
         self.completer.activated.connect(self.insert_completion)
         self.completer.setCaseSensitivity(QtCore.Qt.CaseInsensitive)
         self.completer.setModelSorting(QtWidgets.QCompleter.CaseSensitivelySortedModel)
@@ -46,7 +46,7 @@ class MailMessageInput(QtWidgets.QTextEdit):
         word.
         """
         text_cursor = self.textCursor()
-        for i in range(len(self.completer.completionPrefix())):
+        for _ in self.completer.completionPrefix():
             text_cursor.deletePreviousChar()
         text_cursor.movePosition(QtGui.QTextCursor.EndOfWord)
         text_cursor.insertText("{" + completion + "}")

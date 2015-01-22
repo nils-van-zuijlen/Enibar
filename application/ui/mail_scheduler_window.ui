@@ -301,7 +301,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>19</height>
+     <height>15</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFichier">
@@ -313,7 +313,7 @@
    </widget>
    <widget class="QMenu" name="menuModel">
     <property name="title">
-     <string>&amp;Model</string>
+     <string>&amp;Modele</string>
     </property>
     <addaction name="save_model"/>
     <addaction name="load_model"/>
@@ -332,7 +332,7 @@
   </action>
   <action name="save_model">
    <property name="text">
-    <string>Enregistrer en temps que model</string>
+    <string>Enregistrer en temps que modele</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+S</string>
@@ -340,7 +340,7 @@
   </action>
   <action name="load_model">
    <property name="text">
-    <string>Charger le model</string>
+    <string>Charger le modele</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+O</string>

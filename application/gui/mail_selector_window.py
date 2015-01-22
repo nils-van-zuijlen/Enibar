@@ -64,3 +64,4 @@ class MailSelectorWindow(QtWidgets.QDialog):
             if mail not in mails:
                 mails.append(mail)
         return mails
+
