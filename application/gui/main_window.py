@@ -43,6 +43,8 @@ from .search_window import SearchWindow
 from .stats_window import StatsWindow
 from .about_window import AboutWindow
 from .csv_import_window import CsvImportWindow
+from .send_mail_window import SendMailWindow
+from .mail_scheduler_window import MailSchedulerWindow
 import api.categories
 import api.notes
 import api.transactions
@@ -72,6 +74,11 @@ class MainWindow(QtWidgets.QMainWindow):
         # The secondary window currently opened. It' here to force having only
         # one window opened at a time.
         self.win = None
+
+        # The mail window. This is needed to store the mail window which cannot
+        # be used as a usual secondary window as it's a QMainWindow instead
+        # of a QDiaload. A QMainWindow is required in order to have a menubar
+        self.mail_window = None
 
         # Hack to count ecocups to add/delete.
         self.eco_diff = 0
@@ -486,6 +493,18 @@ class MenuBar(QtWidgets.QMenuBar):
         self._close_window()
         self.cur_window = SearchWindow(self)
         self._connect_window()
+
+    @ask_auth("manage_products")
+    def send_mail_fnc(self, _):
+        """ Open send mail window
+        """
+        SendMailWindow(self)
+
+    @ask_auth("manage_products")
+    def mail_scheduler_fnc(self, _):
+        """ Open mail scheduler window
+        """
+        MailSchedulerWindow(self)
 
     def stats_by_note_fnc(self):
         """ Open a StatsWindow by note

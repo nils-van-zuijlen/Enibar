@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="3" column="1">
+     <widget class="QGroupBox" name="filter_groupbox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="title">
+       <string>Filtres</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="0" column="0">
+        <widget class="MailFilterSelector" name="filter_selector">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <item>
+          <property name="text">
+           <string>Toutes les notes</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Notes suivantes</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Notes au montant supérieur à</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Notes au montant inférieur à</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="MailFilterInput" name="filter_input">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QGroupBox" name="description_groupbox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="title">
+       <string>Description</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_6">
+       <item row="0" column="0">
+        <widget class="QLabel" name="name_label">
+         <property name="text">
+          <string>Nom</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="name_input">
+         <property name="maxLength">
+          <number>255</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QGroupBox" name="schedule_groupbox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="title">
+       <string>Planification</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="1">
+        <widget class="QSpinBox" name="schedule_interval">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>9999</number>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="schedule_label">
+         <property name="text">
+          <string>Envoi tous les </string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QComboBox" name="schedule_interval_unit">
+         <item>
+          <property name="text">
+           <string>Jours</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Semaines</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Mois</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="QComboBox" name="schedule_day">
+         <item>
+          <property name="text">
+           <string>Quelque soit le jour</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Le lundi</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Le mardi</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Le mercredi</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Le jeudi</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Le vendredi</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Le samedi</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Le dimanche</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QGroupBox" name="message_groupbox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="title">
+       <string>Message</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="1" colspan="2">
+        <widget class="QLineEdit" name="sender_input">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1" colspan="2">
+        <widget class="QLineEdit" name="subject_input">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="sender_label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Expéditeur</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="subject_label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Objet</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="3">
+        <widget class="MailMessageInput" name="message_input"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QGroupBox" name="status_groupbox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="title">
+       <string>Status</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_5">
+       <item row="0" column="0">
+        <widget class="QCheckBox" name="active_checkbox">
+         <property name="text">
+          <string>Activé</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="0" rowspan="5">
+     <widget class="ScheduledMailsList" name="scheduled_mails_list">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>200</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>200</width>
+        <height>16777215</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFichier">
+    <property name="title">
+     <string>&amp;Fichier</string>
+    </property>
+    <addaction name="new_mail"/>
+    <addaction name="save_scheduled_mail"/>
+   </widget>
+   <widget class="QMenu" name="menuModel">
+    <property name="title">
+     <string>&amp;Model</string>
+    </property>
+    <addaction name="save_model"/>
+    <addaction name="load_model"/>
+   </widget>
+   <addaction name="menuFichier"/>
+   <addaction name="menuModel"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="new_mail">
+   <property name="text">
+    <string>Nouveau</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="save_model">
+   <property name="text">
+    <string>Enregistrer en temps que model</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
+  </action>
+  <action name="load_model">
+   <property name="text">
+    <string>Charger le model</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+O</string>
+   </property>
+  </action>
+  <action name="save_scheduled_mail">
+   <property name="text">
+    <string>Sauvegarder</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MailMessageInput</class>
+   <extends>QTextEdit</extends>
+   <header>gui/mail_message_input_widget</header>
+  </customwidget>
+  <customwidget>
+   <class>MailFilterSelector</class>
+   <extends>QComboBox</extends>
+   <header>gui/mail_widget</header>
+   <slots>
+    <slot>update_filter(int)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>MailFilterInput</class>
+   <extends>QLineEdit</extends>
+   <header>gui/mail_widget</header>
+   <slots>
+    <slot>on_click()</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>ScheduledMailsList</class>
+   <extends>QListWidget</extends>
+   <header>gui/mail_scheduler_window</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>scheduled_mails_list</tabstop>
+  <tabstop>name_input</tabstop>
+  <tabstop>active_checkbox</tabstop>
+  <tabstop>schedule_interval</tabstop>
+  <tabstop>schedule_interval_unit</tabstop>
+  <tabstop>schedule_day</tabstop>
+  <tabstop>filter_selector</tabstop>
+  <tabstop>filter_input</tabstop>
+  <tabstop>sender_input</tabstop>
+  <tabstop>subject_input</tabstop>
+  <tabstop>message_input</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>new_mail</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>new_mail_fnc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>save_model</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>save_model_fnc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>load_model</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>load_model_fnc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>filter_selector</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>filter_selector</receiver>
+   <slot>update_filter(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>347</x>
+     <y>270</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>337</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>scheduled_mails_list</sender>
+   <signal>itemSelectionChanged()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_selected_mail_change()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>110</x>
+     <y>170</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>3</x>
+     <y>491</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>save_scheduled_mail</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>save_scheduled_mail_fnc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>name_input</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>rename_current_mail()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>301</x>
+     <y>63</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>227</x>
+     <y>23</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>load_model_fnc()</slot>
+  <slot>save_model_fnc()</slot>
+  <slot>new_mail_fnc()</slot>
+  <slot>on_selected_mail_change()</slot>
+  <slot>save_scheduled_mail_fnc()</slot>
+  <slot>rename_current_mail()</slot>
+ </slots>
+</ui>

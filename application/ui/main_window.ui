@@ -641,7 +641,7 @@
      <x>0</x>
      <y>0</y>
      <width>884</width>
-     <height>15</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="administration">
@@ -698,9 +698,17 @@
     <addaction name="menu_Statistiques"/>
     <addaction name="about"/>
    </widget>
+   <widget class="QMenu" name="menuMails">
+    <property name="title">
+     <string>&amp;Mails</string>
+    </property>
+    <addaction name="send_mail"/>
+    <addaction name="mail_scheduler"/>
+   </widget>
    <addaction name="administration"/>
    <addaction name="menuNotes"/>
    <addaction name="menu_Panels"/>
+   <addaction name="menuMails"/>
    <addaction name="menuAutre"/>
   </widget>
   <action name="user_managment">
@@ -821,6 +829,21 @@
     <string>Par catégorie</string>
    </property>
   </action>
+  <action name="send_mail">
+   <property name="text">
+    <string>&amp;Envoi direct</string>
+   </property>
+  </action>
+  <action name="mail_scheduler">
+   <property name="text">
+    <string>&amp;Planificateur d'envoi</string>
+   </property>
+  </action>
+  <action name="mail_manage_models">
+   <property name="text">
+    <string>Gestion des &amp;models</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -858,6 +881,8 @@
     <slot>csv_import_fnc()</slot>
     <slot>stats_by_note_fnc()</slot>
     <slot>stats_by_category_fnc()</slot>
+    <slot>send_mail_fnc()</slot>
+    <slot>mail_scheduler_fnc()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -1248,8 +1273,8 @@
    <slot>stats_by_note_fnc()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>441</x>
-     <y>344</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
      <x>441</x>
@@ -1270,6 +1295,38 @@
     <hint type="destinationlabel">
      <x>441</x>
      <y>7</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mail_scheduler</sender>
+   <signal>triggered()</signal>
+   <receiver>menu_bar</receiver>
+   <slot>mail_scheduler_fnc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>9</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>send_mail</sender>
+   <signal>triggered()</signal>
+   <receiver>menu_bar</receiver>
+   <slot>send_mail_fnc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>9</y>
     </hint>
    </hints>
   </connection>
