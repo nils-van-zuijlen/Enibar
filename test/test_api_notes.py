@@ -17,10 +17,11 @@
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 import basetest
-import datetime
+import freezegun
 import time
 import os.path
 import PyQt5
+from database import Cursor
 import api.notes as notes
 
 
@@ -36,6 +37,8 @@ class NotesTest(basetest.BaseTest):
             os.remove("img/coucou2.jpg")
         except FileNotFoundError:
             pass
+        with Cursor() as cursor:
+            cursor.exec_("SET TIMESTAMP=unix_timestamp('2014-12-24 06:00:00')")
 
     def test_add(self):
         """ Testing adding notes """
@@ -144,17 +147,15 @@ class NotesTest(basetest.BaseTest):
                                  'tot_refill': 0.0,
                                  'hidden': 0} for i in range(2)])
 
+    @freezegun.freeze_time("2014-12-24 06:00:00")
     def test_get_by_minors(self):
         """ Testing get minors """
-        time0 = round(time.time() - 19 * 365 * 24 * 3600)
-        time1 = round(time.time() - 17 * 365 * 24 * 3600)
-        dt1 = int(datetime.datetime.fromtimestamp(time1).replace(hour=0, minute=0, second=0).timestamp())
         notes.add("test0",
             "test",
             "test",
             "test@pouette.com",
             "0600000000",
-            datetime.datetime.fromtimestamp(time0).strftime("%d/%m/%Y"),
+            "24/12/1995",
             '1A',
             ''
         )
@@ -163,18 +164,20 @@ class NotesTest(basetest.BaseTest):
             "test",
             "test@pouette.com",
             "0600000000",
-            datetime.datetime.fromtimestamp(time1).strftime("%d/%m/%Y"),
+            "24/12/1997",
             '1A',
             ''
         )
 
-        self.assertEqual(notes.get(lambda x: x["birthdate"] > time.time() - 18 * 365 * 24 * 3600), [{'id': id1,
+        print(notes.get())
+
+        self.assertEqual(notes.get(lambda x: x["birthdate"] > 851403600), [{'id': id1,
                                  'nickname': 'test1',
                                  'lastname': 'test',
                                  'firstname': 'test',
                                  'mail': 'test@pouette.com',
                                  'tel': '0600000000',
-                                 'birthdate': dt1,
+                                 'birthdate': 882918000,
                                  'promo': '1A',
                                  'note': 0.0,
                                  'tot_cons': 0.0,
@@ -184,17 +187,15 @@ class NotesTest(basetest.BaseTest):
                                  'photo_path': '',
                                  'hidden': 0}])
 
+    @freezegun.freeze_time("2014-12-24 06:00:00")
     def test_get_by_majors(self):
         """ Testing get majors """
-        time0 = round(time.time() - 19 * 365 * 24 * 3600)
-        time1 = round(time.time() - 17 * 365 * 24 * 3600)
-        dt0 = int(datetime.datetime.fromtimestamp(time0).replace(hour=0, minute=0, second=0).timestamp())
         id0 = notes.add("test0",
             "test",
             "test",
             "test@pouette.com",
             "0600000000",
-            datetime.datetime.fromtimestamp(time0).strftime("%d/%m/%Y"),
+            "24/12/1995",
             '1A',
             ''
         )
@@ -203,18 +204,18 @@ class NotesTest(basetest.BaseTest):
             "test",
             "test@pouette.com",
             "0600000000",
-            datetime.datetime.fromtimestamp(time1).strftime("%d/%m/%Y"),
+            "24/12/1997",
             '1A',
             ''
         )
 
-        self.assertEqual(notes.get(lambda x: x["birthdate"] < time.time() - 18 * 365 * 24 * 3600), [{'id': id0,
+        self.assertEqual(notes.get(lambda x: x["birthdate"] < 851403600), [{'id': id0,
                                  'nickname': 'test0',
                                  'lastname': 'test',
                                  'firstname': 'test',
                                  'mail': 'test@pouette.com',
                                  'tel': '0600000000',
-                                 'birthdate': dt0,
+                                 'birthdate': 819759600,
                                  'promo': '1A',
                                  'note': 0.0,
                                  'tot_cons': 0,
@@ -248,6 +249,7 @@ class NotesTest(basetest.BaseTest):
         for note in notes.get():
             self.assertEqual(note['note'], 0.05)
 
+    @freezegun.freeze_time("2014-12-24")
     def test_export_xml(self):
         """ Testing notes exporting """
         notes.add("test1",
@@ -270,14 +272,13 @@ class NotesTest(basetest.BaseTest):
         )
         notes.transactions(["test1", ], -60)
         xml = "<?xml version=\"1.0\"?>\n"
-        xml += "<notes date=\"{}\">\n".format(datetime.datetime.now().strftime(
-            "%Y-%m-%d"))
+        xml += "<notes date=\"2014-12-24\">\n"
         xml += "\t<note id=\"1\">\n"
         xml += "\t\t<prenom>test</prenom>\n"
         xml += "\t\t<nom>test</nom>\n"
         xml += "\t\t<compte>-60.0</compte>\n"
         xml += "\t\t<mail>test</mail>\n"
-        xml += "\t\t<date_Decouvert>{}</date_Decouvert>\n".format(datetime.datetime.now().strftime("%Y-%m-%d"))
+        xml += "\t\t<date_Decouvert>2014-12-24</date_Decouvert>\n"
         xml += "\t</note>\n"
         xml += "\t<note id=\"2\">\n"
         xml += "\t\t<prenom>test2</prenom>\n"
@@ -372,8 +373,7 @@ class NotesTest(basetest.BaseTest):
 
         notes.transactions(["test0", ], -1)
         note = notes.get()[0]
-        now = PyQt5.QtCore.QDateTime()
-        now.setMSecsSinceEpoch(time.time() * 1000)
+        now = PyQt5.QtCore.QDateTime(PyQt5.QtCore.QDate(2014, 12, 24))
         self.assertEqual(note['overdraft_date'], now.date())
 
         notes.transactions(["test0", ], 1)

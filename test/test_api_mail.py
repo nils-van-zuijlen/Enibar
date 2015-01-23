@@ -18,7 +18,6 @@
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 import basetest
-import datetime
 import time
 import os.path
 import PyQt5
@@ -32,7 +31,7 @@ class MailTest(basetest.BaseTest):
         for i in range(10):
             text = "note{}".format(i)
             api.notes.add(text, text, text, text, text,
-                datetime.date.today().strftime("%d/%m/%Y"), '1A', "")
+                "24/12/2014", '1A', "")
             if i < 5:
                 diff = -5
             elif i == 5:
@@ -114,7 +113,6 @@ class MailTest(basetest.BaseTest):
     def test_format_message(self):
         """ Testing mail message format
         """
-        curdate = datetime.datetime.now()
 
         note = {
             'nickname': "Nickname",
@@ -122,7 +120,7 @@ class MailTest(basetest.BaseTest):
             'firstname': "Firstname",
             'mail': "m2blabla@enib.fr",
             'tel': "+33605040302",
-            'birthdate': int(curdate.timestamp()),
+            'birthdate': 1419397200,
             'promo': '1A',
             'overdraft_date': PyQt5.QtCore.QDate(2014, 5, 1),
             'note': -25,
@@ -134,7 +132,7 @@ class MailTest(basetest.BaseTest):
             "{promo} {note} {date_note_negative} {ecocups}", note
         )
         self.assertEqual(message, "2 Nickname Lastname Firstname "
-                "m2blabla@enib.fr +33605040302 " + curdate.strftime("%d/%m/%Y") + " 1A -25 01/05/2014 5"
+                "m2blabla@enib.fr +33605040302 " + "24/12/2014" + " 1A -25 01/05/2014 5"
         )
 
         note = {
@@ -143,7 +141,7 @@ class MailTest(basetest.BaseTest):
             'firstname': "Firstname",
             'mail': "m2blabla@enib.fr",
             'tel': "+33605040302",
-            'birthdate': int(curdate.timestamp()),
+            'birthdate': 1419397200,
             'promo': '1A',
             'overdraft_date': PyQt5.QtCore.QDate(),
             'note': -25,
@@ -155,7 +153,7 @@ class MailTest(basetest.BaseTest):
             "{promo} {note} {date_note_negative} {ecocups}", note
         )
         self.assertEqual(message, "2 Nickname Lastname Firstname "
-                "m2blabla@enib.fr +33605040302 " + curdate.strftime("%d/%m/%Y") + " 1A -25 Jamais 5"
+                "m2blabla@enib.fr +33605040302 " + "24/12/2014" + " 1A -25 Jamais 5"
         )
 
     def test_get_models(self):
