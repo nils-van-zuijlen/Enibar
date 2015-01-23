@@ -88,7 +88,7 @@ class MultiRefillNoteWindow(QtWidgets.QDialog):
     """ A window that ask for a value to add and set it as a variable instead
         of adding it to the notes. It's used to add money on multiple notes.
     """
-    def __init__(self, performer):
+    def __init__(self, performer, text="ajouter"):
         super().__init__()
         uic.loadUi('ui/refill_note_window.ui', self)
         self.performer = performer
@@ -96,6 +96,8 @@ class MultiRefillNoteWindow(QtWidgets.QDialog):
         self.reason.set_validator(api.validator.NOTHING)
         self.to_add.setFocus()
         self.to_add_value = 0
+        self.reason_value = ""
+        self.text = text
 
         self.show()
 
@@ -107,18 +109,19 @@ class MultiRefillNoteWindow(QtWidgets.QDialog):
             gui.utils.error("Erreur", "La valeur à ajouter doit etre superieur à\
                 0.01€")
             return
-        prompt = ValidationWindow("Etes vous sûr de vouloir ajouter {} € sur les\
-            \nnotes selectionées".format(self.to_add.text()),
+        prompt = ValidationWindow("Etes vous sûr de vouloir {} {} € sur les\
+            \nnotes selectionées".format(self.text, self.to_add.text()),
             settings.ASK_VALIDATION_REFILL)
         if not prompt.is_ok:
             return
         self.to_add_value = to_add
+        self.reason_value = self.reason.text()
         super().accept()
 
     def on_change(self):
         """ Set state of the validation button
         """
-        if self.to_add.valid:
+        if self.to_add.valid and self.reason.valid:
             self.valid_button.setEnabled(True)
         else:
             self.valid_button.setEnabled(False)

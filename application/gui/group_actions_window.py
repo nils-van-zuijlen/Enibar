@@ -131,8 +131,44 @@ class GroupActionsWindow(QtWidgets.QDialog):
         """
         self._multiple_action(api.notes.show)
 
+    def take_action(self):
+        """ Called when we want to take on notes
+        """
+        self.cur_window = MultiRefillNoteWindow(self.performer, text="enlever")
+        self.cur_window.reason.setPlaceholderText("Raison")
+        self.cur_window.reason.setValidator(api.validator.NAME)
+        self.cur_window.reason.on_change()
+        self.cur_window.on_change()
+
+        def continuation():
+            """ Called when the MultiRefillNoteWindow is closed.
+            """
+            def take(notes):
+                """ take on notes
+                """
+                notes = list(notes)
+                to_add = self.cur_window.to_add_value
+                reason = self.cur_window.reason_value
+                if not to_add:
+                    return
+                transactions = []
+                for note in notes:
+                    transactions.append({'note': note,
+                                         'category': "Note",
+                                         'product': reason,
+                                         'price_name': "Solde",
+                                         'quantity': 1,
+                                         'price': -to_add
+                                        }
+                    )
+                api.notes.transactions(notes, -to_add)
+                api.transactions.log_transactions(transactions)
+            self._multiple_action(take)
+
+        self.cur_window.finished.connect(continuation)
+
     def refill_action(self):
-        """ Called when we want to refille notes.
+        """ Called when we want to refill notes.
         """
         self.cur_window = MultiRefillNoteWindow(self.performer)
 
@@ -144,13 +180,14 @@ class GroupActionsWindow(QtWidgets.QDialog):
                 """
                 notes = list(notes)
                 to_add = self.cur_window.to_add_value
+                reason = self.cur_window.reason_value
                 if not to_add:
                     return
                 transactions = []
                 for note in notes:
                     transactions.append({'note': note,
                                          'category': "Note",
-                                         'product': self.performer,
+                                         'product': '{} {}'.format(self.performer, "[{}]".format(reason) if reason else ""),
                                          'price_name': "Rechargement",
                                          'quantity': 1,
                                          'price': to_add
