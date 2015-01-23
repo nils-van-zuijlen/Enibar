@@ -110,9 +110,12 @@ class NotesManagementWindow(QtWidgets.QDialog):
             else:
                 gui.utils.error("Erreur", "Impossible d'ajouter la note.")
         else:
+            birthdate = datetime.datetime.strptime(self.birthdate_input.text(),
+                                                   "%d/%m/%Y").timestamp()
             api.notes.change_values(self.current_nickname,
                                     tel=self.phone_input.text(),
                                     mail=self.mail_input.text(),
+                                    birthdate=birthdate,
                                     promo=self.promo_input.currentText(),
                                     nickname=self.nickname_input.text())
             if self.photo_selected:
@@ -203,6 +206,7 @@ class NotesManagementWindow(QtWidgets.QDialog):
         self.photo_button.setEnabled(True)
         self.nickname_input.setEnabled(True)
         self.promo_input.setEnabled(True)
+        self.birthdate_input.setEnabled(True)
 
     def _inputs_action(self, action):
         """ This performs the action on all object of the type Input in the
