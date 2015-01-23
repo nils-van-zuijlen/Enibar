@@ -113,6 +113,7 @@ class NotesManagementWindow(QtWidgets.QDialog):
             api.notes.change_values(self.current_nickname,
                                     tel=self.phone_input.text(),
                                     mail=self.mail_input.text(),
+                                    promo=self.promo_input.currentText(),
                                     nickname=self.nickname_input.text())
             if self.photo_selected:
                 api.notes.change_photo(self.nickname_input.text(),
@@ -183,7 +184,6 @@ class NotesManagementWindow(QtWidgets.QDialog):
         """
         self._inputs_action(lambda x: x.setEnabled(False))
         self.promo_input.setEnabled(False)
-        self.promo_input.setEnabled(False)
         self.photo_button.setEnabled(False)
 
     def enable_inputs(self):
@@ -202,6 +202,7 @@ class NotesManagementWindow(QtWidgets.QDialog):
         self.phone_input.setEnabled(True)
         self.photo_button.setEnabled(True)
         self.nickname_input.setEnabled(True)
+        self.promo_input.setEnabled(True)
 
     def _inputs_action(self, action):
         """ This performs the action on all object of the type Input in the
