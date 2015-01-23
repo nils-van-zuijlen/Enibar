@@ -27,7 +27,8 @@ Douchette Window
 from PyQt5 import QtWidgets, uic, QtGui, QtCore
 
 EQUIVALENCE_TABLE = {"&": 1, "é": 2, "\"": 3, "'": 4, "(": 5,
-                     "-": 6, "è": 7, "_": 8, "ç": 9, "à": 0, ")": "-"}
+                     "-": 6, "è": 7, "_": 8, "ç": 9, "à": 0, ")": "-",
+                     "É": 2, "È": 7, "À": 0, "Ç": 9}
 
 
 class DouchetteWindow(QtWidgets.QDialog):
@@ -37,8 +38,6 @@ class DouchetteWindow(QtWidgets.QDialog):
         self.callback = callback
         uic.loadUi('ui/douchette_window.ui', self)
         self.show()
-        self.equivalence_table = {"&": 1, "é": 2, "\"": 3, "'": 4, "(": 5,
-                                  "-": 6, "è": 7, "_": 8, "ç": 9, "à": 0}
 
     def accept(self):
         """ Called when "Valider" is clicked
