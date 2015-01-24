@@ -49,6 +49,39 @@ class MailTest(basetest.BaseGuiTest):
         QtCore.QTimer.singleShot(200, callback)
         self.win.send_button.click()
 
+    def test_new_model(self):
+        """ Testing gui new model
+        """
+        self.win.subject_input.setText("a")
+        self.win.message_input.setText("b")
+        self.win.filter_selector.setCurrentIndex(1)
+        self.win.filter_input.setText("c")
+
+        def callback():
+            win = self.app.activeWindow()
+            win.accept()
+        QtCore.QTimer.singleShot(200, callback)
+        self.win.new_model_btn.trigger()
+        self.assertEqual(self.win.subject_input.text(), "")
+        self.assertEqual(self.win.message_input.toPlainText(), "")
+        self.assertEqual(self.win.filter_selector.currentIndex(), 0)
+        self.assertEqual(self.win.filter_input.text(), "")
+
+        self.win.subject_input.setText("a")
+        self.win.message_input.setText("b")
+        self.win.filter_selector.setCurrentIndex(1)
+        self.win.filter_input.setText("c")
+
+        def callback():
+            win = self.app.activeWindow()
+            win.reject()
+        QtCore.QTimer.singleShot(200, callback)
+        self.win.new_model_btn.trigger()
+        self.assertEqual(self.win.subject_input.text(), "a")
+        self.assertEqual(self.win.message_input.toPlainText(), "b")
+        self.assertEqual(self.win.filter_selector.currentIndex(), 1)
+        self.assertEqual(self.win.filter_input.text(), "c")
+
     def test_save_model(self):
         """ Testing gui save model
         """

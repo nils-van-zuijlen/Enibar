@@ -61,6 +61,20 @@ class SendMailWindow(QtWidgets.QMainWindow):
                 self.destinateur_input.text(),
             )
 
+    def new_model(self):
+        """ New mail model
+        """
+        prompt = ValidationWindow(
+            "Attention le model en cour d'édition ne sera pas sauvegardé"
+        )
+        if not prompt.is_ok:
+            return
+
+        self.subject_input.setText("")
+        self.message_input.setText("")
+        self.filter_selector.setCurrentIndex(0)
+        self.filter_input.setText("")
+
     def save_model(self):
         """ Save mail model
         """
