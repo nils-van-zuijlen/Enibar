@@ -102,7 +102,10 @@ def send_mail(to, subject, message, from_="cafeteria@enib.fr"):
         message['subject'] = subject
         message['from'] = from_
         message['to'] = to
-        server.send_message(message)
+        try:
+            server.send_message(message)
+        except smtplib.SMTPRecipientsRefused:
+            pass
 
 
 def dummy_send_mail(to, subject, message, from_="cafeteria@enib.fr"):
