@@ -19,14 +19,24 @@
 """
 Main file of the Application
 """
+import asyncio
+import quamash
 import sys
 import gui.main_window
 from PyQt5 import QtWidgets
 
 
+def update(app, loop):
+    t = loop.create_task(app.notes_list.on_timer())
+    loop.call_later(5, update, app, loop)
+
 if __name__ == "__main__":
     APP = QtWidgets.QApplication(sys.argv)
+    LOOP = quamash.QEventLoop(APP)
+    asyncio.set_event_loop(LOOP)
     MYAPP = gui.main_window.MainWindow()
     MYAPP.show()
-    APP.exec_()
+    with LOOP:
+        LOOP.call_soon(update, MYAPP, LOOP)
+        LOOP.run_forever()
 

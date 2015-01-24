@@ -27,6 +27,7 @@ It refreshes itself every 10 seconds.
 from PyQt5 import QtWidgets, QtCore, QtGui
 import api.notes
 import time
+import asyncio
 
 
 class NotesList(QtWidgets.QListWidget):
@@ -36,10 +37,6 @@ class NotesList(QtWidgets.QListWidget):
         self.current_filter = lambda x: x['hidden'] == 0
         self.minors_color = QtGui.QColor(255, 192, 203)
         self.overdraft_color = QtCore.Qt.red
-        self.refresh_timer = QtCore.QTimer(self)
-        self.refresh_timer.setInterval(10 * 1000)  # 10 seconds
-        self.refresh_timer.timeout.connect(self.on_timer)
-        self.refresh_timer.start()
 
     def build(self, notes_list):
         """ Fill the list with notes from notes_list, coloring negatives one
@@ -55,7 +52,8 @@ class NotesList(QtWidgets.QListWidget):
     def on_timer(self):
         """ Rebuild the note list every 10 seconds
         """
-        api.notes.rebuild_cache()
+        loop = asyncio.get_event_loop()
+        yield from loop.run_in_executor(None, api.notes.rebuild_cache)
         new_notes = api.notes.get(self.current_filter)
         self.refresh(new_notes)
 
