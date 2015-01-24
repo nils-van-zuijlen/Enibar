@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>Mailscheduler</class>
+ <widget class="QMainWindow" name="Mailscheduler">
   <property name="windowModality">
    <enum>Qt::WindowModal</enum>
   </property>
@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Planificateur de mails</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -301,7 +301,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>15</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFichier">
@@ -401,7 +401,7 @@
   <connection>
    <sender>new_mail</sender>
    <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
+   <receiver>Mailscheduler</receiver>
    <slot>new_mail_fnc()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -417,7 +417,7 @@
   <connection>
    <sender>save_model</sender>
    <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
+   <receiver>Mailscheduler</receiver>
    <slot>save_model_fnc()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -433,7 +433,7 @@
   <connection>
    <sender>load_model</sender>
    <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
+   <receiver>Mailscheduler</receiver>
    <slot>load_model_fnc()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -465,7 +465,7 @@
   <connection>
    <sender>scheduled_mails_list</sender>
    <signal>itemSelectionChanged()</signal>
-   <receiver>MainWindow</receiver>
+   <receiver>Mailscheduler</receiver>
    <slot>on_selected_mail_change()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -481,7 +481,7 @@
   <connection>
    <sender>save_scheduled_mail</sender>
    <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
+   <receiver>Mailscheduler</receiver>
    <slot>save_scheduled_mail_fnc()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -497,7 +497,7 @@
   <connection>
    <sender>name_input</sender>
    <signal>editingFinished()</signal>
-   <receiver>MainWindow</receiver>
+   <receiver>Mailscheduler</receiver>
    <slot>rename_current_mail()</slot>
    <hints>
     <hint type="sourcelabel">
