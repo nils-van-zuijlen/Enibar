@@ -26,6 +26,7 @@ from .mail_selector_window import MailSelectorWindow
 import api.mail
 from .save_mail_model_window import SaveMailModelWindow
 from .load_mail_model_window import LoadMailModelWindow
+from .validation_window import ValidationWindow
 
 
 class SendMailWindow(QtWidgets.QMainWindow):
@@ -45,6 +46,9 @@ class SendMailWindow(QtWidgets.QMainWindow):
     def send(self):
         """ Send mail
         """
+        prompt = ValidationWindow("Etes vous sûr de vouloir envoyer ce mail ?")
+        if not prompt.is_ok:
+            return
         recipients = api.mail.get_recipients(
             self.filter_selector.currentIndex(),
             self.filter_input.text()

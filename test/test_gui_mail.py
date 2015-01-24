@@ -42,6 +42,10 @@ class MailTest(basetest.BaseGuiTest):
         self.win.destinateur_input.setText("Pouette")
         self.win.subject_input.setText("Subject")
         self.win.message_input.setText("This is the message")
+        def callback():
+            win = self.app.activeWindow()
+            win.accept()
+        QtCore.QTimer.singleShot(200, callback)
         self.win.send_button.click()
 
     def test_save_model(self):
