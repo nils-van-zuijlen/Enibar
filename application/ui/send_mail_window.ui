@@ -24,7 +24,7 @@
     <item row="0" column="0">
      <widget class="QLabel" name="destinateur_label">
       <property name="text">
-       <string>Destinateur</string>
+       <string>Expéditeur</string>
       </property>
      </widget>
     </item>
