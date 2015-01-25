@@ -54,7 +54,6 @@ class MailTest(basetest.BaseGuiTest):
         QtCore.QTimer.singleShot(200, callback)
         self.win.send_button.click()
 
-
         QtTest.QTest.qWait(1000)
         self.assertTrue(self.send_mail_was_called)
 
