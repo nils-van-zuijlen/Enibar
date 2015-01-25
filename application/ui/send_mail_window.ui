@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Envoi direct</string>
   </property>
   <widget class="QWidget" name="main_layout">
    <layout class="QGridLayout" name="gridLayout">

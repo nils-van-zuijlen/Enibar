@@ -27,14 +27,19 @@ import api.mail
 
 
 class MailTest(basetest.BaseGuiTest):
+
+    def send_mail(self, *args):
+        self.send_mail_was_called = True
+
     def setUp(self):
         super().setUp()
         self._reset_db()
+        self.send_mail_was_called = False
         self.win = gui.send_mail_window.SendMailWindow()
         api.notes.add("Nick", "Nick", "Name", "n2name@enib.fr", "+33605040302",
             "01/02/1994", "3A", "")
         api.mail.save_model("Stock model", "Subject", "message", 0, "")
-        api.mail.send_mail = api.mail.dummy_send_mail
+        api.mail.send_mail = self.send_mail
 
     def test_send_mail(self):
         """ Testing gui send mail
@@ -48,6 +53,43 @@ class MailTest(basetest.BaseGuiTest):
             win.accept()
         QtCore.QTimer.singleShot(200, callback)
         self.win.send_button.click()
+
+
+        QtTest.QTest.qWait(1000)
+        self.assertTrue(self.send_mail_was_called)
+
+    def test_send_mail_reject_confirm(self):
+        """ Testing send mail validation window rejection
+        """
+        self.win.destinateur_input.setText("Pouette")
+        self.win.subject_input.setText("Subject")
+        self.win.message_input.setText("This is the message")
+
+        def callback():
+            win = self.app.activeWindow()
+            win.reject()
+        QtCore.QTimer.singleShot(200, callback)
+        self.win.send_button.click()
+
+        QtTest.QTest.qWait(1000)
+        self.assertFalse(self.send_mail_was_called)
+
+    def test_send_mail_hidden_note(self):
+        """ Testing send mail on hidden notes
+        """
+        self.win.destinateur_input.setText("Pouette")
+        self.win.subject_input.setText("Subject")
+        self.win.message_input.setText("This is the message")
+        api.notes.hide(["Nick"])
+
+        def callback():
+            win = self.app.activeWindow()
+            win.accept()
+        QtCore.QTimer.singleShot(200, callback)
+        self.win.send_button.click()
+
+        QtTest.QTest.qWait(1000)
+        self.assertFalse(self.send_mail_was_called)
 
     def test_new_model(self):
         """ Testing gui new model
@@ -215,7 +257,6 @@ class MailTest(basetest.BaseGuiTest):
             instance = isinstance(win, gui.mail_selector_window.MailSelectorWindow)
             self.assertTrue(instance)
             items = win.mail_list.selectedItems()
-            print(items)
             self.assertEqual(len(items), 0)
             win.accept()
 
