@@ -134,21 +134,23 @@ class NotesTest(basetest.BaseTest):
             ''
         )
 
-        self.assertListEqual(notes.get(lambda x: 'test' in x["nickname"]), [{'id': i + 1,
-                                 'nickname': 'test' + str(i),
-                                 'lastname': 'test',
-                                 'firstname': 'test',
-                                 'mail': 'test@pouette.com',
-                                 'tel': '0600000000',
-                                 'birthdate': 1008111600,
-                                 'promo': '1A',
-                                 'note': 0.0,
-                                 'overdraft_date': PyQt5.QtCore.QDate(),
-                                 'ecocups': 0,
-                                 'photo_path': '',
-                                 'tot_cons': 0.0,
-                                 'tot_refill': 0.0,
-                                 'hidden': 0} for i in range(2)])
+        res = notes.get(lambda x: 'test' in x["nickname"])
+        for i in range(2):
+            self.assertIn({'id': i + 1,
+                           'nickname': 'test' + str(i),
+                           'lastname': 'test',
+                           'firstname': 'test',
+                           'mail': 'test@pouette.com',
+                           'tel': '0600000000',
+                           'birthdate': 1008111600,
+                           'promo': '1A',
+                           'note': 0.0,
+                           'overdraft_date': PyQt5.QtCore.QDate(),
+                           'ecocups': 0,
+                           'photo_path': '',
+                           'tot_cons': 0.0,
+                           'tot_refill': 0.0,
+                           'hidden': 0}, res)
 
     @freezegun.freeze_time("2014-12-24 06:00:00")
     def test_get_by_minors(self):
