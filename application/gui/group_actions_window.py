@@ -56,6 +56,9 @@ class GroupActionsWindow(QtWidgets.QDialog):
         self.product_list.build()
         self.show()
 
+    def redis_handle(self, channel, message):
+        self.note_list.refresh()
+
     def del_action(self, _):
         """ Called when "Supprimer" is clicked
         """
@@ -268,11 +271,10 @@ class MultiNotesList(NotesList):
         self.clear()
         self.build(notes_list)
 
-    def on_timer(self):
+    def refresh(self):
         """ Rebuild the note list every 10 seconds
         """
         selected = [item.text() for item in self.selectedItems()]
-        api.notes.rebuild_cache()
         self.rebuild(api.notes.get(self.current_filter))
         for item in selected:
             try:

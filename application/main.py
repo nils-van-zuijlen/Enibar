@@ -20,15 +20,25 @@
 Main file of the Application
 """
 import asyncio
+import asyncio_redis
+import api.redis
+import json
 import quamash
 import sys
 import gui.main_window
 from PyQt5 import QtWidgets
 
 
-def update(app, loop):
-    t = loop.create_task(app.notes_list.on_timer())
-    loop.call_later(5, update, app, loop)
+@asyncio.coroutine
+def install_redis_handle(app):
+    connection = yield from asyncio_redis.Connection.create(host='127.0.0.1', port=6379)
+    subscriber = yield from connection.start_subscribe()
+
+    yield from subscriber.psubscribe(['enibar-*'])
+    while True:
+        reply = yield from subscriber.next_published()
+        app.redis_handle(reply.channel, json.loads(reply.value))
+
 
 if __name__ == "__main__":
     APP = QtWidgets.QApplication(sys.argv)
@@ -37,6 +47,7 @@ if __name__ == "__main__":
     MYAPP = gui.main_window.MainWindow()
     MYAPP.show()
     with LOOP:
-        LOOP.call_soon(update, MYAPP, LOOP)
+        asyncio.async(install_redis_handle(MYAPP))
+        asyncio.async(api.redis.connect())
         LOOP.run_forever()
 

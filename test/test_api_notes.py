@@ -131,7 +131,7 @@ class NotesTest(basetest.BaseTest):
             ''
         )
 
-        self.assertEqual(notes.get(lambda x: 'test' in x["nickname"]), [{'id': i + 1,
+        self.assertSequenceEqual(notes.get(lambda x: 'test' in x["nickname"]), [{'id': i + 1,
                                  'nickname': 'test' + str(i),
                                  'lastname': 'test',
                                  'firstname': 'test',

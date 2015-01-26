@@ -49,14 +49,6 @@ class NotesList(QtWidgets.QListWidget):
             elif current_time - note["birthdate"] < 18 * 365 * 24 * 3600:
                 widget.setBackground(self.minors_color)
 
-    def on_timer(self):
-        """ Rebuild the note list every 10 seconds
-        """
-        loop = asyncio.get_event_loop()
-        yield from loop.run_in_executor(None, api.notes.rebuild_cache)
-        new_notes = api.notes.get(self.current_filter)
-        self.refresh(new_notes)
-
     def refresh(self, notes_list):
         """ Refresh the note list
         """

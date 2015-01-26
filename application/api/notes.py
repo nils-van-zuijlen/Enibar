@@ -36,7 +36,7 @@ NOTE_FIELDS = ['id', 'nickname', 'lastname', 'firstname', 'mail', 'tel',
                'birthdate', 'promo', 'note', 'photo_path', 'overdraft_date',
                'ecocups', 'hidden']
 
-NOTES_CACHE = []
+NOTES_CACHE = {}
 NOTES_FIELDS_CACHE = {}
 NOTES_STATS_FIELDS_CACHE = {}
 
@@ -48,7 +48,7 @@ def rebuild_cache(build_stats=True, *, do_not=False):
     if do_not:
         return True
     global NOTES_CACHE, NOTES_FIELDS_CACHE
-    NOTES_CACHE = []
+    NOTES_CACHE = {}
     with Cursor() as cursor:
         cursor.prepare("SELECT * FROM notes")
         if cursor.exec_():
@@ -61,7 +61,7 @@ def rebuild_cache(build_stats=True, *, do_not=False):
                        in NOTE_FIELDS}
                 row['tot_cons'] = 0
                 row['tot_refill'] = 0
-                NOTES_CACHE.append(row)
+                NOTES_CACHE[row['nickname']] = row
         if build_stats:
             _build_stats()
     return True
@@ -96,12 +96,55 @@ def _build_stats():
 
                 note = record.value(NOTES_STATS_FIELDS_CACHE['nickname'])
                 tot[note] = {}
-                tot[note]['tot_cons'] = record.value(NOTES_STATS_FIELDS_CACHE['tot_cons'])
-                tot[note]['tot_refill'] = record.value(NOTES_STATS_FIELDS_CACHE['tot_refill'])
-            for note in NOTES_CACHE:
-                if note['nickname'] in tot:
-                    note['tot_cons'] = tot[note['nickname']]['tot_cons']
-                    note['tot_refill'] = tot[note['nickname']]['tot_refill']
+                NOTES_CACHE[note]['tot_cons'] = record.value(NOTES_STATS_FIELDS_CACHE['tot_cons'])
+                NOTES_CACHE[note]['tot_refill'] = record.value(NOTES_STATS_FIELDS_CACHE['tot_refill'])
+
+
+def rebuild_note_cache(nick):
+    """ Rebuild a row in the cache
+    """
+    global NOTES_CACHE, NOTES_FIELDS_CACHE, NOTES_STATS_FIELDS_CACHE
+    with Cursor() as cursor:
+        cursor.prepare("SELECT * FROM notes WHERE nickname=:nick")
+        cursor.bindValue(":nick", nick)
+        if cursor.exec_():
+            while cursor.next():
+                record = cursor.record()
+                if NOTES_FIELDS_CACHE == {}:
+                    NOTES_FIELDS_CACHE = {field: record.indexOf(field) for field
+                                          in NOTE_FIELDS}
+                row = {field: record.value(NOTES_FIELDS_CACHE[field]) for field
+                       in NOTE_FIELDS}
+                NOTES_CACHE[row['nickname']] = row
+
+    with Cursor() as cursor:
+        cursor.prepare("SELECT nickname, notes.firstname, notes.lastname,\
+                        SUM(IF(price>0, price, 0)) as tot_refill,\
+                        SUM(IF(price<0, price, 0)) AS tot_cons\
+                        FROM transactions INNER JOIN notes ON\
+                        notes.firstname=transactions.firstname AND\
+                        notes.lastname=transactions.lastname\
+                        WHERE notes.firstname=:fn AND notes.lastname=:ln\
+                        GROUP BY firstname, lastname")
+        cursor.bindValue(':fn', row['firstname'])
+        cursor.bindValue(':ln', row['lastname'])
+
+        if cursor.exec_():
+            while cursor.next():
+                record = cursor.record()
+                if NOTES_STATS_FIELDS_CACHE == {}:
+                    NOTES_STATS_FIELDS_CACHE = {field: record.indexOf(field)
+                                                for field in ('lastname',
+                                                              'nickname',
+                                                              'firstname',
+                                                              'tot_cons',
+                                                              'tot_refill'
+                                                             )
+                                               }
+
+                note = record.value(NOTES_STATS_FIELDS_CACHE['nickname'])
+                NOTES_CACHE[note]['tot_cons'] = record.value(NOTES_STATS_FIELDS_CACHE['tot_cons'])
+                NOTES_CACHE[note]['tot_refill'] = record.value(NOTES_STATS_FIELDS_CACHE['tot_refill'])
 
 
 def _request_multiple_nicks(nicks, request, *, do_not=False):
@@ -120,7 +163,6 @@ def _request_multiple_nicks(nicks, request, *, do_not=False):
             cursor.bindValue(':nick', nick)
             cursor.exec_()
         value = database.commit()
-    rebuild_cache(do_not=do_not)
     return value
 
 
@@ -136,7 +178,7 @@ def change_values(nick, *, do_not=False, **kwargs):
             cursor.bindValue(':{}'.format(key), value)
         cursor.bindValue(':nick', nick)
         value = cursor.exec_()
-    rebuild_cache(do_not=do_not)
+    api.redis.send_message("enibar-notes", [nick, ])
     return value
 
 
@@ -187,7 +229,7 @@ def add(nickname, firstname, lastname, mail, tel, birthdate, promo, photo_path):
                            ':photo_path': name if photo_path else ""})
 
         if cursor.exec_():
-            rebuild_cache()
+            api.redis.send_message("enibar-notes", [nickname, ])
             return cursor.lastInsertId()
         return -1
 
@@ -199,6 +241,8 @@ def remove(nicks):
 
     :return bool: True if success else False.
     """
+    nicks = list(nicks)
+    api.redis.send_message("enibar-delete", nicks)
     _request_multiple_nicks(nicks, "DELETE FROM notes WHERE nickname=:nick")
 
 
@@ -221,7 +265,7 @@ def change_photo(nickname, new_photo):
                         WHERE nickname=:nickname")
         cursor.bindValues({':photo_path': name, ':nickname': nickname})
         value = cursor.exec_()
-    rebuild_cache(False)
+        api.redis.send_message("enibar-notes", [nickname, ])
     return value
 
 
@@ -233,8 +277,8 @@ def get(filter_function=None):
         :param callable filter_function: The filter to apply.
     """
     if filter_function is None:
-        return NOTES_CACHE
-    return list(filter(filter_function, NOTES_CACHE))
+        return list(NOTES_CACHE.values())
+    return list(filter(filter_function, NOTES_CACHE.values()))
 
 
 def hide(nicks):
@@ -244,6 +288,7 @@ def hide(nicks):
 
     :return bool: True if success else False
     """
+    api.redis.send_message("enibar-notes", nicks)
     return _request_multiple_nicks(nicks, "UPDATE notes SET hidden=1\
         WHERE nickname=:nick")
 
@@ -255,6 +300,7 @@ def show(nicks):
 
     :return bool: True if success else False
     """
+    api.redis.send_message("enibar-notes", nicks)
     return _request_multiple_nicks(nicks, "UPDATE notes SET hidden=0\
         WHERE nickname=:nick")
 
@@ -276,11 +322,12 @@ def transactions(notes, diff, *, do_not=False):
             cursor.bindValue(':diff', diff)
             cursor.exec_()
         value = database.commit()
-    rebuild_cache(do_not=do_not)
+    if not do_not:
+        api.redis.send_message("enibar-notes", notes)
     return value
 
 
-def change_ecocups(nick, diff):
+def change_ecocups(nick, diff, do_not=False):
     """ Change the number of ecocups taken on a note.
 
         :param str nick: The nickname og the note
@@ -292,7 +339,7 @@ def change_ecocups(nick, diff):
         cursor.bindValue(":diff", diff)
         cursor.bindValue(":nick", nick)
         value = cursor.exec_()
-    rebuild_cache()
+    api.redis.send_message("enibar-notes", [nick, ])
     return value
 
 
@@ -336,7 +383,7 @@ def export_by_nick(notes_nicks, *args, **kwargs):
     """ Export notes but taking nicknames.
     """
     notes_nicks = list(notes_nicks)
-    return export([note for note in NOTES_CACHE if note['nickname'] in notes_nicks],
+    return export([note for note in NOTES_CACHE.values() if note['nickname'] in notes_nicks],
                   *args,
                   **kwargs)
 
@@ -359,7 +406,6 @@ def import_csv(notes, reason, amount, *, do_not=False):
         )
     if transactions(notes, amount):
         if api.transactions.log_transactions(trs):
-            rebuild_cache(do_not=do_not)
             return len(trs)
 
 
