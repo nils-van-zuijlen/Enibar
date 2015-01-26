@@ -101,6 +101,25 @@ class MainWindow(QtWidgets.QMainWindow):
             QtWidgets.QHeaderView.Stretch
         )
 
+    def redis_handle(self, channel, message):
+        if channel == 'enibar-notes':
+            for note in message:
+                api.notes.rebuild_note_cache(note)
+            if self.selected:
+                self._note_refresh(self.notes_list.currentRow())
+            self.rebuild_notes_list()
+        else:
+            for note in message:
+                try:
+                    del api.notes.NOTES_CACHE[note]
+                except KeyError:  # Osef
+                    pass
+            self.rebuild_notes_list()
+            try:
+                self.menu_bar.cur_window.redis_handle(channel, message)
+            except AttributeError:
+                pass
+
     def on_note_selection(self, index):
         """ Called when a note is selected
             Rebuild the timer so it stays unique. Then call self.refresh_note
@@ -245,6 +264,7 @@ class MainWindow(QtWidgets.QMainWindow):
             if event.key() == QtCore.Qt.Key_Return or\
                     event.key() == QtCore.Qt.Key_Enter:
                 self.validate_transaction()
+                return True
         return super().event(event)
 
     def on_douchette(self, text):
@@ -302,7 +322,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 api.notes.transactions([self.selected.text(), ], -total,
                     do_not=True)
                 api.notes.change_ecocups(self.selected_nickname, self.eco_diff)
-                self.rebuild_notes_list()
                 self.eco_diff = 0
                 self.refresh_ecocup_button()
                 self.product_list.clear()

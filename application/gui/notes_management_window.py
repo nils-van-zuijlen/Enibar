@@ -58,6 +58,9 @@ class NotesManagementWindow(QtWidgets.QDialog):
         self.note_list.refresh(api.notes.get())
         self.show()
 
+    def redis_handle(self, channel, message):
+        self.note_list.refresh(api.notes.get())
+
     def add_photo(self):
         """ Function called to add a photo. Open a QFileDialog and fill
             self.photo with the selected image
@@ -170,7 +173,6 @@ class NotesManagementWindow(QtWidgets.QDialog):
         """
         api.notes.remove(note['nickname'] for note in list(
             api.notes.get(lambda x: x["nickname"] == self.current_nickname)))
-        self.note_list.refresh(api.notes.get())
         self.disable_inputs()
         self.empty_inputs()
 
