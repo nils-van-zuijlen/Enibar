@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Envoi direct</string>
   </property>
   <widget class="QWidget" name="main_layout">
    <layout class="QGridLayout" name="gridLayout">
@@ -24,7 +24,7 @@
     <item row="0" column="0">
      <widget class="QLabel" name="destinateur_label">
       <property name="text">
-       <string>Destinateur</string>
+       <string>Expéditeur</string>
       </property>
      </widget>
     </item>
@@ -120,6 +120,7 @@
     <property name="title">
      <string>Fichier</string>
     </property>
+    <addaction name="new_model_btn"/>
     <addaction name="open_model_btn"/>
     <addaction name="save_model_btn"/>
    </widget>
@@ -145,6 +146,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="new_model_btn">
+   <property name="text">
+    <string>Nouveau model</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
    </property>
   </action>
  </widget>
@@ -245,6 +254,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>new_model_btn</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>new_model()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>send()</slot>
@@ -252,5 +277,6 @@
   <slot>on_filter_input_click()</slot>
   <slot>open_model()</slot>
   <slot>save_model()</slot>
+  <slot>new_model()</slot>
  </slots>
 </ui>

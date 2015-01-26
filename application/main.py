@@ -26,12 +26,13 @@ import json
 import quamash
 import sys
 import gui.main_window
+import settings
 from PyQt5 import QtWidgets
 
 
 @asyncio.coroutine
 def install_redis_handle(app):
-    connection = yield from asyncio_redis.Connection.create(host='127.0.0.1', port=6379)
+    connection = yield from asyncio_redis.Connection.create(host=settings.HOST, port=6379)
     subscriber = yield from connection.start_subscribe()
 
     yield from subscriber.psubscribe(['enibar-*'])

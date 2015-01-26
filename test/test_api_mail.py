@@ -23,6 +23,9 @@ import os.path
 import PyQt5
 import api.mail
 import api.notes
+import api.redis
+
+api.redis.send_message = lambda x, y: [api.notes.rebuild_note_cache(note) for note in y]
 
 
 class MailTest(basetest.BaseTest):

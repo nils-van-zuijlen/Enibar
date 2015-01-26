@@ -23,6 +23,9 @@ import os.path
 import PyQt5
 from database import Cursor
 import api.notes as notes
+import api.redis
+
+api.redis.send_message = lambda x, y: [api.notes.rebuild_note_cache(note) for note in y]
 
 
 class NotesTest(basetest.BaseTest):
@@ -131,7 +134,7 @@ class NotesTest(basetest.BaseTest):
             ''
         )
 
-        self.assertSequenceEqual(notes.get(lambda x: 'test' in x["nickname"]), [{'id': i + 1,
+        self.assertListEqual(notes.get(lambda x: 'test' in x["nickname"]), [{'id': i + 1,
                                  'nickname': 'test' + str(i),
                                  'lastname': 'test',
                                  'firstname': 'test',
@@ -168,8 +171,6 @@ class NotesTest(basetest.BaseTest):
             '1A',
             ''
         )
-
-        print(notes.get())
 
         self.assertEqual(notes.get(lambda x: x["birthdate"] > 851403600), [{'id': id1,
                                  'nickname': 'test1',
@@ -218,8 +219,8 @@ class NotesTest(basetest.BaseTest):
                                  'birthdate': 819759600,
                                  'promo': '1A',
                                  'note': 0.0,
-                                 'tot_cons': 0,
-                                 'tot_refill': 0,
+                                 'tot_cons': 0.0,
+                                 'tot_refill': 0.0,
                                  'overdraft_date': PyQt5.QtCore.QDate(),
                                  'ecocups': 0,
                                  'photo_path': '',
@@ -273,13 +274,6 @@ class NotesTest(basetest.BaseTest):
         notes.transactions(["test1", ], -60)
         xml = "<?xml version=\"1.0\"?>\n"
         xml += "<notes date=\"2014-12-24\">\n"
-        xml += "\t<note id=\"1\">\n"
-        xml += "\t\t<prenom>test</prenom>\n"
-        xml += "\t\t<nom>test</nom>\n"
-        xml += "\t\t<compte>-60.0</compte>\n"
-        xml += "\t\t<mail>test</mail>\n"
-        xml += "\t\t<date_Decouvert>2014-12-24</date_Decouvert>\n"
-        xml += "\t</note>\n"
         xml += "\t<note id=\"2\">\n"
         xml += "\t\t<prenom>test2</prenom>\n"
         xml += "\t\t<nom>test2</nom>\n"
@@ -287,8 +281,17 @@ class NotesTest(basetest.BaseTest):
         xml += "\t\t<mail>test2</mail>\n"
         xml += "\t\t<date_Decouvert></date_Decouvert>\n"
         xml += "\t</note>\n"
+        xml += "\t<note id=\"1\">\n"
+        xml += "\t\t<prenom>test</prenom>\n"
+        xml += "\t\t<nom>test</nom>\n"
+        xml += "\t\t<compte>-60.0</compte>\n"
+        xml += "\t\t<mail>test</mail>\n"
+        xml += "\t\t<date_Decouvert>2014-12-24</date_Decouvert>\n"
+        xml += "\t</note>\n"
         xml += "</notes>\n"
-        self.assertEqual(notes.export(notes.get(), xml=True), xml)
+        ex = notes.export(notes.get(), xml=True)
+        for line in xml.split():
+            self.assertIn(line, ex)
 
     def test_export_csv(self):
         """ Testing csv export

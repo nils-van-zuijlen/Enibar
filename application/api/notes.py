@@ -24,6 +24,7 @@ Notes
 
 from PyQt5 import QtSql
 import api.transactions
+import api.redis
 from database import Cursor, Database
 import datetime
 import os.path
@@ -41,12 +42,10 @@ NOTES_FIELDS_CACHE = {}
 NOTES_STATS_FIELDS_CACHE = {}
 
 
-def rebuild_cache(build_stats=True, *, do_not=False):
+def rebuild_cache():
     """ Build a cache with all notes inside. This improve greatly the perfs of
         get actions
     """
-    if do_not:
-        return True
     global NOTES_CACHE, NOTES_FIELDS_CACHE
     NOTES_CACHE = {}
     with Cursor() as cursor:
@@ -62,9 +61,7 @@ def rebuild_cache(build_stats=True, *, do_not=False):
                 row['tot_cons'] = 0
                 row['tot_refill'] = 0
                 NOTES_CACHE[row['nickname']] = row
-        if build_stats:
-            _build_stats()
-    return True
+    _build_stats()
 
 
 def _build_stats():
@@ -115,36 +112,39 @@ def rebuild_note_cache(nick):
                                           in NOTE_FIELDS}
                 row = {field: record.value(NOTES_FIELDS_CACHE[field]) for field
                        in NOTE_FIELDS}
+                row['tot_cons'] = 0.0
+                row['tot_refill'] = 0.0
+
                 NOTES_CACHE[row['nickname']] = row
 
-    with Cursor() as cursor:
-        cursor.prepare("SELECT nickname, notes.firstname, notes.lastname,\
-                        SUM(IF(price>0, price, 0)) as tot_refill,\
-                        SUM(IF(price<0, price, 0)) AS tot_cons\
-                        FROM transactions INNER JOIN notes ON\
-                        notes.firstname=transactions.firstname AND\
-                        notes.lastname=transactions.lastname\
-                        WHERE notes.firstname=:fn AND notes.lastname=:ln\
-                        GROUP BY firstname, lastname")
-        cursor.bindValue(':fn', row['firstname'])
-        cursor.bindValue(':ln', row['lastname'])
+                with Cursor() as cursor:
+                    cursor.prepare("SELECT nickname, notes.firstname, notes.lastname,\
+                                    SUM(IF(price>0, price, 0)) as tot_refill,\
+                                    SUM(IF(price<0, price, 0)) AS tot_cons\
+                                    FROM transactions INNER JOIN notes ON\
+                                    notes.firstname=transactions.firstname AND\
+                                    notes.lastname=transactions.lastname\
+                                    WHERE notes.firstname=:fn AND notes.lastname=:ln\
+                                    GROUP BY firstname, lastname")
+                    cursor.bindValue(':fn', row['firstname'])
+                    cursor.bindValue(':ln', row['lastname'])
 
-        if cursor.exec_():
-            while cursor.next():
-                record = cursor.record()
-                if NOTES_STATS_FIELDS_CACHE == {}:
-                    NOTES_STATS_FIELDS_CACHE = {field: record.indexOf(field)
-                                                for field in ('lastname',
-                                                              'nickname',
-                                                              'firstname',
-                                                              'tot_cons',
-                                                              'tot_refill'
-                                                             )
-                                               }
+                    if cursor.exec_():
+                        while cursor.next():
+                            record = cursor.record()
+                            if NOTES_STATS_FIELDS_CACHE == {}:
+                                NOTES_STATS_FIELDS_CACHE = {field: record.indexOf(field)
+                                                            for field in ('lastname',
+                                                                          'nickname',
+                                                                          'firstname',
+                                                                          'tot_cons',
+                                                                          'tot_refill'
+                                                                         )
+                                                           }
 
-                note = record.value(NOTES_STATS_FIELDS_CACHE['nickname'])
-                NOTES_CACHE[note]['tot_cons'] = record.value(NOTES_STATS_FIELDS_CACHE['tot_cons'])
-                NOTES_CACHE[note]['tot_refill'] = record.value(NOTES_STATS_FIELDS_CACHE['tot_refill'])
+                            note = record.value(NOTES_STATS_FIELDS_CACHE['nickname'])
+                            NOTES_CACHE[note]['tot_cons'] = record.value(NOTES_STATS_FIELDS_CACHE['tot_cons'])
+                            NOTES_CACHE[note]['tot_refill'] = record.value(NOTES_STATS_FIELDS_CACHE['tot_refill'])
 
 
 def _request_multiple_nicks(nicks, request, *, do_not=False):
@@ -288,9 +288,10 @@ def hide(nicks):
 
     :return bool: True if success else False
     """
-    api.redis.send_message("enibar-notes", nicks)
-    return _request_multiple_nicks(nicks, "UPDATE notes SET hidden=1\
+    v = _request_multiple_nicks(nicks, "UPDATE notes SET hidden=1\
         WHERE nickname=:nick")
+    api.redis.send_message("enibar-notes", nicks)
+    return v
 
 
 def show(nicks):
@@ -300,9 +301,10 @@ def show(nicks):
 
     :return bool: True if success else False
     """
-    api.redis.send_message("enibar-notes", nicks)
-    return _request_multiple_nicks(nicks, "UPDATE notes SET hidden=0\
+    v = _request_multiple_nicks(nicks, "UPDATE notes SET hidden=0\
         WHERE nickname=:nick")
+    api.redis.send_message("enibar-notes", nicks)
+    return v
 
 
 def transactions(notes, diff, *, do_not=False):
