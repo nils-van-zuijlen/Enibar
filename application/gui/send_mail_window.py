@@ -26,6 +26,7 @@ from .mail_selector_window import MailSelectorWindow
 import api.mail
 from .save_mail_model_window import SaveMailModelWindow
 from .load_mail_model_window import LoadMailModelWindow
+from .validation_window import ValidationWindow
 
 
 class SendMailWindow(QtWidgets.QMainWindow):
@@ -45,17 +46,36 @@ class SendMailWindow(QtWidgets.QMainWindow):
     def send(self):
         """ Send mail
         """
+        prompt = ValidationWindow("Etes vous sûr de vouloir envoyer ce mail ?")
+        if not prompt.is_ok:
+            return
         recipients = api.mail.get_recipients(
             self.filter_selector.currentIndex(),
             self.filter_input.text()
         )
         for recipient in recipients:
+            if recipient['hidden'] or recipient['promo'] == "Prof":
+                continue
             api.mail.send_mail(
                 recipient['mail'],
                 self.subject_input.text(),
                 api.mail.format_message(self.message_input.toPlainText(), recipient),
                 self.destinateur_input.text(),
             )
+
+    def new_model(self):
+        """ New mail model
+        """
+        prompt = ValidationWindow(
+            "Attention le model en cour d'édition ne sera pas sauvegardé"
+        )
+        if not prompt.is_ok:
+            return
+
+        self.subject_input.setText("")
+        self.message_input.setText("")
+        self.filter_selector.setCurrentIndex(0)
+        self.filter_input.setText("")
 
     def save_model(self):
         """ Save mail model

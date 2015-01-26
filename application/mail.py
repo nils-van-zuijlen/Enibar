@@ -74,6 +74,8 @@ def send_scheduled_mails():
                 record.value('filter_value'),
             )
             for recipient in recipients:
+                if recipient['hidden'] or recipient['promo'] == "Prof":
+                    continue
                 message = api.mail.format_message(
                     record.value('message'),
                     recipient
