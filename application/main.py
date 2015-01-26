@@ -48,6 +48,7 @@ if __name__ == "__main__":
     MYAPP = gui.main_window.MainWindow()
     MYAPP.show()
     with LOOP:
+        LOOP.run_until_complete(api.redis.connect())
         asyncio.async(install_redis_handle(MYAPP))
         asyncio.async(api.redis.connect())
         LOOP.run_forever()

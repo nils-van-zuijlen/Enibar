@@ -71,7 +71,6 @@ class GroupActionsWindow(QtWidgets.QDialog):
             to_del.append(index.data())
             self.note_list.takeItem(index.row())
         api.notes.remove(to_del)
-        self.note_list.rebuild(api.notes.get(self.note_list.current_filter))
 
     def _multiple_action(self, fnc, *args, **kwargs):
         """ Execute a function on the currently selected notes
@@ -80,9 +79,9 @@ class GroupActionsWindow(QtWidgets.QDialog):
         notes_nicks = []
         for index in indexes:
             notes_nicks.append(index.data())
-        val = fnc(notes_nicks, *args, **kwargs)
-        self.note_list.rebuild(api.notes.get(self.note_list.current_filter))
-        return val
+        for widget in self.note_list.selectedItems():
+            widget.setSelected(False)
+        return fnc(notes_nicks, *args, **kwargs)
 
     def filter_combobox_change(self, id_):
         """ Called when the filter combobox is chnged
@@ -233,6 +232,8 @@ class GroupActionsWindow(QtWidgets.QDialog):
         if api.transactions.log_transactions(transactions):
             api.notes.transactions(notes, -price['value'])
             valid("OK", "Transaction effectuée")
+        for widget in self.note_list.selectedItems():
+            widget.setSelected(False)
 
     def export_csv_action(self):
         """ Called when "Export CSV" is clicked
