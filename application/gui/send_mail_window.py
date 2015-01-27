@@ -58,7 +58,7 @@ class SendMailWindow(QtWidgets.QMainWindow):
                 continue
             api.mail.send_mail(
                 recipient['mail'],
-                self.subject_input.text(),
+                api.mail.format_message(self.subject_input.text(), recipient),
                 api.mail.format_message(self.message_input.toPlainText(), recipient),
                 self.destinateur_input.text(),
             )

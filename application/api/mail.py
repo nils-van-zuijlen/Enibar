@@ -25,9 +25,9 @@ Handle all mail related task.
 
 """
 
+import sys
 import smtplib
 import ssl
-import sys
 import re
 import datetime
 from email.mime.text import MIMEText
@@ -98,7 +98,7 @@ def send_mail(to, subject, message, from_="cafeteria@enib.fr"):
 
     srv, port = settings.SMTP_SERVER_ADDR, settings.SMTP_SERVER_PORT
     with smtplib.SMTP(srv, port) as server:
-        message = MIMEText(message)
+        message = MIMEText(message, "html")
         message['subject'] = subject
         message['from'] = from_
         message['to'] = to
