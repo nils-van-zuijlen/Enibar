@@ -74,6 +74,17 @@ class StatsTests(basetest.BaseTest):
             True
         )
         notes.transactions(["test4", ], 8)
+        notes.add("test12",
+            "test1",
+            "test1",
+            "test@pouette.com",
+            "0600000000",
+            '12/12/2001',
+            '1A',
+            '',
+            False,
+            True
+        )
 
         # Hitory
 

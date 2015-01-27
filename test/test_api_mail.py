@@ -31,6 +31,9 @@ api.redis.send_message = lambda x, y: [api.notes.rebuild_note_cache(note) for no
 class MailTest(basetest.BaseTest):
     def setUp(self):
         self._reset_db()
+        text = "cocou"
+        api.notes.add(text, text, text, text, text,
+            "24/12/2014", '1A', "", True, False)
         for i in range(10):
             text = "note{}".format(i)
             api.notes.add(text, text, text, text, text,
@@ -106,10 +109,10 @@ class MailTest(basetest.BaseTest):
     def test_get_recipients(self):
         """ Testing get recipients
         """
-        self.assertEqual(api.notes.get(), api.mail.get_recipients(0, ""))
+        self.assertEqual(api.notes.get(lambda x: x['mails_inscription']), api.mail.get_recipients(0, ""))
         self.assertEqual(api.notes.get(lambda x: x['mail'] in ('note1', 'note2')), api.mail.get_recipients(1, "note1,note2"))
-        self.assertEqual(api.notes.get(lambda x: x['note'] >= 0), api.mail.get_recipients(2, "0"))
-        self.assertEqual(api.notes.get(lambda x: x['note'] < 0), api.mail.get_recipients(3, "0"))
+        self.assertEqual(api.notes.get(lambda x: x['note'] >= 0 and x['mails_inscription']), api.mail.get_recipients(2, "0"))
+        self.assertEqual(api.notes.get(lambda x: x['note'] < 0 and x['mails_inscription']), api.mail.get_recipients(3, "0"))
         self.assertEqual([], api.mail.get_recipients(2, ""))
         self.assertEqual([], api.mail.get_recipients(520, ""))
 

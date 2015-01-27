@@ -39,9 +39,10 @@ def get_notes_stats():
                         transactions.category AS category,\
                         SUM(transactions.quantity) AS quantity\
                         FROM transactions INNER JOIN notes WHERE\
-                        (notes.lastname = transactions.lastname AND\
+                        ((notes.lastname = transactions.lastname AND\
                         notes.firstname = transactions.firstname) OR\
-                        notes.nickname = transactions.note\
+                        notes.nickname = transactions.note) AND\
+                        notes.stats_inscription = TRUE\
                         GROUP BY notes.nickname, transactions.product,\
                         transactions.price_name, transactions.price")
         cursor.exec_()
