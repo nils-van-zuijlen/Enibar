@@ -35,7 +35,7 @@ import tempfile
 
 NOTE_FIELDS = ['id', 'nickname', 'lastname', 'firstname', 'mail', 'tel',
                'birthdate', 'promo', 'note', 'photo_path', 'overdraft_date',
-               'ecocups', 'hidden']
+               'ecocups', 'hidden', 'mails_inscription', 'stats_inscription']
 
 NOTES_CACHE = {}
 NOTES_FIELDS_CACHE = {}
@@ -192,7 +192,8 @@ def unique_file(file_name):
     return filename
 
 
-def add(nickname, firstname, lastname, mail, tel, birthdate, promo, photo_path):
+def add(nickname, firstname, lastname, mail, tel, birthdate, promo, photo_path,
+        stats_inscription, mails_inscription):
     """ Create a note. Copy the image from photo_path to settings.IMG_BASE_DIR
 
     :param str nickname: Nickname
@@ -217,16 +218,20 @@ def add(nickname, firstname, lastname, mail, tel, birthdate, promo, photo_path):
 
     with Cursor() as cursor:
         cursor.prepare("INSERT INTO notes (nickname, lastname, firstname,\
-                        mail, tel, birthdate, promo, photo_path)\
+                        mail, tel, birthdate, promo, photo_path,\
+                        mails_inscription, stats_inscription)\
                         VALUES(:nickname, :lastname, :firstname, :mail, :tel,\
-                        :birthdate, :promo, :photo_path)")
+                        :birthdate, :promo, :photo_path, :mails_inscription,\
+                        :stats_inscription)")
         birthdate = datetime.datetime.strptime(birthdate,
                                                "%d/%m/%Y").timestamp()
 
         cursor.bindValues({':nickname': nickname, ':lastname': lastname,
                            ':firstname': firstname, ':mail': mail, ':tel': tel,
                            ':birthdate': birthdate, ':promo': promo,
-                           ':photo_path': name if photo_path else ""})
+                           ':photo_path': name if photo_path else "",
+                           ':mails_inscription': mails_inscription,
+                           ':stats_inscription': stats_inscription})
 
         if cursor.exec_():
             api.redis.send_message("enibar-notes", [nickname, ])

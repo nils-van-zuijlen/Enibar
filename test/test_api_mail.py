@@ -34,7 +34,7 @@ class MailTest(basetest.BaseTest):
         for i in range(10):
             text = "note{}".format(i)
             api.notes.add(text, text, text, text, text,
-                "24/12/2014", '1A', "")
+                "24/12/2014", '1A', "", True, True)
             if i < 5:
                 diff = -5
             elif i == 5:

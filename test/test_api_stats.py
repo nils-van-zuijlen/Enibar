@@ -33,7 +33,9 @@ class StatsTests(basetest.BaseTest):
             "0600000000",
             '12/12/2001',
             '1A',
-            ''
+            '',
+            True,
+            True
         )
         notes.transactions(["test1", ], -7)
         notes.add("test2",
@@ -43,7 +45,9 @@ class StatsTests(basetest.BaseTest):
             "0600000000",
             '12/12/2001',
             '1A',
-            ''
+            '',
+            True,
+            True
         )
         notes.transactions(["test2", ], 10)
         notes.add("test3",
@@ -53,7 +57,9 @@ class StatsTests(basetest.BaseTest):
             "0600000000",
             '12/12/2001',
             '1A',
-            ''
+            '',
+            True,
+            True
         )
         notes.transactions(["test3", ], -10)
         notes.add("test4",
@@ -63,7 +69,9 @@ class StatsTests(basetest.BaseTest):
             "0600000000",
             '12/12/2001',
             '1A',
-            ''
+            '',
+            True,
+            True
         )
         notes.transactions(["test4", ], 8)
 

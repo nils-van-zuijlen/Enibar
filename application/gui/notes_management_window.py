@@ -29,6 +29,7 @@ from PyQt5 import QtWidgets, QtCore, QtGui, uic
 from gui.input_widget import Input
 import api.notes
 import api.validator
+import api.redis
 import datetime
 import gui.notes_list_widget
 import settings
@@ -99,7 +100,9 @@ class NotesManagementWindow(QtWidgets.QDialog):
                              self.phone_input.text(),
                              self.birthdate_input.text(),
                              self.promo_input.currentText(),
-                             self.photo_selected):
+                             self.photo_selected,
+                             self.stats_checkbox.isChecked(),
+                             self.mails_checkbox.isChecked()):
                 self.adding = False
                 nick = self.nickname_input.text()
                 self.empty_inputs()
@@ -120,7 +123,9 @@ class NotesManagementWindow(QtWidgets.QDialog):
                                     mail=self.mail_input.text(),
                                     birthdate=birthdate,
                                     promo=self.promo_input.currentText(),
-                                    nickname=self.nickname_input.text())
+                                    nickname=self.nickname_input.text(),
+                                    stats_inscription=self.stats_checkbox.isChecked(),
+                                    mails_inscription=self.mails_checkbox.isChecked())
             if self.photo_selected:
                 api.notes.change_photo(self.nickname_input.text(),
                                        self.photo_selected)
@@ -143,6 +148,9 @@ class NotesManagementWindow(QtWidgets.QDialog):
         if not image.isNull():
             image = image.scaled(QtCore.QSize(120, 160))
         self.photo.setPixmap(image)
+
+        self.mails_checkbox.setChecked(note['mails_inscription'])
+        self.stats_checkbox.setChecked(note['stats_inscription'])
 
     def on_note_selected(self, note_selected):
         """ This is called when a note is selected

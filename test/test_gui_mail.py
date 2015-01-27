@@ -37,7 +37,7 @@ class MailTest(basetest.BaseGuiTest):
         self.send_mail_was_called = False
         self.win = gui.send_mail_window.SendMailWindow()
         api.notes.add("Nick", "Nick", "Name", "n2name@enib.fr", "+33605040302",
-            "01/02/1994", "3A", "")
+            "01/02/1994", "3A", "", True, True)
         api.mail.save_model("Stock model", "Subject", "message", 0, "")
         api.mail.send_mail = self.send_mail
 

@@ -31,7 +31,7 @@ class MailTest(basetest.BaseGuiTest):
         super().setUp()
         self._reset_db()
         api.notes.add("Nick", "Nick", "Name", "n2name@enib.fr", "+33605040302",
-            "01/02/1994", "3A", "")
+            "01/02/1994", "3A", "", True, True)
         api.mail.save_model("Stock model", "Subject", "message", 0, "")
         api.mail.save_scheduled_mails("Scheduled Mail 1", False, 1, "day", 0,
             0, "", "Scheduled mail test 1", "test@test.com",

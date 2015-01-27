@@ -32,7 +32,9 @@ class TransactionsTest(basetest.BaseTest):
             "0600000000",
             '12/12/2001',
             '1A',
-            ''
+            '',
+            True,
+            True
         )
 
     def test_log_transaction(self):

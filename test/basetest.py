@@ -119,7 +119,8 @@ class BaseTest(unittest.TestCase):
         for d1, d2 in zip(l1, l2):
             self.assertMyDictEqual(d1, d2, ignore=ignore)
 
-    def add_note(self, nick, name="test1", first_name="test1", mail="test@pouette.fr"):
+    def add_note(self, nick, name="test1", first_name="test1", mail="test@pouette.fr",
+            stats_inscription=True, mails_inscription=True):
         return api.notes.add(nick,
             first_name,
             name,
@@ -127,7 +128,9 @@ class BaseTest(unittest.TestCase):
             "0600000000",
             '12/12/2001',
             '1A',
-            ''
+            '',
+            stats_inscription,
+            mails_inscription
         )
 
     def _count(self, db):

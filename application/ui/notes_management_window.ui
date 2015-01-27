@@ -14,13 +14,6 @@
    <string>Gestion notes</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="1" column="1">
-    <widget class="ManageNotesList" name="note_list">
-     <property name="sortingEnabled">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
    <item row="4" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
@@ -41,6 +34,13 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item row="1" column="1">
+    <widget class="ManageNotesList" name="note_list">
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item row="0" column="2" rowspan="3">
     <layout class="QGridLayout" name="gridLayout">
@@ -157,22 +157,6 @@
        </property>
       </widget>
      </item>
-     <item row="25" column="0" colspan="2">
-      <widget class="QLabel" name="photo">
-       <property name="minimumSize">
-        <size>
-         <width>120</width>
-         <height>160</height>
-        </size>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
      <item row="21" column="0" colspan="3">
       <widget class="Input" name="phone_input">
        <property name="enabled">
@@ -279,6 +263,42 @@
       <widget class="Input" name="nickname_input">
        <property name="enabled">
         <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="24" column="0">
+      <widget class="QCheckBox" name="mails_checkbox">
+       <property name="text">
+        <string>Mails</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="25" column="0" colspan="2">
+      <widget class="QLabel" name="photo">
+       <property name="minimumSize">
+        <size>
+         <width>120</width>
+         <height>160</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="24" column="1" colspan="2">
+      <widget class="QCheckBox" name="stats_checkbox">
+       <property name="text">
+        <string>Stats</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

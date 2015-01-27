@@ -48,7 +48,9 @@ CREATE TABLE IF NOT EXISTS notes(
 	overdraft_date DATE DEFAULT NULL,
 	last_agio DATE DEFAULT NULL,
 	ecocups INTEGER UNSIGNED DEFAULT 0,
-	hidden BOOLEAN DEFAULT 0
+	hidden BOOLEAN DEFAULT 0,
+	mails_inscription BOOLEAN DEFAULT TRUE,
+	stats_inscription BOOLEAN DEFAULT TRUE
 ) ENGINE=InnoDB;
 
 delimiter //

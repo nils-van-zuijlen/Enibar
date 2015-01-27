@@ -53,7 +53,9 @@ class NotesTest(basetest.BaseTest):
             "0600000000",
             '12/12/2001',
             '1A',
-            '../test/resources/coucou.jpg'
+            '../test/resources/coucou.jpg',
+            True,
+            True
         ), 1)
         self.assertEqual(notes.add("test2",
             "test2",
@@ -62,7 +64,9 @@ class NotesTest(basetest.BaseTest):
             "0600000000",
             '12/12/2001',
             '1A',
-            '../test/resources/coucou.jpg'
+            '../test/resources/coucou.jpg',
+            True,
+            True
         ), 2)
         self.assertEqual(notes.add("test2",
             15,
@@ -71,7 +75,9 @@ class NotesTest(basetest.BaseTest):
             "0600000000",
             '12/12/2001',
             '1A',
-            ''
+            '',
+            True,
+            True,
         ), -1)
         self.assertEqual(self.count_notes(), 2)
 
@@ -84,7 +90,9 @@ class NotesTest(basetest.BaseTest):
             "0600000000",
             '12/12/2001',
             '1A',
-            '../test/resources/coucou.jpg'
+            '../test/resources/coucou.jpg',
+            True,
+            False
         )
         getted = notes.get(lambda x: x['id'] == id_)[0]
         self.assertEqual(getted, {'id': id_,
@@ -101,6 +109,8 @@ class NotesTest(basetest.BaseTest):
                                  'photo_path': 'coucou.jpg',
                                  'tot_cons': 0.0,
                                  'tot_refill': 0.0,
+                                 'mails_inscription': False,
+                                 'stats_inscription': True,
                                  'hidden': 0})
         self.assertTrue(os.path.isfile("img/coucou.jpg"))
 
@@ -113,7 +123,9 @@ class NotesTest(basetest.BaseTest):
             "0600000000",
             '12/12/2001',
             '1A',
-            ''
+            '',
+            True,
+            True
         )
         notes.add("test1",
             "test",
@@ -122,7 +134,9 @@ class NotesTest(basetest.BaseTest):
             "0600000000",
             '12/12/2001',
             '1A',
-            ''
+            '',
+            True,
+            True
         )
         notes.add("pouette",
             "test",
@@ -131,7 +145,9 @@ class NotesTest(basetest.BaseTest):
             "0600000000",
             '12/12/2001',
             '1A',
-            ''
+            '',
+            True,
+            True
         )
 
         res = notes.get(lambda x: 'test' in x["nickname"])
@@ -150,6 +166,8 @@ class NotesTest(basetest.BaseTest):
                            'photo_path': '',
                            'tot_cons': 0.0,
                            'tot_refill': 0.0,
+                           'mails_inscription': True,
+                           'stats_inscription': True,
                            'hidden': 0}, res)
 
     @freezegun.freeze_time("2014-12-24 06:00:00")
@@ -162,7 +180,9 @@ class NotesTest(basetest.BaseTest):
             "0600000000",
             "24/12/1995",
             '1A',
-            ''
+            '',
+            True,
+            True
         )
         id1 = notes.add("test1",
             "test",
@@ -171,7 +191,9 @@ class NotesTest(basetest.BaseTest):
             "0600000000",
             "24/12/1997",
             '1A',
-            ''
+            '',
+            True,
+            True
         )
 
         self.assertEqual(notes.get(lambda x: x["birthdate"] > 851403600), [{'id': id1,
@@ -188,6 +210,8 @@ class NotesTest(basetest.BaseTest):
                                  'overdraft_date': PyQt5.QtCore.QDate(),
                                  'ecocups': 0,
                                  'photo_path': '',
+                                 'mails_inscription': True,
+                                 'stats_inscription': True,
                                  'hidden': 0}])
 
     @freezegun.freeze_time("2014-12-24 06:00:00")
@@ -200,7 +224,9 @@ class NotesTest(basetest.BaseTest):
             "0600000000",
             "24/12/1995",
             '1A',
-            ''
+            '',
+            True,
+            True
         )
         notes.add("test1",
             "test",
@@ -209,7 +235,9 @@ class NotesTest(basetest.BaseTest):
             "0600000000",
             "24/12/1997",
             '1A',
-            ''
+            '',
+            True,
+            True
         )
 
         self.assertEqual(notes.get(lambda x: x["birthdate"] < 851403600), [{'id': id0,
@@ -226,6 +254,8 @@ class NotesTest(basetest.BaseTest):
                                  'overdraft_date': PyQt5.QtCore.QDate(),
                                  'ecocups': 0,
                                  'photo_path': '',
+                                 'mails_inscription': True,
+                                 'stats_inscription': True,
                                  'hidden': 0}])
 
     def test_transaction_multiple(self):
@@ -262,7 +292,9 @@ class NotesTest(basetest.BaseTest):
             "0600000000",
             '12/12/2001',
             '1A',
-            ''
+            '',
+            True,
+            True
         )
         notes.add("test2",
             "test2",
@@ -271,7 +303,9 @@ class NotesTest(basetest.BaseTest):
             "0700000000",
             '12/12/2001',
             '2A',
-            ''
+            '',
+            True,
+            True
         )
         notes.transactions(["test1", ], -60)
         xml = "<?xml version=\"1.0\"?>\n"
@@ -305,7 +339,9 @@ class NotesTest(basetest.BaseTest):
             "0600000000",
             '12/12/2001',
             '1A',
-            ''
+            '',
+            True,
+            True
         )
 
         to_export = ["nickname", "firstname", "lastname", "note", "mail",
@@ -323,7 +359,9 @@ class NotesTest(basetest.BaseTest):
             "0600000000",
             '12/12/2001',
             '1A',
-            ''
+            '',
+            True,
+            True
         )
         notes.add("test1",
             "test",
@@ -332,7 +370,9 @@ class NotesTest(basetest.BaseTest):
             "0600000000",
             '12/12/2001',
             '1A',
-            ''
+            '',
+            True,
+            True
         )
         to_export = ["nickname", "firstname", "lastname", "note", "mail",
                      "photo_path"]
@@ -361,7 +401,9 @@ class NotesTest(basetest.BaseTest):
             "0600000000",
             "01/01/1994",
             '1A',
-            ''
+            '',
+            True,
+            True
         )
 
         notes.change_values("test0", tel="0200000000", promo="3A")
