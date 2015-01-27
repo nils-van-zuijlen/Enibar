@@ -178,7 +178,11 @@ def change_values(nick, *, do_not=False, **kwargs):
             cursor.bindValue(':{}'.format(key), value)
         cursor.bindValue(':nick', nick)
         value = cursor.exec_()
-    api.redis.send_message("enibar-notes", [nick, ])
+    if 'nickname' in kwargs:  # Note renaming
+        api.redis.send_message("enibar-delete", [nick, ])
+        api.redis.send_message("enibar-notes", [kwargs['nickname'], ])
+    else:
+        api.redis.send_message("enibar-notes", [nick, ])
     return value
 
 

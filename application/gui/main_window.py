@@ -108,17 +108,17 @@ class MainWindow(QtWidgets.QMainWindow):
             if self.selected:
                 self._note_refresh(self.notes_list.currentRow())
             self.rebuild_notes_list()
-        else:
+        elif channel == 'enibar-delete':
             for note in message:
                 try:
                     del api.notes.NOTES_CACHE[note]
                 except KeyError:  # Osef
                     pass
             self.rebuild_notes_list()
-            try:
-                self.menu_bar.cur_window.redis_handle(channel, message)
-            except AttributeError:
-                pass
+        try:
+            self.menu_bar.cur_window.redis_handle(channel, message)
+        except AttributeError:
+            pass
 
     def on_note_selection(self, index):
         """ Called when a note is selected

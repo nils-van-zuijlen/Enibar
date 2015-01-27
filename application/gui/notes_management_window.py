@@ -29,7 +29,6 @@ from PyQt5 import QtWidgets, QtCore, QtGui, uic
 from gui.input_widget import Input
 import api.notes
 import api.validator
-import api.redis
 import datetime
 import gui.notes_list_widget
 import settings
@@ -60,7 +59,15 @@ class NotesManagementWindow(QtWidgets.QDialog):
         self.show()
 
     def redis_handle(self, channel, message):
-        self.note_list.refresh(api.notes.get())
+        if channel == 'enibar-notes-mgnt':
+            self.note_list.clear()
+            self.note_list.refresh(api.notes.get())
+            try:
+                self.note_list.setCurrentItem(
+                    self.note_list.findItems(message[0], QtCore.Qt.MatchExactly)[0],
+                    QtCore.QItemSelectionModel.SelectCurrent)
+            except IndexError:
+                pass
 
     def add_photo(self):
         """ Function called to add a photo. Open a QFileDialog and fill
@@ -106,13 +113,7 @@ class NotesManagementWindow(QtWidgets.QDialog):
                 self.adding = False
                 nick = self.nickname_input.text()
                 self.empty_inputs()
-                self.main_window.notes_list.refresh(api.notes.get(
-                    lambda x: x['hidden'] == 0))
-                self.note_list.refresh(api.notes.get())
                 self.add_button.setEnabled(True)
-                self.note_list.setCurrentItem(
-                    self.note_list.findItems(nick, QtCore.Qt.MatchExactly)[0],
-                    QtCore.QItemSelectionModel.SelectCurrent)
             else:
                 gui.utils.error("Erreur", "Impossible d'ajouter la note.")
         else:
@@ -129,7 +130,7 @@ class NotesManagementWindow(QtWidgets.QDialog):
             if self.photo_selected:
                 api.notes.change_photo(self.nickname_input.text(),
                                        self.photo_selected)
-            self.note_list.refresh(api.notes.get())
+        api.redis.send_message("enibar-notes-mgnt", [self.nickname_input.text()])
         self.photo_selected = None
 
     def fill_inputs(self, note):
