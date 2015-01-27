@@ -30,7 +30,7 @@ Database
 
     HOST
 
-            **Default value:** ``localhost``
+            **Default value:** ``127.0.0.1``
 
             Adress of the mysql server.
 
@@ -168,7 +168,7 @@ MAX_HISTORY = 5
 # Database settings
 #
 
-HOST = ""
+HOST = "127.0.0.1"
 USERNAME = "root"
 PASSWORD = ""
 DBNAME = "enibar"
