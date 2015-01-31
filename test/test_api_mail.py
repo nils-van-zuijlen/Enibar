@@ -18,7 +18,9 @@
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 import basetest
+import freezegun
 import time
+import os
 import os.path
 import PyQt5
 import api.mail
@@ -31,6 +33,8 @@ api.redis.send_message = lambda x, y: [api.notes.rebuild_note_cache(note) for no
 class MailTest(basetest.BaseTest):
     def setUp(self):
         self._reset_db()
+        if os.path.isfile("mail.log"):
+            os.remove("mail.log")
         text = "cocou"
         api.notes.add(text, text, text, text, text,
             "24/12/2014", '1A', "", True, False)
@@ -301,4 +305,39 @@ class MailTest(basetest.BaseTest):
         mails = self._populate_scheduled_mails()
         self.assertTrue(api.mail.delete_scheduled_mail(mails[0]['name']))
         self.assertEqual(mails[1:], list(api.mail.get_scheduled_mails()))
+
+    @freezegun.freeze_time("1994-02-01 00:00:00")
+    def test_success_mail_logging(self):
+        """ Testing successfully sent mail logging
+        """
+        return
+        api.mail.log_mail("a2levauf@enib.fr", "Test", "Test", "cafeteria@enib.fr")
+        with open("mail.log") as logfile:
+            self.assertEqual(logfile.read(),
+                "Mail sent on 1994-02-01 00:00:00 from cafeteria@enib.fr to a2levauf@enib.fr\n"
+                "Subject : Test\n"
+                "Message :\n"
+                "\n"
+                "Test\n"
+                "\n"
+                "\n"
+                "---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n"
+            )
+
+    @freezegun.freeze_time("1994-02-01 00:00:00")
+    def test_fail_mail_logging(self):
+        """ Testing fail sent mail logging
+        """
+        api.mail.log_mail("a2levauf@enib.fr", "Test", "Test", "cafeteria@enib.fr", Exception)
+        with open("mail.log") as logfile:
+            self.assertEqual(logfile.read(),
+                "Mail not sent on 1994-02-01 00:00:00 from cafeteria@enib.fr to a2levauf@enib.fr with error <class 'Exception'>\n"
+                "Subject : Test\n"
+                "Message :\n"
+                "\n"
+                "Test\n"
+                "\n"
+                "\n"
+                "---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n"
+            )
 

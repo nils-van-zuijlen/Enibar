@@ -35,6 +35,7 @@ from database import Cursor
 import api.base
 import api.notes
 import settings
+import datetime
 
 
 # Data used to convert french completion word to english database column name
@@ -96,18 +97,53 @@ def send_mail(to, subject, message, from_="cafeteria@enib.fr"):
     :param str from_: Mail sender
     """
 
+
+    log_mail(to, subject, message, from_)
+    return True
+
     srv, port = settings.SMTP_SERVER_ADDR, settings.SMTP_SERVER_PORT
     with smtplib.SMTP(srv, port) as server:
-        message = re.sub("\n", "<br/>", message)
-        message = MIMEText(message, "html")
-        message['subject'] = subject
-        message['from'] = from_
-        message['to'] = to
-        try:
-            server.send_message(message)
-        except smtplib.SMTPRecipientsRefused:
-            pass
+        content = re.sub("\n", "<br/>", message)
+        mail = MIMEText(content, "html")
+        mail['subject'] = subject
+        mail['from'] = from_
+        mail['to'] = to
 
+        try:
+            server.send_message(mail)
+            log_mail(to, subject, message, from_)
+            return True
+        except Exception as e:
+            log_mail(to, subject, message, from_, str(e))
+            return False
+
+def log_mail(to, subject, message, from_, error=None):
+    """ Log sent and not sent mail
+
+    :param str to: Mail recipient
+    :param str subject: Mail subject
+    :param str message: Mail message
+    :param str from_: Mail sender
+    :param str error: error while sending
+    """
+
+    with open("mail.log", "a") as logfile:
+        if not error:
+            logfile.write("Mail sent on {} from {} to {}\n".format(
+                datetime.datetime.now(),
+                from_,
+                to
+            ))
+        else:
+            logfile.write("Mail not sent on {} from {} to {} with error {}\n".format(
+                datetime.datetime.now(),
+                from_,
+                to,
+                error
+            ))
+        logfile.write("Subject : {}\n".format(subject))
+        logfile.write("Message :\n\n{}\n\n\n".format(message))
+        logfile.write("-" * 255 + "\n")
 
 def dummy_send_mail(to, subject, message, from_="cafeteria@enib.fr"):
     print("From:   ", from_)
