@@ -98,6 +98,7 @@ def send_mail(to, subject, message, from_="cafeteria@enib.fr"):
 
     srv, port = settings.SMTP_SERVER_ADDR, settings.SMTP_SERVER_PORT
     with smtplib.SMTP(srv, port) as server:
+        message = re.sub("\n", "<br/>", message)
         message = MIMEText(message, "html")
         message['subject'] = subject
         message['from'] = from_
