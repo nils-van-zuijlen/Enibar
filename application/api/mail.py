@@ -97,7 +97,6 @@ def send_mail(to, subject, message, from_="cafeteria@enib.fr"):
     :param str from_: Mail sender
     """
 
-
     log_mail(to, subject, message, from_)
     return True
 
@@ -116,6 +115,7 @@ def send_mail(to, subject, message, from_="cafeteria@enib.fr"):
         except Exception as e:
             log_mail(to, subject, message, from_, str(e))
             return False
+
 
 def log_mail(to, subject, message, from_, error=None):
     """ Log sent and not sent mail
@@ -144,6 +144,7 @@ def log_mail(to, subject, message, from_, error=None):
         logfile.write("Subject : {}\n".format(subject))
         logfile.write("Message :\n\n{}\n\n\n".format(message))
         logfile.write("-" * 255 + "\n")
+
 
 def dummy_send_mail(to, subject, message, from_="cafeteria@enib.fr"):
     print("From:   ", from_)
