@@ -48,6 +48,7 @@ from .mail_scheduler_window import MailSchedulerWindow
 import api.categories
 import api.notes
 import api.transactions
+import api.redis
 import datetime
 import gui.utils
 import settings
@@ -100,6 +101,16 @@ class MainWindow(QtWidgets.QMainWindow):
             2,
             QtWidgets.QHeaderView.Stretch
         )
+        self.check_alcohol()
+
+    def check_alcohol(self):
+        def callback(value):
+            if value == "1":
+                self.hide_alcohol.setChecked(False)
+            else:
+                self.hide_alcohol.setChecked(True)
+            self.panels.rebuild()
+        api.redis.get_key("alcohol", callback)
 
     def redis_handle(self, channel, message):
         if channel == 'enibar-notes':
@@ -115,6 +126,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 except KeyError:  # Osef
                     pass
             self.rebuild_notes_list()
+        elif channel == "enibar-alcohol":
+            self.check_alcohol()
         try:
             self.menu_bar.cur_window.redis_handle(channel, message)
         except AttributeError:

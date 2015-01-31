@@ -32,7 +32,7 @@ from PyQt5 import QtWidgets
 
 @asyncio.coroutine
 def install_redis_handle(app):
-    connection = yield from asyncio_redis.Connection.create(host=settings.HOST, port=6379)
+    connection = yield from asyncio_redis.Pool.create(host=settings.HOST, port=6379, poolsize=10)
     subscriber = yield from connection.start_subscribe()
 
     yield from subscriber.psubscribe(['enibar-*'])
@@ -49,7 +49,6 @@ if __name__ == "__main__":
     MYAPP.show()
     with LOOP:
         LOOP.run_until_complete(api.redis.connect())
-        asyncio.async(install_redis_handle(MYAPP))
-        asyncio.async(api.redis.connect())
+        LOOP.run_until_complete(install_redis_handle(MYAPP))
         LOOP.run_forever()
 

@@ -28,6 +28,7 @@ import collections
 import api.panels
 import settings
 from .auth_prompt_window import ask_auth
+import api.redis
 
 
 def fail_callback_dummy():
@@ -60,7 +61,10 @@ class Panels(QtWidgets.QTabWidget):
         """ Dummy fnction. Only here to ask a password on alcohol view state
             change.
         """
-        self.rebuild()
+        def callback():
+            api.redis.send_message("enibar-alcohol", "")
+            self.rebuild()
+        api.redis.set_key("alcohol", str(int(not self.parent().parent().hide_alcohol.isChecked())), callback)
 
     def rebuild(self):
         """ Clear panels and build them back
