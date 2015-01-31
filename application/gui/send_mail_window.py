@@ -27,6 +27,7 @@ import api.mail
 from .save_mail_model_window import SaveMailModelWindow
 from .load_mail_model_window import LoadMailModelWindow
 from .validation_window import ValidationWindow
+from .send_mail_recap_window import SendMailRecapWindow
 
 
 class SendMailWindow(QtWidgets.QMainWindow):
@@ -46,6 +47,7 @@ class SendMailWindow(QtWidgets.QMainWindow):
     def send(self):
         """ Send mail
         """
+        mails = []
         prompt = ValidationWindow("Etes vous sûr de vouloir envoyer ce mail ?")
         if not prompt.is_ok:
             return
@@ -56,12 +58,20 @@ class SendMailWindow(QtWidgets.QMainWindow):
         for recipient in recipients:
             if recipient['hidden'] or recipient['promo'] == "Prof":
                 continue
-            api.mail.send_mail(
+            sent = api.mail.send_mail(
                 recipient['mail'],
                 api.mail.format_message(self.subject_input.text(), recipient),
                 api.mail.format_message(self.message_input.toPlainText(), recipient),
                 self.destinateur_input.text(),
             )
+
+            mails.append({
+                'nickname': recipient['nickname'],
+                'mail': recipient['mail'],
+                'status': "Envoyé" if sent else "Echec de l'envoi"
+            })
+
+        popup = SendMailRecapWindow(self, mails)
 
     def new_model(self):
         """ New mail model

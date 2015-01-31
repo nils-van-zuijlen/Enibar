@@ -97,9 +97,6 @@ def send_mail(to, subject, message, from_="cafeteria@enib.fr"):
     :param str from_: Mail sender
     """
 
-    log_mail(to, subject, message, from_)
-    return True
-
     srv, port = settings.SMTP_SERVER_ADDR, settings.SMTP_SERVER_PORT
     with smtplib.SMTP(srv, port) as server:
         content = re.sub("\n", "<br/>", message)
