@@ -20,6 +20,7 @@
 from PyQt5 import QtCore, QtWidgets, uic
 from gui.tree_item_widget import TreeWidget
 
+
 class SendMailRecapWindow(QtWidgets.QDialog):
     """ Send mail recap window
     """
@@ -27,8 +28,7 @@ class SendMailRecapWindow(QtWidgets.QDialog):
         super().__init__(parent)
         uic.loadUi('ui/send_mail_recap_window.ui', self)
         for mail in mails:
-            widget = TreeWidget(
-                self.mail_list,(
+            widget = TreeWidget(self.mail_list, (
                 mail['nickname'],
                 mail['mail'],
                 mail['status'],
