@@ -208,6 +208,7 @@ class HistoryWindow(QtWidgets.QDialog):
     def update_summary(self):
         """ Update debit, credit and Total on the window
         """
+        quantity = 0
         credited = 0
         debited = 0
 
@@ -218,7 +219,9 @@ class HistoryWindow(QtWidgets.QDialog):
                     credited += price
                 if price < 0:
                     debited += price
+                quantity += transaction['quantity']
 
+        self.quantity.setText(str(quantity))
         self.credited.setText("{} €".format(round(credited, 2)))
         self.debited.setText("{} €".format(round(debited, 2)))
         self.total.setText("{} €".format(round(credited + debited, 2)))
@@ -226,6 +229,7 @@ class HistoryWindow(QtWidgets.QDialog):
     def update_summary_selected(self):
         """ update debit credit and Total on selected items.
         """
+        quantity = 0
         credited = 0
         debited = 0
 
@@ -238,7 +242,9 @@ class HistoryWindow(QtWidgets.QDialog):
                     credited += price
                 if price < 0:
                     debited += price
+                quantity += self.transactions[int(widget.text(8))]['quantity']
 
+        self.selected_quantity.setText(str(quantity))
         self.selected_credited.setText("{} €".format(round(credited, 2)))
         self.selected_debited.setText("{} €".format(round(debited, 2)))
         self.selected_solde.setText("{} €".format(round(credited + debited, 2)))
