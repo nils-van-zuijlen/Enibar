@@ -157,7 +157,6 @@ def get(**kwargs):
         cursor.prepare("SELECT prices.id as id,\
             prices.product as product,\
             prices.value as value,\
-            prices.barcode as barcode,\
             price_description.label as label,\
             price_description.category as category \
             from prices INNER JOIN price_description \
@@ -175,7 +174,6 @@ def get(**kwargs):
                     'value': record.value('value'),
                     'product': record.value('product'),
                     'category': record.value('category'),
-                    'barcode': record.value('barcode'),
                 }
 
 
@@ -183,10 +181,48 @@ def set_barcode(id_, barcode):
     """ Change the barcod assiociated to a product
     """
     with Cursor() as cursor:
-        cursor.prepare("UPDATE prices SET barcode=:barcode WHERE id=:id")
+        cursor.prepare("INSERT INTO barcodes (price_id, value) VALUES(:price, :value)")
+        cursor.bindValue(":price", id_)
+        cursor.bindValue(":value", barcode)
+        cursor.exec_()
+        return not cursor.lastError().isValid()
+
+
+def get_barcodes(price_id):
+    """ Return a lit of barcodes assiociated with a price
+    """
+    with Cursor() as cursor:
+        cursor.prepare("SELECT * FROM barcodes WHERE price_id=:id")
+        cursor.bindValue(":id", price_id)
+        cursor.exec_()
+        while cursor.next():
+            record = cursor.record()
+            yield {
+                'id': record.value('id'),
+                'price_id': record.value('price_id'),
+                'value': record.value('value'),
+            }
+
+
+def delete_barcode(barcode):
+    """ Delete a barcode
+    """
+    with Cursor() as cursor:
+        cursor.prepare("DELETE FROM barcodes WHERE value=:barcode")
         cursor.bindValue(":barcode", barcode)
-        cursor.bindValue(":id", id_)
         return cursor.exec_()
+
+
+def get_product_by_barcode(barcode):
+    """ Returns a price id when provided a barcode
+    """
+    with Cursor() as cursor:
+        cursor.prepare("SELECT * FROM barcodes WHERE value=:barcode")
+        cursor.bindValue(":barcode", barcode)
+        cursor.exec_()
+        if cursor.next():
+            return cursor.record().value('price_id')
+    return None
 
 
 def set_value(id_, value):

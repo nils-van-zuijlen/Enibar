@@ -270,7 +270,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def on_douchette(self, text):
         """ Called after the douchette is fired !
         """
-        price = api.prices.get_unique(barcode=text)
+        price = api.prices.get_unique(id=api.prices.get_product_by_barcode(text))
         if not price:
             return
         catname = api.categories.get_unique(id=price["category"])

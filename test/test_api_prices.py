@@ -119,7 +119,6 @@ class PricesTest(basetest.BaseTest):
             'value': 0,
             'product': pid,
             'category': self.cat_drink,
-            'barcode': ''
         }])
         api.prices.add(None, price_desc_id, 0)
         self.assertTrue(self.count_prices(), 2)
@@ -129,7 +128,6 @@ class PricesTest(basetest.BaseTest):
             'value': 0,
             'product': pid,
             'category': self.cat_drink,
-            'barcode': ''
         }])
 
     def test_get_unique(self):
@@ -146,7 +144,6 @@ class PricesTest(basetest.BaseTest):
             'value': 0,
             'product': pid,
             'category': self.cat_eat,
-            'barcode': ''
         })
 
     def test_set_value(self):
@@ -180,7 +177,13 @@ class PricesTest(basetest.BaseTest):
         pid = api.products.add("Lapin", category_id=self.cat_eat)
         desc_id = api.prices.add_descriptor("Unité", self.cat_eat)
         price = api.prices.add(pid, desc_id, 1)
-        self.assertEqual(api.prices.get_unique(id=price)['barcode'], "")
-        self.assertTrue(api.prices.set_barcode(price, "123456"))
-        self.assertEqual(api.prices.get_unique(id=price)['barcode'], "123456")
-
+        self.assertTrue(api.prices.set_barcode(price, '33333'))
+        self.assertFalse(api.prices.set_barcode(50, '33333'))  # Do not allow same barcode multiple times.
+        self.assertEqual(api.prices.get_product_by_barcode("33333"), price)
+        api.prices.set_barcode(price, '33334')
+        self.assertEqual(api.prices.get_product_by_barcode("33334"), price)
+        api.prices.delete_barcode('33334')
+        self.assertEqual(api.prices.get_product_by_barcode("33334"), None)
+        print(list(api.prices.get_barcodes(price)))
+        return
+        self.assertEqual(list(api.prices.get_barcodes(price)), [{'id': 1, 'price_id': price, 'value': '33333'}])

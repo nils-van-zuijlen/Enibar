@@ -29,7 +29,7 @@ import api.products
 import api.categories
 import api.prices
 import api.validator
-from .douchette_window import AskDouchetteWindow
+from .adding_barcode_window import AddingBarcodeWindow
 
 
 class ProductsManagementWindow(QtWidgets.QDialog):
@@ -274,14 +274,14 @@ class ConsumptionPrices(QtWidgets.QGroupBox):
         super().__init__(parent)
         self.widgets = []
 
-    def add_price(self, id_, name, value, barcode):
+    def add_price(self, id_, name, value):
         """ Add price to product's price list
 
         :param int id_: Price id
         :param str name: Price name
         :param float value: Price value
         """
-        item = ConsumptionPricesItem(id_, name, value, barcode)
+        item = ConsumptionPricesItem(id_, name, value)
         self.layout().insertWidget(len(self.widgets), item)
         self.widgets.append(item)
 
@@ -316,8 +316,7 @@ class ConsumptionPrices(QtWidgets.QGroupBox):
             return
 
         for price in api.prices.get(product=product['id']):
-            self.add_price(price['id'], price['label'], price['value'],
-                price['barcode'])
+            self.add_price(price['id'], price['label'], price['value'])
 
 
 class ConsumptionPricesItem(QtWidgets.QWidget):
@@ -325,13 +324,13 @@ class ConsumptionPricesItem(QtWidgets.QWidget):
     """
     BUTTON_ENABLED = True
 
-    def __init__(self, id_, name, value, barcode):
+    def __init__(self, id_, name, value):
         super().__init__()
         self.id_ = id_
         self.name = name
         self.value = value
-        self.barcode = barcode
         self.win = None
+        self.barcode = None
 
         self.label = QtWidgets.QLabel(name)
         self.input = QtWidgets.QDoubleSpinBox()
@@ -365,13 +364,7 @@ class ConsumptionPricesItem(QtWidgets.QWidget):
     def add_barcode(self):
         """ Called when the button for the barcode is pressed
         """
-        def set_barcode(barcode):
-            """ Callback for the AskDouchetteWindow
-            """
-            api.prices.set_barcode(self.id_, barcode)
-            self.barcode = barcode
-            self._build()
-        self.win = AskDouchetteWindow(set_barcode)
+        self.win = AddingBarcodeWindow(self.id_)
 
 
 class ConsumptionList(QtWidgets.QTreeWidget):
