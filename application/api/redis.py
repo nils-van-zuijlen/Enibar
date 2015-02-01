@@ -18,6 +18,7 @@ def send_message(channel, message):
 def get_key(key, callback):
     value = ""
     loop = asyncio.get_event_loop()
+
     def wrapper():
         nonlocal value
         transport, protocol = yield from loop.create_connection(asyncio_redis.RedisProtocol, settings.HOST, 6379)
@@ -28,6 +29,7 @@ def get_key(key, callback):
 
 def set_key(key, value, callback):
     loop = asyncio.get_event_loop()
+
     def wrapper():
         transport, protocol = yield from loop.create_connection(asyncio_redis.RedisProtocol, settings.HOST, 6379)
         yield from protocol.set(key, value)
