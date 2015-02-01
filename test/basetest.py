@@ -26,6 +26,7 @@ import os
 import sys
 import traceback
 import unittest
+import signal
 
 from unittest.runner import TextTestResult, TextTestRunner
 from unittest.signals import registerResult
@@ -178,6 +179,12 @@ class BaseGuiTest(BaseTest):
             self.display = Display(visible=0, size=(800, 600))
             self.display.start()
         self.app = QtWidgets.QApplication(sys.argv)
+        signal.signal(signal.SIGALRM, self.handle_timeout)
+        signal.alarm(30)
+
+    def handle_timeout(self, _, __):
+        self.app.quit()
+        raise TimeoutError()
 
     def tearDown(self):
         self.app = None  # Need this to avoid X11 crash. It may cause segfault.
