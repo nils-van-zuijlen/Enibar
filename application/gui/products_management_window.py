@@ -53,6 +53,8 @@ class ProductsManagementWindow(QtWidgets.QDialog):
     def on_change(self):
         """ Called when the inputs change
         """
+        self.button_cat_add.setDefault(True)
+        self.button_product_add.setDefault(True)
         self.button_cat_add.setEnabled(self.input_cat.valid)
         self.button_product_add.setEnabled(self.input_product.valid)
 
@@ -131,8 +133,10 @@ class ProductsManagementWindow(QtWidgets.QDialog):
                     })
         if not api.prices.set_multiple_values(new_prices):
             gui.utils.error("Erreur", "Impossible de sauvegarder les nouveaux prix")
-        if not len(indexes):
-            return
+        if self.name_input.isEnabled():
+            if api.products.rename(product['id'], self.name_input.text()):
+                for item in self.products.selectedItems():
+                    item.setData(0, 0, self.name_input.text())
 
     def select_product(self):
         """ Select product
@@ -146,16 +150,20 @@ class ProductsManagementWindow(QtWidgets.QDialog):
         if not indexes:
             self.prices.setEnabled(False)
             self.input_product_save.setEnabled(False)
+            self.name_input.setEnabled(False)
             return
 
         if len(indexes) > 1:
             # If more than 1 product is selected, we must disable the douchette.
             ConsumptionPricesItem.BUTTON_ENABLED = False
+            self.name_input.setEnabled(False)
         else:
+            self.name_input.setEnabled(True)
             ConsumptionPricesItem.BUTTON_ENABLED = True
 
         for index in indexes:
             if not index.parent().isValid():
+                self.name_input.setEnabled(False)
                 continue
             if parent and index.parent() != parent:
                 invalid = True
@@ -165,9 +173,11 @@ class ProductsManagementWindow(QtWidgets.QDialog):
         item = indexes[-1]
         if item.parent().isValid() and not invalid:
             self.prices.rebuild(item.data(), item.parent().data())
+            self.name_input.setText(item.data())
             self.prices.setEnabled(True)
             self.input_product_save.setEnabled(True)
         else:
+            self.name_input.setText("")
             self.prices.clean()
             self.prices.setEnabled(False)
             self.input_product_save.setEnabled(False)
@@ -208,6 +218,8 @@ class ProductsManagementWindow(QtWidgets.QDialog):
                 )
         is_alcoholic = self.checkbox_alcoholic.isChecked()
         api.categories.set_alcoholic(cat['id'], is_alcoholic)
+        if api.categories.rename(self.category.text(), self.cat_name_input.text()):
+            self.category.setText(self.cat_name_input.text())
 
     def add_category_price(self):
         """ Add category price to category price list
@@ -232,12 +244,15 @@ class ProductsManagementWindow(QtWidgets.QDialog):
                 color.setNamedColor(cat['color'])
                 self.color_picker.setCurrentColor(color)
                 self.category_prices.rebuild(item.text())
+                self.cat_name_input.setText(item.text())
                 self.category_prices.setEnabled(True)
                 self.checkbox_alcoholic.setEnabled(True)
                 self.button_cat_save.setEnabled(True)
                 self.button_cat_price.setEnabled(True)
                 self.category_type.setEnabled(True)
                 self.color_button.setEnabled(True)
+                self.cat_name_input.setEnabled(True)
+                self.button_cat_save.setDefault(True)
                 return
 
         self.category_prices.clean()
@@ -247,6 +262,8 @@ class ProductsManagementWindow(QtWidgets.QDialog):
         self.category_type.setEnabled(False)
         self.color_button.setEnabled(False)
         self.checkbox_alcoholic.setEnabled(False)
+        self.cat_name_input.setEnabled(False)
+        self.button_cat_save.setDefault(False)
 
     def select_color(self):
         """ Select color, called when color_button is pressed

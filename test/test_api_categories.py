@@ -96,6 +96,8 @@ class CategoriesTest(basetest.BaseTest):
         categories.rename("Test", "Coucou")
         self.assertEqual("Coucou", list(categories.get(name='Coucou'))[0]['name'])
         self.assertEqual(1, self.count_categories())
+        self.assertFalse(categories.rename("Coucou", " "))
+        self.assertEqual("Coucou", list(categories.get(name='Coucou'))[0]['name'])
 
     def test_set_alcoholic(self):
         """ Testing set_alcoholic

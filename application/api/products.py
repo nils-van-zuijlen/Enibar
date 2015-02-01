@@ -98,6 +98,20 @@ def remove(id_):
         return cursor.exec_()
 
 
+def rename(product_id, new_name):
+    """ Rename a product
+    """
+    if not new_name.strip():
+        return False
+    with Cursor() as cursor:
+        cursor.prepare("UPDATE products SET name=:new WHERE id=:id")
+
+        cursor.bindValue(":new", new_name.strip())
+        cursor.bindValue(":id", product_id)
+
+        return cursor.exec_()
+
+
 def search_by_name(name):
     """ Search products by name
 

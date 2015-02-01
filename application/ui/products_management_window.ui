@@ -144,6 +144,9 @@
            <height>16777215</height>
           </size>
          </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
          <property name="selectionMode">
           <enum>QAbstractItemView::ExtendedSelection</enum>
          </property>
@@ -203,6 +206,22 @@
          </layout>
         </widget>
        </item>
+       <item row="0" column="3">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>Nom</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="0" column="0">
+           <widget class="QLineEdit" name="name_input">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tab_manage_categories">
@@ -210,17 +229,32 @@
        <string>Gestion des catégories</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="6" column="2">
-        <widget class="QPushButton" name="button_cat_save">
-         <property name="enabled">
-          <bool>false</bool>
+       <item row="2" column="2">
+        <widget class="QGroupBox" name="category_color">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <property name="text">
-          <string>Sauvegarder la catégorie</string>
+         <property name="title">
+          <string>Couleur</string>
          </property>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="0" column="0">
+           <widget class="QPushButton" name="color_button">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>changer la couleur</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
-       <item row="5" column="2">
+       <item row="8" column="2">
         <widget class="QPushButton" name="button_cat_price">
          <property name="enabled">
           <bool>false</bool>
@@ -230,56 +264,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="2" rowspan="3">
-        <widget class="CategoryPrices" name="category_prices">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>200</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="title">
-          <string>Libellé des prix</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <property name="spacing">
-           <number>0</number>
-          </property>
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <item>
-           <spacer name="verticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="6" column="0">
+       <item row="9" column="0">
         <widget class="QWidget" name="widget" native="true">
          <property name="minimumSize">
           <size>
@@ -380,7 +365,7 @@
          </layout>
         </widget>
        </item>
-       <item row="5" column="0">
+       <item row="8" column="0">
         <widget class="Input" name="input_cat">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -409,6 +394,32 @@
         </widget>
        </item>
        <item row="0" column="2">
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>Nom</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="0" column="0">
+           <widget class="QLineEdit" name="cat_name_input">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="9" column="2">
+        <widget class="QPushButton" name="button_cat_save">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Sauvegarder la catégorie</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
         <widget class="QGroupBox" name="category_type">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
@@ -448,32 +459,7 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="2">
-        <widget class="QGroupBox" name="category_color">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="title">
-          <string>Couleur</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_4">
-          <item row="0" column="0">
-           <widget class="QPushButton" name="color_button">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>changer la couleur</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="0" column="0" rowspan="5" colspan="2">
+       <item row="0" column="0" rowspan="8" colspan="2">
         <widget class="CategoryList" name="categories">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
@@ -498,6 +484,55 @@
          </property>
         </widget>
        </item>
+       <item row="3" column="2" rowspan="5">
+        <widget class="CategoryPrices" name="category_prices">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="title">
+          <string>Libellé des prix</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
       </layout>
      </widget>
     </widget>
@@ -505,6 +540,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>Input</class>
+   <extends>QLineEdit</extends>
+   <header>gui/input_widget</header>
+  </customwidget>
   <customwidget>
    <class>ConsumptionPrices</class>
    <extends>QGroupBox</extends>
@@ -526,11 +566,6 @@
    <class>ConsumptionList</class>
    <extends>QTreeWidget</extends>
    <header>gui/products_management_window</header>
-  </customwidget>
-  <customwidget>
-   <class>Input</class>
-   <extends>QLineEdit</extends>
-   <header>gui.input_widget</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -102,7 +102,7 @@ class TestAuthPrompt(basetest.BaseGuiTest):
             self.assertFalse(self.func_called)
             win.accept()
 
-        QtCore.QTimer.singleShot(500, lambda: self.fill_fail_auth(callback))
+        QtCore.QTimer.singleShot(1000, lambda: self.fill_fail_auth(callback))
         self.func_callback()
 
     def test_pass_performer(self):

@@ -78,6 +78,8 @@ def rename(oldname, newname):
     :param str oldname: Old category name
     :param str newname: New category name
     """
+    if not newname.strip():
+        return False
     with Cursor() as cursor:
         cursor.prepare("UPDATE categories SET name=? WHERE name=?")
         cursor.addBindValue(newname)

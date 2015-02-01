@@ -68,3 +68,15 @@ class ProductsTest(basetest.BaseTest):
             [{'id': id2, 'category': self.cat_eat, 'name': "Banana split"},
              {'id': id1, 'category': self.cat_eat, 'name': "Banane"}])
 
+    def test_rename(self):
+        """ Testing renaming a product
+        """
+        id1 = products.add("Banane", category_id=self.cat_eat)
+        products.rename(id1, "Lapin")
+        self.assertEqual(list(products.get()),
+            [{'id': id1, 'category': self.cat_eat, 'name': "Lapin"}]
+        )
+        self.assertFalse(products.rename(id1, " "))
+        self.assertEqual(list(products.get()),
+            [{'id': id1, 'category': self.cat_eat, 'name': "Lapin"}]
+        )
