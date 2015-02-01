@@ -77,7 +77,7 @@ class AskDouchetteWindow(QtWidgets.QDialog):
             If the " key is pressed, open a Douchette window.
         """
         if isinstance(event, QtGui.QKeyEvent) and\
-                event.type() == QtCore.QEvent.KeyPress:
+                event.type() == QtCore.QEvent.KeyRelease:
             if event.text() == "\"":
                 self.win = DouchetteWindow(self.callback)
                 self.win.finished.connect(self.close)
