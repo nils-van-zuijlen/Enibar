@@ -27,6 +27,7 @@ Prices
 from database import Cursor, Database
 from PyQt5 import QtSql
 import api.base
+import settings
 
 
 def add_descriptor(name, category):
@@ -158,9 +159,12 @@ def get(**kwargs):
             prices.product as product,\
             prices.value as value,\
             price_description.label as label,\
-            price_description.category as category \
+            price_description.category as category, \
+            categories.alcoholic AS alcoholic \
             from prices INNER JOIN price_description \
+            INNER JOIN categories \
             ON prices.price_description=price_description.id \
+            AND categories.id=price_description.category \
             {} {} ".format("WHERE" * bool(filters), " AND ".join(filters)))
         for key, arg in kwargs.items():
             cursor.bindValue(":{}".format(key), arg)
@@ -171,7 +175,7 @@ def get(**kwargs):
                 yield {
                     'id': record.value('id'),
                     'label': record.value('label'),
-                    'value': record.value('value'),
+                    'value': record.value('value') + settings.ALCOHOL_MAJORATION * record.value("alcoholic"),
                     'product': record.value('product'),
                     'category': record.value('category'),
                 }

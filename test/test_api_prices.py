@@ -20,6 +20,7 @@ import basetest
 import api.prices
 import api.products
 import api.categories
+import settings
 
 from database import Cursor
 
@@ -184,6 +185,17 @@ class PricesTest(basetest.BaseTest):
         self.assertEqual(api.prices.get_product_by_barcode("33334"), price)
         api.prices.delete_barcode('33334')
         self.assertEqual(api.prices.get_product_by_barcode("33334"), None)
-        print(list(api.prices.get_barcodes(price)))
-        return
         self.assertEqual(list(api.prices.get_barcodes(price)), [{'id': 1, 'price_id': price, 'value': '33333'}])
+
+    def test_alcohol_majoration(self):
+        """ Testing alcohol majoration
+        """
+        api.categories.set_alcoholic(self.cat_eat, True)
+        pid = api.products.add("Lapin", category_id=self.cat_eat)
+        desc_id = api.prices.add_descriptor("Unité", self.cat_eat)
+        settings.ALCOHOL_MAJORATION = 0.0
+        self.assertEqual(list(api.prices.get()), [{'label': 'Unité', 'id': 1, 'product': 1, 'category': 1, 'value': 0.0}])
+        settings.ALCOHOL_MAJORATION = 5.0
+        self.assertEqual(list(api.prices.get()), [{'label': 'Unité', 'id': 1, 'product': 1, 'category': 1, 'value': 5.0}])
+        settings.ALCOHOL_MAJORATION = 0.0
+

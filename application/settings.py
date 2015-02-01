@@ -155,6 +155,11 @@ Other
 
             The base dir for all images.
 
+    ALCOHOL_MAJORATION
+            **Default value** ``0.0``
+
+            Majoration on alcohols
+
 """
 
 
@@ -163,6 +168,7 @@ DEBUG = False
 ASK_VALIDATION_VALIDATE = True
 ASK_VALIDATION_REFILL = True
 MAX_HISTORY = 5
+ALCOHOL_MAJORATION = 5
 
 #
 # Database settings
