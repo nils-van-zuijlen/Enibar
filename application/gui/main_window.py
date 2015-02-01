@@ -45,6 +45,7 @@ from .about_window import AboutWindow
 from .csv_import_window import CsvImportWindow
 from .send_mail_window import SendMailWindow
 from .mail_scheduler_window import MailSchedulerWindow
+from .help_window import HelpWindow
 import api.categories
 import api.notes
 import api.transactions
@@ -551,4 +552,10 @@ class MenuBar(QtWidgets.QMenuBar):
         self._close_window()
         self.cur_window = StatsWindow(by_note=False)
         self._connect_window()
+
+    def help_fnc(self):
+        """ Open HelpWindow
+        """
+        self._close_window()
+        self.cur_window = HelpWindow()
 

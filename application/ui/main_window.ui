@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>884</width>
-    <height>690</height>
+    <height>699</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -641,7 +641,7 @@
      <x>0</x>
      <y>0</y>
      <width>884</width>
-     <height>19</height>
+     <height>15</height>
     </rect>
    </property>
    <widget class="QMenu" name="administration">
@@ -697,6 +697,7 @@
     </widget>
     <addaction name="menu_Statistiques"/>
     <addaction name="about"/>
+    <addaction name="help"/>
    </widget>
    <widget class="QMenu" name="menuMails">
     <property name="title">
@@ -844,6 +845,11 @@
     <string>Gestion des &amp;models</string>
    </property>
   </action>
+  <action name="help">
+   <property name="text">
+    <string>Aide</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -883,6 +889,7 @@
     <slot>stats_by_category_fnc()</slot>
     <slot>send_mail_fnc()</slot>
     <slot>mail_scheduler_fnc()</slot>
+    <slot>help_fnc()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -1327,6 +1334,22 @@
     <hint type="destinationlabel">
      <x>441</x>
      <y>9</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>help</sender>
+   <signal>triggered()</signal>
+   <receiver>menu_bar</receiver>
+   <slot>help_fnc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>7</y>
     </hint>
    </hints>
   </connection>
