@@ -91,7 +91,7 @@ class SendMailWindow(QtWidgets.QMainWindow):
         """ Save mail model
         """
         popup = SaveMailModelWindow(self)
-        if popup.exec() and popup.input.text():
+        if popup.exec_() and popup.input.text():
             api.mail.save_model(
                 popup.input.text(),
                 self.subject_input.text(),
@@ -104,7 +104,7 @@ class SendMailWindow(QtWidgets.QMainWindow):
         """ Open mail model. Fill all fields in the ui.
         """
         popup = LoadMailModelWindow(self)
-        if popup.exec():
+        if popup.exec_():
             model = popup.get_selected()
             if not model:
                 return None

@@ -89,7 +89,7 @@ class UsersManagementWindow(QtWidgets.QDialog):
         """ Callback to add user when button is pushed
         """
         prompt = AddUserPrompt()
-        if prompt.exec():
+        if prompt.exec_():
             self.user_list.refresh()
 
     def save(self):

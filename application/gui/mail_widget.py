@@ -87,7 +87,7 @@ class MailFilterInput(QtWidgets.QLineEdit):
             return
 
         popup = MailSelectorWindow(self, self.text().split(','))
-        if popup.exec():
+        if popup.exec_():
             mails = popup.get_mail_list()
             self.setText(','.join(mails))
 

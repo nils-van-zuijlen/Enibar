@@ -34,7 +34,7 @@ class ValidationWindow(QtWidgets.QDialog):
             self.is_ok = False
             uic.loadUi('ui/validation_prompt_window.ui', self)
             self.content.setText(text)
-            self.exec()
+            self.exec_()
         else:
             self.is_ok = True
 

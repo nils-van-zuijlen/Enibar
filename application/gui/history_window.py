@@ -375,7 +375,7 @@ class HistoryWindow(QtWidgets.QDialog):
             export_trans.append(self.transactions[int(widget.text(8))])
 
         dialog = ExportWindow(export_trans)
-        dialog.exec()
+        dialog.exec_()
 
 
 class ExportWindow(QtWidgets.QDialog):

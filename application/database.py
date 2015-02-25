@@ -71,8 +71,8 @@ class Database:
                 print("Can't join database")
                 sys.exit(1)
             cursor = SqlQuery(self.database)
-            cursor.exec("SET AUTOCOMMIT=0")
-            cursor.exec("SET innodb_flush_log_at_trx_commit=0")
+            cursor.exec_("SET AUTOCOMMIT=0")
+            cursor.exec_("SET innodb_flush_log_at_trx_commit=0")
 
 
 class Cursor(Database):

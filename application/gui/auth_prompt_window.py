@@ -92,7 +92,7 @@ class AuthPromptWindow(QtWidgets.QDialog):
             gui.utils.error("Error", "Personne n'a le droit de faire ça")
         else:
             self.login_input.setFocus()
-            self.exec()
+            self.exec_()
 
     def accept(self):
         """ Called when "Login" is clicked """

@@ -34,7 +34,7 @@ def error(title, message=""):
     err.setText(title)
     err.setInformativeText(message)
     err.setIcon(QtWidgets.QMessageBox.Critical)
-    err.exec()
+    err.exec_()
 
 
 def valid(title, message=""):
@@ -44,5 +44,5 @@ def valid(title, message=""):
     err.setText(title)
     err.setInformativeText(message)
     err.setIcon(QtWidgets.QMessageBox.Information)
-    err.exec()
+    err.exec_()
 
