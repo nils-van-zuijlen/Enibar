@@ -29,6 +29,7 @@ import api.transactions
 from PyQt5 import QtSql
 from database import Database
 
+
 if __name__ == "__main__":
     with Database() as database:
         database.transaction()
