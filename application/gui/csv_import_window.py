@@ -55,9 +55,11 @@ class CsvImportWindow(QtWidgets.QDialog):
             for line in reader:
                 mail = line['Email']
                 note = api.notes.get(lambda x: x['mail'] == mail)
-                if note:
+                if note and not note[0]['hidden']:
                     note = note[0]['nickname']
                     self.notes.append(note)
+                else:
+                    note = None
                 if note:
                     QtWidgets.QTreeWidgetItem(
                         self.recap,
