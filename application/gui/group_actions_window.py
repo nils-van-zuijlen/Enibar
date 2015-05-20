@@ -49,7 +49,7 @@ class GroupActionsWindow(QtWidgets.QDialog):
         uic.loadUi('ui/group_actions_window.ui', self)
 
         self.filter_input.setEnabled(False)
-        self.filter_input.set_validator(api.validator.NUMBER)
+        self.filter_input.set_validator(api.validator.ALL_NUMBER)
         self.on_change = lambda: False  # Don't do anything.
         self.filter_input.keyPressEvent = self.filter_input_changed
         self.note_list.rebuild(api.notes.get(self.current_filter))
