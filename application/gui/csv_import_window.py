@@ -50,7 +50,7 @@ class CsvImportWindow(QtWidgets.QDialog):
     def _build_recap(self):
         """ Parse a CSV file and try to build lines from it.
         """
-        with open(self.file_path, 'r', encoding="ISO8859") as fd:
+        with open(self.file_path, 'r') as fd:
             reader = csv.DictReader(fd)
             for line in reader:
                 mail = line['Email']
