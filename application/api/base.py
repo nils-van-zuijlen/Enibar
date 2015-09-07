@@ -41,7 +41,7 @@ def make_get_unique(getter):
     return get_unique
 
 
-def filtered_getter(table, filter_):
+def filtered_getter(table, filter_, reverse=False, max=None):
     """ This creates a request in the table table with the filter filter_ and
         returns the cursor of this request for future use.
     """
@@ -50,10 +50,12 @@ def filtered_getter(table, filter_):
         for key in filter_:
             filters.append("{key}=:{key}".format(key=key))
 
-        cursor.prepare("SELECT * FROM {} {} {}".format(
+        cursor.prepare("SELECT * FROM {} {} {} {} {}".format(
             table,
             "WHERE" * bool(len(filters)),
-            " AND ".join(filters)
+            " AND ".join(filters),
+            "ORDER BY id DESC" * reverse,
+            "LIMIT 0, {}".format(max) * bool(max),
         ))
         for key, arg in filter_.items():
             cursor.bindValue(":{}".format(key), arg)

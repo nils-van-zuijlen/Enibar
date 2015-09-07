@@ -204,12 +204,10 @@ class MainWindow(QtWidgets.QMainWindow):
         )
         if infos:
             infos = infos[0]
-        note_hist = api.transactions.get_reversed(note=self.selected.text())
+        note_hist = api.transactions.get(note=self.selected.text(), reverse=True, max=settings.MAX_HISTORY)
 
         # Construct the note history
-        for i, product in enumerate(note_hist):
-            if i > settings.MAX_HISTORY:
-                break
+        for product in note_hist:
             name = "{} ({}) - {}".format(product['product'],
                                          product['price_name'],
                                          product['category'])

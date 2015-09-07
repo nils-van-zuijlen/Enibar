@@ -198,13 +198,13 @@ TRANSACT_FIELDS = ['id', 'date', 'note', 'lastname', 'firstname', 'category',
                    'product', 'price_name', 'quantity', 'price']
 
 
-def get(**filter_):
+def get(max=None, reverse=False, **filter_):
     """ Get transactions matching filter.
 
     :param dict filter_: filter to apply
     """
     global TRANSACTS_FIELDS_CACHE
-    cursor = api.base.filtered_getter("transactions", filter_)
+    cursor = api.base.filtered_getter("transactions", filter_, max=max, reverse=reverse)
     while cursor.next():
         record = cursor.record()
         if TRANSACTS_FIELDS_CACHE == {}:
@@ -213,26 +213,4 @@ def get(**filter_):
         yield {field: record.value(TRANSACTS_FIELDS_CACHE[field]) for field
                in TRANSACT_FIELDS}
 
-
-def get_reversed(**filter_):
-    """ Get transactions matching filter. Reversed.
-
-    :param dict filter_: filter to apply
-    """
-    global TRANSACTS_FIELDS_CACHE
-    cursor = api.base.filtered_getter("transactions", filter_)
-    if not cursor.last():
-        return []
-    record = cursor.record()
-    if TRANSACTS_FIELDS_CACHE == {}:
-        TRANSACTS_FIELDS_CACHE = {field: record.indexOf(field) for field
-                                  in TRANSACT_FIELDS}
-    yield {field: record.value(TRANSACTS_FIELDS_CACHE[field]) for field
-           in TRANSACT_FIELDS}
-    while cursor.previous():
-        record = cursor.record()
-        yield {field: record.value(TRANSACTS_FIELDS_CACHE[field]) for field
-               in TRANSACT_FIELDS}
-
 get_unique = api.base.make_get_unique(get)
-
