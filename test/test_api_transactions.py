@@ -21,6 +21,8 @@ import basetest
 import api.transactions as transactions
 import api.notes as notes
 
+notes.api.redis.send_message = lambda x, y: [notes.rebuild_note_cache(note) for note in y]
+
 
 class TransactionsTest(basetest.BaseTest):
     def setUp(self):
@@ -249,47 +251,4 @@ class TransactionsTest(basetest.BaseTest):
         )
         self.assertEqual(list(transactions.get_grouped_entries("note", {'lastname': ""})), ['test2'])
         self.assertEqual(list(transactions.get_grouped_entries("note", {})), ['test1', 'test2'])
-
-    def test_get_reversed(self):
-        """ Testing get_reversed
-        """
-        self.assertEqual(list(transactions.get_reversed()), [])
-        self.assertTrue(transactions.log_transaction(
-            "test1",
-            "a",
-            "b",
-            "c",
-            "1",
-            -1
-        ))
-        self.assertTrue(transactions.log_transaction(
-            "test1",
-            "b",
-            "d",
-            "c",
-            "2",
-            -5
-        ))
-        self.assertEqual(self.count_transactions(), 2)
-        self.assertDictListEqual(list(transactions.get_reversed()),
-            [{'product': 'd',
-              'lastname': 'test1',
-              'quantity': 2,
-              'firstname': 'test1',
-              'id': 2,
-              'note': 'test1',
-              'price': -5.0,
-              'category': 'b',
-              'price_name': 'c'},
-             {'product': 'b',
-              'lastname': 'test1',
-              'quantity': 1,
-              'firstname': 'test1',
-              'id': 1,
-              'note': 'test1',
-              'price': -1.0,
-              'category': 'a',
-              'price_name': 'c'},
-            ], ignore=["date"]
-        )
 
