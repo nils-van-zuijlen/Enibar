@@ -62,7 +62,7 @@ if [[ $TEST == 1 ]]; then
 	nosetests ../test/*.py -v --with-coverage --cover-package=api,gui || TEST_FAILED=1
 
 	mv settings.py.bak settings.py
-    killall `cat /tmp/mysql.pid`
+    kill `cat /tmp/mysql.pid`
 fi
 
 rm -f img/coucou.jpg
