@@ -22,7 +22,7 @@ export USE_VD=1
 APPLICATION_DIR="application"
 cd $APPLICATION_DIR
 
-TEMP=`getopt -o tp --long test,pep,no-docker,no-vd -- "$@"`
+TEMP=`getopt -o tp --long test,pep,no-vd -- "$@"`
 eval set -- "$TEMP"
 
 # == EXTRACT OPTIONS
@@ -34,9 +34,6 @@ while true ; do
 		-t|--test)
 			TEST=1
 			shift ;;
-		--no-docker)
-			NODOCKER=1
-			shift;;
 		--no-vd)
 			export USE_VD=0
 			shift;;
@@ -51,24 +48,21 @@ if [[ $TEST == 1 ]]; then
 	rm -f img/coucou.jpg
 	cp settings.py settings.py.bak
 
+    rm -Rf /tmp/enibar
+    mkdir -p /tmp/enibar
+    mysql_install_db --basedir=/usr --datadir=/tmp/enibar
+    mysqld --no-defaults --pid-file=/tmp/mysql.pid -P 4569 --datadir /tmp/enibar/ --socket=/tmp/mysql.socket &
+    sleep 5;
+    echo "Importing"
 	# -- MYSQL --
-	if [[ $NODOCKER != 1 ]]; then
-		DOCKER_MYSQL_ID=$(docker run -d eijebong/mariadb)
-		IP=$(docker inspect $DOCKER_MYSQL_ID | python -c 'import json,sys;obj=json.load(sys.stdin);print(obj[0]["NetworkSettings"]["IPAddress"])')
-		sed "s/{IP}/${IP}/" ../test/resources/settings/settings_mysql.py > settings.py
-		echo "[ .... ] Waiting for db..."
-		sleep 30
-
-		mysql --user="root" --password="toor" --host="$IP" < ../db.sql
-	else
-		mysql --user="root" < ../db.sql
-	fi
-
+	mysql --socket=/tmp/mysql.socket --user="root" --port 4569 < ../db.sql
+    export TEST_ENIBAR=1
 	# -- TEST --
 	rm -f .coverage
 	nosetests ../test/*.py -v --with-coverage --cover-package=api,gui || TEST_FAILED=1
 
 	mv settings.py.bak settings.py
+    killall `cat /tmp/mysql.pid`
 fi
 
 rm -f img/coucou.jpg
@@ -78,8 +72,5 @@ if [[ $PEP == 1 ]]; then
 	pep8 --exclude=documentation,enibar-venv,.ropeproject --ignore=E501,W391,E128,E124 ../ || TEST_FAILED=1
 fi
 
-if [[ $NODOCKER != 1 && $TEST == 1 ]]; then
-	docker stop $DOCKER_MYSQL_ID
-fi
 exit $TEST_FAILED
 

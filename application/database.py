@@ -37,6 +37,7 @@ You can use the DB class like that:
 from PyQt5 import QtSql, QtWidgets
 import sys
 import settings
+import os
 
 
 class Database:
@@ -57,7 +58,9 @@ class Database:
         """
         if Database.database is None:
             Database.database = QtSql.QSqlDatabase("QMYSQL")
-
+            if "TEST_ENIBAR" in os.environ:
+                Database.database.setPort(int(settings.PORT))
+                Database.database.setConnectOptions("MYSQL_OPT_RECONNECT=1;UNIX_SOCKET=/tmp/mysql.socket")
             Database.database.setHostName(settings.HOST)
             Database.database.setUserName(settings.USERNAME)
             Database.database.setPassword(settings.PASSWORD)
