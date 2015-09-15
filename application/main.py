@@ -20,7 +20,7 @@
 Main file of the Application
 """
 import asyncio
-import asyncio_redis
+import aioredis
 import api.redis
 import json
 import quamash
@@ -32,23 +32,23 @@ from PyQt5 import QtWidgets
 
 @asyncio.coroutine
 def install_redis_handle(app):
-    connection = yield from asyncio_redis.Pool.create(host=settings.HOST, port=6379, poolsize=10)
-    subscriber = yield from connection.start_subscribe()
+    sub = yield from aioredis.create_redis(('localhost', 6379))
+    res = yield from sub.psubscribe("enibar-*")
+    subscriber = res[0]
 
-    yield from subscriber.psubscribe(['enibar-*'])
-    while True:
-        reply = yield from subscriber.next_published()
-        app.redis_handle(reply.channel, json.loads(reply.value))
+    while (yield from subscriber.wait_message()):
+        reply = yield from subscriber.get_json()
+        app.redis_handle(reply[0].decode(), reply[1])
 
 
 if __name__ == "__main__":
     APP = QtWidgets.QApplication(sys.argv)
     LOOP = quamash.QEventLoop(APP)
     asyncio.set_event_loop(LOOP)
-    MYAPP = gui.main_window.MainWindow()
-    MYAPP.show()
     with LOOP:
         LOOP.run_until_complete(api.redis.connect())
+        MYAPP = gui.main_window.MainWindow()
+        MYAPP.show()
         LOOP.run_until_complete(install_redis_handle(MYAPP))
         LOOP.run_forever()
 
