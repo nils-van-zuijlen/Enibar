@@ -27,7 +27,10 @@ def get_key(key, callback):
         nonlocal value
         with (yield from connection) as redis:
             value = yield from redis.get(key)
-        callback(value.decode())
+        try:
+            callback(value.decode())
+        except:
+            callback(value)
     asyncio.async(wrapper())
 
 

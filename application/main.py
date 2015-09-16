@@ -32,7 +32,7 @@ from PyQt5 import QtWidgets
 
 @asyncio.coroutine
 def install_redis_handle(app):
-    sub = yield from aioredis.create_redis(('localhost', 6379))
+    sub = yield from aioredis.create_redis((settings.HOST, 6379))
     res = yield from sub.psubscribe("enibar-*")
     subscriber = res[0]
 
