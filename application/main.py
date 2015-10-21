@@ -22,6 +22,7 @@ Main file of the Application
 import asyncio
 import aioredis
 import api.redis
+from database import Cursor
 import json
 import quamash
 import sys
@@ -40,6 +41,14 @@ def install_redis_handle(app):
         reply = yield from subscriber.get_json()
         app.redis_handle(reply[0].decode(), reply[1])
 
+@asyncio.coroutine
+def ping_sql(app):
+    while True:
+        yield from asyncio.sleep(10)
+        with Cursor() as cursor:
+            cursor.prepare("SELECT 1")
+            cursor.exec_()
+
 
 if __name__ == "__main__":
     APP = QtWidgets.QApplication(sys.argv)
@@ -49,6 +58,7 @@ if __name__ == "__main__":
         LOOP.run_until_complete(api.redis.connect())
         MYAPP = gui.main_window.MainWindow()
         MYAPP.show()
+        asyncio.async(ping_sql(MYAPP))
         LOOP.run_until_complete(install_redis_handle(MYAPP))
         LOOP.run_forever()
 
