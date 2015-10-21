@@ -211,7 +211,7 @@ class ProductList(QtWidgets.QTreeWidget):
                     product['price'] = product['price']
                     product['count'] -= 1
                     product['widget'].setText(0, str(product['count']))
-                    product['widget'].setText(2, str(product['price']))
+                    product['widget'].setText(2, str(round(product['price'], 2)))
                 else:
                     self.takeTopLevelItem(i)
                     del self.products[i]
