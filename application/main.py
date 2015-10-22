@@ -41,6 +41,7 @@ def install_redis_handle(app):
         reply = yield from subscriber.get_json()
         app.redis_handle(reply[0].decode(), reply[1])
 
+
 @asyncio.coroutine
 def ping_sql(app):
     while True:
