@@ -1,4 +1,5 @@
 python-bcrypt==0.3.1
-Quamash==0.5.2
-asyncio-redis==0.14.1
+Quamash==0.5.3
+aioredis==0.2.3
+hiredis==0.2.0
 

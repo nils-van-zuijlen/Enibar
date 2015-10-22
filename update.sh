@@ -36,12 +36,12 @@ if [ -e "$VENV" ]; then
 	 . "$VENV/bin/activate"
 	 echo 'Updating dependencies'
 	pip install -r requirements.txt
-	cp -R /usr/lib/python3.4/site-packages/PyQt5 $VENV/lib/python3.4/site-packages/  || {
+	cp -R /usr/lib/python3.5/site-packages/PyQt5 $VENV/lib/python3.5/site-packages/  || {
 		echo ''
 		echo 'You have to install PyQt5 manually'
 		echo ''
 	}
-	cp -R /usr/lib/python3.4/site-packages/sip.so $VENV/lib/python3.4/site-packages/ || {
+	cp -R /usr/lib/python3.5/site-packages/sip.so $VENV/lib/python3.5/site-packages/ || {
 		echo ''
 		echo 'You have to install sip manually'
 		echo ''
@@ -53,12 +53,12 @@ else
 	 . "$VENV/bin/activate"
 
 	pip install -r "requirements.txt" --upgrade
-	cp -R /usr/lib/python3.4/site-packages/PyQt5 $VENV/lib/python3.4/site-packages/  || {
+	cp -R /usr/lib/python3.5/site-packages/PyQt5 $VENV/lib/python3.5/site-packages/  || {
 		echo ''
 		echo 'You have to install PyQt5 manually'
 		echo ''
 	}
-	cp -R /usr/lib/python3.4/site-packages/sip.so $VENV/lib/python3.4/site-packages/ || {
+	cp -R /usr/lib/python3.5/site-packages/sip.so $VENV/lib/python3.5/site-packages/ || {
 		echo ''
 		echo 'You have to install sip manually'
 		echo ''
