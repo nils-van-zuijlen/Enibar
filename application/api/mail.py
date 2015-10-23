@@ -104,6 +104,7 @@ def send_mail(to, subject, message, from_="cafeteria@enib.fr"):
         mail['subject'] = subject
         mail['from'] = from_
         mail['to'] = to
+        mail['date'] = datetime.datetime.now().strftime("%d/%m/%Y %H:%M")
 
         try:
             server.send_message(mail)
