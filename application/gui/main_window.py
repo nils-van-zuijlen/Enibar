@@ -26,6 +26,7 @@ The MainWindow class is the main class of the program.
 """
 
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
+from functools import partial
 
 from .auth_prompt_window import ask_auth
 from .validation_window import ValidationWindow
@@ -215,10 +216,20 @@ class MainWindow(QtWidgets.QMainWindow):
                 [product['date'].toString("yyyy/MM/dd HH:mm:ss"),
                  str(product['quantity']),
                  name,
-                 str(-product['price'])
+                 str(-product['price']),
+                 str(product["id"])
                 ]
             )
             self.note_history.addTopLevelItem(widget)
+        def keyPressEvent(obj, event):
+            if event.key() == QtCore.Qt.Key_Delete:
+                selected = obj.selectedItems()[0].text(4)
+                @ask_auth("manage_notes")
+                def del_line(id_):
+                    api.transactions.rollback_transaction(id_, full=True)
+                del_line(selected)
+            obj.__class__.keyPressEvent(obj, event)
+        self.note_history.keyPressEvent = partial(keyPressEvent, self.note_history)
         self.note_history.resizeColumnToContents(0)
         self.note_history.resizeColumnToContents(1)
 
