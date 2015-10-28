@@ -149,14 +149,14 @@ def rollback_transaction(id_, full=False):
     with Cursor() as cursor:
         if quantity > 1 and not full:
             cursor.prepare("UPDATE transactions SET quantity=quantity - 1,\
-                    price=? WHERE id=? AND deletable=1")
+                    price=:price WHERE id=:id AND deletable=1")
             price = trans['price'] / quantity
-            cursor.addBindValue(trans['price'] - price)
-            cursor.addBindValue(trans['id'])
+            cursor.bindValue(':price', trans['price'] - price)
+            cursor.bindValue(':id', trans['id'])
         else:
-            cursor.prepare("DELETE FROM transactions WHERE id=? "
+            cursor.prepare("DELETE FROM transactions WHERE id=:id "
                 "AND deletable=1")
-            cursor.addBindValue(trans['id'])
+            cursor.bindValue(':id', trans['id'])
             price = trans['price']
 
         cursor.exec_()
