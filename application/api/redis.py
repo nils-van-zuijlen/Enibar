@@ -19,11 +19,7 @@ def send_message(channel, message):
 
 
 def get_key(key, callback):
-    global connection
-    value = ""
-
     async def wrapper():
-        nonlocal value
         async with connection.get() as redis:
             value = await redis.get(key)
         try:
