@@ -25,9 +25,7 @@ It refreshes itself every 10 seconds.
 """
 
 from PyQt5 import QtWidgets, QtCore, QtGui
-import api.notes
 import time
-import asyncio
 
 
 class NotesList(QtWidgets.QListWidget):

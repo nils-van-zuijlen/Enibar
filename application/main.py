@@ -33,15 +33,14 @@ from PyQt5 import QtWidgets
 SUB = None
 
 
-@asyncio.coroutine
-def install_redis_handle(app):
+async def install_redis_handle(app):
     global SUB
-    SUB = yield from aioredis.create_redis((settings.HOST, 6379))
-    res = yield from SUB.psubscribe("enibar-*")
+    SUB = await aioredis.create_redis((settings.HOST, 6379))
+    res = await SUB.psubscribe("enibar-*")
     subscriber = res[0]
 
-    while (yield from subscriber.wait_message()):
-        reply = yield from subscriber.get_json()
+    while (await subscriber.wait_message()):
+        reply = await subscriber.get_json()
         app.redis_handle(reply[0].decode(), reply[1])
 
 
@@ -53,7 +52,7 @@ if __name__ == "__main__":
         LOOP.run_until_complete(api.redis.connect())
         MYAPP = gui.main_window.MainWindow()
         MYAPP.show()
-        asyncio.async(ping_sql(MYAPP))
+        asyncio.ensure_future(ping_sql(MYAPP))
         try:
             LOOP.run_until_complete(install_redis_handle(MYAPP))
         finally:

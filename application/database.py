@@ -108,11 +108,9 @@ class SqlQuery(QtSql.QSqlQuery):
             self.bindValue(key, value)
 
 
-@asyncio.coroutine
-def ping_sql(app):
+async def ping_sql(app):
     while True:
-        print("ping")
-        yield from asyncio.sleep(10)
+        await asyncio.sleep(10)
         with Cursor() as cursor:
             cursor.prepare("SELECT 1")
             cursor.exec_()
