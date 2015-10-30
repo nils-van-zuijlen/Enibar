@@ -35,9 +35,10 @@ You can use the DB class like that:
 
 
 from PyQt5 import QtSql, QtWidgets
-import sys
-import settings
+import asyncio
 import os
+import settings
+import sys
 
 
 class Database:
@@ -105,4 +106,14 @@ class SqlQuery(QtSql.QSqlQuery):
 
         for key, value in kwargs.items():
             self.bindValue(key, value)
+
+
+@asyncio.coroutine
+def ping_sql(app):
+    while True:
+        print("ping")
+        yield from asyncio.sleep(10)
+        with Cursor() as cursor:
+            cursor.prepare("SELECT 1")
+            cursor.exec_()
 

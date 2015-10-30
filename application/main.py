@@ -22,7 +22,7 @@ Main file of the Application
 import asyncio
 import aioredis
 import api.redis
-from database import Cursor
+from database import Cursor, ping_sql
 import json
 import quamash
 import sys
@@ -43,15 +43,6 @@ def install_redis_handle(app):
     while (yield from subscriber.wait_message()):
         reply = yield from subscriber.get_json()
         app.redis_handle(reply[0].decode(), reply[1])
-
-
-@asyncio.coroutine
-def ping_sql(app):
-    while True:
-        yield from asyncio.sleep(10)
-        with Cursor() as cursor:
-            cursor.prepare("SELECT 1")
-            cursor.exec_()
 
 
 if __name__ == "__main__":
