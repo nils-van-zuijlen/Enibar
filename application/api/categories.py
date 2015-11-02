@@ -53,9 +53,9 @@ def set_alcoholic(cat_id, is_alcoholic):
     :param bool is_alcoholic: True if categorie products contain alcohol
     """
     with Cursor() as cursor:
-        cursor.prepare("UPDATE categories SET alcoholic=? WHERE id=?")
-        cursor.addBindValue(is_alcoholic)
-        cursor.addBindValue(cat_id)
+        cursor.prepare("UPDATE categories SET alcoholic=:alcoholic WHERE id=:id")
+        cursor.bindValue(':alcoholic', is_alcoholic)
+        cursor.bindValue(':id', cat_id)
         return cursor.exec_()
 
 
@@ -66,9 +66,9 @@ def set_color(name, color):
     :param bool: True if operation succed or False
     """
     with Cursor() as cursor:
-        cursor.prepare("UPDATE categories SET color=? WHERE name=?")
-        cursor.addBindValue(color)
-        cursor.addBindValue(name)
+        cursor.prepare("UPDATE categories SET color=:color WHERE name=:name")
+        cursor.bindValue(':color', color)
+        cursor.bindValue(':name', name)
         return cursor.exec_()
 
 
@@ -81,9 +81,9 @@ def rename(oldname, newname):
     if not newname.strip():
         return False
     with Cursor() as cursor:
-        cursor.prepare("UPDATE categories SET name=? WHERE name=?")
-        cursor.addBindValue(newname)
-        cursor.addBindValue(oldname)
+        cursor.prepare("UPDATE categories SET name=:newname WHERE name=:oldname")
+        cursor.bindValue(':newname', newname)
+        cursor.bindValue(':oldname', oldname)
         return cursor.exec_()
 
 
