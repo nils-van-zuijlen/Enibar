@@ -53,7 +53,7 @@ class CsvImportWindow(QtWidgets.QDialog):
         with open(self.file_path, 'r') as fd:
             reader = csv.DictReader(fd)
             for line in reader:
-                mail = line['Email']
+                mail = line['Mail']
                 note = api.notes.get(lambda x: x['mail'] == mail)
                 if note and not note[0]['hidden']:
                     note = note[0]['nickname']
@@ -70,7 +70,7 @@ class CsvImportWindow(QtWidgets.QDialog):
                 else:
                     w = QtWidgets.QTreeWidgetItem(
                         self.recap,
-                        ("[{} {}]".format(line["Nom"], line["Prenom"]),
+                        ("[{} {}]".format(line["Nom"], line["Prénom"]),
                          mail
                         )
                     )
