@@ -1,4 +1,4 @@
-Nom,Prenom,Surnom,Note,Email,"Date de naissance",Majeur
+Nom,Prénom,Surnom,Note,Mail,"Date de naissance",Majeur
 test,test,test,,test@test.fr,"26 juin 1992",oui
 test,test,test,,test2@test.fr,"26 juin 1992",oui
 test,test,test,,test3@test.fr,"26 juin 1992",oui
