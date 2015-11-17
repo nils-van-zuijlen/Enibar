@@ -25,6 +25,7 @@ Notes
 from PyQt5 import QtSql
 import api.transactions
 import api.redis
+import api.sde
 from database import Cursor, Database
 import datetime
 import os.path

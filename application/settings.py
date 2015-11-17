@@ -109,7 +109,7 @@ Mail
 ^^^^
 
 ..glossary::
-    :sorter:
+    :sorted:
 
 
     SMTP_SERVER_ADDR
@@ -121,6 +121,17 @@ Mail
             **Default value** ``25``
 
             Smtp port used to connect to server
+
+Students website
+^^^^^^^^^^^^^^^^
+
+..glossary:
+    :sorted:
+
+
+    WEB_URL
+        **Default value** ``http://enib.net/enibar/api/``
+
 
 Other
 ^^^^^
@@ -207,3 +218,9 @@ ECOCUP_NAME = "Ecocup"
 #
 SMTP_SERVER_ADDR = 'smtp.enib.fr'
 SMTP_SERVER_PORT = 25
+
+#
+# WEBSITE
+#
+WEB_URL = 'http://127.0.0.1:8000/enibar/'
+
