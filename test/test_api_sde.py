@@ -26,12 +26,11 @@ class ApiSdeTests(basetest.BaseTest):
         self.loop = asyncio.get_event_loop()
         self.loop.run_until_complete(api.redis.connect())
 
-
     def test_sde_add_note(self):
         async def func_test():
             async with api.redis.connection.get() as redis:
                 await redis.delete(api.sde.QUEUE_NAME)
-                await api.sde.send_notes(["test1", "test2"]) # XXX
+                await api.sde.send_notes(["test1", "test2"])
 
                 total = []
                 res = await redis.blpop(api.sde.QUEUE_NAME)
