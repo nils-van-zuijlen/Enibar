@@ -26,6 +26,7 @@ consumption bought.
 
 from PyQt5 import QtSql
 from database import Database, Cursor
+import asyncio
 import api.base
 import api.notes
 
@@ -65,6 +66,7 @@ def log_transaction(nickname, category, product, price_name, quantity, price,
         cursor.bindValue(':lastname', lastname)
         cursor.bindValue(':deletable', deletable)
         cursor.exec_()
+        asyncio.ensure_future(api.sde.send_history_lines([{"id": cursor.lastInsertId(), "nickname": nickname, "category": category, "product": product, "price_name": price_name, "quantity": quantity, "price": price}]))
         return True
 
 
@@ -120,7 +122,9 @@ def log_transactions(transactions):
             cursor.bindValue(':lastname', lastname)
             cursor.bindValue(':deletable', trans.get('deletable', True))
             cursor.exec_()
+            trans["id"] = cursor.lastInsertId()
 
+        asyncio.ensure_future(api.sde.send_history_lines(transactions))
         database.commit()
         return True
 

@@ -58,3 +58,20 @@ class ApiSdeTests(basetest.BaseTest):
         task = asyncio.ensure_future(func_test())
         self.loop.run_until_complete(task)
 
+    def test_sde_add_history_lines(self):
+        async def func_test():
+            async with api.redis.connection.get() as redis:
+                await redis.delete(api.sde.QUEUE_NAME)
+                await api.sde.send_history_lines(
+                    [{"price_name": "test", "note": "test1", "category": "test", "price": -0.8, "quantity": 2, "product": "test", "id": 1},
+                    {"price_name": "test3", "note": "test3", "category": "test3", "price": -0.7, "quantity": 1, "product": "test3", "id": 3}])
+
+                total = []
+                res = await redis.blpop(api.sde.QUEUE_NAME)
+                total.append(json.loads(res[1].decode()))
+                res = await redis.blpop(api.sde.QUEUE_NAME)
+                total.append(json.loads(res[1].decode()))
+                self.assertCountEqual(total, [{'type': 'history', 'category': 'test', 'price': -0.8, 'id': 1, 'price_name': 'test', 'quantity': 2, 'note': 'test1', 'product': 'test'}, {'type': 'history', 'category': 'test3', 'price': -0.7, 'id': 3, 'price_name': 'test3', 'quantity': 1, 'note': 'test3', 'product': 'test3'}])
+
+        task = asyncio.ensure_future(func_test())
+        self.loop.run_until_complete(task)

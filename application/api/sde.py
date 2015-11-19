@@ -30,6 +30,18 @@ async def send_note_deletion(notes_id):
             await redis.rpush(QUEUE_NAME, json.dumps(req))
 
 
+async def send_history_lines(lines):
+    print("Adding history lines: ", lines)
+    async with api.redis.connection.get() as redis:
+        for line in lines:
+            try:
+                line.pop("deletable")
+            except KeyError:
+                pass
+            line["type"] = "history"
+            await redis.rpush(QUEUE_NAME, json.dumps(line))
+
+
 async def process_queue():
     async with api.redis.connection.get() as redis:
         while True:
