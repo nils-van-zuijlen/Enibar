@@ -157,7 +157,9 @@ def rollback_transaction(id_, full=False):
             price = trans['price'] / quantity
             cursor.bindValue(':price', trans['price'] - price)
             cursor.bindValue(':id', trans['id'])
+            task = api.sde.send_history_lines([{"id": trans["id"], "price": trans["price"] - price, "quantity": quantity - 1}])
         else:
+            task = api.sde.send_history_deletion([trans['id']])
             cursor.prepare("DELETE FROM transactions WHERE id=:id "
                 "AND deletable=1")
             cursor.bindValue(':id', trans['id'])
@@ -165,6 +167,7 @@ def rollback_transaction(id_, full=False):
 
         cursor.exec_()
         if not cursor.lastError().isValid() and cursor.numRowsAffected() > 0:
+            asyncio.ensure_future(task)
             return api.notes.transactions([note['nickname'], ], -price)
         else:
             return False

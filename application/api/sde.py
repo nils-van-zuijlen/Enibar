@@ -42,6 +42,13 @@ async def send_history_lines(lines):
             await redis.rpush(QUEUE_NAME, json.dumps(line))
 
 
+async def send_history_deletion(lines_id):
+    for line_id in lines_id:
+        req = {"type": "history-delete", "id": line_id}
+        async with api.redis.connection.get() as redis:
+            await redis.rpush(QUEUE_NAME, json.dumps(req))
+
+
 async def process_queue():
     async with api.redis.connection.get() as redis:
         while True:

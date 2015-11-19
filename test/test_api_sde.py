@@ -75,3 +75,19 @@ class ApiSdeTests(basetest.BaseTest):
 
         task = asyncio.ensure_future(func_test())
         self.loop.run_until_complete(task)
+
+    def test_sde_delete_history_line(self):
+        async def func_test():
+            async with api.redis.connection.get() as redis:
+                await redis.delete(api.sde.QUEUE_NAME)
+                await api.sde.send_history_deletion([1, 2])
+
+                total = []
+                res = await redis.blpop(api.sde.QUEUE_NAME)
+                total.append(json.loads(res[1].decode()))
+                res = await redis.blpop(api.sde.QUEUE_NAME)
+                total.append(json.loads(res[1].decode()))
+                self.assertCountEqual(total, [{'id': 1, 'type': 'history-delete'}, {'id': 2, 'type': 'history-delete'}])
+
+        task = asyncio.ensure_future(func_test())
+        self.loop.run_until_complete(task)
