@@ -30,7 +30,6 @@ import sys
 import gui.main_window
 import settings
 from PyQt5 import QtWidgets
-import signal
 
 SUB = None
 

@@ -29,6 +29,7 @@ from database import Database, Cursor
 import asyncio
 import api.base
 import api.notes
+import api.sde
 
 
 def log_transaction(nickname, category, product, price_name, quantity, price,
