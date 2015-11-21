@@ -16,7 +16,7 @@ class QueueProcessingException(Exception):
 async def send_notes(notes):
     print("Adding notes: ", notes)
     for note in api.notes.get(lambda n: n['nickname'] in notes):
-        req = {"type": "note", "id": note["id"], "nickname": note["nickname"],
+        req = {"token": settings.AUTH_SDE_TOKEN, "type": "note", "id": note["id"], "nickname": note["nickname"],
             "mail": note["mail"], "note": note["note"]}
         async with api.redis.connection.get() as redis:
             await redis.rpush(QUEUE_NAME, json.dumps(req))
@@ -25,7 +25,7 @@ async def send_notes(notes):
 async def send_note_deletion(notes_id):
     print("Deleting note: ", notes_id)
     for note_id in notes_id:
-        req = {"type": "note-delete", "id": note_id}
+        req = {"token": settings.AUTH_SDE_TOKEN, "type": "note-delete", "id": note_id}
         async with api.redis.connection.get() as redis:
             await redis.rpush(QUEUE_NAME, json.dumps(req))
 
@@ -39,12 +39,13 @@ async def send_history_lines(lines):
             except KeyError:
                 pass
             line["type"] = "history"
+            line["token"] = settings.AUTH_SDE_TOKEN
             await redis.rpush(QUEUE_NAME, json.dumps(line))
 
 
 async def send_history_deletion(lines_id):
     for line_id in lines_id:
-        req = {"type": "history-delete", "id": line_id}
+        req = {"token": settings.AUTH_SDE_TOKEN, "type": "history-delete", "id": line_id}
         async with api.redis.connection.get() as redis:
             await redis.rpush(QUEUE_NAME, json.dumps(req))
 

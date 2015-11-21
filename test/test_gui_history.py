@@ -108,7 +108,7 @@ class HistoryWindowTest(basetest.BaseGuiTest):
                 self.win.delete_button.click()
                 async def retest_func():
                     res = await redis.blpop(api.sde.QUEUE_NAME)
-                    self.assertEqual(json.loads(res[1].decode()), {'type': 'history', 'price': -2.5, 'id': 2, 'quantity': 1})
+                    self.assertEqual(json.loads(res[1].decode()), {'token': 'changeme', 'type': 'history', 'price': -2.5, 'id': 2, 'quantity': 1})
                     redis.delete(api.sde.QUEUE_NAME)
 
                     self.assertEqual(self.get_tree(self.win.transaction_list),
@@ -118,7 +118,7 @@ class HistoryWindowTest(basetest.BaseGuiTest):
                     self.win.delete_button.click()
                     async def final_func():
                         res = await redis.blpop(api.sde.QUEUE_NAME)
-                        self.assertEqual(json.loads(res[1].decode()), {'type': 'history-delete', 'id': 2})
+                        self.assertEqual(json.loads(res[1].decode()), {'token': 'changeme', 'type': 'history-delete', 'id': 2})
                         self.assertEqual(self.get_tree(self.win.transaction_list),
                             [{('2015/11/20 21:36:22', 'test1', 'a', 'b', 'c', '1', '-', '1.0', '1'): []}, {('2015/11/20 21:36:22', 'test2', 'e', 'f', 'g', '2', '5.0', '-', '3'): []}]
                         )
@@ -137,7 +137,7 @@ class HistoryWindowTest(basetest.BaseGuiTest):
         async def test_func():
             async def final_func():
                 res = await redis.blpop(api.sde.QUEUE_NAME)
-                self.assertEqual(json.loads(res[1].decode()), {'type': 'history-delete', 'id': 2})
+                self.assertEqual(json.loads(res[1].decode()), {'token': 'changeme', 'type': 'history-delete', 'id': 2})
                 self.assertEqual(self.get_tree(self.win.transaction_list),
                     [{('2015/11/20 21:36:22', 'test1', 'a', 'b', 'c', '1', '-', '1.0', '1'): []}, {('2015/11/20 21:36:22', 'test2', 'e', 'f', 'g', '2', '5.0', '-', '3'): []}]
                 )

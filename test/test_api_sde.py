@@ -51,7 +51,6 @@ class ApiSdeTests(basetest.BaseTest):
             api.notes.rebuild_cache()
         self.loop = asyncio.get_event_loop()
         self.loop.run_until_complete(api.redis.connect())
-        self.loop.set_debug(True)
 
     def test_sde_add_note(self):
         """ Testing adding a note to the queue
@@ -66,7 +65,7 @@ class ApiSdeTests(basetest.BaseTest):
                 total.append(json.loads(res[1].decode()))
                 res = await redis.blpop(api.sde.QUEUE_NAME)
                 total.append(json.loads(res[1].decode()))
-                self.assertCountEqual(total, [{"id": 3, "type": "note", "note": -2.0, "mail": "test2@pouette.com", "nickname": "test2"}, {"id": 2, "type": "note", "note": -1.0, "mail": "test1@pouette.com", "nickname": "test1"}])
+                self.assertCountEqual(total, [{"token": "changeme", "id": 3, "type": "note", "note": -2.0, "mail": "test2@pouette.com", "nickname": "test2"}, {"token": "changeme", "id": 2, "type": "note", "note": -1.0, "mail": "test1@pouette.com", "nickname": "test1"}])
 
         task = asyncio.ensure_future(func_test())
         self.loop.run_until_complete(task)
@@ -84,7 +83,7 @@ class ApiSdeTests(basetest.BaseTest):
                 total.append(json.loads(res[1].decode()))
                 res = await redis.blpop(api.sde.QUEUE_NAME)
                 total.append(json.loads(res[1].decode()))
-                self.assertCountEqual(total, [{'id': 1, 'type': 'note-delete'}, {'id': 2, 'type': 'note-delete'}])
+                self.assertCountEqual(total, [{"token": "changeme", 'id': 1, 'type': 'note-delete'}, {"token": "changeme", 'id': 2, 'type': 'note-delete'}])
 
         task = asyncio.ensure_future(func_test())
         self.loop.run_until_complete(task)
@@ -104,7 +103,7 @@ class ApiSdeTests(basetest.BaseTest):
                 total.append(json.loads(res[1].decode()))
                 res = await redis.blpop(api.sde.QUEUE_NAME)
                 total.append(json.loads(res[1].decode()))
-                self.assertCountEqual(total, [{'type': 'history', 'category': 'test', 'price': -0.8, 'id': 1, 'price_name': 'test', 'quantity': 2, 'note': 'test1', 'product': 'test'}, {'type': 'history', 'category': 'test3', 'price': -0.7, 'id': 3, 'price_name': 'test3', 'quantity': 1, 'note': 'test3', 'product': 'test3'}])
+                self.assertCountEqual(total, [{"token": "changeme", 'type': 'history', 'category': 'test', 'price': -0.8, 'id': 1, 'price_name': 'test', 'quantity': 2, 'note': 'test1', 'product': 'test'}, {"token": "changeme", 'type': 'history', 'category': 'test3', 'price': -0.7, 'id': 3, 'price_name': 'test3', 'quantity': 1, 'note': 'test3', 'product': 'test3'}])
 
         task = asyncio.ensure_future(func_test())
         self.loop.run_until_complete(task)
@@ -122,7 +121,7 @@ class ApiSdeTests(basetest.BaseTest):
                 total.append(json.loads(res[1].decode()))
                 res = await redis.blpop(api.sde.QUEUE_NAME)
                 total.append(json.loads(res[1].decode()))
-                self.assertCountEqual(total, [{'id': 1, 'type': 'history-delete'}, {'id': 2, 'type': 'history-delete'}])
+                self.assertCountEqual(total, [{"token": "changeme", 'id': 1, 'type': 'history-delete'}, {"token": "changeme", 'id': 2, 'type': 'history-delete'}])
 
         task = asyncio.ensure_future(func_test())
         self.loop.run_until_complete(task)
@@ -131,14 +130,14 @@ class ApiSdeTests(basetest.BaseTest):
         """ Testing processing one item of the queue
         """
         async def test_func():
-            await api.sde._process_queue_item(b'{"id": 1, "type": "history-delete"}')
+            await api.sde._process_queue_item(b'{"token": "changeme", "id": 1, "type": "history-delete"}')
             msg = MockSdeServer.received.split('\r\n')
             self.assertEqual(msg[0], 'DELETE /history HTTP/1.1')
-            self.assertEqual(json.loads(msg[-1]), {"id": 1})
-            await api.sde._process_queue_item(b'{"id": 3, "type": "note", "note": -2.0, "mail": "test2@pouette.com", "nickname": "test2"}')
+            self.assertEqual(json.loads(msg[-1]), {"token": "changeme", "id": 1})
+            await api.sde._process_queue_item(b'{"token": "changeme", "id": 3, "type": "note", "note": -2.0, "mail": "test2@pouette.com", "nickname": "test2"}')
             msg = MockSdeServer.received.split('\r\n')
             self.assertEqual(msg[0], 'PUT /note HTTP/1.1')
-            self.assertEqual(json.loads(msg[-1]), {"id": 3, "mail": "test2@pouette.com", "nickname": "test2", "note": -2.0})
+            self.assertEqual(json.loads(msg[-1]), {"token": "changeme", "id": 3, "mail": "test2@pouette.com", "nickname": "test2", "note": -2.0})
         coro = self.loop.create_server(MockSdeServer, '127.0.0.1', 52412)
         server = self.loop.run_until_complete(coro)
         task = asyncio.ensure_future(test_func())
@@ -151,7 +150,7 @@ class ApiSdeTests(basetest.BaseTest):
         """
         async def test_func():
             with self.assertRaises(Exception):
-                await api.sde._process_queue_item(b'{"id": 1, "type": "history-delete"}')
+                await api.sde._process_queue_item(b'{"token": "changeme", "id": 1, "type": "history-delete"}')
         task = asyncio.ensure_future(test_func())
         self.loop.run_until_complete(task)
 
@@ -160,9 +159,9 @@ class ApiSdeTests(basetest.BaseTest):
         """
         async def test_func():
             with self.assertRaises(api.sde.QueueProcessingException):
-                await api.sde._process_queue_item(b'{"id": 1, "type": "history-delete"}')
+                await api.sde._process_queue_item(b'{"token": "changeme", "id": 1, "type": "history-delete"}')
             with self.assertRaises(api.sde.QueueProcessingException):
-                await api.sde._process_queue_item(b'{"id": 3, "type": "note", "note": -2.0, "mail": "test2@pouette.com", "nickname": "test2"}')
+                await api.sde._process_queue_item(b'{"token": "changeme", "id": 3, "type": "note", "note": -2.0, "mail": "test2@pouette.com", "nickname": "test2"}')
         coro = self.loop.create_server(MockBadSdeServer, '127.0.0.1', 52412)
         server = self.loop.run_until_complete(coro)
         task = asyncio.ensure_future(test_func())
@@ -198,7 +197,7 @@ class ApiSdeTests(basetest.BaseTest):
             task.cancel()
             async with api.redis.connection.get() as redis:
                 res = await redis.lpop(api.sde.QUEUE_NAME)
-                self.assertEqual(json.loads(res.decode()), {"id": 1, "type": "note-delete"})
+                self.assertEqual(json.loads(res.decode()), {"token": "changeme", "id": 1, "type": "note-delete"})
         coro = self.loop.create_server(MockBadSdeServer, '127.0.0.1', 52412)
         server = self.loop.run_until_complete(coro)
         task = asyncio.ensure_future(test_func())

@@ -132,6 +132,10 @@ Students website
     WEB_URL
         **Default value** ``http://enib.net/enibar/api/``
 
+    AUTH_SDE_TOKEN
+        **Default value** ``changeme``
+        You NEED to change this to the same token as on the website
+
 
 Other
 ^^^^^
@@ -223,4 +227,5 @@ SMTP_SERVER_PORT = 25
 # WEBSITE
 #
 WEB_URL = 'http://127.0.0.1:8000/enibar/'
+AUTH_SDE_TOKEN = 'changeme'
 
