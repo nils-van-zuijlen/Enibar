@@ -14,7 +14,6 @@ class QueueProcessingException(Exception):
 
 
 async def send_notes(notes):
-    print("Adding notes: ", notes)
     for note in api.notes.get(lambda n: n['nickname'] in notes):
         req = {"token": settings.AUTH_SDE_TOKEN, "type": "note", "id": note["id"], "nickname": note["nickname"],
             "mail": note["mail"], "note": note["note"]}
@@ -23,7 +22,6 @@ async def send_notes(notes):
 
 
 async def send_note_deletion(notes_id):
-    print("Deleting note: ", notes_id)
     for note_id in notes_id:
         req = {"token": settings.AUTH_SDE_TOKEN, "type": "note-delete", "id": note_id}
         async with api.redis.connection.get() as redis:
@@ -31,7 +29,6 @@ async def send_note_deletion(notes_id):
 
 
 async def send_history_lines(lines):
-    print("Adding history lines: ", lines)
     async with api.redis.connection.get() as redis:
         for line in lines:
             try:
@@ -60,7 +57,6 @@ async def process_queue():
                 redis.close()
                 return
             except Exception as e:
-                print("Error in queue processing: ", e)
                 await redis.lpush(QUEUE_NAME, item[1])
                 await asyncio.sleep(60)
 
@@ -68,7 +64,6 @@ async def process_queue():
 async def _process_queue_item(item):
     parsed_item = json.loads(item.decode())
     type_ = parsed_item.pop('type')
-    print("Processing: ", item)
     if type_.endswith('-delete'):
         async with aiohttp.delete(settings.WEB_URL + type_[:-7], data=json.dumps(parsed_item)) as req:
             if req.status != 200:
