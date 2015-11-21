@@ -51,6 +51,7 @@ class ApiSdeTests(basetest.BaseTest):
             api.notes.rebuild_cache()
         self.loop = asyncio.get_event_loop()
         self.loop.run_until_complete(api.redis.connect())
+        self.loop.set_debug(True)
 
     def test_sde_add_note(self):
         """ Testing adding a note to the queue
@@ -146,6 +147,8 @@ class ApiSdeTests(basetest.BaseTest):
         self.loop.run_until_complete(server.wait_closed())
 
     def test_sde_process_queue_item_without_server(self):
+        """ Testing processing one item of the queue without a server
+        """
         async def test_func():
             with self.assertRaises(Exception):
                 await api.sde._process_queue_item(b'{"id": 1, "type": "history-delete"}')
@@ -153,6 +156,8 @@ class ApiSdeTests(basetest.BaseTest):
         self.loop.run_until_complete(task)
 
     def test_sde_process_queue_item_with_bad_server(self):
+        """ Testing processing one item of the queue with a bad server
+        """
         async def test_func():
             with self.assertRaises(api.sde.QueueProcessingException):
                 await api.sde._process_queue_item(b'{"id": 1, "type": "history-delete"}')
@@ -168,5 +173,36 @@ class ApiSdeTests(basetest.BaseTest):
     def test_sde_process_queue(self):
         """ Testing processing a full queue
         """
-        pass
+        async def test_func():
+            await api.sde.send_note_deletion([1, 2])
+            task = asyncio.ensure_future(api.sde.process_queue())
+            await asyncio.sleep(1)
+            task.cancel()
+            async with api.redis.connection.get() as redis:
+                res = await redis.lpop(api.sde.QUEUE_NAME)
+                self.assertIsNone(res)
+        coro = self.loop.create_server(MockSdeServer, '127.0.0.1', 52412)
+        server = self.loop.run_until_complete(coro)
+        task = asyncio.ensure_future(test_func())
+        self.loop.run_until_complete(task)
+        server.close()
+        self.loop.run_until_complete(server.wait_closed())
+
+    def test_sde_process_queue_with_bad_server(self):
+        """ Testing processing a full queue with bad server
+        """
+        async def test_func():
+            await api.sde.send_note_deletion([1])
+            task = asyncio.ensure_future(api.sde.process_queue())
+            await asyncio.sleep(1)
+            task.cancel()
+            async with api.redis.connection.get() as redis:
+                res = await redis.lpop(api.sde.QUEUE_NAME)
+                self.assertEqual(json.loads(res.decode()), {"id": 1, "type": "note-delete"})
+        coro = self.loop.create_server(MockBadSdeServer, '127.0.0.1', 52412)
+        server = self.loop.run_until_complete(coro)
+        task = asyncio.ensure_future(test_func())
+        self.loop.run_until_complete(task)
+        server.close()
+        self.loop.run_until_complete(server.wait_closed())
 

@@ -56,7 +56,8 @@ async def process_queue():
                 item = await redis.blpop(QUEUE_NAME)
                 await _process_queue_item(item[1])
             except asyncio.CancelledError:
-                break
+                redis.close()
+                return
             except Exception as e:
                 print("Error in queue processing: ", e)
                 await redis.lpush(QUEUE_NAME, item[1])
