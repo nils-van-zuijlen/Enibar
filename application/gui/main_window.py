@@ -114,16 +114,19 @@ class MainWindow(QtWidgets.QMainWindow):
             self.panels.rebuild()
         api.redis.get_key("alcohol", callback)
 
-    def redis_handle(self, channel, message):
+    async def redis_handle(self, channel, message):
         if channel == 'enibar-notes':
             for note in message:
                 api.notes.rebuild_note_cache(note)
+            await api.sde.send_notes(message)
             if self.selected:
                 self._note_refresh(self.notes_list.currentRow())
             self.rebuild_notes_list()
         elif channel == 'enibar-delete':
             for note in message:
                 try:
+                    note_id = api.notes.NOTES_CACHE[note]['id']
+                    await api.sde.send_note_deletion([note_id, ])
                     del api.notes.NOTES_CACHE[note]
                 except KeyError:  # Osef
                     pass

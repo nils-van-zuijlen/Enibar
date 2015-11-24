@@ -26,8 +26,10 @@ consumption bought.
 
 from PyQt5 import QtSql
 from database import Database, Cursor
+import asyncio
 import api.base
 import api.notes
+import api.sde
 
 
 def log_transaction(nickname, category, product, price_name, quantity, price,
@@ -65,6 +67,7 @@ def log_transaction(nickname, category, product, price_name, quantity, price,
         cursor.bindValue(':lastname', lastname)
         cursor.bindValue(':deletable', deletable)
         cursor.exec_()
+        asyncio.ensure_future(api.sde.send_history_lines([{"id": cursor.lastInsertId(), "note": nickname, "category": category, "product": product, "price_name": price_name, "quantity": quantity, "price": price}]))
         return True
 
 
@@ -120,7 +123,9 @@ def log_transactions(transactions):
             cursor.bindValue(':lastname', lastname)
             cursor.bindValue(':deletable', trans.get('deletable', True))
             cursor.exec_()
+            trans["id"] = cursor.lastInsertId()
 
+        asyncio.ensure_future(api.sde.send_history_lines(transactions))
         database.commit()
         return True
 
@@ -153,7 +158,9 @@ def rollback_transaction(id_, full=False):
             price = trans['price'] / quantity
             cursor.bindValue(':price', trans['price'] - price)
             cursor.bindValue(':id', trans['id'])
+            task = api.sde.send_history_lines([{"id": trans["id"], "price": trans["price"] - price, "quantity": quantity - 1}])
         else:
+            task = api.sde.send_history_deletion([trans['id']])
             cursor.prepare("DELETE FROM transactions WHERE id=:id "
                 "AND deletable=1")
             cursor.bindValue(':id', trans['id'])
@@ -161,6 +168,7 @@ def rollback_transaction(id_, full=False):
 
         cursor.exec_()
         if not cursor.lastError().isValid() and cursor.numRowsAffected() > 0:
+            asyncio.ensure_future(task)
             return api.notes.transactions([note['nickname'], ], -price)
         else:
             return False

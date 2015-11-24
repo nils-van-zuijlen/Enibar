@@ -22,6 +22,7 @@ Main file of the Application
 import asyncio
 import aioredis
 import api.redis
+import api.sde
 from database import Cursor, ping_sql
 import json
 import quamash
@@ -41,21 +42,26 @@ async def install_redis_handle(app):
 
     while (await subscriber.wait_message()):
         reply = await subscriber.get_json()
-        app.redis_handle(reply[0].decode(), reply[1])
+        await app.redis_handle(reply[0].decode(), reply[1])
 
 
 if __name__ == "__main__":
     APP = QtWidgets.QApplication(sys.argv)
     LOOP = quamash.QEventLoop(APP)
+    TASKS = []
     asyncio.set_event_loop(LOOP)
+
     with LOOP:
         LOOP.run_until_complete(api.redis.connect())
         MYAPP = gui.main_window.MainWindow()
         MYAPP.show()
-        asyncio.ensure_future(ping_sql(MYAPP))
+        TASKS.append(asyncio.ensure_future(ping_sql(MYAPP)))
+        TASKS.append(asyncio.ensure_future(api.sde.process_queue()))
         try:
             LOOP.run_until_complete(install_redis_handle(MYAPP))
         finally:
+            for task in TASKS:
+                task.cancel()
             LOOP.run_until_complete(SUB.punsubscribe("enibar-*"))
             LOOP.run_until_complete(SUB.quit())
             LOOP.run_until_complete(api.redis.connection.clear())
