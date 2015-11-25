@@ -230,3 +230,4 @@ WEB_URL = 'http://127.0.0.1:8000/enibar/'
 AUTH_SDE_TOKEN = 'changeme'
 USE_PROXY = False
 PROXY_AUTH = ""
+
