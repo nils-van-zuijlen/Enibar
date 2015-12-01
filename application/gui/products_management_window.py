@@ -130,7 +130,7 @@ class ProductsManagementWindow(QtWidgets.QDialog):
                     new_prices.append({
                         'id': price['id'],
                         'value': widget.input.value(),
-                        'percentage': widget.percentage_input.value(),
+                        'percentage': widget.percentage_input.value() if cat['alcoholic'] else 0,
                     })
         if not api.prices.set_multiple_values(new_prices):
             gui.utils.error("Erreur", "Impossible de sauvegarder les nouveaux prix")
@@ -211,11 +211,12 @@ class ProductsManagementWindow(QtWidgets.QDialog):
 
         for widget in self.category_prices.widgets:
             if widget.id_ and widget.input.text():
-                api.prices.rename_descriptor(widget.id_, widget.input.text())
+                api.prices.change_descriptor(widget.id_, widget.input.text(), widget.quantity_input.value())
             elif widget.input.text():
                 widget.id_ = api.prices.add_descriptor(
                     widget.input.text(),
-                    cat['id']
+                    cat['id'],
+                    widget.quantity_input.value()
                 )
         is_alcoholic = self.checkbox_alcoholic.isChecked()
         api.categories.set_alcoholic(cat['id'], is_alcoholic)
@@ -335,7 +336,7 @@ class ConsumptionPrices(QtWidgets.QGroupBox):
             return
 
         for price in api.prices.get(product=product['id']):
-            self.add_price(price['id'], price['label'], price['value'], price['percentage'])
+            self.add_price(price['id'], price['label'], price['value'], price['percentage'] if category['alcoholic'] else None)
 
 
 class ConsumptionPricesItem(QtWidgets.QWidget):
@@ -354,7 +355,11 @@ class ConsumptionPricesItem(QtWidgets.QWidget):
 
         self.label = QtWidgets.QLabel(name)
         self.input = QtWidgets.QDoubleSpinBox()
-        self.percentage_input = QtWidgets.QDoubleSpinBox()
+        self.input.setSuffix("€")
+
+        if percentage is not None:
+            self.percentage_input = QtWidgets.QDoubleSpinBox()
+            self.percentage_input.setSuffix("°")
         self.barcode_btn = QtWidgets.QPushButton()
         self.input.setMaximum(999.99)
         self.input.setLocale(QtCore.QLocale('English'))
@@ -369,14 +374,16 @@ class ConsumptionPricesItem(QtWidgets.QWidget):
         self.layout.addWidget(self.label)
         self.layout.addWidget(self.input)
         self.layout.addWidget(self.barcode_btn)
-        self.layout.addWidget(self.percentage_input)
+        if percentage is not None:
+            self.layout.addWidget(self.percentage_input)
 
     def _build(self):
         """ Fill the inputs with walues and update the douchette button
         """
         self.label = QtWidgets.QLabel(self.name)
         self.input.setValue(self.value)
-        self.percentage_input.setValue(self.percentage)
+        if self.percentage is not None:
+            self.percentage_input.setValue(self.percentage)
 
         if self.barcode and ConsumptionPricesItem.BUTTON_ENABLED:
             self.barcode_btn.setStyleSheet('* {background-color: #A3C1DA;}')
@@ -465,13 +472,13 @@ class CategoryPrices(QtWidgets.QGroupBox):
         super().__init__(parent)
         self.widgets = []
 
-    def add_price(self, id_=None, name=""):
+    def add_price(self, id_=None, name="", quantity=0):
         """ Add price description to price list
 
         :param int id_: Price descriptor id
         :param str name: Price descriptor name
         """
-        widget = CategoryPriceItem(id_, name)
+        widget = CategoryPriceItem(id_, name, quantity)
         self.layout().insertWidget(len(self.widgets), widget, stretch=0)
         self.widgets.append(widget)
 
@@ -499,7 +506,7 @@ class CategoryPrices(QtWidgets.QGroupBox):
         cat = api.categories.get_unique(name=category_name)
         if cat:
             for desc in api.prices.get_descriptor(category=cat['id']):
-                self.add_price(desc['id'], desc['label'])
+                self.add_price(desc['id'], desc['label'], desc["quantity"])
         else:
             gui.utils.error("La catégorie sélectionnée n'existe pas.")
 
@@ -507,15 +514,19 @@ class CategoryPrices(QtWidgets.QGroupBox):
 class CategoryPriceItem(QtWidgets.QWidget):
     """ Wrapper to handle input, button pair as a single widget
     """
-    def __init__(self, id_, name=""):
+    def __init__(self, id_, name="", quantity=0):
         super().__init__()
         self.id_ = id_
         self.input = QtWidgets.QLineEdit()
+        self.quantity_input = QtWidgets.QSpinBox()
+        self.quantity_input.setRange(0, 9999)
+        self.quantity_input.setValue(quantity)
         self.input.setText(name)
         self.button = QtWidgets.QPushButton("Supprimer")
         self.button.clicked.connect(self.remove)
         self.layout = QtWidgets.QHBoxLayout(self)
         self.layout.addWidget(self.input)
+        self.layout.addWidget(self.quantity_input)
         self.layout.addWidget(self.button)
 
     def remove(self):

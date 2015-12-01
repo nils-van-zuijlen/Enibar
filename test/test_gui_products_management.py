@@ -75,8 +75,9 @@ class CategoryManagementTest(basetest.BaseGuiTest):
         self.win.categories.setCurrentRow(0)
         self.win.button_cat_price.click()
         self.win.category_prices.widgets[0].input.setText("price1")
+        self.win.category_prices.widgets[0].quantity_input.setValue(100)
         self.win.button_cat_save.click()
-        self.assertEqual(list(api.prices.get_descriptor(category=1)), [{'category': 1, 'label': 'price1', 'id': 1}])
+        self.assertEqual(list(api.prices.get_descriptor(category=1)), [{'category': 1, 'label': 'price1', 'id': 1, 'quantity': 100}])
 
 
 class TestProductsManagement(basetest.BaseGuiTest):

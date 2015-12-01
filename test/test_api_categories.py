@@ -45,10 +45,10 @@ class CategoriesTest(basetest.BaseTest):
         id1 = categories.add("Test1")
         id2 = categories.add("Test2")
 
-        prices.add_descriptor("A", id1)
-        prices.add_descriptor("B", id1)
-        prices.add_descriptor("C", id2)
-        prices.add_descriptor("D", id2)
+        prices.add_descriptor("A", id1, 100)
+        prices.add_descriptor("B", id1, 100)
+        prices.add_descriptor("C", id2, 100)
+        prices.add_descriptor("D", id2, 100)
 
         products.add("Coucou", category_id=id1)
         products.add("Coucou2", category_id=id1)

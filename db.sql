@@ -88,6 +88,7 @@ CREATE TABLE IF NOT EXISTS price_description(
 	id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
 	label VARCHAR(127),
 	category INTEGER UNSIGNED,
+    quantity INTEGER UNSIGNED,
 	UNIQUE (label, category),
 	FOREIGN KEY (category) REFERENCES categories (id) ON DELETE CASCADE
 ) ENGINE=InnoDB;

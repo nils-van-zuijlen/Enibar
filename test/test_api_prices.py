@@ -34,17 +34,17 @@ class PricesTest(basetest.BaseTest):
 
     def test_add_descriptor(self):
         """ Testing adding price descriptor """
-        self.assertIsNotNone(api.prices.add_descriptor("Unité", self.cat_drink))
-        self.assertIsNotNone(api.prices.add_descriptor("Demi", self.cat_drink))
-        self.assertIsNotNone(api.prices.add_descriptor("Unité", self.cat_eat))
-        self.assertIsNone(api.prices.add_descriptor("Unité", self.cat_eat))
+        self.assertIsNotNone(api.prices.add_descriptor("Unité", self.cat_drink, 100))
+        self.assertIsNotNone(api.prices.add_descriptor("Demi", self.cat_drink, 100))
+        self.assertIsNotNone(api.prices.add_descriptor("Unité", self.cat_eat, 100))
+        self.assertIsNone(api.prices.add_descriptor("Unité", self.cat_eat, 100))
         self.assertEqual(self.count_descriptors(), 3)
 
     def test_add_descriptor_extended(self):
         """ Testing extended features of add_descriptor """
         pid0 = api.products.add("Lapin", category_id=self.cat_eat)
         pid1 = api.products.add("Lapinne", category_id=self.cat_drink)
-        self.assertTrue(api.prices.add_descriptor("Unité", self.cat_eat))
+        self.assertTrue(api.prices.add_descriptor("Unité", self.cat_eat, 100))
         prices = list(api.prices.get(product=pid0))
         self.assertEqual(len(prices), 1)
         prices = list(api.prices.get(product=pid1))
@@ -52,18 +52,18 @@ class PricesTest(basetest.BaseTest):
 
     def test_remove_description(self):
         """ Testing removing descriptor """
-        id_ = api.prices.add_descriptor("Unité", self.cat_drink)
+        id_ = api.prices.add_descriptor("Unité", self.cat_drink, 100)
         self.assertEqual(self.count_descriptors(), 1)
         self.assertTrue(api.prices.remove_descriptor(id_))
         self.assertEqual(self.count_descriptors(), 0)
 
     def test_remove_description_extended(self):
         """ Testing advanced feature of description removing """
-        did1 = api.prices.add_descriptor("Unité", self.cat_eat)
+        did1 = api.prices.add_descriptor("Unité", self.cat_eat, 100)
         api.products.add("Lapin", category_id=self.cat_eat)
         api.products.add("Lapine", category_id=self.cat_eat)
 
-        api.prices.add_descriptor("Unité", self.cat_drink)
+        api.prices.add_descriptor("Unité", self.cat_drink, 100)
         api.products.add("Lapon", category_id=self.cat_drink)
         api.products.add("Lapone", category_id=self.cat_drink)
 
@@ -73,15 +73,18 @@ class PricesTest(basetest.BaseTest):
 
     def test_rename_description(self):
         """ Testing renaming price descriptor """
-        id_ = api.prices.add_descriptor("Unité", self.cat_drink)
-        self.assertTrue(api.prices.rename_descriptor(id_, "Demi"))
+        id_ = api.prices.add_descriptor("Unité", self.cat_drink, 100)
+        price_descs = list(api.prices.get_descriptor(label="Unité"))
+        self.assertEqual(100, price_descs[0]['quantity'])
+        self.assertTrue(api.prices.change_descriptor(id_, "Demi", 50))
         price_descs = list(api.prices.get_descriptor(label="Demi"))
         self.assertEqual(len(price_descs), 1)
         self.assertEqual(id_, price_descs[0]['id'])
+        self.assertEqual(50, price_descs[0]['quantity'])
 
     def test_add(self):
         """ Testing adding prices """
-        desc_id = api.prices.add_descriptor("Unité", self.cat_eat)
+        desc_id = api.prices.add_descriptor("Unité", self.cat_eat, 100)
         pid = api.products.add("Lapin", category_id=self.cat_eat)
         test = api.products.add("Lapin", category_id=self.cat_eat)
         self.assertIsNone(test)
@@ -93,7 +96,7 @@ class PricesTest(basetest.BaseTest):
     def test_deletion(self):
         """ Testing deletion of prices
         """
-        desc_id = api.prices.add_descriptor("Unité", self.cat_eat)
+        desc_id = api.prices.add_descriptor("Unité", self.cat_eat, 100)
         pid = api.products.add("Lapin", category_id=self.cat_eat)
         price = api.prices.add(pid, desc_id, 0, 5)
         self.assertTrue(api.prices.remove(price))
@@ -102,7 +105,7 @@ class PricesTest(basetest.BaseTest):
     def test_get(self):
         """ Testing get price function """
         self.assertEqual(list(api.prices.get()), [])
-        price_desc_id = api.prices.add_descriptor("Unité", self.cat_drink)
+        price_desc_id = api.prices.add_descriptor("Unité", self.cat_drink, 100)
         pid = api.products.add("Lapin", category_id=self.cat_drink)
 
         price_id = None
@@ -137,8 +140,8 @@ class PricesTest(basetest.BaseTest):
     def test_get_unique(self):
         """ Testing get unique """
         pid = api.products.add("Lapin", category_id=self.cat_eat)
-        desc_id1 = api.prices.add_descriptor("Unité", self.cat_eat)
-        desc_id2 = api.prices.add_descriptor("Kilo", self.cat_eat)
+        desc_id1 = api.prices.add_descriptor("Unité", self.cat_eat, 100)
+        desc_id2 = api.prices.add_descriptor("Kilo", self.cat_eat, 100)
         id1 = api.prices.add(pid, desc_id1, 0, 0)
         api.prices.add(pid, desc_id2, 0, 5)
         self.assertIsNone(api.prices.get_unique(value=0))
@@ -153,7 +156,7 @@ class PricesTest(basetest.BaseTest):
 
     def test_set_value(self):
         """ Testing setting price value """
-        desc_id = api.prices.add_descriptor("Unité", self.cat_eat)
+        desc_id = api.prices.add_descriptor("Unité", self.cat_eat, 100)
         product = api.products.add("Lapin", category_id=self.cat_eat)
         pid = api.prices.add(product, desc_id, 0, 5)
         self.assertTrue(api.prices.set_value(pid, 12.34))
@@ -161,7 +164,7 @@ class PricesTest(basetest.BaseTest):
 
     def test_set_multiple_value(self):
         """ Testing setting multiple values """
-        desc_id = api.prices.add_descriptor("Unité", self.cat_eat)
+        desc_id = api.prices.add_descriptor("Unité", self.cat_eat, 100)
         product = api.products.add("Lapin", category_id=self.cat_eat)
         prices = []
         for i in range(10):
@@ -180,7 +183,7 @@ class PricesTest(basetest.BaseTest):
         """ Testing set_barcode
         """
         pid = api.products.add("Lapin", category_id=self.cat_eat)
-        desc_id = api.prices.add_descriptor("Unité", self.cat_eat)
+        desc_id = api.prices.add_descriptor("Unité", self.cat_eat, 100)
         price = api.prices.add(pid, desc_id, 1, 5)
         self.assertTrue(api.prices.set_barcode(price, '33333'))
         self.assertFalse(api.prices.set_barcode(50, '33333'))  # Do not allow same barcode multiple times.
@@ -196,7 +199,7 @@ class PricesTest(basetest.BaseTest):
         """
         api.categories.set_alcoholic(self.cat_eat, True)
         pid = api.products.add("Lapin", category_id=self.cat_eat)
-        desc_id = api.prices.add_descriptor("Unité", self.cat_eat)
+        desc_id = api.prices.add_descriptor("Unité", self.cat_eat, 100)
         settings.ALCOHOL_MAJORATION = 0.0
         self.assertEqual(list(api.prices.get()), [{'label': 'Unité', 'id': 1, 'product': 1, 'category': 1, 'value': 0.0, 'percentage': 0.0}])
         settings.ALCOHOL_MAJORATION = 5.0

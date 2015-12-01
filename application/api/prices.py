@@ -30,20 +30,22 @@ import api.base
 import settings
 
 
-def add_descriptor(name, category):
+def add_descriptor(name, category, quantity):
     """ Add price descriptor
 
     :param str name: Price name
     :param int category: category id
+    :param int quantity: The quantity (in mL) of the product
     :return int: Return price id created or None
     """
     with Database() as database:
         database.transaction()
         cursor = QtSql.QSqlQuery(database)
-        cursor.prepare("INSERT INTO price_description(label, category) \
-            VALUES(:label, :category)")
+        cursor.prepare("INSERT INTO price_description(label, category, quantity) \
+            VALUES(:label, :category, :quantity)")
         cursor.bindValue(":label", name)
         cursor.bindValue(":category", category)
+        cursor.bindValue(":quantity", quantity)
         if cursor.exec_():
             desc_id = cursor.lastInsertId()
             cursor.prepare("SELECT id FROM products WHERE category=:category")
@@ -77,16 +79,18 @@ def remove_descriptor(descriptor_id):
         return cursor.exec_()
 
 
-def rename_descriptor(id_, name):
-    """ Rename price descriptor
+def change_descriptor(id_, name, quantity):
+    """ Change price descriptor name and quantity
 
     :param int id_: Price descriptor id
+    :param int quantity: The quantity (in mL) of the product
     :return bool: True if operation succeed
     """
     with Cursor() as cursor:
-        cursor.prepare("UPDATE price_description SET label=:label WHERE id=:id")
+        cursor.prepare("UPDATE price_description SET label=:label, quantity=:quantity WHERE id=:id")
         cursor.bindValue(":id", id_)
         cursor.bindValue(":label", name)
+        cursor.bindValue(":quantity", quantity)
         return cursor.exec_()
 
 
@@ -112,6 +116,7 @@ def get_descriptor(**kwargs):
                 'id': record.value('id'),
                 'label': record.value('label'),
                 'category': record.value('category'),
+                'quantity': record.value('quantity'),
             }
 
 
