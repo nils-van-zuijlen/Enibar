@@ -521,6 +521,7 @@ class CategoryPriceItem(QtWidgets.QWidget):
         self.quantity_input = QtWidgets.QSpinBox()
         self.quantity_input.setRange(0, 9999)
         self.quantity_input.setValue(quantity)
+        self.quantity_input.setSuffix(" mL")
         self.input.setText(name)
         self.button = QtWidgets.QPushButton("Supprimer")
         self.button.clicked.connect(self.remove)
