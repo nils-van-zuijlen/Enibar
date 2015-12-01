@@ -413,6 +413,8 @@ def import_csv(notes, reason, amount, *, do_not=False):
             'product': reason,
             'price_name': "Solde",
             'quantity': "1",
+            'liquid_quantity': 0,
+            'percentage': 0,
             'price': amount}
         )
     if transactions(notes, amount):

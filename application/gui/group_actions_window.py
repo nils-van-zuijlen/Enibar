@@ -225,6 +225,8 @@ class GroupActionsWindow(QtWidgets.QDialog):
                 'product': product['name'],
                 'price_name': price_name,
                 'quantity': 1,
+                'liquid_quantity': descriptor['quantity'],
+                'percentage': price['percentage'],
                 'price': -price['value']
             }
             transactions.append(transaction)

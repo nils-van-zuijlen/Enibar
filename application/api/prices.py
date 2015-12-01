@@ -275,3 +275,5 @@ def set_multiple_values(prices):
 
 
 get_unique = api.base.make_get_unique(get)
+get_unique_descriptor = api.base.make_get_unique(get_descriptor)
+

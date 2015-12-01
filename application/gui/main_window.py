@@ -337,6 +337,11 @@ class MainWindow(QtWidgets.QMainWindow):
                 return
             transactions = []
             for product in self.product_list.products:
+                cat = api.categories.get_unique(name=product['category'])
+                desc = api.prices.get_unique_descriptor(category=cat['id'], label=product['price_name'])
+                p = api.products.get_unique(name=product['product'])
+                price = api.prices.get_unique(price_description=desc['id'], product=p['id'])
+
                 transaction = {
                     'note': self.selected.text(),
                     'category': product['category'],
@@ -344,7 +349,9 @@ class MainWindow(QtWidgets.QMainWindow):
                     'price_name': product['price_name'],
                     'quantity': product['count'],
                     'price': -product['price'],
-                    'deletable': product['deletable']
+                    'deletable': product['deletable'],
+                    'quantity': desc['quantity'],
+                    'percentage': price['percentage'],
                 }
                 transactions.append(transaction)
             if api.transactions.log_transactions(transactions):

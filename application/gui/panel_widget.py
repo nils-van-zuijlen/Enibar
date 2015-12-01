@@ -173,7 +173,6 @@ class ProductList(QtWidgets.QTreeWidget):
         :param str pname: Product name
         :param str price_name: Price name
         :param float price: Price value
-        :param bool ecocup: Product is an ecocup
         """
         name = "{} ({}) - {}".format(pname, price_name, cname)
         for product in self.products:

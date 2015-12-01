@@ -33,7 +33,7 @@ import api.sde
 
 
 def log_transaction(nickname, category, product, price_name, quantity, price,
-        deletable=True):
+        deletable=True, liquid_quantity=0, percentage=0):
     """ Insert a transaction log line in database
 
     :param str nickname: Note nickname
@@ -52,9 +52,11 @@ def log_transaction(nickname, category, product, price_name, quantity, price,
             lastname, firstname = "", ""
 
         cursor.prepare("""INSERT INTO transactions(date, note, category,
-            product, price_name,quantity, price, firstname, lastname, deletable)
+            product, price_name,quantity, price, firstname, lastname,
+            liquid_quantity, percentage, deletable)
             VALUES(NOW(), :note, :category, :product, :price_name, :quantity,
-            :price, :firstname, :lastname, :deletable)
+            :price, :firstname, :lastname, :liquid_quantity,
+            :percentage, :deletable)
             """
         )
         cursor.bindValue(':note', nickname)
@@ -65,6 +67,8 @@ def log_transaction(nickname, category, product, price_name, quantity, price,
         cursor.bindValue(':price', price)
         cursor.bindValue(':firstname', firstname)
         cursor.bindValue(':lastname', lastname)
+        cursor.bindValue(':liquid_quantity', liquid_quantity)
+        cursor.bindValue(':percentage', percentage)
         cursor.bindValue(':deletable', deletable)
         cursor.exec_()
         asyncio.ensure_future(api.sde.send_history_lines([{"id": cursor.lastInsertId(), "note": nickname, "category": category, "product": product, "price_name": price_name, "quantity": quantity, "price": price}]))
@@ -82,11 +86,13 @@ def log_transactions(transactions):
         cursor = QtSql.QSqlQuery(database)
         cursor.prepare("""INSERT INTO transactions(
                 date, note, category, product, price_name,
-                quantity, price, firstname, lastname, deletable
+                quantity, price, firstname, lastname, liquid_quantity,
+                percentage, deletable
             )
             VALUES(
                 NOW(), :note, :category, :product, :price_name,
-                :quantity, :price, :firstname, :lastname, :deletable
+                :quantity, :price, :firstname, :lastname, :liquid_quantity,
+                :percentage, :deletable
             )""")
         for trans in transactions:
             # Fecth firstname and lastname of user with a bit of caching
@@ -121,6 +127,8 @@ def log_transactions(transactions):
             cursor.bindValue(':price', trans['price'])
             cursor.bindValue(':firstname', firstname)
             cursor.bindValue(':lastname', lastname)
+            cursor.bindValue(':liquid_quantity', trans.get('liquid_quantity', 0))
+            cursor.bindValue(':percentage', trans.get('percentage', 0))
             cursor.bindValue(':deletable', trans.get('deletable', True))
             cursor.exec_()
             trans["id"] = cursor.lastInsertId()

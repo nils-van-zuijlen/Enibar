@@ -121,6 +121,8 @@ CREATE TABLE IF NOT EXISTS transactions(
 	price_name VARCHAR(127),
 	price DECIMAL(10, 2),
 	quantity INTEGER UNSIGNED,
+    liquid_quantity INTEGER UNSIGNED,
+    percentage DECIMAL(10, 2),
 	deletable BOOLEAN default TRUE
 ) ENGINE=InnoDB;
 
