@@ -129,7 +129,8 @@ class ProductsManagementWindow(QtWidgets.QDialog):
                         continue
                     new_prices.append({
                         'id': price['id'],
-                        'value': widget.input.value()
+                        'value': widget.input.value(),
+                        'percentage': widget.percentage_input.value(),
                     })
         if not api.prices.set_multiple_values(new_prices):
             gui.utils.error("Erreur", "Impossible de sauvegarder les nouveaux prix")
@@ -291,14 +292,15 @@ class ConsumptionPrices(QtWidgets.QGroupBox):
         super().__init__(parent)
         self.widgets = []
 
-    def add_price(self, id_, name, value):
+    def add_price(self, id_, name, value, percentage):
         """ Add price to product's price list
 
         :param int id_: Price id
         :param str name: Price name
         :param float value: Price value
+        :param float percentage: Alochol percentage
         """
-        item = ConsumptionPricesItem(id_, name, value)
+        item = ConsumptionPricesItem(id_, name, value, percentage)
         self.layout().insertWidget(len(self.widgets), item)
         self.widgets.append(item)
 
@@ -333,7 +335,7 @@ class ConsumptionPrices(QtWidgets.QGroupBox):
             return
 
         for price in api.prices.get(product=product['id']):
-            self.add_price(price['id'], price['label'], price['value'])
+            self.add_price(price['id'], price['label'], price['value'], price['percentage'])
 
 
 class ConsumptionPricesItem(QtWidgets.QWidget):
@@ -341,16 +343,18 @@ class ConsumptionPricesItem(QtWidgets.QWidget):
     """
     BUTTON_ENABLED = True
 
-    def __init__(self, id_, name, value):
+    def __init__(self, id_, name, value, percentage):
         super().__init__()
         self.id_ = id_
         self.name = name
         self.value = value
         self.win = None
         self.barcode = None
+        self.percentage = percentage
 
         self.label = QtWidgets.QLabel(name)
         self.input = QtWidgets.QDoubleSpinBox()
+        self.percentage_input = QtWidgets.QDoubleSpinBox()
         self.barcode_btn = QtWidgets.QPushButton()
         self.input.setMaximum(999.99)
         self.input.setLocale(QtCore.QLocale('English'))
@@ -365,12 +369,14 @@ class ConsumptionPricesItem(QtWidgets.QWidget):
         self.layout.addWidget(self.label)
         self.layout.addWidget(self.input)
         self.layout.addWidget(self.barcode_btn)
+        self.layout.addWidget(self.percentage_input)
 
     def _build(self):
         """ Fill the inputs with walues and update the douchette button
         """
         self.label = QtWidgets.QLabel(self.name)
         self.input.setValue(self.value)
+        self.percentage_input.setValue(self.percentage)
 
         if self.barcode and ConsumptionPricesItem.BUTTON_ENABLED:
             self.barcode_btn.setStyleSheet('* {background-color: #A3C1DA;}')

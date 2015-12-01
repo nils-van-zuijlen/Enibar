@@ -115,22 +115,24 @@ def get_descriptor(**kwargs):
             }
 
 
-def add(product, price_description, value):
+def add(product, price_description, value, percentage):
     """ Add price to product
 
     :param int product: Product id
     :param int price_description: Price description
     :param float value: Price
+    :param float percentage: Alcohol percentage
     """
     with Cursor() as cursor:
-        cursor.prepare("INSERT INTO prices (product, price_description, value)\
-        (SELECT :product, :price_description, :value FROM (SELECT 1) t WHERE\
+        cursor.prepare("INSERT INTO prices (product, price_description, value, percentage)\
+        (SELECT :product, :price_description, :value, :percentage FROM (SELECT 1) t WHERE\
         EXISTS(SELECT * FROM products INNER JOIN price_description ON\
         products.category=price_description.category WHERE products.id=:product\
         AND price_description.id=:price_description))")
         cursor.bindValue(':product', product)
         cursor.bindValue(':price_description', price_description)
         cursor.bindValue(':value', value)
+        cursor.bindValue(':percentage', percentage)
         cursor.exec_()
         return cursor.lastInsertId()
 
@@ -158,6 +160,7 @@ def get(**kwargs):
         cursor.prepare("SELECT prices.id as id,\
             prices.product as product,\
             prices.value as value,\
+            prices.percentage AS percentage, \
             price_description.label as label,\
             price_description.category as category, \
             categories.alcoholic AS alcoholic \
@@ -178,6 +181,7 @@ def get(**kwargs):
                     'value': record.value('value') + settings.ALCOHOL_MAJORATION * record.value("alcoholic"),
                     'product': record.value('product'),
                     'category': record.value('category'),
+                    'percentage': record.value('percentage'),
                 }
 
 
@@ -254,10 +258,11 @@ def set_multiple_values(prices):
     with Database() as database:
         database.transaction()
         cursor = QtSql.QSqlQuery(database)
-        cursor.prepare("UPDATE prices SET value=:value WHERE id=:id")
+        cursor.prepare("UPDATE prices SET value=:value, percentage=:percentage WHERE id=:id")
         for price in prices:
             cursor.bindValue(":id", price['id'])
             cursor.bindValue(":value", price['value'])
+            cursor.bindValue(":percentage", price.get("percentage", 0))
             cursor.exec_()
 
         database.commit()

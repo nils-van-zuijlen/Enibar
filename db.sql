@@ -97,6 +97,7 @@ CREATE TABLE IF NOT EXISTS prices(
 	price_description INTEGER UNSIGNED,
 	product INTEGER UNSIGNED,
 	value DECIMAL(10,2),
+    percentage DECIMAL(10, 2) DEFAULT 0,
 	FOREIGN KEY (price_description) REFERENCES price_description (id) ON DELETE CASCADE,
 	FOREIGN KEY (product) REFERENCES products (id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
