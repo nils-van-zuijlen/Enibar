@@ -30,6 +30,7 @@ from database import Cursor
 
 
 class HistoryWindowTest(basetest.BaseGuiTest):
+    @freeze_time("2015-11-20 21:36:22")
     def setUp(self):
         super().setUp()
         self._reset_db()
@@ -81,6 +82,10 @@ class HistoryWindowTest(basetest.BaseGuiTest):
         gui.history_window.HistoryWindow._instance_count = 0
         self.win = gui.history_window.HistoryWindow(parent=None)
         api.notes.rebuild_cache()
+        async def wait():
+            await asyncio.sleep(0.1)
+        self.loop.run_until_complete(wait())
+        self.loop.run_until_complete(self.reset_redis())
 
     @freeze_time("2015-11-20 21:36:22")
     def test_show_lines(self):
@@ -143,8 +148,6 @@ class HistoryWindowTest(basetest.BaseGuiTest):
                 )
                 self.app.exit()
             async with api.redis.connection.get() as redis:
-                redis.delete(api.sde.QUEUE_NAME)
-
                 item = self.win.transaction_list.topLevelItem(1)
                 self.win.transaction_list.setCurrentItem(item)
                 QtCore.QTimer.singleShot(100, self.connect)

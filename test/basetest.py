@@ -22,6 +22,9 @@ from database import Cursor
 from pyvirtualdisplay import Display
 import api.users
 import api.notes
+import api.redis
+import api.sde
+import asyncio
 import os
 import sys
 import traceback
@@ -87,6 +90,17 @@ def run(self, test):
 
 
 class BaseTest(unittest.TestCase):
+    def setUp(self):
+        super().setUp()
+        self.loop = asyncio.get_event_loop()
+        self.loop.run_until_complete(api.redis.connect())
+        self.loop.run_until_complete(asyncio.ensure_future(self.reset_redis()))
+
+    async def reset_redis(self):
+        async with api.redis.connection.get() as redis:
+            res = await redis.delete(api.sde.QUEUE_NAME)
+            print(res)
+
     def _reset_db(self):
         tables = ["admins", "categories", "products", "price_description",
                   "notes", "prices", "transactions", "panels", "panel_content",
@@ -175,6 +189,7 @@ class BaseTest(unittest.TestCase):
 
 class BaseGuiTest(BaseTest):
     def setUp(self):
+        super().setUp()
         if int(os.environ['USE_VD']):
             self.display = Display(visible=0, size=(800, 600))
             self.display.start()
