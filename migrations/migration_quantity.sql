@@ -1,1 +1,0 @@
-ALTER TABLE price_description ADD COLUMN quantity INTEGER NOT NULL DEFAULT 0;
