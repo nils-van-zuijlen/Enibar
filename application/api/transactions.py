@@ -74,7 +74,7 @@ def log_transaction(nickname, category, product, price_name, quantity, price,
         cursor.bindValue(':percentage', percentage)
         cursor.bindValue(':deletable', deletable)
         cursor.exec_()
-        asyncio.ensure_future(api.sde.send_history_lines([{"id": cursor.lastInsertId(), "date": now, "note": nickname, "category": category, "product": product, "price_name": price_name, "quantity": quantity, "price": price}]))
+        asyncio.ensure_future(api.sde.send_history_lines([{"id": cursor.lastInsertId(), "date": now, "note": nickname, "category": category, "product": product, "price_name": price_name, "quantity": quantity, "price": price, "liquid_quantity": liquid_quantity, "percentage": percentage}]))
         return True
 
 

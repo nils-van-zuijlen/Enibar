@@ -350,7 +350,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     'quantity': product['count'],
                     'price': -product['price'],
                     'deletable': product['deletable'],
-                    'quantity': desc['quantity'],
+                    'liquid_quantity': desc['quantity'],
                     'percentage': price['percentage'],
                 }
                 transactions.append(transaction)
