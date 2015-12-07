@@ -30,6 +30,7 @@ import asyncio
 import api.base
 import api.notes
 import api.sde
+import datetime
 
 
 def log_transaction(nickname, category, product, price_name, quantity, price,
@@ -54,11 +55,13 @@ def log_transaction(nickname, category, product, price_name, quantity, price,
         cursor.prepare("""INSERT INTO transactions(date, note, category,
             product, price_name,quantity, price, firstname, lastname,
             liquid_quantity, percentage, deletable)
-            VALUES(NOW(), :note, :category, :product, :price_name, :quantity,
+            VALUES(:date, :note, :category, :product, :price_name, :quantity,
             :price, :firstname, :lastname, :liquid_quantity,
             :percentage, :deletable)
             """
         )
+        now = datetime.datetime.now().isoformat()
+        cursor.bindValue(':date', now)
         cursor.bindValue(':note', nickname)
         cursor.bindValue(':category', category)
         cursor.bindValue(':product', product)
@@ -71,7 +74,7 @@ def log_transaction(nickname, category, product, price_name, quantity, price,
         cursor.bindValue(':percentage', percentage)
         cursor.bindValue(':deletable', deletable)
         cursor.exec_()
-        asyncio.ensure_future(api.sde.send_history_lines([{"id": cursor.lastInsertId(), "note": nickname, "category": category, "product": product, "price_name": price_name, "quantity": quantity, "price": price}]))
+        asyncio.ensure_future(api.sde.send_history_lines([{"id": cursor.lastInsertId(), "date": now, "note": nickname, "category": category, "product": product, "price_name": price_name, "quantity": quantity, "price": price}]))
         return True
 
 
@@ -94,6 +97,7 @@ def log_transactions(transactions):
                 :quantity, :price, :firstname, :lastname, :liquid_quantity,
                 :percentage, :deletable
             )""")
+        now = datetime.datetime.now().isoformat()
         for trans in transactions:
             # Fecth firstname and lastname of user with a bit of caching
             if not trans['note'] in cache:
@@ -119,6 +123,7 @@ def log_transactions(transactions):
                 lastname = cache[trans['note']]['lastname']
                 firstname = cache[trans['note']]['firstname']
 
+            cursor.bindValue(':date', now)
             cursor.bindValue(':note', trans['note'])
             cursor.bindValue(':category', trans['category'])
             cursor.bindValue(':product', trans['product'])
@@ -132,6 +137,7 @@ def log_transactions(transactions):
             cursor.bindValue(':deletable', trans.get('deletable', True))
             cursor.exec_()
             trans["id"] = cursor.lastInsertId()
+            trans["date"] = now
 
         asyncio.ensure_future(api.sde.send_history_lines(transactions))
         database.commit()
