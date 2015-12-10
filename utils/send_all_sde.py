@@ -28,6 +28,8 @@ for trans in api.transactions.get():
         'price_name': trans['price_name'],
         'quantity': trans['quantity'],
         'price': trans['price'],
+        'liquid_quantity': trans['liquid_quantity'],
+        'percentage': trans['percentage'],
     }
     transactions.append(transaction)
 
