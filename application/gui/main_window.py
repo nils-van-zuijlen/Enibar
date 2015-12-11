@@ -339,7 +339,7 @@ class MainWindow(QtWidgets.QMainWindow):
             for product in self.product_list.products:
                 cat = api.categories.get_unique(name=product['category'])
                 desc = api.prices.get_unique_descriptor(category=cat['id'], label=product['price_name'])
-                p = api.products.get_unique(name=product['product'])
+                p = api.products.get_unique(name=product['product'], category=cat['id'])
                 price = api.prices.get_unique(price_description=desc['id'], product=p['id'])
 
                 transaction = {
