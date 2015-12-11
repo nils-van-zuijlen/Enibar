@@ -57,6 +57,7 @@ async def process_queue():
                 redis.close()
                 return
             except Exception as e:
+                print(e)
                 await redis.lpush(QUEUE_NAME, item[1])
                 await asyncio.sleep(60)
 
