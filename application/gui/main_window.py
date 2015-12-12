@@ -337,22 +337,36 @@ class MainWindow(QtWidgets.QMainWindow):
                 return
             transactions = []
             for product in self.product_list.products:
-                cat = api.categories.get_unique(name=product['category'])
-                desc = api.prices.get_unique_descriptor(category=cat['id'], label=product['price_name'])
-                p = api.products.get_unique(name=product['product'], category=cat['id'])
-                price = api.prices.get_unique(price_description=desc['id'], product=p['id'])
+                if product['deletable']:
+                    cat = api.categories.get_unique(name=product['category'])
+                    desc = api.prices.get_unique_descriptor(category=cat['id'], label=product['price_name'])
+                    p = api.products.get_unique(name=product['product'], category=cat['id'])
+                    price = api.prices.get_unique(price_description=desc['id'], product=p['id'])
 
-                transaction = {
-                    'note': self.selected.text(),
-                    'category': product['category'],
-                    'product': product['product'],
-                    'price_name': product['price_name'],
-                    'quantity': product['count'],
-                    'price': -product['price'],
-                    'deletable': product['deletable'],
-                    'liquid_quantity': desc['quantity'],
-                    'percentage': price['percentage'],
-                }
+                    transaction = {
+                        'note': self.selected.text(),
+                        'category': product['category'],
+                        'product': product['product'],
+                        'price_name': product['price_name'],
+                        'quantity': product['count'],
+                        'price': -product['price'],
+                        'deletable': product['deletable'],
+                        'liquid_quantity': desc['quantity'],
+                        'percentage': price['percentage'],
+                    }
+                else:
+                    transaction = {
+                        'note': self.selected.text(),
+                        'category': product['category'],
+                        'product': product['product'],
+                        'price_name': product['price_name'],
+                        'quantity': product['count'],
+                        'price': -product['price'],
+                        'deletable': product['deletable'],
+                        'liquid_quantity': 0,
+                        'percentage': 0,
+                    }
+
                 transactions.append(transaction)
             if api.transactions.log_transactions(transactions):
                 api.notes.transactions([self.selected.text(), ], -total,
