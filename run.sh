@@ -31,5 +31,5 @@ else
 	exit 1
 fi
 cd $DIR/application
-exec $PYTHON "-OO" "main.py" &>> error.log
+/bin/sh -c "$PYTHON -OO main.py 2>&1 | tee -a error.log"
 
