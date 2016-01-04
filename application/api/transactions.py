@@ -218,7 +218,7 @@ def get_grouped_entries(col, filters):
 
 TRANSACTS_FIELDS_CACHE = {}
 TRANSACT_FIELDS = ['id', 'date', 'note', 'lastname', 'firstname', 'category',
-                   'product', 'price_name', 'quantity', 'price']
+                   'product', 'price_name', 'quantity', 'price', 'liquid_quantity', 'percentage']
 
 
 def get(max=None, reverse=False, **filter_):
