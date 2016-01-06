@@ -24,6 +24,7 @@ import aioredis
 import api.redis
 import api.sde
 from database import Cursor, ping_sql
+import datetime
 import json
 import quamash
 import sys
@@ -32,6 +33,34 @@ import settings
 from PyQt5 import QtWidgets
 
 SUB = None
+
+import sys
+
+class Tee(object):
+    def __init__(self, name, mode):
+        self.file = open(name, mode)
+        self.stdout = sys.stdout
+        self.stderr = sys.stderr
+        sys.stdout = self
+        sys.stderr = self
+        self.data = ""
+
+    def write(self, data):
+        self.data += data
+        if '\n' in self.data:
+            data, self.data = self.data.split('\n', 1)
+            d = datetime.datetime.now()
+            fdata = "{}: {}".format(d.isoformat(' '), data)
+            self.file.write(fdata)
+            data = "\033[31m{}\033[0m: {}\n".format(d.isoformat(' '), data)
+            self.stdout.write(data)
+            self.stdout.flush()
+
+    def flush(self):
+        pass
+
+
+t = Tee("error", "a")
 
 
 async def install_redis_handle(app):
