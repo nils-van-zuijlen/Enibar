@@ -192,6 +192,7 @@ class NotesManagementWindow(QtWidgets.QDialog):
         img = QtGui.QPixmap()
         self.photo.setPixmap(img)
         self.on_change()
+        self.save_button.setEnabled(False)
 
     def disable_inputs(self):
         """ This disable all the inputs
@@ -199,6 +200,8 @@ class NotesManagementWindow(QtWidgets.QDialog):
         self._inputs_action(lambda x: x.setEnabled(False))
         self.promo_input.setEnabled(False)
         self.photo_button.setEnabled(False)
+        self.save_button.setEnabled(False)
+        self.cancel_button.setEnabled(False)
 
     def enable_inputs(self):
         """ This enable all the inputs
@@ -206,6 +209,8 @@ class NotesManagementWindow(QtWidgets.QDialog):
         self._inputs_action(lambda x: x.setEnabled(True))
         self.promo_input.setEnabled(True)
         self.photo_button.setEnabled(True)
+        self.save_button.setEnabled(True)
+        self.cancel_button.setEnabled(True)
 
     def disable_inputs_for_editing(self):
         """ This disable all the inputs excepted those allowed to be edited on
