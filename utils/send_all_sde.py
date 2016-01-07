@@ -22,7 +22,7 @@ for trans in api.transactions.get():
         continue
 
     transaction = {'id': trans['id'],
-        'date': trans['date'],
+        'date': trans['date'].toPyDateTime().isoformat(),
         'category': trans['category'],
         'note': note[0]['nickname'],
         'product': trans['product'],
