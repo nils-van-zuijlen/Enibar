@@ -32,9 +32,9 @@ import gui.main_window
 import settings
 from PyQt5 import QtWidgets
 
+
 SUB = None
 
-import sys
 
 class Tee(object):
     def __init__(self, name, mode):
