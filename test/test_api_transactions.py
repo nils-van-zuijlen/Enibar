@@ -95,7 +95,7 @@ class TransactionsTest(basetest.BaseTest):
               'price': 5.0,
               'category': 'e',
               'price_name': 'g'}
-            ], ignore=["date"]
+            ], ignore=["date", "percentage", "liquid_quantity"]
         )
 
     def test_log_transactions(self):
@@ -148,7 +148,7 @@ class TransactionsTest(basetest.BaseTest):
               'price': 5.0,
               'category': 'e',
               'price_name': 'g'}
-            ], ignore=["date"]
+            ], ignore=["date", "percentage", "liquid_quantity"]
         )
 
     def test_rollback_transaction(self):
@@ -211,7 +211,7 @@ class TransactionsTest(basetest.BaseTest):
               'price': -4.0,
               'category': 'b',
               'price_name': 'c'}
-             ], ignore=['date']
+             ], ignore=["date", "percentage", "liquid_quantity"]
         )
         self.assertEqual(self.count_transactions(), 4)
         self.assertTrue(transactions.rollback_transaction(2, full=True))
