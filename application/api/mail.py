@@ -26,11 +26,13 @@ Handle all mail related task.
 """
 
 import sys
+import os
+import base64
 import smtplib
-import ssl
 import re
 import datetime
 from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from database import Cursor
 import api.base
 import api.notes
@@ -99,15 +101,27 @@ def send_mail(to, subject, message, from_="cafeteria@enib.fr"):
 
     srv, port = settings.SMTP_SERVER_ADDR, settings.SMTP_SERVER_PORT
     with smtplib.SMTP(srv, port) as server:
-        content = re.sub("\n", "<br/>", message)
-        mail = MIMEText(content, "html")
+        mail = MIMEMultipart('alternative')
         mail['subject'] = subject
-        mail['from'] = from_
-        mail['to'] = to
-        mail['date'] = datetime.datetime.now().strftime("%m/%d/%Y %H:%M")
+        mail['To'] = to
+        mail['From'] = from_
+        now = datetime.datetime.now()
+        mail['Date'] = now.strftime("%a, %d %h %Y %X %z")
+        mail['Message-ID'] = '<{}.{}@{}>'.format(
+            base64.b32encode(os.urandom(8)).decode()[:13],
+            base64.b32encode(os.urandom(8)).decode()[:13],
+            'enibar.enib.net'
+        )
 
+        text = MIMEText(message, "plain")
+        content = re.sub("\n", "<br/>", message)
+        message = "<!dotcype html>\n<html><body>{}</body></html>".format(content)
+        html = MIMEText(message, "html")
+
+        mail.attach(text)
+        mail.attach(html)
         try:
-            server.send_message(mail)
+            server.sendmail(from_, to, mail.as_string())
             log_mail(to, subject, message, from_)
             return True
         except Exception as e:
