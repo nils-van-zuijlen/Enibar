@@ -98,6 +98,7 @@ class MultiRefillNoteWindow(QtWidgets.QDialog):
         self.to_add_value = 0
         self.reason_value = ""
         self.text = text
+        self.setWindowTitle("{} d'une note".format(text.title()))
 
         self.show()
 
