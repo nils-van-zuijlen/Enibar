@@ -282,53 +282,6 @@ class NotesTest(basetest.BaseTest):
         for note in notes.get():
             self.assertEqual(note['note'], 0.05)
 
-    @freezegun.freeze_time("2014-12-24")
-    def test_export_xml(self):
-        """ Testing notes exporting """
-        notes.add("test1",
-            "test",
-            "test",
-            "test@pouette.com",
-            "0600000000",
-            '12/12/2001',
-            '1A',
-            '',
-            True,
-            True
-        )
-        notes.add("test2",
-            "test2",
-            "test2",
-            "test2@pouette.com",
-            "0700000000",
-            '12/12/2001',
-            '2A',
-            '',
-            True,
-            True
-        )
-        notes.transactions(["test1", ], -60)
-        xml = "<?xml version=\"1.0\"?>\n"
-        xml += "<notes date=\"2014-12-24\">\n"
-        xml += "\t<note id=\"2\">\n"
-        xml += "\t\t<prenom>test2</prenom>\n"
-        xml += "\t\t<nom>test2</nom>\n"
-        xml += "\t\t<compte>0.0</compte>\n"
-        xml += "\t\t<mail>test2</mail>\n"
-        xml += "\t\t<date_Decouvert></date_Decouvert>\n"
-        xml += "\t</note>\n"
-        xml += "\t<note id=\"1\">\n"
-        xml += "\t\t<prenom>test</prenom>\n"
-        xml += "\t\t<nom>test</nom>\n"
-        xml += "\t\t<compte>-60.0</compte>\n"
-        xml += "\t\t<mail>test</mail>\n"
-        xml += "\t\t<date_Decouvert>2014-12-24</date_Decouvert>\n"
-        xml += "\t</note>\n"
-        xml += "</notes>\n"
-        ex = notes.export(notes.get(), xml=True)
-        for line in xml.split():
-            self.assertIn(line, ex)
-
     def test_export_csv(self):
         """ Testing csv export
         """
@@ -349,7 +302,7 @@ class NotesTest(basetest.BaseTest):
         note = notes.get()[0]
         csv = ", ".join(to_export)
         csv += "\n" + ",".join(str(note[value]) for value in to_export)
-        self.assertEqual(csv, notes.export(notes.get(), csv=True))
+        self.assertEqual(csv, notes.export(notes.get()))
 
     def test_export_by_id(self):
         notes.add("test0",

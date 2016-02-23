@@ -246,20 +246,7 @@ class GroupActionsWindow(QtWidgets.QDialog):
             "CSV Files (*.csv)")
         if path:
             with open(path, "w") as save_file:
-                save_file.write(self._multiple_action(api.notes.export_by_nick,
-                                                      csv=True))
-
-    def export_xml_action(self):
-        """ Called when "Export XML" is clicked
-        """
-        path, _ = QtWidgets.QFileDialog(self).getSaveFileName(
-            self, "Exporter vers", "{}.xml".format(
-                datetime.datetime.now().strftime("%Y-%m-%d")),
-            "XML Files (*.xml)")
-        if path:
-            with open(path, "w") as save_file:
-                save_file.write(self._multiple_action(api.notes.export_by_id,
-                                                      xml=True))
+                save_file.write(self._multiple_action(api.notes.export_by_nick,))
 
 
 class MultiNotesList(NotesList):

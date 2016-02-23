@@ -538,16 +538,13 @@ class MenuBar(QtWidgets.QMenuBar):
         path, format_ = QtWidgets.QFileDialog(self).getSaveFileName(
             self,
             "Exporter vers",
-            "{}.xml".format(datetime.datetime.now().strftime("%Y-%m-%d")),
-            "XML Files (*.xml)\nCSV Files (*.csv)"
+            "{}.csv".format(datetime.datetime.now().strftime("%Y-%m-%d")),
+            "CSV Files (*.csv)"
         )
 
         if path:
             with open(path, "w") as save_file:
-                if format_ == "XML Files (*.xml)":
-                    save_file.write(api.notes.export(notes, xml=True))
-                else:
-                    save_file.write(api.notes.export(notes, csv=True))
+                save_file.write(api.notes.export(notes))
 
     def show_transactions_history(self):
         """ Show transaction logs

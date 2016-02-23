@@ -161,13 +161,6 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_5">
           <item row="0" column="0">
-           <widget class="QPushButton" name="export_xml_button">
-            <property name="text">
-             <string>Export XML</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
            <widget class="QPushButton" name="export_csv_button">
             <property name="text">
              <string>Export CSV</string>
@@ -272,22 +265,6 @@
     <hint type="sourcelabel">
      <x>146</x>
      <y>21</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>294</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>export_xml_button</sender>
-   <signal>clicked()</signal>
-   <receiver>NotesAction</receiver>
-   <slot>export_xml_action()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>417</x>
-     <y>480</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>

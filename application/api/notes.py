@@ -354,40 +354,17 @@ def change_ecocups(nick, diff, do_not=False):
     return value
 
 
-def export(notes, *, csv=False, xml=False):
-    """ Return an xml representation of all notes
+def export(notes):
+    """ Return an csv representation of all notes
 
         :param list: A list of notes to export
     """
-    if xml:
-        xml = "<?xml version=\"1.0\"?>\n"
-        xml += "<notes date=\"{}\">\n".format(datetime.datetime.now().strftime(
-            "%Y-%m-%d"))
-        for note in notes:
-            if note["overdraft_date"] and note["overdraft_date"].isValid():
-                overdraft_date = note["overdraft_date"].toString("yyyy-MM-dd")
-            else:
-                overdraft_date = ""
-
-            xml += "\t<note id=\"{}\">\n".format(note["id"])
-            xml += "\t\t<prenom>{}</prenom>\n".format(note["firstname"])
-            xml += "\t\t<nom>{}</nom>\n".format(note["lastname"])
-            xml += "\t\t<compte>{}</compte>\n".format(note["note"])
-            xml += "\t\t<mail>{}</mail>\n".format(note["mail"].split("@")[0])
-            xml += "\t\t<date_Decouvert>{}</date_Decouvert>\n".format(
-                overdraft_date
-            )
-
-            xml += "\t</note>\n"
-        xml += "</notes>\n"
-        return xml
-    elif csv:
-        to_export = ["nickname", "firstname", "lastname", "note", "mail",
-                     "photo_path"]
-        csv = ", ".join(to_export)
-        for note in notes:
-            csv += "\n" + ",".join(str(note[value]) for value in to_export)
-        return csv
+    to_export = ["nickname", "firstname", "lastname", "note", "mail",
+                 "photo_path"]
+    csv = ", ".join(to_export)
+    for note in notes:
+        csv += "\n" + ",".join(str(note[value]) for value in to_export)
+    return csv
 
 
 def export_by_nick(notes_nicks, *args, **kwargs):
