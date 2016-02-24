@@ -285,15 +285,17 @@ class MainWindow(QtWidgets.QMainWindow):
             If the " key is pressed, open a Douchette window. If the \n key is
             pressed, call self.validate_transaction.
         """
-        if isinstance(event, QtGui.QKeyEvent) and\
-                event.type() == QtCore.QEvent.KeyRelease:
-            if event.text() == "\"":
-                self.win = DouchetteWindow(self.on_douchette)
-                return True
-            if event.key() == QtCore.Qt.Key_Return or\
-                    event.key() == QtCore.Qt.Key_Enter:
-                self.validate_transaction()
-                return True
+        if isinstance(event, QtGui.QKeyEvent):
+            if event.type() == QtCore.QEvent.KeyRelease:
+                if event.text() == "\"":
+                    self.win = DouchetteWindow(self.on_douchette)
+                    return True
+            elif event.type() == QtCore.QEvent.KeyPress:
+                if event.key() == QtCore.Qt.Key_Return or\
+                        event.key() == QtCore.Qt.Key_Enter:
+                    self.validate_transaction()
+                    return True
+
         return super().event(event)
 
     def on_douchette(self, text):
