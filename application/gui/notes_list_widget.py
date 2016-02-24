@@ -35,6 +35,7 @@ class NotesList(QtWidgets.QListWidget):
         self.current_filter = lambda x: x['hidden'] == 0
         self.minors_color = QtGui.QColor(255, 192, 203)
         self.overdraft_color = QtCore.Qt.red
+        self.search_text = ""
 
     def build(self, notes_list):
         """ Fill the list with notes from notes_list, coloring negatives one
@@ -46,6 +47,18 @@ class NotesList(QtWidgets.QListWidget):
                 widget.setBackground(self.overdraft_color)
             elif current_time - note["birthdate"] < 18 * 365 * 24 * 3600:
                 widget.setBackground(self.minors_color)
+
+            if not note['nickname'].lower().startswith(self.search_text):
+                widget.setHidden(True)
+
+    def hide_unmatched_items(self, search_text):
+        self.search_text = search_text.lower()
+        for i in range(self.count()):
+            widget = self.item(i)
+            if widget.text().lower().startswith(self.search_text):
+                widget.setHidden(False)
+            else:
+                widget.setHidden(True)
 
     def refresh(self, notes_list):
         """ Refresh the note list

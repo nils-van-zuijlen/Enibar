@@ -123,6 +123,11 @@ class GroupActionsWindow(QtWidgets.QDialog):
         except ValueError:
             self.note_list.clear()
 
+    def search_input_changed(self, event):
+        """ Called when the search input is changed
+        """
+        self.note_list.hide_unmatched_items(self.search_input.text())
+
     def hide_action(self):
         """ Called when "cacher" is clicked
         """
@@ -247,6 +252,11 @@ class GroupActionsWindow(QtWidgets.QDialog):
         if path:
             with open(path, "w") as save_file:
                 save_file.write(self._multiple_action(api.notes.export_by_nick,))
+
+    def selection_changed(self):
+        self.selected_note_report.setPlainText(
+            ", ".join([i.text() for i in self.note_list.selectedItems()])
+        )
 
 
 class MultiNotesList(NotesList):

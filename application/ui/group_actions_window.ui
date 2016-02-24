@@ -16,6 +16,34 @@
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="1" column="0">
     <layout class="QGridLayout" name="gridLayout">
+     <item row="5" column="0" colspan="2">
+      <widget class="QGroupBox" name="groupBox_3">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="title">
+        <string>Notes sélectionnées</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_6">
+        <item row="0" column="0">
+         <widget class="QPlainTextEdit" name="selected_note_report">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
      <item row="0" column="0">
       <widget class="QComboBox" name="filter_combobox">
        <property name="sizePolicy">
@@ -56,7 +84,36 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="2">
+     <item row="2" column="0" rowspan="3" colspan="2">
+      <widget class="MultiNotesList" name="note_list">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="selectionMode">
+        <enum>QAbstractItemView::MultiSelection</enum>
+       </property>
+       <property name="sortingEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" colspan="2">
+      <widget class="QLineEdit" name="search_input">
+       <property name="inputMask">
+        <string/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="placeholderText">
+        <string>Recherche</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2" rowspan="6">
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="8" column="0" colspan="2">
         <widget class="QPushButton" name="hide_button">
@@ -79,83 +136,14 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0" colspan="2">
-        <widget class="QGroupBox" name="groupBox">
-         <property name="title">
-          <string>Consommations</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_4">
-          <item row="1" column="0" colspan="2">
-           <widget class="UniqueConsumptionList" name="product_list">
-            <column>
-             <property name="text">
-              <string>Produits</string>
-             </property>
-            </column>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="2" column="1">
-           <widget class="QPushButton" name="take_products_btn">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Valider</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <spacer name="horizontalSpacer_2">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="3" column="0" colspan="2">
-           <widget class="QPushButton" name="refill_button">
-            <property name="text">
-             <string>Recharger</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QComboBox" name="price_list">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0" colspan="2">
-           <widget class="QPushButton" name="take_button">
-            <property name="text">
-             <string>Prendre</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
        <item row="4" column="0" colspan="2">
         <widget class="QGroupBox" name="groupBox_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="title">
           <string>Export</string>
          </property>
@@ -170,17 +158,62 @@
          </layout>
         </widget>
        </item>
+       <item row="0" column="0" rowspan="3" colspan="2">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>Consommations</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="0" column="1" colspan="2">
+           <widget class="UniqueConsumptionList" name="product_list">
+            <column>
+             <property name="text">
+              <string>Produits</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QPushButton" name="take_products_btn">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Valider</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1" colspan="2">
+           <widget class="QPushButton" name="refill_button">
+            <property name="text">
+             <string>Recharger</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QComboBox" name="price_list">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1" colspan="2">
+           <widget class="QPushButton" name="take_button">
+            <property name="text">
+             <string>Prendre</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
       </layout>
-     </item>
-     <item row="3" column="0" colspan="2">
-      <widget class="MultiNotesList" name="note_list">
-       <property name="selectionMode">
-        <enum>QAbstractItemView::MultiSelection</enum>
-       </property>
-       <property name="sortingEnabled">
-        <bool>true</bool>
-       </property>
-      </widget>
      </item>
     </layout>
    </item>
@@ -352,6 +385,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>search_input</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>NotesAction</receiver>
+   <slot>search_input_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>143</x>
+     <y>45</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>300</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>note_list</sender>
+   <signal>itemSelectionChanged()</signal>
+   <receiver>NotesAction</receiver>
+   <slot>selection_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>143</x>
+     <y>326</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>300</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>del_action()</slot>
@@ -364,5 +429,7 @@
   <slot>take_products_action()</slot>
   <slot>refill_action()</slot>
   <slot>take_action()</slot>
+  <slot>search_input_changed()</slot>
+  <slot>selection_changed()</slot>
  </slots>
 </ui>
