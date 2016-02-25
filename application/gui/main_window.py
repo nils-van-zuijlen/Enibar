@@ -280,6 +280,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.notes_list.refresh(api.notes.get(lambda x: x['hidden'] == 0))
         self._note_refresh(self.notes_list.currentRow())
 
+    def reset_product_list(self):
+        self.eco_diff = 0
+        self.refresh_ecocup_button()
+        self.product_list.clear()
+        self.notes_list.setFocus()
+
     def event(self, event):
         """ Rewrite the event loop. Used to handle the douchette and the \n key
             If the " key is pressed, open a Douchette window. If the \n key is
@@ -294,6 +300,9 @@ class MainWindow(QtWidgets.QMainWindow):
                 if event.key() == QtCore.Qt.Key_Return or\
                         event.key() == QtCore.Qt.Key_Enter:
                     self.validate_transaction()
+                    return True
+                elif event.key() == QtCore.Qt.Key_Escape:
+                    self.reset_product_list()
                     return True
 
         return super().event(event)
@@ -374,10 +383,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 api.notes.transactions([self.selected.text(), ], -total,
                     do_not=True)
                 api.notes.change_ecocups(self.selected_nickname, self.eco_diff)
-                self.eco_diff = 0
-                self.refresh_ecocup_button()
-                self.product_list.clear()
-                self.notes_list.setFocus()
+                self.reset_product_list()
             else:
                 gui.utils.error('Impossible de valider la transaction')
 
