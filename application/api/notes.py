@@ -251,8 +251,23 @@ def remove(nicks):
     :return bool: True if success else False.
     """
     nicks = list(nicks)
+    trs = []
+    for nick in nicks:
+        note = get(lambda x: x['nickname'] == nick)[0]
+        trs.append({
+            'note': nick,
+            'category': "Note",
+            'product': "",
+            'price_name': "Fermeture",
+            'quantity': "1",
+            'liquid_quantity': 0,
+            'percentage': 0,
+            'price': -note['note']}
+        )
+
     api.redis.send_message("enibar-delete", nicks)
     _request_multiple_nicks(nicks, "DELETE FROM notes WHERE nickname=:nick")
+    api.transactions.log_transactions(trs)
 
 
 def change_photo(nickname, new_photo):

@@ -23,6 +23,7 @@ import os.path
 import PyQt5
 from database import Cursor
 import api.notes as notes
+import api.transactions as transactions
 import api.redis
 
 api.redis.send_message = lambda x, y: [api.notes.rebuild_note_cache(note) for note in y]
@@ -343,6 +344,23 @@ class NotesTest(basetest.BaseTest):
         self.assertEqual(self.count_notes(), 2)
         notes.remove(["test0", "test1"])
         self.assertEqual(self.count_notes(), 0)
+
+    def test_remove_line_history(self):
+        self.add_note("test0")
+        notes.transactions(['test0', ], 10)
+        notes.remove(["test0", ])
+        self.assertDictListEqual(list(transactions.get()),
+            [{'product': '',
+              'lastname': '',
+              'quantity': 1,
+              'firstname': '',
+              'id': 1,
+              'note': 'test0',
+              'price': -10.0,
+              'category': 'Note',
+              'price_name': 'Fermeture'},
+            ], ignore=["date", "percentage", "liquid_quantity"]
+        )
 
     def test_modif_note(self):
         """ Testing modifying a note.
