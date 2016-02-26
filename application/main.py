@@ -50,7 +50,7 @@ class Tee(object):
         if '\n' in self.data:
             data, self.data = self.data.split('\n', 1)
             d = datetime.datetime.now()
-            fdata = "{}: {}".format(d.isoformat(' '), data)
+            fdata = "{}: {}\n".format(d.isoformat(' '), data)
             self.file.write(fdata)
             data = "\033[31m{}\033[0m: {}\n".format(d.isoformat(' '), data)
             self.stdout.write(data)
