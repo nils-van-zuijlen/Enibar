@@ -17,7 +17,7 @@
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 
-python3 -c 'import sys;(print("Python 3.4 or newer is required") and exit(1)) if sys.version_info < (3, 4) else exit(0)' || exit 1
+python3 -c 'import sys;(print("Python 3.5 or newer is required") and exit(1)) if sys.version_info < (3, 5) else exit(0)' || exit 1
 VENV="enibar-venv"
 VENV_COMMAND="pyvenv"
 
