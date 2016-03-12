@@ -362,7 +362,7 @@
               <string>Quantité</string>
              </property>
              <property name="textAlignment">
-              <set>AlignLeft|AlignVCenter</set>
+              <set>AlignLeading|AlignVCenter</set>
              </property>
             </column>
             <column>
@@ -655,6 +655,8 @@
     <addaction name="hide_alcohol"/>
     <addaction name="separator"/>
     <addaction name="transaction_history"/>
+    <addaction name="separator"/>
+    <addaction name="settings"/>
    </widget>
    <widget class="QMenu" name="menuNotes">
     <property name="title">
@@ -850,6 +852,11 @@
     <string>Aide</string>
    </property>
   </action>
+  <action name="settings">
+   <property name="text">
+    <string>Pa&amp;ramètres</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -890,6 +897,7 @@
     <slot>send_mail_fnc()</slot>
     <slot>mail_scheduler_fnc()</slot>
     <slot>help_fnc()</slot>
+    <slot>settings_fnc()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -1342,6 +1350,22 @@
    <signal>triggered()</signal>
    <receiver>menu_bar</receiver>
    <slot>help_fnc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>7</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>settings</sender>
+   <signal>triggered()</signal>
+   <receiver>menu_bar</receiver>
+   <slot>settings_fnc()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

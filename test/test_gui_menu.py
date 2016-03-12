@@ -31,6 +31,7 @@ from gui.users_management_window import UsersManagementWindow
 from gui.search_window import SearchWindow
 from gui.stats_window import StatsWindow
 from gui.about_window import AboutWindow
+from gui.settings_window import SettingsWindow
 
 
 class MenuTest(basetest.BaseGuiTest):
@@ -170,5 +171,13 @@ class MenuTest(basetest.BaseGuiTest):
         self.assertIsInstance(
             self.win.menu_bar.cur_window,
             AboutWindow
+        )
+
+    def test_settings(self):
+        self.connect()
+        self.win.settings.trigger()
+        self.assertIsInstance(
+            self.win.menu_bar.cur_window,
+            SettingsWindow
         )
 

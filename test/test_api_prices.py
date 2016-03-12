@@ -200,9 +200,12 @@ class PricesTest(basetest.BaseTest):
         api.categories.set_alcoholic(self.cat_eat, True)
         pid = api.products.add("Lapin", category_id=self.cat_eat)
         desc_id = api.prices.add_descriptor("Unité", self.cat_eat, 100)
-        settings.ALCOHOL_MAJORATION = 0.0
+        settings.synced.ALCOHOL_MAJORATION = 0.0
+        settings.synced.refresh_cache()
         self.assertEqual(list(api.prices.get()), [{'label': 'Unité', 'id': 1, 'product': 1, 'category': 1, 'value': 0.0, 'percentage': 0.0}])
-        settings.ALCOHOL_MAJORATION = 5.0
+        settings.synced.ALCOHOL_MAJORATION = 5.0
+        settings.synced.refresh_cache()
         self.assertEqual(list(api.prices.get()), [{'label': 'Unité', 'id': 1, 'product': 1, 'category': 1, 'value': 5.0, 'percentage': 0.0}])
-        settings.ALCOHOL_MAJORATION = 0.0
+        settings.synced.ALCOHOL_MAJORATION = 0.0
+        settings.synced.refresh_cache()
 

@@ -2,8 +2,10 @@ import asyncio
 import aioredis
 import json
 import settings
+import redis
 
 connection = None
+blocking_connection = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 
 async def connect():
@@ -35,4 +37,12 @@ def set_key(key, value, callback):
             await redis.set(key, value)
         callback()
     asyncio.ensure_future(wrapper())
+
+
+def get_key_blocking(key, default=None):
+    return blocking_connection.get(key) or str(default).encode()
+
+
+def set_key_blocking(key, value):
+    blocking_connection.set(key, value)
 

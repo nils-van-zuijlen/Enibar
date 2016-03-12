@@ -47,6 +47,7 @@ from .csv_import_window import CsvImportWindow
 from .send_mail_window import SendMailWindow
 from .mail_scheduler_window import MailSchedulerWindow
 from .help_window import HelpWindow
+from .settings_window import SettingsWindow
 import api.categories
 import api.notes
 import api.transactions
@@ -133,6 +134,9 @@ class MainWindow(QtWidgets.QMainWindow):
             self.rebuild_notes_list()
         elif channel == "enibar-alcohol":
             self.check_alcohol()
+        elif channel == "enibar-settings":
+            settings.synced.refresh_cache()
+            self.panels.rebuild()
         try:
             self.menu_bar.cur_window.redis_handle(channel, message)
         except AttributeError:
@@ -599,4 +603,10 @@ class MenuBar(QtWidgets.QMenuBar):
         """
         self._close_window()
         self.cur_window = HelpWindow()
+
+    @ask_auth("manage_users")
+    def settings_fnc(self, _):
+        self._close_window()
+        self.cur_window = SettingsWindow()
+        self._connect_window()
 

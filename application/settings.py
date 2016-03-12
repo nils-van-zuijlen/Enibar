@@ -177,6 +177,8 @@ Other
 
 """
 
+import api.redis
+
 
 IMG_BASE_DIR = "img/"
 DEBUG = False
@@ -230,4 +232,28 @@ WEB_URL = 'http://127.0.0.1:8000/enibar/'
 AUTH_SDE_TOKEN = 'changeme'
 USE_PROXY = False
 PROXY_AUTH = ""
+
+CACHED_SETTINGS = {}
+
+
+class SyncedSettings:
+    SETTINGS = {'ALCOHOL_MAJORATION': 0.0,
+                'AUTH_SDE_TOKEN': 'changeme', }
+
+    def __getattr__(self, name):
+        default = self.SETTINGS[name]
+        if name not in CACHED_SETTINGS:
+            value = type(default)(api.redis.get_key_blocking(name, default).decode())
+            CACHED_SETTINGS[name] = value
+        return CACHED_SETTINGS[name]
+
+    def __setattr__(self, name, value):
+        api.redis.set_key_blocking(name, value)
+
+    def refresh_cache(self):
+        global CACHED_SETTINGS
+        CACHED_SETTINGS = {}
+
+
+synced = SyncedSettings()
 

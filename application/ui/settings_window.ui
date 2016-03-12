@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SettingsWindow</class>
+ <widget class="QDialog" name="SettingsWindow">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>261</width>
+    <height>87</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Paramètres</string>
+  </property>
+  <layout class="QFormLayout" name="formLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="majoration_label">
+     <property name="text">
+      <string>Majoration alcools</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="key_label">
+     <property name="text">
+      <string>Secret key</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="Input" name="key_input"/>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <widget class="QPushButton" name="save_button">
+     <property name="text">
+      <string>Sauvegarder</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="Input" name="majoration_input"/>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Input</class>
+   <extends>QLineEdit</extends>
+   <header>gui/input_widget</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>majoration_input</tabstop>
+  <tabstop>key_input</tabstop>
+  <tabstop>save_button</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>save_button</sender>
+   <signal>clicked()</signal>
+   <receiver>SettingsWindow</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>130</x>
+     <y>65</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>130</x>
+     <y>43</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
