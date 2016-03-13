@@ -69,8 +69,10 @@ class Panels(QtWidgets.QTabWidget):
     def rebuild(self):
         """ Clear panels and build them back
         """
+        selected = self.currentIndex()
         self.clear()
         self.build()
+        self.setCurrentIndex(selected)
 
     @classmethod
     def fail_callback(cls):
