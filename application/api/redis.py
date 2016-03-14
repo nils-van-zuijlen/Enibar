@@ -1,11 +1,11 @@
+import settings
 import asyncio
 import aioredis
 import json
-import settings
 import redis
 
 connection = None
-blocking_connection = redis.StrictRedis(host='localhost', port=6379, db=0)
+blocking_connection = redis.StrictRedis(host=settings.HOST, port=6379, db=0)
 
 
 async def connect():

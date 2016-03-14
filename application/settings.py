@@ -16,7 +16,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
-
 """
 
 Settings
@@ -177,8 +176,6 @@ Other
 
 """
 
-import api.redis
-
 
 IMG_BASE_DIR = "img/"
 DEBUG = False
@@ -234,6 +231,8 @@ USE_PROXY = False
 PROXY_AUTH = ""
 
 CACHED_SETTINGS = {}
+
+import api.redis  # nopep8
 
 
 class SyncedSettings:
