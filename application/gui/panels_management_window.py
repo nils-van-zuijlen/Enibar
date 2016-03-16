@@ -24,7 +24,7 @@ PanelManagment Window
 """
 
 
-from PyQt5 import QtWidgets, uic
+from PyQt5 import QtWidgets, uic, QtCore
 
 import api.panels
 import api.validator
@@ -39,6 +39,8 @@ class PanelsManagementWindow(QtWidgets.QDialog):
         uic.loadUi('ui/panels_management_window.ui', self)
         self.panel_list = []
         self.name_input.set_validator(api.validator.NAME)
+        self.product_list.sortByColumn(0, QtCore.Qt.AscendingOrder)
+        self.panel_content.sortByColumn(0, QtCore.Qt.AscendingOrder)
 
         self.create_panel_list()
         self.show()

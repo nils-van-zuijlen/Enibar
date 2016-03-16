@@ -84,12 +84,18 @@
      <property name="selectionMode">
       <enum>QAbstractItemView::ExtendedSelection</enum>
      </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
      <property name="animated">
       <bool>false</bool>
      </property>
      <property name="allColumnsShowFocus">
       <bool>false</bool>
      </property>
+     <attribute name="headerShowSortIndicator" stdset="0">
+      <bool>true</bool>
+     </attribute>
      <column>
       <property name="text">
        <string>Consommations</string>
@@ -177,6 +183,9 @@
      <property name="selectionMode">
       <enum>QAbstractItemView::ExtendedSelection</enum>
      </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
      <column>
       <property name="text">
        <string>Consomations affichés pour le panel</string>
@@ -228,7 +237,7 @@
   <customwidget>
    <class>Input</class>
    <extends>QLineEdit</extends>
-   <header>gui.input_widget</header>
+   <header>gui/input_widget</header>
   </customwidget>
   <customwidget>
    <class>PanelConsumptionList</class>

@@ -298,8 +298,8 @@ class ProductsContainer(QtWidgets.QWidget):
         Build the product list with all categories and products of the given
         panel. All products of the panel are fetched from database and are
         sorted in their respectives categories. Widgets used to insert
-        categores and products are build on the fly.  Then all categories are
-        sorted into columns in an oprimised maner.
+        categores and products are built on the fly.  Then all categories are
+        sorted into columns in an optimised maner.
         """
         try:
             if self.parent().parent().parent().main_window.\
