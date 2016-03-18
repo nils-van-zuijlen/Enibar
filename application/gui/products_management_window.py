@@ -36,8 +36,8 @@ class ProductsManagementWindow(QtWidgets.QDialog):
     """ Consumption ManagmentWindow
     This window allow user to add products, productcategories and prices.
     """
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super().__init__(parent)
         uic.loadUi('ui/products_management_window.ui', self)
         self.tab_manage_categories.on_change = self.on_change
         self.tab_manage_consumptions.on_change = self.on_change
@@ -277,6 +277,9 @@ class ProductsManagementWindow(QtWidgets.QDialog):
             self.color_button.setStyleSheet(
                 "background:{}".format(color.name())
             )
+
+    def panels_management_fnc(self):
+        self.parent().panel_managment_fnc_no_auth()
 
 
 #

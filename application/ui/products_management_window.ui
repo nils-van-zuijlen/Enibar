@@ -540,6 +540,13 @@
      </widget>
     </widget>
    </item>
+   <item row="1" column="0">
+    <widget class="QPushButton" name="panels_management_btn">
+     <property name="text">
+      <string>Gerer les panels</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -765,6 +772,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>panels_management_btn</sender>
+   <signal>clicked()</signal>
+   <receiver>ConsuptionManagmentWindow</receiver>
+   <slot>panels_management_fnc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>268</x>
+     <y>540</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>268</x>
+     <y>277</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>add_product()</slot>
@@ -777,5 +800,6 @@
   <slot>select_category()</slot>
   <slot>select_product()</slot>
   <slot>select_color()</slot>
+  <slot>panels_management_fnc()</slot>
  </slots>
 </ui>

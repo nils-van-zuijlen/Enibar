@@ -34,8 +34,8 @@ from .products_management_window import ConsumptionList
 
 class PanelsManagementWindow(QtWidgets.QDialog):
     """ AddNote window class """
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super().__init__(parent)
         uic.loadUi('ui/panels_management_window.ui', self)
         self.panel_list = []
         self.name_input.set_validator(api.validator.NAME)
@@ -233,6 +233,9 @@ class PanelsManagementWindow(QtWidgets.QDialog):
         """ Set the status of the name input
         """
         self.add_button.setEnabled(self.name_input.valid)
+
+    def consumption_management_fnc(self):
+        self.parent().consumption_management_fnc_no_auth()
 
 
 class PanelList(ConsumptionList):

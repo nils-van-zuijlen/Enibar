@@ -17,8 +17,58 @@
    <string/>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="3" column="0">
-    <widget class="QWidget" name="button_container" native="true">
+   <item row="0" column="2" rowspan="4">
+    <layout class="QVBoxLayout" name="switch_container">
+     <item>
+      <spacer name="top_spacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="move_right">
+       <property name="text">
+        <string>&gt;&gt;&gt;&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="move_left">
+       <property name="text">
+        <string>&lt;&lt;&lt;&lt;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="bottom_spacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="0">
+    <widget class="QListWidget" name="panels">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="minimumSize">
       <size>
        <width>200</width>
@@ -31,40 +81,22 @@
        <height>16777215</height>
       </size>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
-      <item>
-       <widget class="QPushButton" name="add_button">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="text">
-         <string>Ajouter</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="delete_button">
-        <property name="text">
-         <string>Supprimer</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::ExtendedSelection</enum>
+     </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
-   <item row="0" column="1" rowspan="4">
+   <item row="4" column="2">
+    <widget class="QPushButton" name="products_management_button">
+     <property name="text">
+      <string>Gerer les produits</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" rowspan="5">
     <widget class="GlobalConsumptionList" name="product_list">
      <property name="showDropIndicator" stdset="0">
       <bool>true</bool>
@@ -119,51 +151,7 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="2" rowspan="4">
-    <layout class="QVBoxLayout" name="switch_container">
-     <item>
-      <spacer name="top_spacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="move_right">
-       <property name="text">
-        <string>&gt;&gt;&gt;&gt;</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="move_left">
-       <property name="text">
-        <string>&lt;&lt;&lt;&lt;</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="bottom_spacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </item>
-   <item row="0" column="3" rowspan="4">
+   <item row="0" column="3" rowspan="5">
     <widget class="PanelConsumptionList" name="panel_content">
      <property name="showDropIndicator" stdset="0">
       <bool>true</bool>
@@ -193,14 +181,18 @@
      </column>
     </widget>
    </item>
-   <item row="0" column="0">
-    <widget class="QListWidget" name="panels">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+   <item row="1" column="0">
+    <widget class="QCheckBox" name="hidden">
+     <property name="enabled">
+      <bool>false</bool>
      </property>
+     <property name="text">
+      <string>Panel caché</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QWidget" name="button_container" native="true">
      <property name="minimumSize">
       <size>
        <width>200</width>
@@ -213,22 +205,37 @@
        <height>16777215</height>
       </size>
      </property>
-     <property name="selectionMode">
-      <enum>QAbstractItemView::ExtendedSelection</enum>
-     </property>
-     <property name="sortingEnabled">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QCheckBox" name="hidden">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="text">
-      <string>Panel caché</string>
-     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="add_button">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Ajouter</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="delete_button">
+        <property name="text">
+         <string>Supprimer</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>
@@ -348,6 +355,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>products_management_button</sender>
+   <signal>clicked()</signal>
+   <receiver>PanelAdmin</receiver>
+   <slot>consumption_management_fnc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>503</x>
+     <y>437</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>401</x>
+     <y>226</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>delete()</slot>
@@ -355,5 +378,6 @@
   <slot>delete_product()</slot>
   <slot>add_product()</slot>
   <slot>on_hide(bool)</slot>
+  <slot>consumption_management_fnc()</slot>
  </slots>
 </ui>

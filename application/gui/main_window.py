@@ -428,7 +428,17 @@ class MenuBar(QtWidgets.QMenuBar):
     def consumption_managment_fnc(self, _):
         """ Call consumption managment window """
         self._close_window()
-        self.cur_window = ProductsManagementWindow()
+        self.cur_window = ProductsManagementWindow(self)
+        self.cur_window.finished.connect(self.parent().panels.rebuild)
+        self._connect_window()
+
+    def consumption_management_fnc_no_auth(self):
+        """ Call consumption managment window
+            BE CAREFUL: ONLY CALL THIS FUNCTION FROM TRUSTED FONCTIONS.
+            THERE IS NO AUTHENTIFICATION REQUIRED FOR THIS ONE.
+        """
+        self._close_window()
+        self.cur_window = ProductsManagementWindow(self)
         self.cur_window.finished.connect(self.parent().panels.rebuild)
         self._connect_window()
 
@@ -460,7 +470,17 @@ class MenuBar(QtWidgets.QMenuBar):
         """ Open a PanelManagment window
         """
         self._close_window()
-        self.cur_window = PanelsManagementWindow()
+        self.cur_window = PanelsManagementWindow(self)
+        self.cur_window.finished.connect(self.parent().panels.rebuild)
+        self._connect_window()
+
+    def panel_managment_fnc_no_auth(self):
+        """ Open a PanelManagment window.
+            BE CAREFUL: ONLY CALL THIS FUNCTION FROM TRUSTED FONCTIONS.
+            THERE IS NO AUTHENTIFICATION REQUIRED FOR THIS ONE.
+        """
+        self._close_window()
+        self.cur_window = PanelsManagementWindow(self)
         self.cur_window.finished.connect(self.parent().panels.rebuild)
         self._connect_window()
 
