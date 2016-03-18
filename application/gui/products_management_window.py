@@ -45,6 +45,7 @@ class ProductsManagementWindow(QtWidgets.QDialog):
         self.input_product.set_validator(api.validator.NAME)
         self.category = None
         self.products.build()
+        self.products.sortByColumn(0, QtCore.Qt.AscendingOrder)
         self.color_picker = QtWidgets.QColorDialog(self)
         self.win = None
         self.tabs.currentChanged.connect(self.products.rebuild)
