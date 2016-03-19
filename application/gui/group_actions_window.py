@@ -54,6 +54,7 @@ class GroupActionsWindow(QtWidgets.QDialog):
         self.filter_input.keyPressEvent = self.filter_input_changed
         self.note_list.rebuild(api.notes.get(self.current_filter))
         self.product_list.build()
+        self.search_input.setFocus(True)
         self.show()
 
     def redis_handle(self, channel, message):
@@ -257,6 +258,8 @@ class GroupActionsWindow(QtWidgets.QDialog):
         self.selected_note_report.setPlainText(
             ", ".join([i.text() for i in self.note_list.selectedItems()])
         )
+        self.search_input.clear()
+        self.search_input.setFocus(True)
 
 
 class MultiNotesList(NotesList):
