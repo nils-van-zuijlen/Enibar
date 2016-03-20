@@ -46,3 +46,9 @@ def get_key_blocking(key, default=None):
 def set_key_blocking(key, value):
     blocking_connection.set(key, value)
 
+
+async def ping_redis():
+    while True:
+        async with connection.get() as redis:
+            await redis.ping()
+        await asyncio.sleep(10)

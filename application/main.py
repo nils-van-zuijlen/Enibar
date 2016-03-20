@@ -85,6 +85,7 @@ if __name__ == "__main__":
         MYAPP = gui.main_window.MainWindow()
         MYAPP.show()
         TASKS.append(asyncio.ensure_future(ping_sql(MYAPP)))
+        TASKS.append(asyncio.ensure_future(api.redis.ping_redis()))
         TASKS.append(asyncio.ensure_future(api.sde.process_queue()))
         try:
             LOOP.run_until_complete(install_redis_handle(MYAPP))
