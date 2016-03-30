@@ -287,7 +287,8 @@ class GlobalConsumptionList(PanelList):
         for cat in panel_content.categories:
             products = []
             for product in panel_content.products:
-                products.append(product.text(0))
+                if product.parent() == cat:
+                    products.append(product.text(0))
             names[cat.text(0)] = products
 
         for cat in api.categories.get():
