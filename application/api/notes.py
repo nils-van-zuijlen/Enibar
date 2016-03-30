@@ -69,13 +69,13 @@ def _build_stats():
     """
     global NOTES_STATS_FIELDS_CACHE
     with Cursor() as cursor:
-        cursor.prepare("SELECT nickname, notes.mail, notes.firstname, notes.lastname,\
+        cursor.prepare("SELECT nickname, notes.firstname, notes.lastname,\
                         SUM(IF(price>0, price, 0)) as tot_refill,\
                         SUM(IF(price<0, price, 0)) AS tot_cons\
                         FROM transactions INNER JOIN notes ON\
                         notes.firstname=transactions.firstname AND\
                         notes.lastname=transactions.lastname\
-                        GROUP BY firstname, lastname, mail")
+                        GROUP BY firstname, lastname")
 
         if cursor.exec_():
             tot = {}
