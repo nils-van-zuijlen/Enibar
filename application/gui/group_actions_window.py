@@ -30,7 +30,7 @@ import api.notes
 import api.prices
 import api.categories
 import api.validator
-from .utils import valid, error
+from .utils import valid
 from .notes_list_widget import NotesList
 from .panels_management_window import ConsumptionList
 from .refill_note_window import MultiRefillNoteWindow
@@ -251,11 +251,8 @@ class GroupActionsWindow(QtWidgets.QDialog):
                 datetime.datetime.now().strftime("%Y-%m-%d")),
             "CSV Files (*.csv)")
         if path:
-            try:
-                with open(path, "w") as save_file:
-                    save_file.write(self._multiple_action(api.notes.export_by_nick,))
-            except PermissionError:
-                error("Erreur", "Impossible d'écrire ici")
+            with open(path, "w") as save_file:
+                save_file.write(self._multiple_action(api.notes.export_by_nick,))
 
     def selection_changed(self):
         self.selected_note_report.setPlainText(
