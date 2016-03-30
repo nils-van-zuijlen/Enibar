@@ -575,8 +575,11 @@ class MenuBar(QtWidgets.QMenuBar):
         )
 
         if path:
-            with open(path, "w") as save_file:
-                save_file.write(api.notes.export(notes))
+            try:
+                with open(path, "w") as save_file:
+                    save_file.write(api.notes.export(notes))
+            except PermissionError:
+                gui.utils.error("Erreur", "Impossible d'écrire ici")
 
     def show_transactions_history(self):
         """ Show transaction logs
