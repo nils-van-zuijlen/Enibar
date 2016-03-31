@@ -412,20 +412,23 @@ class ExportWindow(QtWidgets.QDialog):
         if not dest[0]:
             self.close()
             return
-        with open(dest[0], "w") as dest_file:
-            headers = [key for key, checked in fields.items() if checked]
-            dest_file.write(';'.join(headers) + "\n")
-            # Write all transactions to file
-            for trans in self.trans:
-                items = []
-                for key, checked in fields.items():
-                    if not checked:
-                        continue
-                    if type(trans[key]) is QtCore.QDateTime:
-                        items.append(trans[key].toString("yyyy-MM-dd hh:mm:ss"))
-                    else:
-                        items.append(str(trans[key]))
-                line = ";".join(items)
-                dest_file.write(line + "\n")
+        try:
+            with open(dest[0], "w") as dest_file:
+                headers = [key for key, checked in fields.items() if checked]
+                dest_file.write(';'.join(headers) + "\n")
+                # Write all transactions to file
+                for trans in self.trans:
+                    items = []
+                    for key, checked in fields.items():
+                        if not checked:
+                            continue
+                        if type(trans[key]) is QtCore.QDateTime:
+                            items.append(trans[key].toString("yyyy-MM-dd hh:mm:ss"))
+                        else:
+                            items.append(str(trans[key]))
+                    line = ";".join(items)
+                    dest_file.write(line + "\n")
+        except PermissionError:
+            gui.utils.error("Erreur", "Impossible d'écrire ici")
         self.close()
 
