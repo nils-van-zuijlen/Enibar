@@ -95,6 +95,9 @@ def _build_stats():
                 tot[note] = {}
                 NOTES_CACHE[note]['tot_cons'] = record.value(NOTES_STATS_FIELDS_CACHE['tot_cons'])
                 NOTES_CACHE[note]['tot_refill'] = record.value(NOTES_STATS_FIELDS_CACHE['tot_refill'])
+                NOTES_CACHE[note]['mails_inscription'] = NOTES_CACHE[note]['mails_inscription'] == b'\x01'
+                NOTES_CACHE[note]['stats_inscription'] = NOTES_CACHE[note]['stats_inscription'] == b'\x01'
+                NOTES_CACHE[note]['hidden'] = NOTES_CACHE[note]['hidden'] == b'\x01'
 
 
 def rebuild_note_cache(nick):
@@ -114,6 +117,9 @@ def rebuild_note_cache(nick):
                        in NOTE_FIELDS}
                 row['tot_cons'] = 0.0
                 row['tot_refill'] = 0.0
+                row['mails_inscription'] = row['mails_inscription'] == b'\x01'
+                row['stats_inscription'] = row['stats_inscription'] == b'\x01'
+                row['hidden'] = row['hidden'] == b'\x01'
 
                 NOTES_CACHE[row['nickname']] = row
 

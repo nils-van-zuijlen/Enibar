@@ -258,10 +258,10 @@ def get_scheduled_mails(**filter_):
         record = cursor.record()
         yield {
             'name': record.value('name'),
-            'active': record.value('active'),
+            'active': record.value('active') == b'\x01',
             'schedule_interval': record.value('schedule_interval'),
             'schedule_unit': record.value('schedule_unit'),
-            'schedule_day': record.value('schedule_day'),
+            'schedule_day': int(record.value('schedule_day') == b'\x01'),
             'subject': record.value('subject'),
             'message': record.value('message'),
             'filter': record.value('filter'),

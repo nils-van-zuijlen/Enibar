@@ -158,7 +158,7 @@ def get(**filter_):
         record = cursor.record()
         yield {
             'name': record.value('name'),
-            'hidden': record.value('hidden'),
+            'hidden': record.value('hidden') == b'\x01',
             'id': record.value('id'),
         }
 
