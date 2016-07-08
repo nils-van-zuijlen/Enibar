@@ -107,6 +107,23 @@ class SqlQuery(QtSql.QSqlQuery):
         for key, value in kwargs.items():
             self.bindValue(key, value)
 
+    def record(self):
+        return SqlRecord(super().record())
+
+class SqlRecord:
+    def __init__(self, record):
+        self._record = record
+
+    def __getattr__(self, name):
+        if name != 'value':
+            return getattr(self._record, name)
+
+    def value(self, name_or_id):
+        ret_value = self._record.value(name_or_id)
+        if ret_value in (b'\x00', b'\x01'):
+            return ret_value == b'\x01'
+        return ret_value
+
 
 async def ping_sql(app):
     while True:
