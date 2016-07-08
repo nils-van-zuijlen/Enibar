@@ -110,6 +110,7 @@ class SqlQuery(QtSql.QSqlQuery):
     def record(self):
         return SqlRecord(super().record())
 
+
 class SqlRecord:
     def __init__(self, record):
         self._record = record
