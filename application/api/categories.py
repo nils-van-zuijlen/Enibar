@@ -110,7 +110,7 @@ def get(**filter_):
         yield {
             'id': record.value('id'),
             'name': record.value('name'),
-            'alcoholic': record.value('alcoholic') == b'\x01',
+            'alcoholic': record.value('alcoholic'),
             'color': record.value('color'),
         }
 

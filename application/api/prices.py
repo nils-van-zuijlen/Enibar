@@ -183,7 +183,7 @@ def get(**kwargs):
                 yield {
                     'id': record.value('id'),
                     'label': record.value('label'),
-                    'value': record.value('value') + settings.synced.ALCOHOL_MAJORATION * (record.value("alcoholic") == b'\x01'),
+                    'value': record.value('value') + settings.synced.ALCOHOL_MAJORATION * record.value("alcoholic"),
                     'product': record.value('product'),
                     'category': record.value('category'),
                     'percentage': record.value('percentage'),
