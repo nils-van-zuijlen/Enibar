@@ -365,6 +365,8 @@ def change_ecocups(nick, diff, do_not=False):
         cursor.bindValue(":diff", diff)
         cursor.bindValue(":nick", nick)
         value = cursor.exec_()
+        note = NOTES_CACHE[nick]
+        note['ecocups'] = note['ecocups'] + diff
     api.redis.send_message("enibar-notes", [nick, ])
     return value
 

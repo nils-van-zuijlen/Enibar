@@ -199,8 +199,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         if self.selected_nickname != self.selected.text():
             self.selected_nickname = self.selected.text()
-            self.refresh_ecocup_button()
 
+        self.refresh_ecocup_button()
         # If there are no current selected note, set the default text and diable
         # everything
         if not self.selected:
