@@ -24,6 +24,7 @@ from PyQt5 import QtWidgets, uic, QtCore
 from .auth_prompt_window import ask_auth
 import api.transactions
 from gui.tree_item_widget import TreeWidget
+import copy
 import datetime
 import time
 import gui.utils
@@ -73,13 +74,14 @@ class HistoryWindow(QtWidgets.QDialog):
 
             self.filter.hide()
             self.transactions = {}
-            self.cbs = {
-                'note': self.cb_nickname,
-                'lastname': self.cb_lastname,
-                'firstname': self.cb_firstname,
-                'category': self.cb_category,
-                'product': self.cb_product,
-            }
+            self.cbs = collections.OrderedDict(
+                [('note', self.cb_nickname),
+                ('lastname', self.cb_lastname),
+                ('firstname', self.cb_firstname),
+                ('category', self.cb_category),
+                ('product', self.cb_product), ]
+            )
+
         self.show()
 
     def showEvent(self, event):
@@ -94,9 +96,16 @@ class HistoryWindow(QtWidgets.QDialog):
 
         date = QtCore.QDateTime()
         date.setMSecsSinceEpoch((time.time() - 24 * 3600 * 7) * 1000)
+
+        # We disable the signals here to avoid calling call_update when the
+        # window opens as it's useless.
+        self.datetime_from.blockSignals(True)
         self.datetime_from.setDateTime(date)
+        self.datetime_from.blockSignals(False)
         date.setMSecsSinceEpoch(time.time() * 1000)
+        self.datetime_to.blockSignals(True)
         self.datetime_to.setDateTime(date)
+        self.datetime_to.blockSignals(False)
 
         self.progressbar.reset()
         self.progressbar.setRange(0, 0)
@@ -108,21 +117,28 @@ class HistoryWindow(QtWidgets.QDialog):
     def update_filters(self):
         """ Update filters
         """
-        # prepare filters
+        # Get filters current values.
+        transactions_left = copy.copy(self.transactions)
         filters = {}
+
         for row, combobox in self.cbs.items():
             if combobox.currentText():
                 filters[row] = combobox.currentText()
+                transactions_left = {key: value for key, value in transactions_left.items() if value[row] == filters[row]}
 
         for row, combobox in self.cbs.items():
             combobox.clear()
             combobox.addItem("")
-            for data in api.transactions.get_grouped_entries(row, filters):
-                if data:
-                    combobox.addItem(data)
-            combobox.setCurrentIndex(0)
+            values = set()
+            for data in transactions_left.values():
+                if data[row] and not (row == 'product' and data['category'] == 'Note' and self.cb_category.currentText() != 'Note'):
+                    for row_, filt in filters.items():
+                        if row != row_ and data[row_] != filt:
+                            break
+                    else:
+                        values.add(data[row])
 
-        for row, combobox in self.cbs.items():
+            combobox.addItems(list(values))
             if row in filters:
                 index = combobox.findText(filters[row])
                 if index:
@@ -133,7 +149,6 @@ class HistoryWindow(QtWidgets.QDialog):
         and displaying history.
         """
         self.fetch_transactions()
-        self.update_filters()
         self.call_update()
 
     def call_update(self):
@@ -165,10 +180,11 @@ class HistoryWindow(QtWidgets.QDialog):
         length, count = len(transactions), 0
         self.progressbar.setFormat("Chargement de l'historique %p%")
         self.progressbar.reset()
-        self.progressbar.setRange(0, 100)
+        self.progressbar.setRange(0, 20)
         for trans in transactions:
             count += 1
-            self.progressbar.setValue(int(count / length * 100))
+            if count % 1000:
+                self.progressbar.setValue(int(count / length * 20))
             if trans['id'] not in self.transactions:
                 if trans['price'] >= 0:
                     credit = round(trans['price'], 2)
@@ -203,7 +219,6 @@ class HistoryWindow(QtWidgets.QDialog):
                     'show': False,
                 }
         self.progressbar.setFormat("Terminé")
-        self.call_update()
 
     def update_summary(self):
         """ Update debit, credit and Total on the window
@@ -280,6 +295,7 @@ class HistoryWindow(QtWidgets.QDialog):
             for index, regex in filter_.items():
                 if regex and regex != transaction[index]:
                     show = False
+                    break
             transaction['show'] = show
             transaction['widget'].setHidden(not show)
         self.progressbar.setFormat("Terminé")
