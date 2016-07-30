@@ -95,9 +95,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.product_list.setColumnWidth(1, 128)
         self.product_list.setColumnWidth(2, 40)
 
-        # Build the panels.
-        self.panels.build()
-
         # Set the headers of the history in the note details.
         self.note_history.header().setStretchLastSection(False)
         self.note_history.header().setSectionResizeMode(
