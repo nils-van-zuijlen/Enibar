@@ -231,12 +231,22 @@ class MainWindow(QtWidgets.QMainWindow):
 
         def keyPressEvent(obj, event):
             if event.key() == QtCore.Qt.Key_Delete:
-                selected = obj.selectedItems()[0].text(4)
+                items = obj.selectedItems()
 
                 @ask_auth("manage_notes")
-                def del_line(id_):
-                    api.transactions.rollback_transaction(id_, full=True)
-                del_line(selected)
+                def del_line(items):
+                    for item in items:
+                        if not api.transactions.rollback_transaction(item.text(4), full=True):
+                            gui.utils.error(
+                                "Impossible de supprimer la transation n°{}".format(
+                                    item.text(4)
+                                ),
+                                "La transaction du {date} sur cette note"
+                                "n'a pas été supprimée.".format(
+                                    date=item.text(0),
+                                )
+                            )
+                del_line(items)
             obj.__class__.keyPressEvent(obj, event)
 
         self.note_history.keyPressEvent = partial(keyPressEvent, self.note_history)

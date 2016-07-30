@@ -349,6 +349,9 @@
           </property>
           <item row="0" column="0">
            <widget class="QTreeWidget" name="note_history">
+            <property name="selectionMode">
+             <enum>QAbstractItemView::MultiSelection</enum>
+            </property>
             <property name="indentation">
              <number>0</number>
             </property>
