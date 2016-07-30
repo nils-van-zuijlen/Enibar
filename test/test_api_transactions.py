@@ -252,3 +252,30 @@ class TransactionsTest(basetest.BaseTest):
         self.assertEqual(list(transactions.get_grouped_entries("note", {'lastname': ""})), ['test2'])
         self.assertEqual(list(transactions.get_grouped_entries("note", {})), ['test1', 'test2'])
 
+    def test_get_gt(self):
+        """ Testing __gt """
+        transactions.log_transaction(
+            "test1",
+            "a",
+            "b",
+            "c",
+            "1",
+            -1
+        )
+        transactions.log_transaction(
+            "test1",
+            "b",
+            "d",
+            "c",
+            5,
+            -5
+        )
+        transactions.log_transaction(
+            "test2",
+            "e",
+            "f",
+            "g",
+            "2",
+            5
+        )
+        self.assertEqual(len(list(transactions.get(id__gt=1))), 2)

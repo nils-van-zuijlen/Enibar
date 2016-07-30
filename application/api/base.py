@@ -48,7 +48,12 @@ def filtered_getter(table, filter_, reverse=False, max=None):
     with Cursor() as cursor:
         filters = []
         for key in filter_:
-            filters.append("{key}=:{key}".format(key=key))
+            if key.endswith('__gt'):
+                filter_[key[:-4]] = filter_[key]
+                del filter_[key]
+                filters.append("{key}>:{key}".format(key=key[:-4]))
+            else:
+                filters.append("{key}=:{key}".format(key=key))
 
         cursor.prepare("SELECT * FROM {} {} {} {} {}".format(
             table,

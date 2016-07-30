@@ -81,6 +81,7 @@ class HistoryWindow(QtWidgets.QDialog):
                 ('category', self.cb_category),
                 ('product', self.cb_product), ]
             )
+            self.last_id = 0
 
         self.show()
 
@@ -177,7 +178,7 @@ class HistoryWindow(QtWidgets.QDialog):
         them. A huge dictionary containing all transactions information is
         created to allow fast advanced filtering.
         """
-        transactions = list(api.transactions.get())
+        transactions = list(api.transactions.get(id__gt=self.last_id))
         length, count = len(transactions), 0
         self.progressbar.setFormat("Chargement de l'historique %p%")
         self.progressbar.reset()
@@ -209,6 +210,7 @@ class HistoryWindow(QtWidgets.QDialog):
                     'id': trans['id'],
                     'show': False,
                 }
+            self.last_id = trans['id']
         self.progressbar.setFormat("Terminé")
 
     def update_summary(self):
