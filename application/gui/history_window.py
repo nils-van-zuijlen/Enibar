@@ -126,12 +126,13 @@ class HistoryWindow(QtWidgets.QDialog):
                 filters[row] = combobox.currentText()
                 transactions_left = {key: value for key, value in transactions_left.items() if value[row] == filters[row]}
 
+        current_cat = self.cb_category.currentText()
         for row, combobox in self.cbs.items():
             combobox.clear()
             combobox.addItem("")
             values = set()
             for data in transactions_left.values():
-                if data[row] and not (row == 'product' and data['category'] == 'Note' and self.cb_category.currentText() != 'Note'):
+                if data[row] and not (row == 'product' and data['category'] == 'Note' and current_cat != 'Note'):
                     for row_, filt in filters.items():
                         if row != row_ and data[row_] != filt:
                             break
@@ -192,18 +193,6 @@ class HistoryWindow(QtWidgets.QDialog):
                 else:
                     credit = "-"
                     debit = round(-trans['price'], 2)
-                widget = TreeWidget(self.transaction_list, (
-                    trans['date'].toString("yyyy/MM/dd HH:mm:ss"),
-                    trans['note'],
-                    trans['category'],
-                    trans['product'],
-                    trans['price_name'],
-                    str(trans['quantity']),
-                    str(credit),
-                    str(debit),
-                    str(trans['id'])
-                ))
-
                 self.transactions[trans['id']] = {
                     'note': trans['note'],
                     'lastname': trans['lastname'],
@@ -214,7 +203,9 @@ class HistoryWindow(QtWidgets.QDialog):
                     'product': trans['product'],
                     'category': trans['category'],
                     'quantity': trans['quantity'],
-                    'widget': widget,
+                    'credit': credit,
+                    'debit': debit,
+                    'widget': None,
                     'id': trans['id'],
                     'show': False,
                 }
@@ -282,12 +273,12 @@ class HistoryWindow(QtWidgets.QDialog):
         }
         self.progressbar.setFormat("Application des filtres %p%")
         length = len(self.transactions)
-        self.progressbar.setRange(0, 100)
+        self.progressbar.setRange(0, 20)
         count = 0
         for id_, transaction in self.transactions.items():
             show = True
             count += 1
-            self.progressbar.setValue(int(count / length * 100))
+            self.progressbar.setValue(int(count / length * 20))
             if not self.datetime_from.dateTime() <= \
                     self.transactions[id_]['date'] <= \
                     self.datetime_to.dateTime():
@@ -297,7 +288,23 @@ class HistoryWindow(QtWidgets.QDialog):
                     show = False
                     break
             transaction['show'] = show
-            transaction['widget'].setHidden(not show)
+            if show and not transaction['widget']:
+                widget = TreeWidget(self.transaction_list, (
+                    transaction['date'].toString("yyyy/MM/dd HH:mm:ss"),
+                    transaction['note'],
+                    transaction['category'],
+                    transaction['product'],
+                    transaction['price_name'],
+                    str(transaction['quantity']),
+                    str(transaction['credit']),
+                    str(transaction['debit']),
+                    str(transaction['id'])
+                ))
+                transaction['widget'] = widget
+            elif not show and transaction['widget']:
+                del transaction['widget']
+                transactions['widget'] = None
+
         self.progressbar.setFormat("Terminé")
         self.progressbar.setValue(100)
         self.update_summary()
