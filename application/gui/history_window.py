@@ -275,6 +275,7 @@ class HistoryWindow(QtWidgets.QDialog):
         length = len(self.transactions)
         self.progressbar.setRange(0, 20)
         count = 0
+        self.transaction_list.clear()
         for id_, transaction in self.transactions.items():
             show = True
             count += 1
@@ -288,7 +289,7 @@ class HistoryWindow(QtWidgets.QDialog):
                     show = False
                     break
             transaction['show'] = show
-            if show and not transaction['widget']:
+            if show:
                 widget = TreeWidget(self.transaction_list, (
                     transaction['date'].toString("yyyy/MM/dd HH:mm:ss"),
                     transaction['note'],
@@ -301,9 +302,6 @@ class HistoryWindow(QtWidgets.QDialog):
                     str(transaction['id'])
                 ))
                 transaction['widget'] = widget
-            elif not show and transaction['widget']:
-                del transaction['widget']
-                transactions['widget'] = None
 
         self.progressbar.setFormat("Terminé")
         self.progressbar.setValue(100)
