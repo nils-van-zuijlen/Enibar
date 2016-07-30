@@ -87,12 +87,16 @@ if __name__ == "__main__":
         TASKS.append(asyncio.ensure_future(ping_sql(MYAPP)))
         TASKS.append(asyncio.ensure_future(api.redis.ping_redis()))
         TASKS.append(asyncio.ensure_future(api.sde.process_queue()))
+        TASKS.append(asyncio.ensure_future(install_redis_handle(MYAPP)))
         try:
-            LOOP.run_until_complete(install_redis_handle(MYAPP))
+            LOOP.run_forever()
         finally:
             for task in TASKS:
                 task.cancel()
             LOOP.run_until_complete(SUB.punsubscribe("enibar-*"))
             LOOP.run_until_complete(SUB.quit())
             LOOP.run_until_complete(api.redis.connection.clear())
+            api.redis.connection.close()
+            LOOP.run_until_complete(api.redis.connection.wait_closed())
+
 
