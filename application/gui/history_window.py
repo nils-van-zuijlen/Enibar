@@ -340,19 +340,19 @@ class HistoryWindow(QtWidgets.QDialog):
                 quantity = 1
 
             if quantity > 1:
-                widget.setText(5, str(quantity - 1))
                 if widget.text(6) != "-":
                     credit = float(widget.text(6))
                     credit -= credit / quantity
                     credit = round(credit, 2)
-                    widget.setText(6, str(credit))
                     self.transactions[int(widget.text(8))]['price'] = credit
+                    self.transactions[int(widget.text(8))]['credit'] = credit
                 elif widget.text(7) != "-":
                     debit = float(widget.text(7))
                     debit -= debit / quantity
                     debit = round(debit, 2)
-                    widget.setText(7, str(debit))
                     self.transactions[int(widget.text(8))]['price'] = -debit
+                    self.transactions[int(widget.text(8))]['debit'] = debit
+                self.transactions[int(widget.text(8))]['quantity'] = quantity - 1
             else:
                 self.transaction_list.takeTopLevelItem(index.row())
                 del self.transactions[int(widget.text(8))]

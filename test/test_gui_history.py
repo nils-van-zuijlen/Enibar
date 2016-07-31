@@ -120,6 +120,8 @@ class HistoryWindowTest(basetest.BaseGuiTest):
                         [{('2015/11/20 21:36:22', 'test1', 'a', 'b', 'c', '1', '-', '1.0', '1'): []}, {('2015/11/20 21:36:22', 'test1', 'b', 'd', 'c', '1', '-', '2.5', '2'): []}, {('2015/11/20 21:36:22', 'test2', 'e', 'f', 'g', '2', '5.0', '-', '3'): []}]
                     )
                     QtCore.QTimer.singleShot(100, self.connect)
+                    item = self.win.transaction_list.topLevelItem(1)
+                    self.win.transaction_list.setCurrentItem(item)
                     self.win.delete_button.click()
                     async def final_func():
                         res = await redis.blpop(api.sde.QUEUE_NAME)
