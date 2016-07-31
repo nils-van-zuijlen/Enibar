@@ -21,6 +21,7 @@ Base api, with common functions.
 """
 
 from database import Cursor
+import copy
 
 
 def make_get_unique(getter):
@@ -47,7 +48,7 @@ def filtered_getter(table, filter_, reverse=False, max=None):
     """
     with Cursor() as cursor:
         filters = []
-        for key in filter_:
+        for key in copy.copy(filter_):
             if key.endswith('__gt'):
                 filter_[key[:-4]] = filter_[key]
                 del filter_[key]
