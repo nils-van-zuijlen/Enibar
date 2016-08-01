@@ -121,8 +121,8 @@ class SqlRecord:
 
     def value(self, name_or_id):
         ret_value = self._record.value(name_or_id)
-        if ret_value in (b'\x00', b'\x01'):
-            return ret_value == b'\x01'
+        if isinstance(ret_value, bytes):
+            return int.from_bytes(ret_value, byteorder='little')
         return ret_value
 
 
