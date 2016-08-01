@@ -31,8 +31,15 @@ import sys
 import gui.main_window
 import settings
 from PyQt5 import QtWidgets
+import sys
 
 
+def excepthook(*args):
+    sys.__excepthook__(*args)
+    sys.exit(1)
+
+
+sys.excepthook = excepthook
 SUB = None
 
 
