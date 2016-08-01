@@ -28,7 +28,7 @@ once a day.
 """
 
 import api.mail
-from PyQt5 import QtSql, QtCore
+from PyQt5 import QtCore
 from database import Cursor
 
 UNIT_TO_FUNC = {

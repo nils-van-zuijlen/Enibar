@@ -1,7 +1,6 @@
 import settings
 import asyncio
 import aioredis
-import json
 import redis
 
 connection = None

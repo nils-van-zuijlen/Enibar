@@ -23,7 +23,6 @@ Message input widget
 
 from PyQt5 import QtCore, QtWidgets, QtGui
 import api.mail
-import re
 
 
 class MailMessageInput(QtWidgets.QTextEdit):

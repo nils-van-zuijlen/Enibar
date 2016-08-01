@@ -22,7 +22,7 @@ Save mail model window
 
 """
 
-from PyQt5 import QtCore, QtWidgets, uic
+from PyQt5 import QtWidgets, uic
 
 
 class SaveMailModelWindow(QtWidgets.QDialog):

@@ -21,8 +21,7 @@ Send mail window
 ================
 """
 
-from PyQt5 import QtCore, QtWidgets, uic
-from .mail_selector_window import MailSelectorWindow
+from PyQt5 import QtWidgets, uic
 import api.mail
 from .save_mail_model_window import SaveMailModelWindow
 from .load_mail_model_window import LoadMailModelWindow

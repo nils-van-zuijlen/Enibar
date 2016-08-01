@@ -17,7 +17,7 @@
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5 import QtCore, QtWidgets, uic
+from PyQt5 import QtWidgets, uic
 from gui.tree_item_widget import TreeWidget
 
 

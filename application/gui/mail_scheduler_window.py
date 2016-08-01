@@ -24,7 +24,7 @@ Mail scheduler window
 
 from .save_mail_model_window import SaveMailModelWindow
 from .load_mail_model_window import LoadMailModelWindow
-from PyQt5 import QtCore, QtWidgets, uic, QtGui
+from PyQt5 import QtCore, QtWidgets, uic
 import api.mail
 
 

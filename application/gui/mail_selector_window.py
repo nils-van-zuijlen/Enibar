@@ -23,7 +23,7 @@ Mail selector window
 
 """
 
-from PyQt5 import QtCore, QtWidgets, uic, QtGui
+from PyQt5 import QtWidgets, uic
 import api.notes
 
 

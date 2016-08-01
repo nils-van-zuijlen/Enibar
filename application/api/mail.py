@@ -25,7 +25,6 @@ Handle all mail related task.
 
 """
 
-import sys
 import os
 import base64
 import smtplib
@@ -37,7 +36,6 @@ from database import Cursor
 import api.base
 import api.notes
 import settings
-import datetime
 
 
 # Data used to convert french completion word to english database column name

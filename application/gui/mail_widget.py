@@ -23,11 +23,9 @@ Mail widget
 A collection of widget which are used in almost all related mail window
 """
 
-from PyQt5 import QtCore, QtWidgets, QtGui
+from PyQt5 import QtWidgets
 import weakref
 
-from .save_mail_model_window import SaveMailModelWindow
-from .load_mail_model_window import LoadMailModelWindow
 from .mail_selector_window import MailSelectorWindow
 
 

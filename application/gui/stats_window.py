@@ -47,10 +47,7 @@ class StatsWindow(QtWidgets.QDialog):
 
         self.tot_debit = 0
         self.tot_credit = 0
-        if by_note:
-            self.note_mode = True
-        else:
-            self.note_mode = False
+        self.note_mode = by_note
 
         self.note_filter = note_filter
         self.cat_filter = cat_filter

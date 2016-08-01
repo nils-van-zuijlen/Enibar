@@ -23,15 +23,13 @@ import asyncio
 import aioredis
 import api.redis
 import api.sde
-from database import Cursor, ping_sql
+from database import ping_sql
 import datetime
-import json
 import quamash
 import sys
 import gui.main_window
 import settings
 from PyQt5 import QtWidgets
-import sys
 
 
 def excepthook(*args):

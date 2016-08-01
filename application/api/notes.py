@@ -100,7 +100,7 @@ def _build_stats():
 def rebuild_note_cache(nick):
     """ Rebuild a row in the cache
     """
-    global NOTES_CACHE, NOTES_FIELDS_CACHE, NOTES_STATS_FIELDS_CACHE
+    global NOTES_FIELDS_CACHE, NOTES_STATS_FIELDS_CACHE
     with Cursor() as cursor:
         cursor.prepare("SELECT * FROM notes WHERE nickname=:nick")
         cursor.bindValue(":nick", nick)
