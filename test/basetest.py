@@ -34,6 +34,12 @@ import signal
 from unittest.runner import TextTestResult, TextTestRunner
 from unittest.signals import registerResult
 
+if int(os.environ['USE_VD']):
+    import atexit
+    display = Display(visible=0, size=(800, 600))
+    display.start()
+    atexit.register(display.stop)
+
 
 def getDescription(self, test):
     doc_first_line = test.shortDescription()
@@ -96,15 +102,19 @@ class BaseTest(unittest.TestCase):
         self.loop.run_until_complete(api.redis.connect())
         self.loop.run_until_complete(asyncio.ensure_future(self.reset_redis()))
 
+    def tearDown(self):
+        if api.redis.connection:
+            api.redis.connection.close()
+            self.loop.run_until_complete(api.redis.connection.wait_closed())
+
     async def reset_redis(self):
         async with api.redis.connection.get() as redis:
             res = await redis.delete(api.sde.QUEUE_NAME)
-            print(res)
 
     def _reset_db(self):
         tables = ["admins", "categories", "products", "price_description",
                   "notes", "prices", "transactions", "panels", "panel_content",
-                  "scheduled_mails", "mail_models", "barcode"]
+                  "scheduled_mails", "mail_models", "barcode", "note_categories"]
         with Cursor() as cursor:
             for table in tables:
                 cursor.exec_("DELETE FROM {}".format(table))
@@ -186,13 +196,14 @@ class BaseTest(unittest.TestCase):
         """ Test helper, returns the number of admins currently in database """
         return self._count("admins")
 
+    def count_note_categories(self):
+        """ Returns the number of note_categories currently in database """
+        return self._count("note_categories")
+
 
 class BaseGuiTest(BaseTest):
     def setUp(self):
         super().setUp()
-        if int(os.environ['USE_VD']):
-            self.display = Display(visible=0, size=(800, 600))
-            self.display.start()
         self.app = QtWidgets.QApplication(sys.argv)
         signal.signal(signal.SIGALRM, self.handle_timeout)
         signal.alarm(30)
@@ -202,9 +213,9 @@ class BaseGuiTest(BaseTest):
         raise TimeoutError()
 
     def tearDown(self):
+        super().tearDown()
+        self.app.quit()
         self.app = None  # Need this to avoid X11 crash. It may cause segfault.
-        if int(os.environ['USE_VD']):
-            self.display.stop()
 
     def _reset_db(self):
         """ Reset the db but add an user that can do anything

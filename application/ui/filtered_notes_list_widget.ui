@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FilteredNotesListWidget</class>
+ <widget class="QWidget" name="FilteredNotesListWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>316</width>
+    <height>437</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QComboBox" name="filter_combobox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <item>
+        <property name="text">
+         <string>Montrés</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Cachés</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Dont la note &gt;</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Dont la note &lt;</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="Input" name="filter_input">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" colspan="2">
+      <widget class="QLineEdit" name="search_input">
+       <property name="inputMask">
+        <string/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="placeholderText">
+        <string>Recherche</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" colspan="2">
+      <widget class="MultiNotesList" name="note_list">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="selectionMode">
+        <enum>QAbstractItemView::MultiSelection</enum>
+       </property>
+       <property name="sortingEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Input</class>
+   <extends>QLineEdit</extends>
+   <header>gui/input_widget</header>
+  </customwidget>
+  <customwidget>
+   <class>MultiNotesList</class>
+   <extends>QListWidget</extends>
+   <header>gui/group_actions_window</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>filter_combobox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>FilteredNotesListWidget</receiver>
+   <slot>filter_combobox_change()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>110</x>
+     <y>18</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>218</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>search_input</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>FilteredNotesListWidget</receiver>
+   <slot>search_input_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>157</x>
+     <y>44</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>218</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>note_list</sender>
+   <signal>itemSelectionChanged()</signal>
+   <receiver>FilteredNotesListWidget</receiver>
+   <slot>on_selection_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>157</x>
+     <y>244</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>218</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>filter_combobox_change()</slot>
+  <slot>filter_input_changed()</slot>
+  <slot>search_input_changed()</slot>
+  <slot>on_selection_changed()</slot>
+ </slots>
+</ui>

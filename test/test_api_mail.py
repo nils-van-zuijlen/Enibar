@@ -32,6 +32,7 @@ api.redis.send_message = lambda x, y: [api.notes.rebuild_note_cache(note) for no
 
 class MailTest(basetest.BaseTest):
     def setUp(self):
+        super().setUp()
         self._reset_db()
         if os.path.isfile("mail.log"):
             os.remove("mail.log")

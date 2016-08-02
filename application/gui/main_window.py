@@ -48,6 +48,7 @@ from .send_mail_window import SendMailWindow
 from .mail_scheduler_window import MailSchedulerWindow
 from .help_window import HelpWindow
 from .settings_window import SettingsWindow
+from .note_categories_management_window import NoteCategoriesManagementWindow
 import api.categories
 import api.notes
 import api.transactions
@@ -638,5 +639,11 @@ class MenuBar(QtWidgets.QMenuBar):
     def settings_fnc(self, _):
         self._close_window()
         self.cur_window = SettingsWindow()
+        self._connect_window()
+
+    @ask_auth("manage_notes")
+    def note_categories_management_fnc(self, _):
+        self._close_window()
+        self.cur_window = NoteCategoriesManagementWindow()
         self._connect_window()
 

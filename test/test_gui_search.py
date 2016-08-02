@@ -20,6 +20,7 @@ import basetest
 import gui.search_window
 import gui.main_window
 import api.notes
+import api.note_categories
 from PyQt5 import QtTest
 
 
@@ -32,6 +33,7 @@ class SearchTest(basetest.BaseGuiTest):
         self.add_note("test2", "rty", "jhg")
         self.main_win = gui.main_window.MainWindow()
         self.search_window = gui.search_window.SearchWindow(self.main_win.menu_bar)
+        self.hidden_category = api.note_categories.add("hidden", hidden=True)
 
     def test_search_by_firstname(self):
         """ Testing search by firstname
@@ -40,7 +42,7 @@ class SearchTest(basetest.BaseGuiTest):
         self.assertEqual(self.get_items(self.main_win.notes_list), ['test', 'test1'])
         self.search_window.firstname_input.setText("jh")
         self.assertEqual(self.get_items(self.main_win.notes_list), ['test2'])
-        api.notes.hide(["test2"])
+        api.note_categories.add_notes(["test2"], "hidden")
         self.search_window.firstname_input.setText("jhg")
         self.assertEqual(self.get_items(self.main_win.notes_list), [])
 

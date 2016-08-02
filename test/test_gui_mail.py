@@ -24,6 +24,7 @@ import gui.send_mail_window
 import gui.mail_selector_window
 import api.notes
 import api.mail
+import api.note_categories
 
 
 class MailTest(basetest.BaseGuiTest):
@@ -40,6 +41,7 @@ class MailTest(basetest.BaseGuiTest):
             "01/02/1994", "3A", "", True, True)
         api.mail.save_model("Stock model", "Subject", "message", 0, "")
         api.mail.send_mail = self.send_mail
+        self.hidden_category = api.note_categories.add("hidden", hidden=True)
 
     def test_send_mail(self):
         """ Testing gui send mail
@@ -79,7 +81,7 @@ class MailTest(basetest.BaseGuiTest):
         self.win.destinateur_input.setText("Pouette")
         self.win.subject_input.setText("Subject")
         self.win.message_input.setText("This is the message")
-        api.notes.hide(["Nick"])
+        api.note_categories.add_notes(["Nick"], "hidden")
 
         def callback():
             win = self.app.activeWindow()

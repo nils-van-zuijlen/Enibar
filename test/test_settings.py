@@ -4,6 +4,7 @@ import settings
 
 class SettingsTest(basetest.BaseTest):
     def setUp(self):
+        super().setUp()
         settings.synced.AUTH_SDE_TOKEN = ""
         settings.synced.ALCOHOL_MAJORATION = 0
         settings.synced.refresh_cache()

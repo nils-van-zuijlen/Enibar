@@ -681,6 +681,8 @@
     <addaction name="separator"/>
     <addaction name="menuExporter_les_notes"/>
     <addaction name="find"/>
+    <addaction name="separator"/>
+    <addaction name="note_categories_management"/>
    </widget>
    <widget class="QMenu" name="menu_Panels">
     <property name="title">
@@ -860,6 +862,11 @@
     <string>Pa&amp;ramètres</string>
    </property>
   </action>
+  <action name="note_categories_management">
+   <property name="text">
+    <string>Gerer les categories</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -901,6 +908,7 @@
     <slot>mail_scheduler_fnc()</slot>
     <slot>help_fnc()</slot>
     <slot>settings_fnc()</slot>
+    <slot>note_categories_management_fnc()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -1369,6 +1377,22 @@
    <signal>triggered()</signal>
    <receiver>menu_bar</receiver>
    <slot>settings_fnc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>7</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>note_categories_management</sender>
+   <signal>triggered()</signal>
+   <receiver>menu_bar</receiver>
+   <slot>note_categories_management_fnc()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

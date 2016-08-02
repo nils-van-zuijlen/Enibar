@@ -48,13 +48,9 @@ class GroupActionsWindow(QtWidgets.QDialog):
 
         uic.loadUi('ui/group_actions_window.ui', self)
 
-        self.filter_input.setEnabled(False)
-        self.filter_input.set_validator(api.validator.ALL_NUMBER)
         self.on_change = lambda: False  # Don't do anything.
-        self.filter_input.keyPressEvent = self.filter_input_changed
         self.note_list.rebuild(api.notes.get(self.current_filter))
         self.product_list.build()
-        self.search_input.setFocus(True)
         self.show()
 
     def redis_handle(self, channel, message):
@@ -83,61 +79,6 @@ class GroupActionsWindow(QtWidgets.QDialog):
         for widget in self.note_list.selectedItems():
             widget.setSelected(False)
         return fnc(notes_nicks, *args, **kwargs)
-
-    def filter_combobox_change(self, id_):
-        """ Called when the filter combobox is chnged
-        """
-        if id_ == 0:
-            self.note_list.current_filter = lambda x: x['hidden'] == 0
-            self.filter_input.setEnabled(False)
-        elif id_ == 1:
-            self.note_list.current_filter = lambda x: x['hidden'] == 1
-            self.filter_input.setEnabled(False)
-        elif id_ == 2:
-            self.filter_input.setEnabled(True)
-            self.filter_input.setText("0")
-            self.note_list.current_filter = lambda x: x['note'] > 0 and\
-                x['hidden'] == 0
-        elif id_ == 3:
-            self.filter_input.setEnabled(True)
-            self.filter_input.setText("0")
-            self.note_list.current_filter = lambda x: x['note'] < 0 and\
-                x['hidden'] == 0
-        self.note_list.rebuild(api.notes.get(self.note_list.current_filter))
-
-    def filter_input_changed(self, event):
-        """ Called when the filter input is changed
-        """
-        QtWidgets.QLineEdit.keyPressEvent(self.filter_input, event)
-        text = self.filter_input.text()
-        try:
-            if self.filter_combobox.currentIndex() == 2:
-                self.note_list.current_filter = lambda x: x['note'] >\
-                    float(text) and x['hidden'] == 0
-                self.note_list.rebuild(api.notes.get(
-                    self.note_list.current_filter))
-            elif self.filter_combobox.currentIndex() == 3:
-                self.note_list.current_filter = lambda x: x['note'] <\
-                    float(text) and x['hidden'] == 0
-                self.note_list.rebuild(api.notes.get(
-                    self.note_list.current_filter))
-        except ValueError:
-            self.note_list.clear()
-
-    def search_input_changed(self, event):
-        """ Called when the search input is changed
-        """
-        self.note_list.hide_unmatched_items(self.search_input.text())
-
-    def hide_action(self):
-        """ Called when "cacher" is clicked
-        """
-        self._multiple_action(api.notes.hide)
-
-    def show_action(self):
-        """ Called when "Montrer" is clicked
-        """
-        self._multiple_action(api.notes.show)
 
     def take_action(self):
         """ Called when we want to take on notes
@@ -261,8 +202,8 @@ class GroupActionsWindow(QtWidgets.QDialog):
         self.selected_note_report.setPlainText(
             ", ".join([i.text() for i in self.note_list.selectedItems()])
         )
-        self.search_input.clear()
-        self.search_input.setFocus(True)
+        self.note_list.search_input.clear()
+        self.note_list.search_input.setFocus(True)
 
 
 class MultiNotesList(NotesList):
