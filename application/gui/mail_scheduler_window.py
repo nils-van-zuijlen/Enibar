@@ -26,6 +26,7 @@ from .save_mail_model_window import SaveMailModelWindow
 from .load_mail_model_window import LoadMailModelWindow
 from PyQt5 import QtCore, QtWidgets, uic
 import api.mail
+import gui.utils
 
 
 class MailSchedulerWindow(QtWidgets.QMainWindow):
@@ -97,13 +98,16 @@ class MailSchedulerWindow(QtWidgets.QMainWindow):
         """
         popup = SaveMailModelWindow(self)
         if popup.exec_() and popup.input.text():
-            api.mail.save_model(
+            success = api.mail.save_model(
                 popup.input.text(),
                 self.subject_input.text(),
                 self.message_input.toPlainText(),
                 self.filter_selector.currentIndex(),
                 self.filter_input.text()
             )
+            if not success:
+                gui.utils.error("Error", "Le modele n'est pas valide, verifiez\
+                bien les parties entre accolades")
 
     def load_model_fnc(self):
         """ Load mail action
@@ -160,6 +164,9 @@ class MailSchedulerWindow(QtWidgets.QMainWindow):
             self.statusbar.showMessage("Mail «{}» sauvegardé".format(
                 self.name_input.text()
             ))
+        else:
+            gui.utils.error("Error", "Le modele n'est pas valide, verifiez\
+            bien les parties entre accolades")
 
 
 class ScheduledMailsList(QtWidgets.QListWidget):

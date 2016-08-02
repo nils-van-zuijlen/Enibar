@@ -23,6 +23,7 @@ Send mail window
 
 from PyQt5 import QtWidgets, uic
 import api.mail
+import gui.utils
 from .save_mail_model_window import SaveMailModelWindow
 from .load_mail_model_window import LoadMailModelWindow
 from .validation_window import ValidationWindow
@@ -91,13 +92,16 @@ class SendMailWindow(QtWidgets.QMainWindow):
         """
         popup = SaveMailModelWindow(self)
         if popup.exec_() and popup.input.text():
-            api.mail.save_model(
+            success = api.mail.save_model(
                 popup.input.text(),
                 self.subject_input.text(),
                 self.message_input.toPlainText(),
                 self.filter_selector.currentIndex(),
                 self.filter_input.text()
             )
+            if not success:
+                gui.utils.error("Error", "Le modele n'est pas valide, verifiez\
+                bien les parties entre accolades")
 
     def open_model(self):
         """ Open mail model. Fill all fields in the ui.

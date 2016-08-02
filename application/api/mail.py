@@ -216,6 +216,12 @@ def save_model(name, subject, message, filter_, filter_value):
     :param str filter_value: Filter additioal value
     :return bool: Operation succes or not
     """
+    try:
+        subject.format(**COMPLETION_FIELD)
+        message.format(**COMPLETION_FIELD)
+    except ValueError:
+        return False
+
     with Cursor() as cursor:
         cursor.prepare("""
             INSERT INTO mail_models(name, subject, message, filter, filter_value)
@@ -286,6 +292,12 @@ def save_scheduled_mails(name, active, sched_int, sched_unit, sched_day,
     :param QDateTime last_sent: Last date message was sent
     :return bool: Operation success
     """
+    try:
+        subject.format(**COMPLETION_FIELD)
+        message.format(**COMPLETION_FIELD)
+    except ValueError:
+        return False
+
     with Cursor() as cursor:
         cursor.prepare("""
             INSERT INTO scheduled_mails(name, active, schedule_interval,
