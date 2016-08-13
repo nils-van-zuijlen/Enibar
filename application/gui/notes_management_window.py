@@ -201,6 +201,7 @@ class NotesManagementWindow(QtWidgets.QDialog):
             api.notes.get(lambda x: x["nickname"] == self.current_nickname)))
         self.disable_inputs()
         self.empty_inputs()
+        self.note_list.refresh(api.notes.get())
 
     def empty_inputs(self):
         """ This empty all the inputs

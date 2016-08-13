@@ -293,6 +293,7 @@ def remove(nicks):
             'percentage': 0,
             'price': -note['note']}
         )
+        del NOTES_CACHE[nick]
 
     api.redis.send_message("enibar-delete", nicks)
     _request_multiple_nicks(nicks, "DELETE FROM notes WHERE nickname=:nick")
