@@ -33,6 +33,7 @@ class NotesList(QtWidgets.QListWidget):
     def __init__(self, parent):
         super().__init__(parent)
         self.current_filter = lambda x: x['hidden'] == 0
+        self.custom_filter = lambda x: True
         self.minors_color = QtGui.QColor(255, 192, 203)
         self.overdraft_color = QtCore.Qt.red
         self.search_text = ""

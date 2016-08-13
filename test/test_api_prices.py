@@ -27,6 +27,7 @@ from database import Cursor
 
 class PricesTest(basetest.BaseTest):
     def setUp(self):
+        super().setUp()
         self._reset_db()
         self.cat_eat = api.categories.add("Manger")
         self.cat_drink = api.categories.add("Boire")

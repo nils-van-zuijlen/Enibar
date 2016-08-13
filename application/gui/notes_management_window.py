@@ -29,6 +29,7 @@ from PyQt5 import QtWidgets, QtCore, QtGui, uic
 from gui.input_widget import Input
 import api.notes
 import api.validator
+import api.note_categories
 import datetime
 import gui.notes_list_widget
 import settings
@@ -51,7 +52,10 @@ class NotesManagementWindow(QtWidgets.QDialog):
 
         self.photo_selected = None
         self.current_nickname = None
+
         self.adding = False
+        self.categories_added = []
+
         self.current_shown = -1
         self.on_change = api.validator.on_change(self, self.save_button)
         self.note_list.current_filter = lambda x: True
@@ -95,6 +99,8 @@ class NotesManagementWindow(QtWidgets.QDialog):
             self.current_shown = -1
             self.enable_inputs()
             self.empty_inputs()
+            for category in api.note_categories.get():
+                self.category_selector.addItem(category["name"])
 
     def save_fnc(self):
         """ Called when "Sauvegarder" is clicked.
@@ -114,6 +120,9 @@ class NotesManagementWindow(QtWidgets.QDialog):
                 nick = self.nickname_input.text()
                 self.empty_inputs()
                 self.add_button.setEnabled(True)
+                for category in self.categories_added:
+                    api.note_categories.add_notes([nick], category)
+                self.categories_added = []
             else:
                 gui.utils.error("Erreur", "Impossible d'ajouter la note.")
         else:
@@ -152,6 +161,14 @@ class NotesManagementWindow(QtWidgets.QDialog):
 
         self.mails_checkbox.setChecked(note['mails_inscription'])
         self.stats_checkbox.setChecked(note['stats_inscription'])
+
+        self.category_list.clear()
+        self.category_selector.clear()
+        for category in api.note_categories.get():
+            if category["name"] in note["categories"]:
+                self.category_list.addItem(category["name"])
+            else:
+                self.category_selector.addItem(category["name"])
 
     def on_note_selected(self, note_selected):
         """ This is called when a note is selected
@@ -193,6 +210,8 @@ class NotesManagementWindow(QtWidgets.QDialog):
         self.photo.setPixmap(img)
         self.on_change()
         self.save_button.setEnabled(False)
+        self.category_list.clear()
+        self.category_selector.clear()
 
     def disable_inputs(self):
         """ This disable all the inputs
@@ -202,6 +221,9 @@ class NotesManagementWindow(QtWidgets.QDialog):
         self.photo_button.setEnabled(False)
         self.save_button.setEnabled(False)
         self.cancel_button.setEnabled(False)
+        self.add_category_button.setEnabled(False)
+        self.remove_category_button.setEnabled(False)
+        self.category_selector.setEnabled(False)
 
     def enable_inputs(self):
         """ This enable all the inputs
@@ -211,6 +233,9 @@ class NotesManagementWindow(QtWidgets.QDialog):
         self.photo_button.setEnabled(True)
         self.save_button.setEnabled(True)
         self.cancel_button.setEnabled(True)
+        self.add_category_button.setEnabled(True)
+        self.remove_category_button.setEnabled(True)
+        self.category_selector.setEnabled(True)
 
     def disable_inputs_for_editing(self):
         """ This disable all the inputs excepted those allowed to be edited on
@@ -223,6 +248,37 @@ class NotesManagementWindow(QtWidgets.QDialog):
         self.nickname_input.setEnabled(True)
         self.promo_input.setEnabled(True)
         self.birthdate_input.setEnabled(True)
+        self.add_category_button.setEnabled(True)
+        self.remove_category_button.setEnabled(True)
+        self.category_selector.setEnabled(True)
+
+    def add_category_fnc(self):
+        category = self.category_selector.currentText()
+        if not category:
+            return
+
+        if self.adding:
+            self.categories_added.append(category)
+        elif not api.note_categories.add_notes([self.current_nickname], category):
+            return
+
+        self.category_list.addItem(category)
+        self.category_selector.removeItem(self.category_selector.currentIndex())
+
+    def remove_category_fnc(self):
+        try:
+            category = self.category_list.currentItem().text()
+        except AttributeError:
+            return
+
+        if self.adding:
+            self.categories_added.remove(category)
+        elif not api.note_categories.remove_notes([self.current_nickname], category):
+            return
+
+        self.category_selector.addItem(category)
+        self.category_list.takeItem(self.category_list.currentRow())
+        self.category_selector.model().sort(1)
 
     def _inputs_action(self, action):
         """ This performs the action on all object of the type Input in the

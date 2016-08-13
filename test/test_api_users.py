@@ -23,6 +23,7 @@ import api.users as users
 
 class UsersTest(basetest.BaseTest):
     def setUp(self):
+        super().setUp()
         self._reset_db()
 
     def test_add_user(self):

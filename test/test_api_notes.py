@@ -31,6 +31,7 @@ api.redis.send_message = lambda x, y: [api.notes.rebuild_note_cache(note) for no
 
 class NotesTest(basetest.BaseTest):
     def setUp(self):
+        super().setUp()
         self._reset_db()
         try:
             os.remove("img/coucou.jpg")
@@ -112,7 +113,8 @@ class NotesTest(basetest.BaseTest):
                                  'tot_refill': 0.0,
                                  'mails_inscription': False,
                                  'stats_inscription': True,
-                                 'hidden': 0})
+                                 'hidden': 0,
+                                 'categories': []})
         self.assertTrue(os.path.isfile("img/coucou.jpg"))
 
     def test_get_by_name(self):
@@ -169,7 +171,8 @@ class NotesTest(basetest.BaseTest):
                            'tot_refill': 0.0,
                            'mails_inscription': True,
                            'stats_inscription': True,
-                           'hidden': 0}, res)
+                           'hidden': 0,
+                           'categories': []}, res)
 
     @freezegun.freeze_time("2014-12-24 06:00:00")
     def test_get_by_minors(self):
@@ -213,7 +216,8 @@ class NotesTest(basetest.BaseTest):
                                  'photo_path': '',
                                  'mails_inscription': True,
                                  'stats_inscription': True,
-                                 'hidden': 0}])
+                                 'hidden': 0,
+                                 'categories': []}])
 
     @freezegun.freeze_time("2014-12-24 06:00:00")
     def test_get_by_majors(self):
@@ -257,7 +261,8 @@ class NotesTest(basetest.BaseTest):
                                  'photo_path': '',
                                  'mails_inscription': True,
                                  'stats_inscription': True,
-                                 'hidden': 0}])
+                                 'hidden': 0,
+                                 'categories': []}])
 
     def test_transaction_multiple(self):
         """ Testing transactions
@@ -418,22 +423,6 @@ class NotesTest(basetest.BaseTest):
         note = notes.get()[0]
         self.assertIn("coucou2", note['photo_path'])
         self.assertNotEqual("coucou2.jpg", note['photo_path'])
-
-    def test_hide_show(self):
-        """ Testing show and hide
-        """
-        self.add_note("test0")
-        self.add_note("test1")
-        self.add_note("test2")
-
-        for note in notes.get():
-            self.assertFalse(bool(note['hidden']))
-        notes.hide(["test0", "test1", "test2"])
-        for note in notes.get():
-            self.assertTrue(bool(note['hidden']))
-        notes.show(["test0", "test1", "test2"])
-        for note in notes.get():
-            self.assertFalse(bool(note['hidden']))
 
     def test_change_ecocups(self):
         """ Testing change_ecocups

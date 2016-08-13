@@ -25,6 +25,7 @@ import api.transactions as transactions
 
 class StatsTests(basetest.BaseTest):
     def setUp(self):
+        super().setUp()
         self._reset_db()
         notes.add("test1",
             "test1",

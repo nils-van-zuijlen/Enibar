@@ -48,7 +48,6 @@ CREATE TABLE IF NOT EXISTS notes(
 	overdraft_date DATE DEFAULT NULL,
 	last_agio DATE DEFAULT NULL,
 	ecocups INTEGER UNSIGNED DEFAULT 0,
-	hidden BOOLEAN DEFAULT 0,
 	mails_inscription BOOLEAN DEFAULT TRUE,
 	stats_inscription BOOLEAN DEFAULT TRUE
 ) ENGINE=InnoDB;
@@ -160,5 +159,19 @@ CREATE TABLE IF NOT EXISTS scheduled_mails(
 	schedule_unit enum('day', 'week', 'month') default "day",
 	schedule_day TINYINT default 0,
 	last_sent DATE
-) ENGINE=InnoDB
+) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS note_categories(
+    id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) UNIQUE NOT NULL,
+    hidden BOOLEAN DEFAULT FALSE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS note_categories_assoc(
+    id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    note INTEGER UNSIGNED NOT NULL,
+    category INTEGER UNSIGNED NOT NULL,
+    UNIQUE(note, category),
+    FOREIGN KEY (note) REFERENCES notes (id) ON DELETE CASCADE,
+    FOREIGN KEY (category) REFERENCES note_categories (id) ON DELETE CASCADE
+) ENGINE=InnoDB;

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>418</width>
-    <height>646</height>
+    <width>575</width>
+    <height>691</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -44,49 +44,13 @@
    </item>
    <item row="0" column="2" rowspan="3">
     <layout class="QGridLayout" name="gridLayout">
-     <item row="26" column="0" colspan="3">
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="name_label">
+     <item row="4" column="0" colspan="2">
+      <widget class="QLabel" name="first_name_label">
        <property name="text">
-        <string>Nom:</string>
+        <string>Prénom: </string>
        </property>
        <property name="buddy">
-        <cstring>name_input</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="15" column="0" colspan="3">
-      <widget class="QLabel" name="promo_label">
-       <property name="text">
-        <string>Promo:</string>
-       </property>
-       <property name="buddy">
-        <cstring>promo_input</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="31" column="1" colspan="2">
-      <widget class="QPushButton" name="save_button">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="text">
-        <string>Sauvegarder</string>
-       </property>
-       <property name="default">
-        <bool>true</bool>
+        <cstring>first_name_input</cstring>
        </property>
       </widget>
      </item>
@@ -100,13 +64,13 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0" colspan="2">
-      <widget class="QLabel" name="nickname_label">
+     <item row="15" column="0" colspan="3">
+      <widget class="QLabel" name="promo_label">
        <property name="text">
-        <string>Surnom: </string>
+        <string>Promo:</string>
        </property>
        <property name="buddy">
-        <cstring>nickname_input</cstring>
+        <cstring>promo_input</cstring>
        </property>
       </widget>
      </item>
@@ -120,30 +84,27 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="0" colspan="2">
-      <widget class="QLabel" name="first_name_label">
-       <property name="text">
-        <string>Prénom: </string>
-       </property>
-       <property name="buddy">
-        <cstring>first_name_input</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="23" column="0" colspan="3">
-      <widget class="QPushButton" name="photo_button">
+     <item row="21" column="0" colspan="3">
+      <widget class="Input" name="phone_input">
        <property name="enabled">
         <bool>false</bool>
        </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="name_label">
        <property name="text">
-        <string>Modifier la photo</string>
+        <string>Nom:</string>
+       </property>
+       <property name="buddy">
+        <cstring>name_input</cstring>
        </property>
       </widget>
      </item>
-     <item row="31" column="0">
-      <widget class="QPushButton" name="cancel_button">
-       <property name="text">
-        <string>Annuler</string>
+     <item row="7" column="0" colspan="3">
+      <widget class="Input" name="name_input">
+       <property name="enabled">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -157,10 +118,19 @@
        </property>
       </widget>
      </item>
-     <item row="21" column="0" colspan="3">
-      <widget class="Input" name="phone_input">
-       <property name="enabled">
-        <bool>false</bool>
+     <item row="25" column="0" colspan="2">
+      <widget class="QLabel" name="photo">
+       <property name="minimumSize">
+        <size>
+         <width>120</width>
+         <height>160</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
@@ -174,12 +144,85 @@
        </property>
       </widget>
      </item>
-     <item row="19" column="0" colspan="3">
-      <widget class="Input" name="mail_input">
+     <item row="3" column="0" colspan="3">
+      <widget class="Input" name="nickname_input">
        <property name="enabled">
         <bool>false</bool>
        </property>
       </widget>
+     </item>
+     <item row="32" column="1" colspan="2">
+      <widget class="QPushButton" name="save_button">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>Sauvegarder</string>
+       </property>
+       <property name="default">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0" colspan="3">
+      <widget class="Input" name="first_name_input">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" colspan="2">
+      <widget class="QLabel" name="nickname_label">
+       <property name="text">
+        <string>Surnom: </string>
+       </property>
+       <property name="buddy">
+        <cstring>nickname_input</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="24" column="1" colspan="2">
+      <widget class="QCheckBox" name="stats_checkbox">
+       <property name="text">
+        <string>Stats</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="23" column="0" colspan="3">
+      <widget class="QPushButton" name="photo_button">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>Modifier la photo</string>
+       </property>
+      </widget>
+     </item>
+     <item row="24" column="0">
+      <widget class="QCheckBox" name="mails_checkbox">
+       <property name="text">
+        <string>Mails</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="26" column="0" colspan="3">
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
      </item>
      <item row="16" column="0" colspan="3">
       <widget class="QComboBox" name="promo_input">
@@ -238,6 +281,13 @@
        </item>
       </widget>
      </item>
+     <item row="32" column="0">
+      <widget class="QPushButton" name="cancel_button">
+       <property name="text">
+        <string>Annuler</string>
+       </property>
+      </widget>
+     </item>
      <item row="14" column="0" colspan="3">
       <widget class="Input" name="birthdate_input">
        <property name="enabled">
@@ -245,62 +295,51 @@
        </property>
       </widget>
      </item>
-     <item row="7" column="0" colspan="3">
-      <widget class="Input" name="name_input">
+     <item row="19" column="0" colspan="3">
+      <widget class="Input" name="mail_input">
        <property name="enabled">
         <bool>false</bool>
        </property>
       </widget>
      </item>
-     <item row="5" column="0" colspan="3">
-      <widget class="Input" name="first_name_input">
-       <property name="enabled">
-        <bool>false</bool>
+     <item row="28" column="0">
+      <widget class="QComboBox" name="category_selector">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
       </widget>
      </item>
-     <item row="3" column="0" colspan="3">
-      <widget class="Input" name="nickname_input">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="24" column="0">
-      <widget class="QCheckBox" name="mails_checkbox">
-       <property name="text">
-        <string>Mails</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="25" column="0" colspan="2">
-      <widget class="QLabel" name="photo">
-       <property name="minimumSize">
-        <size>
-         <width>120</width>
-         <height>160</height>
-        </size>
+     <item row="28" column="1">
+      <widget class="QPushButton" name="add_category_button">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
        <property name="text">
-        <string/>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
+        <string>Ajouter</string>
        </property>
       </widget>
      </item>
-     <item row="24" column="1" colspan="2">
-      <widget class="QCheckBox" name="stats_checkbox">
-       <property name="text">
-        <string>Stats</string>
+     <item row="28" column="2">
+      <widget class="QPushButton" name="remove_category_button">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-       <property name="checked">
-        <bool>true</bool>
+       <property name="text">
+        <string>Supprimer</string>
        </property>
       </widget>
+     </item>
+     <item row="27" column="0" colspan="3">
+      <widget class="QListWidget" name="category_list"/>
      </item>
     </layout>
    </item>
@@ -426,6 +465,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>add_category_button</sender>
+   <signal>pressed()</signal>
+   <receiver>ManageNotes</receiver>
+   <slot>add_category_fnc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>442</x>
+     <y>629</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>287</x>
+     <y>345</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>remove_category_button</sender>
+   <signal>pressed()</signal>
+   <receiver>ManageNotes</receiver>
+   <slot>remove_category_fnc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>526</x>
+     <y>629</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>287</x>
+     <y>345</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>add_photo()</slot>
@@ -433,5 +504,7 @@
   <slot>save_fnc()</slot>
   <slot>on_note_selected()</slot>
   <slot>del_fnc()</slot>
+  <slot>add_category_fnc()</slot>
+  <slot>remove_category_fnc()</slot>
  </slots>
 </ui>

@@ -35,11 +35,13 @@ if __name__ == "__main__":
         database.transaction()
         cursor = QtSql.QSqlQuery(database)
         cursor.prepare("""
-            SELECT id, nickname, note FROM notes
-            WHERE hidden=0
+        SELECT id, nickname, note FROM notes WHERE
+            NOT EXISTS(
+                SELECT note, category FROM note_categories_assoc JOIN note_categories
+                ON note_categories.hidden=1 AND note_categories.id=category WHERE note=notes.id
+            )
             AND overdraft_date < DATE_SUB(CURDATE(), INTERVAL ? DAY)
-            AND (last_agio < DATE_SUB(CURDATE(), INTERVAL ? DAY)
-                 OR last_agio IS NULL)
+            AND (last_agio < DATE_SUB(CURDATE(), INTERVAL ? DAY) OR last_agio IS NULL)
             """
         )
         cursor.addBindValue(settings.AGIO_THRESHOLD)

@@ -25,6 +25,7 @@ import api.prices as prices
 
 class CategoriesTest(basetest.BaseTest):
     def setUp(self):
+        super().setUp()
         self._reset_db()
 
     def test_add_category(self):

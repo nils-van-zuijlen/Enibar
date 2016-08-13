@@ -24,6 +24,7 @@ import api.categories as categories
 
 class ProductsTest(basetest.BaseTest):
     def setUp(self):
+        super().setUp()
         self._reset_db()
         self.cat_eat = categories.add("Manger")
         self.cat_drink = categories.add("Boire")

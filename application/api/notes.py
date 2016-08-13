@@ -35,7 +35,7 @@ import tempfile
 
 NOTE_FIELDS = ['id', 'nickname', 'lastname', 'firstname', 'mail', 'tel',
                'birthdate', 'promo', 'note', 'photo_path', 'overdraft_date',
-               'ecocups', 'hidden', 'mails_inscription', 'stats_inscription']
+               'ecocups', 'mails_inscription', 'stats_inscription']
 
 NOTES_CACHE = {}
 NOTES_FIELDS_CACHE = {}
@@ -60,8 +60,24 @@ def rebuild_cache():
                        in NOTE_FIELDS}
                 row['tot_cons'] = 0
                 row['tot_refill'] = 0
+                row['categories'] = []
+                row['hidden'] = False
                 NOTES_CACHE[row['nickname']] = row
     _build_stats()
+    _build_categories()
+
+
+def _build_categories():
+    with Cursor() as cursor:
+        cursor.prepare("SELECT notes.id, notes.nickname, note_categories.name, note_categories.hidden FROM notes JOIN\
+            note_categories_assoc ON note_categories_assoc.note=notes.id JOIN\
+            note_categories ON note_categories_assoc.category=note_categories.id")
+
+        if cursor.exec_():
+            while cursor.next():
+                record = cursor.record()
+                NOTES_CACHE[record.value('nickname')]["categories"].append(record.value('name'))
+                NOTES_CACHE[record.value('nickname')]['hidden'] |= record.value('hidden')
 
 
 def _build_stats():
@@ -114,6 +130,8 @@ def rebuild_note_cache(nick):
                        in NOTE_FIELDS}
                 row['tot_cons'] = 0.0
                 row['tot_refill'] = 0.0
+                row['categories'] = []
+                row['hidden'] = False
 
                 NOTES_CACHE[row['nickname']] = row
 
@@ -145,6 +163,17 @@ def rebuild_note_cache(nick):
                             note = record.value(NOTES_STATS_FIELDS_CACHE['nickname'])
                             NOTES_CACHE[note]['tot_cons'] = record.value(NOTES_STATS_FIELDS_CACHE['tot_cons'])
                             NOTES_CACHE[note]['tot_refill'] = record.value(NOTES_STATS_FIELDS_CACHE['tot_refill'])
+        cursor.prepare("SELECT notes.id, notes.nickname, note_categories.name, note_categories.hidden FROM notes JOIN\
+            note_categories_assoc ON note_categories_assoc.note=notes.id JOIN\
+            note_categories ON note_categories_assoc.category=note_categories.id\
+            WHERE notes.nickname=:nick")
+        cursor.bindValue(':nick', nick)
+
+        if cursor.exec_():
+            while cursor.next():
+                record = cursor.record()
+                NOTES_CACHE[record.value('nickname')]["categories"].append(record.value('name'))
+                NOTES_CACHE[record.value('nickname')]['hidden'] |= record.value('hidden')
 
 
 def _request_multiple_nicks(nicks, request, *, do_not=False):
@@ -303,32 +332,6 @@ def get(filter_function=None):
     if filter_function is None:
         return list(NOTES_CACHE.values())
     return list(filter(filter_function, NOTES_CACHE.values()))
-
-
-def hide(nicks):
-    """ Hide multiple notes.
-
-    :param list nicks: The list of notes to hide
-
-    :return bool: True if success else False
-    """
-    v = _request_multiple_nicks(nicks, "UPDATE notes SET hidden=1\
-        WHERE nickname=:nick")
-    api.redis.send_message("enibar-notes", nicks)
-    return v
-
-
-def show(nicks):
-    """ Show multiple notes
-
-    :param int nicks: The list of notes to show
-
-    :return bool: True if success else False
-    """
-    v = _request_multiple_nicks(nicks, "UPDATE notes SET hidden=0\
-        WHERE nickname=:nick")
-    api.redis.send_message("enibar-notes", nicks)
-    return v
 
 
 def transactions(notes, diff, *, do_not=False):
