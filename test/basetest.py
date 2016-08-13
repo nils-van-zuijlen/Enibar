@@ -114,7 +114,7 @@ class BaseTest(unittest.TestCase):
     def _reset_db(self):
         tables = ["admins", "categories", "products", "price_description",
                   "notes", "prices", "transactions", "panels", "panel_content",
-                  "scheduled_mails", "mail_models", "barcode", "note_categories"]
+                  "scheduled_mails", "mail_models", "barcodes", "note_categories"]
         with Cursor() as cursor:
             for table in tables:
                 cursor.exec_("DELETE FROM {}".format(table))

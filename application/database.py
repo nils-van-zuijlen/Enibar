@@ -110,6 +110,19 @@ class SqlQuery(QtSql.QSqlQuery):
     def record(self):
         return SqlRecord(super().record())
 
+    if settings.DEBUG:
+        def exec_(self, *args):
+            ret = super().exec_(*args)
+            if not ret:
+                print(self.lastError().text())
+            return ret
+
+        def execBatch(self, *args):
+            ret = super().execBatch(*args)
+            if not ret:
+                print(self.lastError().text())
+            return ret
+
 
 class SqlRecord:
     def __init__(self, record):
