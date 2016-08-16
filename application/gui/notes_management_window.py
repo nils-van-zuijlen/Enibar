@@ -94,11 +94,13 @@ class NotesManagementWindow(QtWidgets.QDialog):
         """
         if not self.adding:
             self.adding = True
-            self.note_list.setCurrentRow(-1)
+            self.note_list.clearSelection()
             self.add_button.setEnabled(False)
+            self.del_button.setEnabled(False)
             self.current_shown = -1
             self.enable_inputs()
             self.empty_inputs()
+            self.current_nickname = None
             for category in api.note_categories.get():
                 self.category_selector.addItem(category["name"])
 

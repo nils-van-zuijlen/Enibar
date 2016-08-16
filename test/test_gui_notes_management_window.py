@@ -59,6 +59,14 @@ class NotesManagementWindowTest(basetest.BaseGuiTest):
         self.assertEqual(self.get_items(self.win.category_list), [])
         self.win.remove_category_button.click()
 
+    def _fill_inputs(self):
+        self.win.nickname_input.setText("test3")
+        self.win.first_name_input.setText("test3")
+        self.win.name_input.setText("test3")
+        self.win.birthdate_input.setText("29/03/1994")
+        self.win.mail_input.setText("cououc@coucou.rf")
+        self.win.phone_input.setText("0565656451")
+
     def test_add_remove_category_to_note(self):
         self.win.note_list.setCurrentRow(0)
         self._test_add_remove_categories()
@@ -67,12 +75,7 @@ class NotesManagementWindowTest(basetest.BaseGuiTest):
         self.win.add_button.click()
         self._test_add_remove_categories()
         self.win.add_category_button.click()
-        self.win.nickname_input.setText("test3")
-        self.win.first_name_input.setText("test3")
-        self.win.name_input.setText("test3")
-        self.win.birthdate_input.setText("29/03/1994")
-        self.win.mail_input.setText("cououc@coucou.rf")
-        self.win.phone_input.setText("0565656451")
+        self._fill_inputs()
         self.win.save_button.click()
 
         def verif():
@@ -86,3 +89,16 @@ class NotesManagementWindowTest(basetest.BaseGuiTest):
         self.win.note_list.setCurrentRow(0)
         self.win.del_button.click()
         self.assertEqual(self.get_items(self.win.note_list), ["test2"])
+
+    def test_add_note(self):
+        self.win.add_button.click()
+        self.assertFalse(self.win.add_button.isEnabled())
+        self.assertFalse(self.win.del_button.isEnabled())
+        self._fill_inputs()
+        self.win.save_button.click()
+
+        def verif():
+            self.assertEqual(self.get_items(self.win.note_list), ["test3"])
+            self.assertTrue(self.win.add_button.isEnabled())
+            self.assertTrue(self.win.del_button.isEnabled())
+        QtCore.QTimer.singleShot(200, verif)
