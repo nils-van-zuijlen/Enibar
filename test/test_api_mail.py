@@ -26,6 +26,7 @@ import PyQt5
 import api.mail
 import api.notes
 import api.redis
+import mock
 
 api.redis.send_message = lambda x, y: [api.notes.rebuild_note_cache(note) for note in y]
 
@@ -337,6 +338,37 @@ class MailTest(basetest.BaseTest):
                 "Message :\n"
                 "\n"
                 "Test\n"
+                "\n"
+                "\n"
+                "---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n"
+            )
+
+    @mock.patch('smtplib.SMTP')
+    @mock.patch('random.randrange')  # Fix the boundary
+    @mock.patch('os.urandom')  # Fix the Message-ID
+    @freezegun.freeze_time("1994-02-01 00:00:00")
+    def test_send_mail(self, urandom, randrange, smtp):
+        """ Testing sending a mail
+        """
+        randrange.return_value = 0
+        urandom.return_value = b"01234567"
+        self.assertTrue(api.mail.send_mail("eijebong@bananium.fr", "test", "test"))
+
+        smtp.return_value.__enter__.return_value.sendmail.assert_called_with("cafeteria@enib.fr", "eijebong@bananium.fr", 'Content-Type: multipart/alternative; boundary="===============0000000000000000000=="\nMIME-Version: 1.0\nsubject: test\nTo: eijebong@bananium.fr\nFrom: cafeteria@enib.fr\nDate: Tue, 01 Feb 1994 00:00:00 \nMessage-ID: <GAYTEMZUGU3DO.GAYTEMZUGU3DO@enibar.enib.net>\n\n--===============0000000000000000000==\nContent-Type: text/plain; charset="us-ascii"\nMIME-Version: 1.0\nContent-Transfer-Encoding: 7bit\n\ntest\n--===============0000000000000000000==\nContent-Type: text/html; charset="us-ascii"\nMIME-Version: 1.0\nContent-Transfer-Encoding: 7bit\n\n<!dotcype html>\n<html><body>test</body></html>\n--===============0000000000000000000==--\n')
+
+    @mock.patch('smtplib.SMTP')
+    @freezegun.freeze_time("1994-02-01 00:00:00")
+    def test_send_mail_fail(self, smtp):
+        smtp.return_value.__enter__.return_value.sendmail.side_effect = Exception("Error")
+        self.assertFalse(api.mail.send_mail("eijebong@bananium.fr", "test", "test"))
+        with open("mail.log") as logfile:
+            self.assertEqual(logfile.read(),
+                "Mail not sent on 1994-02-01 00:00:00 from cafeteria@enib.fr to eijebong@bananium.fr with error Error\n"
+                "Subject : test\n"
+                "Message :\n"
+                "\n"
+                "<!dotcype html>\n"
+                "<html><body>test</body></html>\n"
                 "\n"
                 "\n"
                 "---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n"
