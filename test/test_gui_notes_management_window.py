@@ -88,7 +88,10 @@ class NotesManagementWindowTest(basetest.BaseGuiTest):
     def test_remove_note(self):
         self.win.note_list.setCurrentRow(0)
         self.win.del_button.click()
-        self.assertEqual(self.get_items(self.win.note_list), ["test2"])
+
+        def verif():
+            self.assertEqual(self.get_items(self.win.note_list), ["test2"])
+        QtCore.QTimer.singleShot(200, verif)
 
     def test_add_note(self):
         self.win.add_button.click()
