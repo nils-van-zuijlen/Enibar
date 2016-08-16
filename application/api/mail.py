@@ -212,7 +212,7 @@ def save_model(name, subject, message, filter_, filter_value):
     try:
         subject.format(**COMPLETION_FIELD)
         message.format(**COMPLETION_FIELD)
-    except ValueError:
+    except KeyError:
         return False
 
     with Cursor() as cursor:
@@ -288,7 +288,7 @@ def save_scheduled_mails(name, active, sched_int, sched_unit, sched_day,
     try:
         subject.format(**COMPLETION_FIELD)
         message.format(**COMPLETION_FIELD)
-    except ValueError:
+    except KeyError:
         return False
 
     with Cursor() as cursor:

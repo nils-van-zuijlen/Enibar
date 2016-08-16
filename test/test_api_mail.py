@@ -198,6 +198,13 @@ class MailTest(basetest.BaseTest):
                 models[i]['filter_value']
             ))
         self.assertEqual(models, list(api.mail.get_models()))
+        self.assertFalse(api.mail.save_model(
+            "Wrong",
+            "Wrong",
+            "{hehe}",
+            1,
+            "test"
+        ))
 
     def test_delete_model(self):
         """ Testing mail model deletion
@@ -290,6 +297,19 @@ class MailTest(basetest.BaseTest):
             mails[1]['last_sent']
         ))
         self.assertEqual(mails, list(api.mail.get_scheduled_mails()))
+        self.assertFalse(api.mail.save_scheduled_mails(
+            "Wrong",
+            1,
+            1,
+            "day",
+            0,
+            0,
+            "",
+            "Wrong",
+            "sender@enib.fr",
+            "{Wrong}",
+            PyQt5.QtCore.QDate()
+        ))
 
     def test_rename_scheduled_mail(self):
         """ Testing rename shceuled mail
