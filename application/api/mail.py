@@ -156,13 +156,6 @@ def log_mail(to, subject, message, from_, error=None):
         logfile.write("-" * 255 + "\n")
 
 
-def dummy_send_mail(to, subject, message, from_="cafeteria@enib.fr"):
-    print("From:   ", from_)
-    print("To:     ", to)
-    print("Subject:", subject)
-    print(message)
-
-
 def format_message(message, note):
     """ Format massge
     Convert placeholders to their values.
