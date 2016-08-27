@@ -24,6 +24,7 @@ import PyQt5
 from database import Cursor
 import api.notes as notes
 import api.transactions as transactions
+import api.note_categories as note_categories
 import api.redis
 
 api.redis.send_message = lambda x, y: [api.notes.rebuild_note_cache(note) for note in y]
@@ -386,6 +387,13 @@ class NotesTest(basetest.BaseTest):
         note = notes.get()[0]
         self.assertEqual(note["tel"], "0200000000")
         self.assertEqual(note["promo"], "3A")
+        notes.change_values("test0", nickname="test1")
+        notes.rebuild_cache()
+
+        note = notes.get()[0]
+        self.assertEqual(note["nickname"], "test1")
+        self.assertEqual(note["tel"], "0200000000")
+        self.assertEqual(note["promo"], "3A")
 
     def test_overdraft(self):
         """ Testing overdraft support
@@ -449,7 +457,30 @@ class NotesTest(basetest.BaseTest):
         """
         self.add_note("test")
         notes.transactions(['test'], 10, do_not=True)
+        trs = [{
+            'note': "test",
+            'category': "Note",
+            'product': "",
+            'price_name': "test",
+            'quantity': "1",
+            'liquid_quantity': 0,
+            'percentage': 0,
+            'price': -10}]
+        transactions.log_transactions(trs)
         self.assertEqual(notes.get()[0]['note'], 0)
+        notes.NOTES_FIELDS_CACHE = {}  # Ensure that this cache is rebuilt in rebuild_cache
+        notes.NOTES_STATS_FIELDS_CACHE = {}
         notes.rebuild_cache()
         self.assertEqual(notes.get()[0]['note'], 10)
+
+    def test_note_categories_in_notes(self):
+        self.add_note("test")
+        note_categories.add("cat1")
+        note_categories.add("cat2")
+        note_categories.add("cat3")
+        note_categories.add_notes(["test"], "cat1")
+        note_categories.add_notes(["test"], "cat2")
+        notes.rebuild_cache()
+        note = notes.get()[0]
+        self.assertEqual(note['categories'], ["cat1", "cat2"])
 
