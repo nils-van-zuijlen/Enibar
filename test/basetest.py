@@ -19,7 +19,6 @@
 
 from PyQt5 import QtCore, QtWidgets
 from database import Cursor
-from pyvirtualdisplay import Display
 import api.users
 import api.notes
 import api.redis
@@ -33,12 +32,6 @@ import signal
 
 from unittest.runner import TextTestResult, TextTestRunner
 from unittest.signals import registerResult
-
-if int(os.environ['USE_VD']):
-    import atexit
-    display = Display(visible=0, size=(800, 600))
-    display.start()
-    atexit.register(display.stop)
 
 
 def getDescription(self, test):

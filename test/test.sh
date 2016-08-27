@@ -57,9 +57,17 @@ if [[ $TEST == 1 ]]; then
 	# -- MYSQL --
 	mysql --socket=/tmp/mysql.socket --user="root" --port 4569 < ../db.sql
     export TEST_ENIBAR=1
+    if [[ $USE_VD == 1 ]]; then
+        Xvfb :1023 -screen 0 1600x1200x24+32 &
+        XVFB=$!
+        export DISPLAY=:1023
+    fi
 	# -- TEST --
 	rm -f .coverage
 	nosetests ../test/*.py -v --with-coverage --cover-package=api,gui || TEST_FAILED=1
+    if [[ $USE_VD == 1 ]]; then
+        kill $XVFB
+    fi
 
 	mv settings.py.bak settings.py
     kill `cat /tmp/mysql.pid`
