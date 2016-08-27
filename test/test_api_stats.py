@@ -21,11 +21,13 @@ import basetest
 import api.stats as stats
 import api.notes as notes
 import api.transactions as transactions
+import api.redis
 
 
 class StatsTests(basetest.BaseTest):
     def setUp(self):
         super().setUp()
+        api.redis.send_message = lambda x, y: [notes.rebuild_note_cache(note) for note in y]
         self._reset_db()
         notes.add("test1",
             "test1",

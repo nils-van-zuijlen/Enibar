@@ -28,11 +28,10 @@ import api.notes
 import api.redis
 import mock
 
-api.redis.send_message = lambda x, y: [api.notes.rebuild_note_cache(note) for note in y]
-
 
 class MailTest(basetest.BaseTest):
     def setUp(self):
+        api.redis.send_message = lambda x, y: [api.notes.rebuild_note_cache(note) for note in y]
         super().setUp()
         self._reset_db()
         if os.path.isfile("mail.log"):

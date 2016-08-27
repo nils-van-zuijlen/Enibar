@@ -27,11 +27,10 @@ import api.transactions as transactions
 import api.note_categories as note_categories
 import api.redis
 
-api.redis.send_message = lambda x, y: [api.notes.rebuild_note_cache(note) for note in y]
-
 
 class NotesTest(basetest.BaseTest):
     def setUp(self):
+        api.redis.send_message = lambda x, y: [api.notes.rebuild_note_cache(note) for note in y]
         super().setUp()
         self._reset_db()
         try:

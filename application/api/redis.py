@@ -34,7 +34,7 @@ def set_key(key, value, callback):
     async def wrapper():
         async with connection.get() as redis:
             await redis.set(key, value)
-        callback()
+            callback()
     asyncio.ensure_future(wrapper())
 
 

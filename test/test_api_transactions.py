@@ -21,11 +21,10 @@ import basetest
 import api.transactions as transactions
 import api.notes as notes
 
-notes.api.redis.send_message = lambda x, y: [notes.rebuild_note_cache(note) for note in y]
-
 
 class TransactionsTest(basetest.BaseTest):
     def setUp(self):
+        notes.api.redis.send_message = lambda x, y: [notes.rebuild_note_cache(note) for note in y]
         super().setUp()
         self._reset_db()
         notes.add("test1",
