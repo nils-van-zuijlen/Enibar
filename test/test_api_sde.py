@@ -50,7 +50,7 @@ class ApiSdeTests(basetest.BaseTest):
             api.notes.transactions(["test" + str(i)], -i)
             api.notes.rebuild_cache()
         self.loop = asyncio.get_event_loop()
-        self.loop.run_until_complete(api.redis.connect())
+        settings.USE_PROXY = False
 
     def test_sde_add_note(self):
         """ Testing adding a note to the queue
@@ -205,3 +205,22 @@ class ApiSdeTests(basetest.BaseTest):
         server.close()
         self.loop.run_until_complete(server.wait_closed())
 
+    def test_sde_connection_with_proxy(self):
+        settings.USE_PROXY = True
+        settings.PROXY_AUTH = "http://test:test@127.0.0.1:3222"
+        async def test_func():
+            await api.sde.send_notes(["test1"])
+            task = asyncio.ensure_future(api.sde.process_queue())
+            await asyncio.sleep(1)
+            task.cancel()
+            msg = MockSdeServer.received.split('\r\n')
+            self.assertEqual(msg[0], 'PUT http://127.0.0.1:52412/note HTTP/1.1')
+
+        coro = self.loop.create_server(MockSdeServer, '127.0.0.1', 3222)
+        server = self.loop.run_until_complete(coro)
+
+        task = asyncio.ensure_future(test_func())
+        self.loop.run_until_complete(task)
+
+        server.close()
+        self.loop.run_until_complete(server.wait_closed())
