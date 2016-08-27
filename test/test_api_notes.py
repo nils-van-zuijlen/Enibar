@@ -45,6 +45,8 @@ class NotesTest(basetest.BaseTest):
             pass
         with Cursor() as cursor:
             cursor.exec_("SET TIMESTAMP=unix_timestamp('2014-12-24 06:00:00')")
+        notes.NOTES_STATS_FIELDS_CACHE = {}
+        notes.NOTES_FIELDS_CACHE = {}  # Ensure that this cache is rebuilt in rebuild_cache
 
     def test_add(self):
         """ Testing adding notes """
@@ -388,6 +390,7 @@ class NotesTest(basetest.BaseTest):
         self.assertEqual(note["tel"], "0200000000")
         self.assertEqual(note["promo"], "3A")
         notes.change_values("test0", nickname="test1")
+        notes.NOTES_FIELDS_CACHE = {}
         notes.rebuild_cache()
 
         note = notes.get()[0]
@@ -468,9 +471,11 @@ class NotesTest(basetest.BaseTest):
             'price': -10}]
         transactions.log_transactions(trs)
         self.assertEqual(notes.get()[0]['note'], 0)
-        notes.NOTES_FIELDS_CACHE = {}  # Ensure that this cache is rebuilt in rebuild_cache
-        notes.NOTES_STATS_FIELDS_CACHE = {}
+        notes.NOTES_FIELDS_CACHE = {}
         notes.rebuild_cache()
+        self.assertEqual(notes.get()[0]['note'], 10)
+        notes.NOTES_STATS_FIELDS_CACHE = {}
+        notes.rebuild_note_cache("test1")
         self.assertEqual(notes.get()[0]['note'], 10)
 
     def test_note_categories_in_notes(self):
