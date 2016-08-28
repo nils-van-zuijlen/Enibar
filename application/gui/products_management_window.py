@@ -29,7 +29,6 @@ import api.products
 import api.categories
 import api.prices
 import api.validator
-from .adding_barcode_window import AddingBarcodeWindow
 
 
 class ProductsManagementWindow(QtWidgets.QDialog):
@@ -156,8 +155,6 @@ class ProductsManagementWindow(QtWidgets.QDialog):
             return
 
         if len(indexes) > 1:
-            # If more than 1 product is selected, we must disable the douchette.
-            ConsumptionPricesItem.BUTTON_ENABLED = False
             self.name_input.setEnabled(False)
         else:
             self.name_input.setEnabled(True)
@@ -354,7 +351,6 @@ class ConsumptionPricesItem(QtWidgets.QWidget):
         self.name = name
         self.value = value
         self.win = None
-        self.barcode = None
         self.percentage = percentage
 
         self.label = QtWidgets.QLabel(name)
@@ -364,41 +360,24 @@ class ConsumptionPricesItem(QtWidgets.QWidget):
         if percentage is not None:
             self.percentage_input = QtWidgets.QDoubleSpinBox()
             self.percentage_input.setSuffix("°")
-        self.barcode_btn = QtWidgets.QPushButton()
         self.input.setMaximum(999.99)
         self.input.setLocale(QtCore.QLocale('English'))
         self.label.setBuddy(self.input)
-        self.barcode_btn.clicked.connect(self.add_barcode)
-        self.barcode_btn.setSizePolicy(QtWidgets.QSizePolicy.Maximum,
-            QtWidgets.QSizePolicy.Maximum)
-
         self._build()
 
         self.layout = QtWidgets.QHBoxLayout(self)
         self.layout.addWidget(self.label)
         self.layout.addWidget(self.input)
-        self.layout.addWidget(self.barcode_btn)
         if percentage is not None:
             self.layout.addWidget(self.percentage_input)
 
     def _build(self):
-        """ Fill the inputs with walues and update the douchette button
+        """ Fill the inputs with walues
         """
         self.label = QtWidgets.QLabel(self.name)
         self.input.setValue(self.value)
         if self.percentage is not None:
             self.percentage_input.setValue(self.percentage)
-
-        if self.barcode and ConsumptionPricesItem.BUTTON_ENABLED:
-            self.barcode_btn.setStyleSheet('* {background-color: #A3C1DA;}')
-        if not ConsumptionPricesItem.BUTTON_ENABLED:
-            self.barcode_btn.setStyleSheet('* {background-color: #FF0000;}')
-        self.barcode_btn.setEnabled(ConsumptionPricesItem.BUTTON_ENABLED)
-
-    def add_barcode(self):
-        """ Called when the button for the barcode is pressed
-        """
-        self.win = AddingBarcodeWindow(self.id_)
 
 
 class ConsumptionList(QtWidgets.QTreeWidget):

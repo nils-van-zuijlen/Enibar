@@ -180,21 +180,6 @@ class PricesTest(basetest.BaseTest):
         # The extra length of api.prices.get is due to product creation
         self.assertEqual(len(prices), len(list(api.prices.get())) - 1)
 
-    def test_set_barcode(self):
-        """ Testing set_barcode
-        """
-        pid = api.products.add("Lapin", category_id=self.cat_eat)
-        desc_id = api.prices.add_descriptor("Unité", self.cat_eat, 100)
-        price = api.prices.add(pid, desc_id, 1, 5)
-        self.assertTrue(api.prices.set_barcode(price, '33333'))
-        self.assertFalse(api.prices.set_barcode(50, '33333'))  # Do not allow same barcode multiple times.
-        self.assertEqual(api.prices.get_product_by_barcode("33333"), price)
-        api.prices.set_barcode(price, '33334')
-        self.assertEqual(api.prices.get_product_by_barcode("33334"), price)
-        api.prices.delete_barcode('33334')
-        self.assertEqual(api.prices.get_product_by_barcode("33334"), None)
-        self.assertEqual(list(api.prices.get_barcodes(price)), [{'id': 1, 'price_id': price, 'value': '33333'}])
-
     def test_alcohol_majoration(self):
         """ Testing alcohol majoration
         """

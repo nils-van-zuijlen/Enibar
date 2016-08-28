@@ -31,7 +31,6 @@ from functools import partial
 from .auth_prompt_window import ask_auth
 from .validation_window import ValidationWindow
 from .products_management_window import ProductsManagementWindow
-from .douchette_window import DouchetteWindow
 from .empty_note_window import EmptyNoteWindow
 from .notes_management_window import NotesManagementWindow
 from .group_actions_window import GroupActionsWindow
@@ -299,16 +298,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.notes_list.setFocus()
 
     def event(self, event):
-        """ Rewrite the event loop. Used to handle the douchette and the \n key
-            If the " key is pressed, open a Douchette window. If the \n key is
-            pressed, call self.validate_transaction.
+        """ Rewrite the event loop. Used to handle the  \n key
+            If the \n key is pressed, call self.validate_transaction.
         """
         if isinstance(event, QtGui.QKeyEvent):
-            if event.type() == QtCore.QEvent.KeyRelease:
-                if event.text() == "\"":
-                    self.win = DouchetteWindow(self.on_douchette)
-                    return True
-            elif event.type() == QtCore.QEvent.KeyPress:
+            if event.type() == QtCore.QEvent.KeyPress:
                 if event.key() == QtCore.Qt.Key_Return or\
                         event.key() == QtCore.Qt.Key_Enter:
                     self.validate_transaction()
@@ -318,26 +312,6 @@ class MainWindow(QtWidgets.QMainWindow):
                     return True
 
         return super().event(event)
-
-    def on_douchette(self, text):
-        """ Called after the douchette is fired !
-        """
-        price = api.prices.get_unique(id=api.prices.get_product_by_barcode(text))
-        if not price:
-            return
-        catname = api.categories.get_unique(id=price["category"])
-        if not catname:
-            return
-        product = api.products.get_unique(id=price["product"])
-        if not product:
-            return
-        self.product_list.add_product(
-            catname["name"],
-            product["name"],
-            price["label"],
-            price["value"])
-        text = "{:.2f} €".format(self.product_list.get_total())
-        self.total.setText(text)
 
     def validate_transaction(self):
         """ Validate transaction if a note is currently selected. And give the

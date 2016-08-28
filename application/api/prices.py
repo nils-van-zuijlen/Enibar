@@ -190,54 +190,6 @@ def get(**kwargs):
                 }
 
 
-def set_barcode(id_, barcode):
-    """ Change the barcod assiociated to a product
-    """
-    with Cursor() as cursor:
-        cursor.prepare("INSERT INTO barcodes (price_id, value) VALUES(:price, :value)")
-        cursor.bindValue(":price", id_)
-        cursor.bindValue(":value", barcode)
-        cursor.exec_()
-        return not cursor.lastError().isValid()
-
-
-def get_barcodes(price_id):
-    """ Return a lit of barcodes assiociated with a price
-    """
-    with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM barcodes WHERE price_id=:id")
-        cursor.bindValue(":id", price_id)
-        cursor.exec_()
-        while cursor.next():
-            record = cursor.record()
-            yield {
-                'id': record.value('id'),
-                'price_id': record.value('price_id'),
-                'value': record.value('value'),
-            }
-
-
-def delete_barcode(barcode):
-    """ Delete a barcode
-    """
-    with Cursor() as cursor:
-        cursor.prepare("DELETE FROM barcodes WHERE value=:barcode")
-        cursor.bindValue(":barcode", barcode)
-        return cursor.exec_()
-
-
-def get_product_by_barcode(barcode):
-    """ Returns a price id when provided a barcode
-    """
-    with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM barcodes WHERE value=:barcode")
-        cursor.bindValue(":barcode", barcode)
-        cursor.exec_()
-        if cursor.next():
-            return cursor.record().value('price_id')
-    return None
-
-
 def set_value(id_, value):
     """ Set price value
     If you have to change value of multiple prices use set_multiple_values
