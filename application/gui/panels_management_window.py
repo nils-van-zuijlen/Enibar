@@ -33,7 +33,7 @@ from .products_management_window import ConsumptionList
 
 
 class PanelsManagementWindow(QtWidgets.QDialog):
-    """ AddNote window class """
+    """ PanelsManagementWindow class """
     def __init__(self, parent=None):
         super().__init__(parent)
         uic.loadUi('ui/panels_management_window.ui', self)
@@ -68,15 +68,9 @@ class PanelsManagementWindow(QtWidgets.QDialog):
         """ Callback to remove panel
         """
         for index in reversed(self.panels.selectedIndexes()):
-            if api.panels.remove(index.data()):
-                item = self.panels.takeItem(index.row())
-                del item
-            else:
-                gui.utils.error(
-                    "Impossible de suppimer le panel {}".format(
-                        index.data()
-                    )
-                )
+            api.panels.remove(index.data())
+            item = self.panels.takeItem(index.row())
+            del item
 
     def on_selection(self):
         """ Called when a panel is selected
@@ -109,18 +103,13 @@ class PanelsManagementWindow(QtWidgets.QDialog):
         currentItem = self.panels.currentItem()
         if not currentItem:
             return
-        panel = api.panels.get_unique(name=currentItem.text())
-        if not panel:
-            return
-        return panel
+        return api.panels.get_unique(name=currentItem.text())
 
     def on_hide(self, state):
         """ Toggle the hidden parameter in database. Called when "Panel cache"
             is clicked
         """
         panel = self.get_current_panel()
-        if not panel:
-            return
 
         if state:
             api.panels.hide(panel["name"])
@@ -140,21 +129,14 @@ class PanelsManagementWindow(QtWidgets.QDialog):
             if index.parent().isValid():
                 cat_name = index.parent().data()
                 category = api.categories.get_unique(name=cat_name)
-                if not category:
-                    continue
                 product = api.products.get_unique(
                     category=category['id'],
                     name=index.data()
                 )
-                if not product:
-                    # Error
-                    continue
                 products_added.append(product['id'])
             else:
                 cat_name = index.data()
                 category = api.categories.get_unique(name=cat_name)
-                if not category:
-                    continue
                 for product in api.products.get(category=category['id']):
                     products_added.append(product['id'])
 
@@ -170,8 +152,6 @@ class PanelsManagementWindow(QtWidgets.QDialog):
         if not self.panels.currentItem():
             return
         panel = api.panels.get_unique(name=self.panels.currentItem().text())
-        if not panel:
-            return
 
         products_deleted = []
         category = None
@@ -179,21 +159,14 @@ class PanelsManagementWindow(QtWidgets.QDialog):
             if index.parent().isValid():
                 cat_name = index.parent().data()
                 category = api.categories.get_unique(name=cat_name)
-                if not category:
-                    continue
                 product = api.products.get_unique(
                     category=category['id'],
                     name=index.data()
                 )
-                if not product:
-                    # Error
-                    continue
                 products_deleted.append(product['id'])
             else:
                 cat_name = index.data()
                 category = api.categories.get_unique(name=cat_name)
-                if not category:
-                    continue
                 for product in api.products.get(category=category['id']):
                     products_deleted.append(product['id'])
 
