@@ -291,6 +291,20 @@ class NotesManagementWindow(QtWidgets.QDialog):
             if isinstance(obj, Input):
                 action(obj)
 
+    def cotiz_fnc(self):
+        transactions = []
+        if api.note_categories.remove_notes([self.current_nickname], "Non cotiz"):
+            transactions.append({'note': self.current_nickname,
+                             'category': "Note",
+                             'product': "cotiz",
+                             'price_name': "Solde",
+                             'quantity': 1,
+                             'price': -1.0,
+                            }
+            )
+            api.notes.transactions([self.current_nickname], -1.0)
+            api.transactions.log_transactions(transactions)
+
 
 class ManageNotesList(gui.notes_list_widget.NotesList):
     """ This is a NotesList but the refresh function is overwritten.
