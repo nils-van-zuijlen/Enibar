@@ -134,6 +134,8 @@ class MainWindow(QtWidgets.QMainWindow):
         elif channel == "enibar-settings":
             settings.synced.refresh_cache()
             self.panels.rebuild()
+        elif channel == "enibar-panels":
+            self.panels.rebuild()
         try:
             self.menu_bar.cur_window.redis_handle(channel, message)
         except AttributeError:
@@ -399,6 +401,9 @@ class MenuBar(QtWidgets.QMenuBar):
         if self.cur_window is not None:
             self.cur_window.close()
 
+    def _trigger_panel_rebuild(self):
+        api.redis.send_message('enibar-panels', {})
+
     @ask_auth("manage_users")
     def user_managment_fnc(self, _):
         """ Call user managment window """
@@ -411,7 +416,7 @@ class MenuBar(QtWidgets.QMenuBar):
         """ Call consumption managment window """
         self._close_window()
         self.cur_window = ProductsManagementWindow(self)
-        self.cur_window.finished.connect(self.parent().panels.rebuild)
+        self.cur_window.finished.connect(self._trigger_panel_rebuild)
         self._connect_window()
 
     def consumption_management_fnc_no_auth(self):
@@ -421,7 +426,7 @@ class MenuBar(QtWidgets.QMenuBar):
         """
         self._close_window()
         self.cur_window = ProductsManagementWindow(self)
-        self.cur_window.finished.connect(self.parent().panels.rebuild)
+        self.cur_window.finished.connect(self._trigger_panel_rebuild)
         self._connect_window()
 
     @ask_auth("manage_notes")
@@ -453,7 +458,7 @@ class MenuBar(QtWidgets.QMenuBar):
         """
         self._close_window()
         self.cur_window = PanelsManagementWindow(self)
-        self.cur_window.finished.connect(self.parent().panels.rebuild)
+        self.cur_window.finished.connect(self._trigger_panel_rebuild)
         self._connect_window()
 
     def panel_managment_fnc_no_auth(self):
@@ -463,7 +468,7 @@ class MenuBar(QtWidgets.QMenuBar):
         """
         self._close_window()
         self.cur_window = PanelsManagementWindow(self)
-        self.cur_window.finished.connect(self.parent().panels.rebuild)
+        self.cur_window.finished.connect(self._trigger_panel_rebuild)
         self._connect_window()
 
     @ask_auth("manage_notes", pass_performer=True)
