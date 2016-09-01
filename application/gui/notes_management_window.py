@@ -107,8 +107,9 @@ class NotesManagementWindow(QtWidgets.QDialog):
     def save_fnc(self):
         """ Called when "Sauvegarder" is clicked.
         """
+        nick = self.nickname_input.text()
         if self.adding:
-            if api.notes.add(self.nickname_input.text(),
+            if api.notes.add(nick,
                              self.first_name_input.text(),
                              self.name_input.text(),
                              self.mail_input.text(),
@@ -119,7 +120,6 @@ class NotesManagementWindow(QtWidgets.QDialog):
                              self.stats_checkbox.isChecked(),
                              self.mails_checkbox.isChecked()):
                 self.adding = False
-                nick = self.nickname_input.text()
                 self.empty_inputs()
                 self.add_button.setEnabled(True)
                 for category in self.categories_added:
@@ -130,7 +130,7 @@ class NotesManagementWindow(QtWidgets.QDialog):
         else:
             birthdate = datetime.datetime.strptime(self.birthdate_input.text(),
                                                    "%d/%m/%Y").timestamp()
-            api.notes.change_values(self.current_nickname,
+            api.notes.change_values(nick,
                                     tel=self.phone_input.text(),
                                     mail=self.mail_input.text(),
                                     birthdate=birthdate,
@@ -141,7 +141,7 @@ class NotesManagementWindow(QtWidgets.QDialog):
             if self.photo_selected:
                 api.notes.change_photo(self.nickname_input.text(),
                                        self.photo_selected)
-        api.redis.send_message("enibar-notes-mgnt", [self.nickname_input.text()])
+        api.redis.send_message("enibar-notes-mgnt", [nick])
         self.photo_selected = None
 
     def fill_inputs(self, note):
