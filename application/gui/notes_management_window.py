@@ -130,7 +130,7 @@ class NotesManagementWindow(QtWidgets.QDialog):
         else:
             birthdate = datetime.datetime.strptime(self.birthdate_input.text(),
                                                    "%d/%m/%Y").timestamp()
-            api.notes.change_values(nick,
+            api.notes.change_values(self.current_nickname,
                                     tel=self.phone_input.text(),
                                     mail=self.mail_input.text(),
                                     birthdate=birthdate,
