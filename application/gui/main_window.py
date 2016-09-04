@@ -50,6 +50,7 @@ from .settings_window import SettingsWindow
 from .note_categories_management_window import NoteCategoriesManagementWindow
 import api.categories
 import api.notes
+import api.soundsystem
 import api.transactions
 import api.redis
 import datetime
@@ -372,6 +373,16 @@ class MainWindow(QtWidgets.QMainWindow):
                     do_not=True)
                 api.notes.change_ecocups(self.selected_nickname, self.eco_diff)
                 self.reset_product_list()
+
+                infos = api.notes.get(
+                    lambda x: self.selected_nickname == x["nickname"]
+                )[0]
+
+                api.soundsystem.play(
+                    'new_transaction',
+                    note=infos['note'] - total
+                )
+
             else:
                 gui.utils.error('Impossible de valider la transaction')
 
