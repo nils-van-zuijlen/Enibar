@@ -27,6 +27,7 @@ RefillNote Window
 from PyQt5 import QtWidgets, uic
 
 import api.notes
+import api.soundsystem
 import api.transactions
 import api.validator
 import gui.utils
@@ -74,6 +75,7 @@ class RefillNoteWindow(QtWidgets.QDialog):
             to_add
         )
         super().accept()
+        api.soundsystem.play('refill')
 
     def on_change(self):
         """ Set state of the validation button.
