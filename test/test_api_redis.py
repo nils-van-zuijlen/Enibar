@@ -17,14 +17,26 @@
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 import aioredis
-import sys
 import api.redis
-import imp
 import asyncio
 import basetest
+import functools
+import imp
+import sys
+import time
+import uuid
+from PyQt5 import QtCore, QtWidgets
 
 
-class RedisTest(basetest.BaseTest):
+def give_random_key(func):
+    @functools.wraps(func)
+    def test_inner(self):
+        key = uuid.uuid4().hex
+        func(self, key)
+    return test_inner
+
+
+class RedisTest(basetest.BaseGuiTest):
     def setUp(self):
         # We need to reset api.redis because we overwrite it in some tests
         imp.reload(api.redis)
@@ -69,4 +81,76 @@ class RedisTest(basetest.BaseTest):
         task = asyncio.ensure_future(func())
         self.loop.run_until_complete(task)
 
+    @give_random_key
+    def test_locking(self, key):
+        self.assertFalse(api.redis.blocking_connection.exists(key))
+        self.assertEqual(api.redis.LOCKS, {})
+        self.assertTrue(api.redis.lock(key, 10))
+        self.assertEqual(api.redis.LOCKS, {key: 10})
+        self.assertTrue(api.redis.blocking_connection.exists(key))
+        self.assertFalse(api.redis.lock(key, 10))
+
+    @give_random_key
+    def test_relocking(self, key):
+        self.assertTrue(api.redis.lock(key, 1))
+        time.sleep(0.9)
+        api.redis._renew_lock(key, 1)
+        time.sleep(0.2)
+        # With a TTL of 1 second and a renewal after 0.9, the lock should still
+        # be held
+        self.assertFalse(api.redis.lock(key, 1))
+        time.sleep(0.7)
+        api.redis._renew_locks()
+        time.sleep(0.2)
+        self.assertFalse(api.redis.lock(key, 1))
+
+    @give_random_key
+    def test_expiring_lock(self, key):
+        self.assertTrue(api.redis.lock(key, 1))
+        time.sleep(1)
+        # TODO: Warning ?
+        self.assertTrue(api.redis.lock(key, 1))
+
+    @give_random_key
+    def test_unlocking(self, key):
+        self.assertTrue(api.redis.lock(key, 1))
+        api.redis.unlock(key)
+        self.assertEqual(api.redis.LOCKS, {})
+        self.assertTrue(api.redis.lock(key, 1))
+
+    @give_random_key
+    def test_lock_decorator(self, key):
+        function_called = 0
+
+        @api.redis.with_lock(key, 1)
+        def test_function():
+            nonlocal function_called
+            function_called += 1
+
+        test_function()
+        test_function()
+        self.assertEqual(function_called, 2)
+
+        function_called = 0
+
+        @api.redis.with_lock(key, 1)
+        def test_function2():
+            nonlocal function_called
+            function_called += 1
+
+            def verif():
+                validation = self.app.activeWindow()
+                self.assertIsInstance(validation, QtWidgets.QMessageBox)
+                validation.accept()
+            QtCore.QTimer.singleShot(400, verif)
+            # This call should be blocked and show an error window
+            test_function2()
+
+        test_function2()
+        self.assertEqual(function_called, 1)
+
+    @give_random_key
+    def test_unlocking_non_locked_key(self, key):
+        with self.assertRaises(api.redis.LockingException):
+            api.redis.unlock(key)
 

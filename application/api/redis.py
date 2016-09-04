@@ -2,6 +2,7 @@ import settings
 import asyncio
 import aioredis
 import redis
+import gui.utils
 
 connection = None
 blocking_connection = redis.StrictRedis(host=settings.HOST, port=6379, db=0)
@@ -50,4 +51,58 @@ async def ping_redis():
     while True:
         async with connection.get() as redis:
             await redis.ping()
+            _renew_locks()
         await asyncio.sleep(10)
+
+
+class LockingException(Exception):
+    pass
+
+
+# This is all the we currently have and need to renew
+# In the form {NAME: TTL}
+LOCKS = {}
+
+
+def lock(lock_name, ttl):
+    if blocking_connection.exists(lock_name):
+        return False
+    LOCKS[lock_name] = ttl
+    blocking_connection.set(lock_name, "", ttl)
+    return True
+
+
+def unlock(lock_name):
+    if lock_name not in LOCKS:
+        raise LockingException
+
+    del LOCKS[lock_name]
+    blocking_connection.delete(lock_name)
+
+
+def _renew_lock(lock_name, ttl):
+    blocking_connection.expire(lock_name, ttl)
+
+
+def _renew_locks():
+    for lock, ttl in LOCKS.items():
+        _renew_lock(lock, ttl)
+
+
+def with_lock(lock_name, ttl):
+    def wrapper(func):
+        def inner(*args, **kwargs):
+            if lock(lock_name, ttl):
+                res = func(*args, **kwargs)
+                unlock(lock_name)
+                return res
+            else:
+                gui.utils.error(
+                    "Déjà utilsé",
+                    ("Cette fonctionnalitée est déjà utilisée sur un autre"
+                    "instance. Si ce n'est pas le cas, attendez %s secondes et"
+                    "réessayez") % ttl
+                )
+        return inner
+    return wrapper
+
