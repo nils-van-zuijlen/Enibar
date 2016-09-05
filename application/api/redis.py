@@ -88,21 +88,3 @@ def _renew_locks():
     for lock, ttl in LOCKS.items():
         _renew_lock(lock, ttl)
 
-
-def with_lock(lock_name, ttl):
-    def wrapper(func):
-        def inner(*args, **kwargs):
-            if lock(lock_name, ttl):
-                res = func(*args, **kwargs)
-                unlock(lock_name)
-                return res
-            else:
-                gui.utils.error(
-                    "Déjà utilsé",
-                    ("Cette fonctionnalitée est déjà utilisée sur un autre"
-                    "instance. Si ce n'est pas le cas, attendez %s secondes et"
-                    "réessayez") % ttl
-                )
-        return inner
-    return wrapper
-

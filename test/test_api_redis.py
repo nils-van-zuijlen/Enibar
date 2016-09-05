@@ -119,37 +119,6 @@ class RedisTest(basetest.BaseGuiTest):
         self.assertTrue(api.redis.lock(key, 1))
 
     @give_random_key
-    def test_lock_decorator(self, key):
-        function_called = 0
-
-        @api.redis.with_lock(key, 1)
-        def test_function():
-            nonlocal function_called
-            function_called += 1
-
-        test_function()
-        test_function()
-        self.assertEqual(function_called, 2)
-
-        function_called = 0
-
-        @api.redis.with_lock(key, 1)
-        def test_function2():
-            nonlocal function_called
-            function_called += 1
-
-            def verif():
-                validation = self.app.activeWindow()
-                self.assertIsInstance(validation, QtWidgets.QMessageBox)
-                validation.accept()
-            QtCore.QTimer.singleShot(400, verif)
-            # This call should be blocked and show an error window
-            test_function2()
-
-        test_function2()
-        self.assertEqual(function_called, 1)
-
-    @give_random_key
     def test_unlocking_non_locked_key(self, key):
         with self.assertRaises(api.redis.LockingException):
             api.redis.unlock(key)
