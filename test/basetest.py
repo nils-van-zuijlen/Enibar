@@ -199,6 +199,7 @@ class BaseTest(unittest.TestCase):
 class BaseGuiTest(BaseTest):
     def setUp(self):
         super().setUp()
+        api.redis.send_message = lambda x, y: [api.notes.rebuild_note_cache(note) for note in y]
         self.app = QtWidgets.QApplication(sys.argv)
         signal.signal(signal.SIGALRM, self.handle_timeout)
         signal.alarm(30)

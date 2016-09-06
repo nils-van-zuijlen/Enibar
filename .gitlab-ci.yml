@@ -1,2 +1,16 @@
-test:
-    script: ./test.sh -tp
+stages:
+    - api
+    - gui
+    - pep
+
+api:
+    stage: api
+    script: ./test.sh -a
+
+gui:
+    stage: gui
+    script: ./test.sh -g
+
+pep:
+    stage: pep
+    script: ./test.sh -p

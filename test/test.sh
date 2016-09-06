@@ -22,7 +22,7 @@ export USE_VD=1
 APPLICATION_DIR="application"
 cd $APPLICATION_DIR
 
-TEMP=`getopt -o tp --long test,pep,no-vd -- "$@"`
+TEMP=`getopt -o agp --long api,gui,pep,no-vd -- "$@"`
 eval set -- "$TEMP"
 
 # == EXTRACT OPTIONS
@@ -31,8 +31,11 @@ while true ; do
 		-p|--pep)
 			PEP=1
 			shift;;
-		-t|--test)
-			TEST=1
+		-a|--api)
+			API=1
+			shift ;;
+		-g|--gui)
+			GUI=1
 			shift ;;
 		--no-vd)
 			export USE_VD=0
@@ -43,7 +46,7 @@ while true ; do
 done
 
 
-if [[ $TEST == 1 ]]; then
+if [[ $API == 1 || $GUI == 1 ]]; then
 	# -- BACKUP --
 	rm -f img/coucou.jpg
 	cp settings.py settings.py.bak
@@ -64,7 +67,14 @@ if [[ $TEST == 1 ]]; then
     fi
 	# -- TEST --
 	rm -f .coverage
-	nosetests ../test/*.py -v --with-coverage --cover-package=api,gui || TEST_FAILED=1
+    if [[ $API == 1 ]]; then
+	    nosetests ../test/*api*.py -v --with-coverage --cover-package=api || TEST_FAILED=1
+    fi
+
+    if [[ $GUI == 1 ]]; then
+	    nosetests ../test/*gui*.py -v --with-coverage --cover-package=gui || TEST_FAILED=1
+    fi
+
     if [[ $USE_VD == 1 ]]; then
         kill $XVFB
     fi

@@ -36,9 +36,8 @@ def give_random_key(func):
     return test_inner
 
 
-class RedisTest(basetest.BaseGuiTest):
+class RedisTest(basetest.BaseTest):
     def setUp(self):
-        # We need to reset api.redis because we overwrite it in some tests
         imp.reload(api.redis)
         super().setUp()
 
