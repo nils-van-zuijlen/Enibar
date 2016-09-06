@@ -40,6 +40,10 @@ class MenuTest(basetest.BaseGuiTest):
         self._reset_db()
         self.win = gui.main_window.MainWindow()
 
+    def tearDown(self):
+        self.win.menu_bar._close_window()
+        super().tearDown()
+
     def test_menu_user_managment(self):
         """ Testing user managment opening
         """

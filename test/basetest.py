@@ -139,7 +139,7 @@ class BaseTest(unittest.TestCase):
 
     def add_note(self, nick, name="test1", first_name="test1", mail="test@pouette.fr",
             stats_inscription=True, mails_inscription=True):
-        return api.notes.add(nick,
+        note = api.notes.add(nick,
             first_name,
             name,
             mail,
@@ -150,6 +150,8 @@ class BaseTest(unittest.TestCase):
             stats_inscription,
             mails_inscription
         )
+        api.notes.rebuild_cache()
+        return note
 
     def _count(self, db):
         with Cursor() as cursor:

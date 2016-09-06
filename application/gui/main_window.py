@@ -400,11 +400,15 @@ class MenuBar(QtWidgets.QMenuBar):
         self.parent().rebuild_notes_list()
         self._close_window()
 
-    def _connect_window(self):
+    def _connect_window(self, lock=None):
         """ Connect the finished signal of the opened window to
             refresh_parent
         """
         self.cur_window.finished.connect(self._refresh_parent)
+        if lock is not None:
+            def unlock():
+                api.redis.unlock(lock)
+            self.cur_window.finished.connect(unlock)
 
     def _close_window(self):
         """ Close the current open window
@@ -415,20 +419,33 @@ class MenuBar(QtWidgets.QMenuBar):
     def _trigger_panel_rebuild(self):
         api.redis.send_message('enibar-panels', {})
 
+    def try_locking(self, key):
+        if api.redis.lock(key, 10):
+            return True
+        gui.utils.error(
+            "Déjà utilsé",
+            ("Cette fonctionnalitée est déjà utilisée sur un autre"
+            "instance. Si ce n'est pas le cas, attendez 10 secondes et"
+            "réessayez")
+        )
+        return False
+
     @ask_auth("manage_users")
     def user_managment_fnc(self, _):
         """ Call user managment window """
-        self._close_window()
-        self.cur_window = UsersManagementWindow()
-        self._connect_window()
+        if self.try_locking("user_management"):
+            self._close_window()
+            self.cur_window = UsersManagementWindow()
+            self._connect_window("user_management")
 
     @ask_auth("manage_products")
     def consumption_managment_fnc(self, _):
         """ Call consumption managment window """
-        self._close_window()
-        self.cur_window = ProductsManagementWindow(self)
-        self.cur_window.finished.connect(self._trigger_panel_rebuild)
-        self._connect_window()
+        if self.try_locking("products_management"):
+            self._close_window()
+            self.cur_window = ProductsManagementWindow(self)
+            self.cur_window.finished.connect(self._trigger_panel_rebuild)
+            self._connect_window("products_management")
 
     def consumption_management_fnc_no_auth(self):
         """ Call consumption managment window
@@ -444,9 +461,10 @@ class MenuBar(QtWidgets.QMenuBar):
     def manage_note_fnc(self, _):
         """ Open an ManageNotes window
         """
-        self._close_window()
-        self.cur_window = NotesManagementWindow(self.parent())
-        self._connect_window()
+        if self.try_locking("notes_management"):
+            self._close_window()
+            self.cur_window = NotesManagementWindow(self.parent())
+            self._connect_window("notes_management")
 
     def export_notes_with_profs_fnc(self, _):
         """ Export all notes """
@@ -467,10 +485,11 @@ class MenuBar(QtWidgets.QMenuBar):
     def panel_managment_fnc(self, _):
         """ Open a PanelManagment window
         """
-        self._close_window()
-        self.cur_window = PanelsManagementWindow(self)
-        self.cur_window.finished.connect(self._trigger_panel_rebuild)
-        self._connect_window()
+        if self.try_locking("products_management"):
+            self._close_window()
+            self.cur_window = PanelsManagementWindow(self)
+            self.cur_window.finished.connect(self._trigger_panel_rebuild)
+            self._connect_window("products_management")
 
     def panel_managment_fnc_no_auth(self):
         """ Open a PanelManagment window.
@@ -486,9 +505,10 @@ class MenuBar(QtWidgets.QMenuBar):
     def notes_action_fnc(self, _, _performer=""):
         """ Open a NotesAction window
         """
-        self._close_window()
-        self.cur_window = GroupActionsWindow(_performer)
-        self._connect_window()
+        if self.try_locking("notes_management"):
+            self._close_window()
+            self.cur_window = GroupActionsWindow(_performer)
+            self._connect_window("notes_management")
 
     @ask_auth("manage_notes", pass_performer=True)
     def refill_note_fnc(self, _, _performer=""):
@@ -503,17 +523,18 @@ class MenuBar(QtWidgets.QMenuBar):
     def csv_import_fnc(self, _):
         """ Open a CsvImportWindow
         """
-        self._close_window()
-        path, _ = QtWidgets.QFileDialog(self).getOpenFileName(
-            self,
-            "Imported",
-            "",
-            "CSV Files (*.csv)"
-        )
+        if self.try_locking("notes_management"):
+            self._close_window()
+            path, _ = QtWidgets.QFileDialog(self).getOpenFileName(
+                self,
+                "Imported",
+                "",
+                "CSV Files (*.csv)"
+            )
 
-        if path:
-            self.cur_window = CsvImportWindow(path)
-            self._connect_window()
+            if path:
+                self.cur_window = CsvImportWindow(path)
+                self._connect_window("notes_management")
 
     def about(self):
         """ Open an AboutWindow
@@ -627,13 +648,15 @@ class MenuBar(QtWidgets.QMenuBar):
 
     @ask_auth("manage_users")
     def settings_fnc(self, _):
-        self._close_window()
-        self.cur_window = SettingsWindow()
-        self._connect_window()
+        if self.try_locking("user_management"):
+            self._close_window()
+            self.cur_window = SettingsWindow()
+            self._connect_window("user_management")
 
     @ask_auth("manage_notes")
     def note_categories_management_fnc(self, _):
-        self._close_window()
-        self.cur_window = NoteCategoriesManagementWindow()
-        self._connect_window()
+        if self.try_locking("notes_management"):
+            self._close_window()
+            self.cur_window = NoteCategoriesManagementWindow()
+            self._connect_window("notes_management")
 
