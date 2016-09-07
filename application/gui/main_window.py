@@ -402,6 +402,7 @@ class MenuBar(QtWidgets.QMenuBar):
         """
         self.parent().notes_list.current_filter = lambda x: x['hidden'] == 0
         self.parent().rebuild_notes_list()
+        self.parent().notes_list.setFocus()
         self._close_window()
 
     def _connect_window(self, lock=None):
