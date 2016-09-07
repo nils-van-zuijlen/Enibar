@@ -313,6 +313,10 @@ class MainWindow(QtWidgets.QMainWindow):
                 elif event.key() == QtCore.Qt.Key_Escape:
                     self.reset_product_list()
                     return True
+                if event.modifiers() == QtCore.Qt.ControlModifier:
+                    if event.key() == QtCore.Qt.Key_Tab:
+                        panels_nb = self.panels.count()
+                        self.panels.setCurrentIndex((self.panels.currentIndex() + 1) % panels_nb)
 
         return super().event(event)
 
