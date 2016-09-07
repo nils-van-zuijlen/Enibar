@@ -664,3 +664,13 @@ class MenuBar(QtWidgets.QMenuBar):
             self.cur_window = NoteCategoriesManagementWindow()
             self._connect_window("notes_management")
 
+    def event(self, event):
+        """ Rewrite the event loop. Used to handle the  \n key
+            If the \n key is pressed, call self.penrent.validate_transaction.
+        """
+        if isinstance(event, QtGui.QKeyEvent):
+            if event.type() == QtCore.QEvent.KeyPress:
+                if event.key() == QtCore.Qt.Key_Return or event.key() == QtCore.Qt.Key_Enter:
+                    self.parent().validate_transaction()
+                    return True
+        return super().event(event)
