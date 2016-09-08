@@ -125,7 +125,7 @@ class HistoryWindow(QtWidgets.QDialog):
         for row, combobox in self.cbs.items():
             if combobox.currentText():
                 filters[row] = combobox.currentText()
-                transactions_left = {key: value for key, value in transactions_left.items() if value[row] == filters[row]}
+                transactions_left = {key: value for key, value in transactions_left.items() if value[row].startswith(filters[row])}
 
         current_cat = self.cb_category.currentText()
         for row, combobox in self.cbs.items():
