@@ -162,7 +162,7 @@ class HistoryWindow(QtWidgets.QDialog):
         dfrom = self.datetime_from.dateTime()
         dto = self.datetime_to.dateTime()
         self.datetime_to.setMinimumDateTime(dfrom)
-        self.datetime_from.setMinimumDateTime(dto)
+        self.datetime_from.setMaximumDateTime(dto)
 
         if self.updatetimer.isActive():
             self.updatetimer.stop()
