@@ -232,6 +232,7 @@ class MainWindow(QtWidgets.QMainWindow):
         def keyPressEvent(obj, event):
             if event.key() == QtCore.Qt.Key_Delete:
                 items = obj.selectedItems()
+                selected_index = self.notes_list.currentRow()
 
                 @ask_auth("manage_notes")
                 def del_line(items):
@@ -246,6 +247,7 @@ class MainWindow(QtWidgets.QMainWindow):
                                     date=item.text(0),
                                 )
                             )
+                    self._note_refresh(selected_index)
                 del_line(items)
             obj.__class__.keyPressEvent(obj, event)
 
