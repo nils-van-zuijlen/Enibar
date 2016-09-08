@@ -157,8 +157,13 @@ class HistoryWindow(QtWidgets.QDialog):
         """ Wrapper to call update on transaction list.
         It enhance performances when user rapidly change filter or date by
         calling for a list update only when filter have not changed after
-        150ms.
+        150ms. It also blocks the QDateTimeEdit so we can't invert the dates.
         """
+        dfrom = self.datetime_from.dateTime()
+        dto = self.datetime_to.dateTime()
+        self.datetime_to.setMinimumDateTime(dfrom)
+        self.datetime_from.setMinimumDateTime(dto)
+
         if self.updatetimer.isActive():
             self.updatetimer.stop()
         self.updatetimer.start()
@@ -278,14 +283,16 @@ class HistoryWindow(QtWidgets.QDialog):
         self.progressbar.setRange(0, 20)
         count = 0
         self.transaction_list.clear()
+        start_date = self.datetime_from.dateTime()
+        end_date = self.datetime_to.dateTime()
+
         for id_, transaction in self.transactions.items():
             show = True
             count += 1
             self.progressbar.setValue(int(count / length * 20))
-            if not self.datetime_from.dateTime() <= \
-                    self.transactions[id_]['date'] <= \
-                    self.datetime_to.dateTime():
+            if not start_date <= self.transactions[id_]['date'] <= end_date:
                 show = False
+
             for index, regex in filter_.items():
                 if regex and regex != transaction[index]:
                     show = False
