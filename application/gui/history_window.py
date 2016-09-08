@@ -140,7 +140,7 @@ class HistoryWindow(QtWidgets.QDialog):
                     else:
                         values.add(data[row])
 
-            combobox.addItems(list(values))
+            combobox.addItems(list(sorted(values)))
             if row in filters:
                 index = combobox.findText(filters[row])
                 if index:
