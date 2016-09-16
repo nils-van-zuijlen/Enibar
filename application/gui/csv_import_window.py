@@ -53,7 +53,7 @@ class CsvImportWindow(QtWidgets.QDialog):
         with open(self.file_path, 'r') as fd:
             reader = csv.DictReader(fd)
             for line in reader:
-                mail = line['Mail']
+                mail = line['Mail'].lower()
                 note = api.notes.get(lambda x: x['mail'] == mail)
                 if note and not note[0]['hidden']:
                     note = note[0]['nickname']
