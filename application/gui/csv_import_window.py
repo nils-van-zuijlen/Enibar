@@ -44,8 +44,12 @@ class CsvImportWindow(QtWidgets.QDialog):
         self.recap.header().setStretchLastSection(False)
         self.recap.header().setSectionResizeMode(1,
             QtWidgets.QHeaderView.Stretch)
-        self._build_recap()
-        self.show()
+        try:
+            self._build_recap()
+        except KeyError:
+            gui.utils.error("Erreur", "Le fichier CSV fourni est mal formé")
+        else:
+            self.show()
 
     def _build_recap(self):
         """ Parse a CSV file and try to build lines from it.
