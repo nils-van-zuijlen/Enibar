@@ -245,6 +245,8 @@ class ProductList(QtWidgets.QTreeWidget):
                     product['price_name'],
                     round(product['price'] / product['count'], 2)
                 )
+        else:
+            return super().keyPressEvent(event)
 
     def clear(self):
         """ Clear the list
