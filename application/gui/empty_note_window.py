@@ -53,7 +53,7 @@ class EmptyNoteWindow(QtWidgets.QDialog):
         """
         to_add = float(self.to_add.text().replace(',', '.'))
         # See #96
-        if round(to_add, 2) > 0:
+        if 1000 > round(to_add, 2) > 0:
             api.notes.transactions([self.selected_note, ], -to_add)
             api.transactions.log_transaction(
                 self.selected_note,
@@ -66,7 +66,7 @@ class EmptyNoteWindow(QtWidgets.QDialog):
             super().accept()
         else:
             gui.utils.error("Erreur", "La valeur à enlever doit etre superieur\
-            à 0.01€")
+            à 0.01€ et inferieure à 1000€")
 
     def on_change(self):
         """ Set the state of the validation button
