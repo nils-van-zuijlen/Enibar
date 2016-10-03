@@ -319,6 +319,10 @@ class MainWindow(QtWidgets.QMainWindow):
                     if event.key() == QtCore.Qt.Key_Tab:
                         panels_nb = self.panels.count()
                         self.panels.setCurrentIndex((self.panels.currentIndex() + 1) % panels_nb)
+                if event.modifiers() == QtCore.Qt.ShiftModifier | QtCore.Qt.ControlModifier:
+                    if event.key() == QtCore.Qt.Key_Backtab:
+                        panels_nb = self.panels.count()
+                        self.panels.setCurrentIndex((self.panels.currentIndex() - 1) % panels_nb)
 
         return super().event(event)
 
