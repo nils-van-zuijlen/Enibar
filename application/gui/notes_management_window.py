@@ -161,6 +161,9 @@ class NotesManagementWindow(QtWidgets.QDialog):
         if not image.isNull():
             image = image.scaled(QtCore.QSize(120, 160), 1)
         self.photo.setPixmap(image)
+        self.notes_infos.setText('Note: ' + str(note['note']) + ' €')
+        if note['note'] < 0:
+            self.notes_infos.setStyleSheet("color: red;")
 
         self.mails_checkbox.setChecked(note['mails_inscription'])
         self.stats_checkbox.setChecked(note['stats_inscription'])
