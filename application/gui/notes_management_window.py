@@ -155,10 +155,11 @@ class NotesManagementWindow(QtWidgets.QDialog):
         self.birthdate_input.setText(datetime.datetime.fromtimestamp(
             note["birthdate"]).strftime("%d/%m/%Y"))
         self.promo_input.setCurrentText(note["promo"])
-        image = QtGui.QPixmap(note["photo_path"])
+        path = settings.IMG_BASE_DIR + '/' + note['photo_path']
+        image = QtGui.QPixmap(path)
 
         if not image.isNull():
-            image = image.scaled(QtCore.QSize(120, 160))
+            image = image.scaled(QtCore.QSize(120, 160), 1)
         self.photo.setPixmap(image)
 
         self.mails_checkbox.setChecked(note['mails_inscription'])
