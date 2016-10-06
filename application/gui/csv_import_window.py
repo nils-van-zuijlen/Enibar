@@ -39,6 +39,10 @@ class CsvImportWindow(QtWidgets.QDialog):
         self.file_path = path
         self.notes = []
         self.on_change = lambda: False
+
+        # It is possible to validate multiple times without that
+        self.validated = False
+
         self.amount.setValidator(api.validator.NUMBER)
         self.reason.setValidator(api.validator.NAME)
         self.recap.header().setStretchLastSection(False)
@@ -86,6 +90,10 @@ class CsvImportWindow(QtWidgets.QDialog):
     def on_validation(self):
         """ Called when "Valider" is clicked
         """
+        if self.validated:
+            return
+
+        self.validated = True
         if float(self.amount.text()) > 0.01:
             api.notes.import_csv(
                 self.notes,
