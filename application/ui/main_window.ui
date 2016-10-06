@@ -769,6 +769,9 @@
    <property name="text">
     <string>&amp;Recharger</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
   </action>
   <action name="hide_alcohol">
    <property name="checkable">
