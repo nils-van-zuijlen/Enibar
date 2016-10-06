@@ -164,6 +164,8 @@ class NotesManagementWindow(QtWidgets.QDialog):
         self.notes_infos.setText('Note: ' + str(note['note']) + ' €')
         if note['note'] < 0:
             self.notes_infos.setStyleSheet("color: red;")
+        else:
+            self.notes_infos.setStyleSheet("color: black;")
 
         self.mails_checkbox.setChecked(note['mails_inscription'])
         self.stats_checkbox.setChecked(note['stats_inscription'])
