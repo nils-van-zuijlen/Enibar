@@ -8,7 +8,7 @@ import datetime
 
 last_updated = api.redis.get_key_blocking('photos_last_update')
 
-if last_updated:
+if last_updated != b'None':
     photos = requests.get(settings.WEB_URL + "photos", params={'last_updated': last_updated}).json()
 else:
     photos = requests.get(settings.WEB_URL + "photos").json()
