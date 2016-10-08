@@ -28,6 +28,7 @@ import datetime
 import quamash
 import sys
 import gui.main_window
+import gui.utils
 import settings
 from PyQt5 import QtWidgets
 
@@ -39,6 +40,16 @@ def excepthook(*args):
 
 sys.excepthook = excepthook
 SUB = None
+
+VERSION = 0
+CURRENT_VERSION = int(api.redis.get_key_blocking("ENIBAR_VERSION").decode())
+
+if VERSION < CURRENT_VERSION:
+    APP = QtWidgets.QApplication(sys.argv)
+    gui.utils.error("Update", "Please update")
+    sys.exit(1)
+elif VERSION > CURRENT_VERSION:
+    api.redis.set_key_blocking("ENIBAR_VERSION", VERSION)
 
 
 class Tee(object):
