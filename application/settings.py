@@ -135,6 +135,12 @@ Students website
         **Default value** ``changeme``
         You NEED to change this to the same token as on the website
 
+    USE_PROXY
+        **Default value** ``False``
+
+    PROXY_AUTH
+        **Default value** ``""``
+        If you're using a proxy this needs to be set to user:passwd@proxy.bla:port
 
 Other
 ^^^^^
