@@ -97,6 +97,7 @@ class NotesManagementWindow(QtWidgets.QDialog):
             self.note_list.clearSelection()
             self.add_button.setEnabled(False)
             self.del_button.setEnabled(False)
+            self.cotiz_button.setEnabled(False)
             self.current_shown = -1
             self.enable_inputs()
             self.empty_inputs()
@@ -122,7 +123,7 @@ class NotesManagementWindow(QtWidgets.QDialog):
                 self.adding = False
                 self.empty_inputs()
                 self.add_button.setEnabled(True)
-                for category in self.categories_added:
+                for category in self.categories_added + [settings.NONCOTIZ_CATEGORY]:
                     api.note_categories.add_notes([nick], category)
                 self.categories_added = []
             else:
@@ -193,14 +194,16 @@ class NotesManagementWindow(QtWidgets.QDialog):
         self.current_nickname = self.note_list.item(note_selected).text()
         if note_selected != self.current_shown:
             self.current_shown = note_selected
-        else:
-            return
 
         note = api.notes.get(lambda x: x["nickname"] ==
                              self.note_list.item(note_selected).text())[0]
         self.disable_inputs_for_editing()
         self.add_button.setEnabled(True)
         self.fill_inputs(note)
+        if settings.NONCOTIZ_CATEGORY in note['categories']:
+            self.cotiz_button.setEnabled(True)
+        else:
+            self.cotiz_button.setEnabled(False)
 
     def del_fnc(self):
         """ Called when "Supprimer" is clicked
@@ -233,6 +236,7 @@ class NotesManagementWindow(QtWidgets.QDialog):
         self.add_category_button.setEnabled(False)
         self.remove_category_button.setEnabled(False)
         self.category_selector.setEnabled(False)
+        self.cotiz_button.setEnabled(False)
 
     def enable_inputs(self):
         """ This enable all the inputs
@@ -273,6 +277,7 @@ class NotesManagementWindow(QtWidgets.QDialog):
 
         self.category_list.addItem(category)
         self.category_selector.removeItem(self.category_selector.currentIndex())
+        self.on_note_selected(self.current_shown)
 
     def remove_category_fnc(self):
         try:
@@ -288,6 +293,7 @@ class NotesManagementWindow(QtWidgets.QDialog):
         self.category_selector.addItem(category)
         self.category_list.takeItem(self.category_list.currentRow())
         self.category_selector.model().sort(1)
+        self.on_note_selected(self.current_shown)
 
     def _inputs_action(self, action):
         """ This performs the action on all object of the type Input in the
@@ -305,11 +311,12 @@ class NotesManagementWindow(QtWidgets.QDialog):
                              'product': "cotiz",
                              'price_name': "Solde",
                              'quantity': 1,
-                             'price': -1.0,
+                             'price': -settings.COTIZ_PRICE,
                             }
             )
             api.notes.transactions([self.current_nickname], -1.0)
             api.transactions.log_transactions(transactions)
+        self.on_note_selected(self.current_shown)
 
 
 class ManageNotesList(gui.notes_list_widget.NotesList):

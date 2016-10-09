@@ -161,6 +161,8 @@ CREATE TABLE IF NOT EXISTS note_categories(
     protected BOOLEAN DEFAULT FALSE
 ) ENGINE=InnoDB;
 
+INSERT INTO `note_categories` (name, hidden, protected) VALUES ('Non Cotiz', 1, 1)
+
 CREATE TABLE IF NOT EXISTS note_categories_assoc(
     id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     note INTEGER UNSIGNED NOT NULL,

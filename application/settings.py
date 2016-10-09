@@ -142,6 +142,22 @@ Students website
         **Default value** ``""``
         If you're using a proxy this needs to be set to user:passwd@proxy.bla:port
 
+Cotiz
+^^^^^
+
+..glossary:
+    :sorted:
+
+    NONCOTIZ_CATEGORY
+        **Default value** ``Non Cotiz``
+        Do not change unless you know what you're doing.
+
+    COTIZ_PRICE
+        **Default value** ``1.0``
+        The price of a cotiz.
+
+
+
 Other
 ^^^^^
 
@@ -208,6 +224,12 @@ DBNAME = "enibar"
 AGIO_THRESHOLD = 14
 AGIO_EVERY = 7
 AGIO_PERCENT = 5.0
+
+#
+# Cotiz settings
+#
+NONCOTIZ_CATEGORY = "Non Cotiz"
+COTIZ_PRICE = 1.0
 
 
 #
