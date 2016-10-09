@@ -42,7 +42,10 @@ sys.excepthook = excepthook
 SUB = None
 
 VERSION = 0
-CURRENT_VERSION = int(api.redis.get_key_blocking("ENIBAR_VERSION").decode())
+try:
+    CURRENT_VERSION = int(api.redis.get_key_blocking("ENIBAR_VERSION").decode())
+except ValueError:
+    CURRENT_VERSION = 0
 
 if VERSION < CURRENT_VERSION:
     APP = QtWidgets.QApplication(sys.argv)
