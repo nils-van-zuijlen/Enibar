@@ -391,6 +391,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>shown_note_categories_list</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>on_shown_note_category_change(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>145</x>
+     <y>378</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>322</x>
+     <y>392</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hidden_note_categories_list</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>on_hidden_note_category_change(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>498</x>
+     <y>401</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>322</x>
+     <y>392</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>add_note_category_fnc()</slot>
@@ -400,5 +432,7 @@
   <slot>remove_notes_from_category_fnc()</slot>
   <slot>dropdown_item_changed_fnc()</slot>
   <slot>delete_note_category_fnc()</slot>
+  <slot>on_shown_note_category_change(QString)</slot>
+  <slot>on_hidden_note_category_change(QString)</slot>
  </slots>
 </ui>

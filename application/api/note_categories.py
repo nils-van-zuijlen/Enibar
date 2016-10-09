@@ -27,19 +27,21 @@ import api.base
 import api.notes
 
 
-def add(name, hidden=False):
+def add(name, hidden=False, protected=False):
     """ Add an empty note category
 
     :param str name: Note category name
     :param bool hidden: The notes in this category should be considered as hidden ?
+    :param bool protected: If True, this category cannot be deleted, shown/hidden nor renamed.
     :return int: Note category id
     """
     with Cursor() as cursor:
-        cursor.prepare("INSERT INTO note_categories (name, hidden)\
-            VALUES(:name, :hidden)")
+        cursor.prepare("INSERT INTO note_categories (name, hidden, protected)\
+            VALUES(:name, :hidden, :protected)")
 
         cursor.bindValue(":name", name)
         cursor.bindValue(":hidden", hidden)
+        cursor.bindValue(":protected", protected)
 
         if cursor.exec_():
             return cursor.lastInsertId()
@@ -51,7 +53,7 @@ def delete(names):
     :param str name: The name of the category to delete
     """
     with Cursor() as cursor:
-        cursor.prepare("DELETE FROM note_categories WHERE name=:name")
+        cursor.prepare("DELETE FROM note_categories WHERE name=:name AND protected=FALSE")
 
         cursor.bindValue(":name", names)
         return cursor.execBatch()
@@ -140,7 +142,7 @@ def rename(old_name, new_name):
 
     """
     with Cursor() as cursor:
-        cursor.prepare("UPDATE note_categories SET name=:new_name WHERE name=:old_name")
+        cursor.prepare("UPDATE note_categories SET name=:new_name WHERE name=:old_name AND protected=FALSE")
 
         cursor.bindValue(":new_name", new_name)
         cursor.bindValue(":old_name", old_name)
@@ -155,7 +157,7 @@ def set_hidden(category_names, hidden):
     :param bool hidden: The new state.
     """
     with Cursor() as cursor:
-        cursor.prepare("UPDATE note_categories SET hidden=:hidden WHERE name=:name")
+        cursor.prepare("UPDATE note_categories SET hidden=:hidden WHERE name=:name AND protected=FALSE")
 
         cursor.bindValue(":name", category_names)
         cursor.bindValue(":hidden", [hidden, ] * len(category_names))
@@ -177,6 +179,7 @@ def get(**filter_):
             'id': record.value('id'),
             'name': record.value('name'),
             'hidden': record.value('hidden'),
+            'protected': record.value('protected'),
         }
 
 

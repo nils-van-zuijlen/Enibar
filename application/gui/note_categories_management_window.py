@@ -37,6 +37,9 @@ class NoteCategoriesManagementWindow(QtWidgets.QDialog):
         self._populate_lists()
         self.notes_not_in_category_list.set_custom_filter(lambda x: self.current_category not in x["categories"])
         self.notes_in_category_list.set_custom_filter(lambda x: self.current_category in x["categories"])
+        self.show_note_category_button.setEnabled(False)
+        self.hide_note_category_button.setEnabled(False)
+        self.delete_note_category_button.setEnabled(True)
         self.show()
 
     def _populate_lists(self):
@@ -72,11 +75,40 @@ class NoteCategoriesManagementWindow(QtWidgets.QDialog):
         items = [item.text() for item in self.shown_note_categories_list.selectedItems()]
         api.note_categories.set_hidden(items, True)
         self._populate_lists()
+        self.hide_note_category_button.setEnabled(False)
 
     def show_note_category_fnc(self):
         items = [item.text() for item in self.hidden_note_categories_list.selectedItems()]
         api.note_categories.set_hidden(items, False)
         self._populate_lists()
+        self.show_note_category_button.setEnabled(False)
+
+    def on_shown_note_category_change(self, new):
+        category = api.note_categories.get_unique(name=new)
+
+        if not category: # Happends after deletion.
+            self.delete_note_category_button.setEnabled(False)
+            self.hide_note_category_button.setEnabled(False)
+            return
+
+        if category['protected']:
+            self.delete_note_category_button.setEnabled(False)
+            self.hide_note_category_button.setEnabled(False)
+        else:
+            self.delete_note_category_button.setEnabled(True)
+            self.hide_note_category_button.setEnabled(True)
+
+    def on_hidden_note_category_change(self, new):
+        category = api.note_categories.get_unique(name=new)
+
+        if not category:
+            self.show_note_category_button.setEnabled(False)
+            return
+
+        if category['protected']:
+            self.show_note_category_button.setEnabled(False)
+        else:
+            self.show_note_category_button.setEnabled(True)
 
     # TAB 2
     def _populate_dropdown(self):
