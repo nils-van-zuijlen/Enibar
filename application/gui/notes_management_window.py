@@ -292,7 +292,7 @@ class NotesManagementWindow(QtWidgets.QDialog):
 
         self.category_selector.addItem(category)
         self.category_list.takeItem(self.category_list.currentRow())
-        self.category_selector.model().sort(1)
+        self.category_selector.model().sort(0)
         self.on_note_selected(self.current_shown)
 
     def _inputs_action(self, action):

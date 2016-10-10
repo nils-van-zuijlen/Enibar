@@ -55,7 +55,7 @@ class NotesManagementWindowTest(basetest.BaseGuiTest):
         self.win.category_list.setCurrentRow(0)
         self.win.remove_category_button.click()
         self.win.category_selector.setCurrentIndex(1)
-        self.assertEqual(self.win.category_selector.currentText(), "cat1")
+        self.assertEqual(self.win.category_selector.currentText(), "cat2")
         self.assertEqual(self.get_items(self.win.category_list), [])
         self.win.remove_category_button.click()
 
