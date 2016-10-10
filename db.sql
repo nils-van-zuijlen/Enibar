@@ -49,7 +49,8 @@ CREATE TABLE IF NOT EXISTS notes(
 	last_agio DATE DEFAULT NULL,
 	ecocups INTEGER UNSIGNED DEFAULT 0,
 	mails_inscription BOOLEAN DEFAULT TRUE,
-	stats_inscription BOOLEAN DEFAULT TRUE
+	stats_inscription BOOLEAN DEFAULT TRUE,
+	UNIQUE(lastname, firstname)
 ) ENGINE=InnoDB;
 
 delimiter //
