@@ -33,6 +33,7 @@ import api.note_categories
 import datetime
 import gui.notes_list_widget
 import settings
+import gui.auth_prompt_window
 
 
 class NotesManagementWindow(QtWidgets.QDialog):
@@ -205,7 +206,8 @@ class NotesManagementWindow(QtWidgets.QDialog):
         else:
             self.cotiz_button.setEnabled(False)
 
-    def del_fnc(self):
+    @gui.auth_prompt_window.ask_auth("manage_notes")
+    def del_fnc(self, _):
         """ Called when "Supprimer" is clicked
         """
         api.notes.remove(note['nickname'] for note in list(
