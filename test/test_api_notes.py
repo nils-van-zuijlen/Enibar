@@ -122,8 +122,8 @@ class NotesTest(basetest.BaseTest):
     def test_get_by_name(self):
         """ Testing get_by_name """
         notes.add("test0",
-            "test",
-            "test",
+            "test0",
+            "test0",
             "test@pouette.com",
             "0600000000",
             '12/12/2001',
@@ -133,8 +133,8 @@ class NotesTest(basetest.BaseTest):
             True
         )
         notes.add("test1",
-            "test",
-            "test",
+            "test1",
+            "test1",
             "test@pouette.com",
             "0600000000",
             '12/12/2001',
@@ -159,8 +159,8 @@ class NotesTest(basetest.BaseTest):
         for i in range(2):
             self.assertIn({'id': i + 1,
                            'nickname': 'test' + str(i),
-                           'lastname': 'test',
-                           'firstname': 'test',
+                           'lastname': 'test' + str(i),
+                           'firstname': 'test' + str(i),
                            'mail': 'test@pouette.com',
                            'tel': '0600000000',
                            'birthdate': 1008111600,
@@ -180,8 +180,8 @@ class NotesTest(basetest.BaseTest):
     def test_get_by_minors(self):
         """ Testing get minors """
         notes.add("test0",
-            "test",
-            "test",
+            "test0",
+            "test0",
             "test@pouette.com",
             "0600000000",
             "24/12/1995",
@@ -191,8 +191,8 @@ class NotesTest(basetest.BaseTest):
             True
         )
         id1 = notes.add("test1",
-            "test",
-            "test",
+            "test1",
+            "test1",
             "test@pouette.com",
             "0600000000",
             "24/12/1997",
@@ -204,8 +204,8 @@ class NotesTest(basetest.BaseTest):
 
         self.assertEqual(notes.get(lambda x: x["birthdate"] > 851403600), [{'id': id1,
                                  'nickname': 'test1',
-                                 'lastname': 'test',
-                                 'firstname': 'test',
+                                 'lastname': 'test1',
+                                 'firstname': 'test1',
                                  'mail': 'test@pouette.com',
                                  'tel': '0600000000',
                                  'birthdate': 882918000,
@@ -225,8 +225,8 @@ class NotesTest(basetest.BaseTest):
     def test_get_by_majors(self):
         """ Testing get majors """
         id0 = notes.add("test0",
-            "test",
-            "test",
+            "test0",
+            "test0",
             "test@pouette.com",
             "0600000000",
             "24/12/1995",
@@ -236,8 +236,8 @@ class NotesTest(basetest.BaseTest):
             True
         )
         notes.add("test1",
-            "test",
-            "test",
+            "test1",
+            "test1",
             "test@pouette.com",
             "0600000000",
             "24/12/1997",
@@ -249,8 +249,8 @@ class NotesTest(basetest.BaseTest):
 
         self.assertEqual(notes.get(lambda x: x["birthdate"] < 851403600), [{'id': id0,
                                  'nickname': 'test0',
-                                 'lastname': 'test',
-                                 'firstname': 'test',
+                                 'lastname': 'test0',
+                                 'firstname': 'test0',
                                  'mail': 'test@pouette.com',
                                  'tel': '0600000000',
                                  'birthdate': 819759600,

@@ -42,8 +42,8 @@ class StatsTests(basetest.BaseTest):
         )
         notes.transactions(["test1", ], -7)
         notes.add("test2",
-            "test1",
-            "test1",
+            "test2",
+            "test2",
             "test@pouette.com",
             "0600000000",
             '12/12/2001',
@@ -54,8 +54,8 @@ class StatsTests(basetest.BaseTest):
         )
         notes.transactions(["test2", ], 10)
         notes.add("test3",
-            "test1",
-            "test1",
+            "test3",
+            "test3",
             "test@pouette.com",
             "0600000000",
             '12/12/2001',
@@ -66,8 +66,8 @@ class StatsTests(basetest.BaseTest):
         )
         notes.transactions(["test3", ], -10)
         notes.add("test4",
-            "test1",
-            "test1",
+            "test4",
+            "test4",
             "test@pouette.com",
             "0600000000",
             '12/12/2001',
@@ -78,8 +78,8 @@ class StatsTests(basetest.BaseTest):
         )
         notes.transactions(["test4", ], 8)
         notes.add("test12",
-            "test1",
-            "test1",
+            "test12",
+            "test12",
             "test@pouette.com",
             "0600000000",
             '12/12/2001',
@@ -117,14 +117,11 @@ class StatsTests(basetest.BaseTest):
         )
 
     def test_get_stats(self):
+        print(list(stats.get_notes_stats()))
         self.assertEqual(list(stats.get_notes_stats()),
-            [{'price_name': 'c', 'category': 'a', 'nickname': 'test1', 'price': -1.0, 'quantity': 2.0, 'product': 'b'},
+            [{'price_name': 'c', 'category': 'a', 'nickname': 'test1', 'price': -1.0, 'quantity': 1.0, 'product': 'b'},
              {'price_name': 'f', 'category': 'd', 'nickname': 'test1', 'price': -2.0, 'quantity': 1.0, 'product': 'e'},
-             {'price_name': 'c', 'category': 'a', 'nickname': 'test2', 'price': -1.0, 'quantity': 2.0, 'product': 'b'},
-             {'price_name': 'f', 'category': 'd', 'nickname': 'test2', 'price': -2.0, 'quantity': 1.0, 'product': 'e'},
-             {'price_name': 'c', 'category': 'a', 'nickname': 'test3', 'price': -1.0, 'quantity': 2.0, 'product': 'b'},
-             {'price_name': 'f', 'category': 'd', 'nickname': 'test3', 'price': -2.0, 'quantity': 1.0, 'product': 'e'},
-             {'price_name': 'c', 'category': 'a', 'nickname': 'test4', 'price': -1.0, 'quantity': 2.0, 'product': 'b'},
-             {'price_name': 'f', 'category': 'd', 'nickname': 'test4', 'price': -2.0, 'quantity': 1.0, 'product': 'e'}]
+             {'price_name': 'c', 'category': 'a', 'nickname': 'test2', 'price': -1.0, 'quantity': 1.0, 'product': 'b'},
+            ]
         )
 
