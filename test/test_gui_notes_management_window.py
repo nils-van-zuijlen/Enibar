@@ -87,6 +87,7 @@ class NotesManagementWindowTest(basetest.BaseGuiTest):
 
     def test_remove_note(self):
         self.win.note_list.setCurrentRow(0)
+        self.connect()
         self.win.del_button.click()
 
         def verif():
