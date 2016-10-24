@@ -86,7 +86,7 @@ class NoteCategoriesManagementWindow(QtWidgets.QDialog):
     def on_shown_note_category_change(self, new):
         category = api.note_categories.get_unique(name=new)
 
-        if not category: # Happends after deletion.
+        if not category:  # Happens after deletion.
             self.delete_note_category_button.setEnabled(False)
             self.hide_note_category_button.setEnabled(False)
             return
