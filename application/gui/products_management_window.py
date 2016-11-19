@@ -214,8 +214,9 @@ class ProductsManagementWindow(QtWidgets.QDialog):
                 widget.id_ = api.prices.add_descriptor(
                     widget.input.text(),
                     cat['id'],
-                    widget.quantity_input.value()
-                )
+                    widget.quantity_input.value())
+            else:
+                api.prices.remove_descriptor(widget.id_)
         is_alcoholic = self.checkbox_alcoholic.isChecked()
         api.categories.set_alcoholic(cat['id'], is_alcoholic)
         if api.categories.rename(self.category.text(), self.cat_name_input.text()):
