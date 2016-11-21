@@ -47,9 +47,8 @@ def get_notes_stats():
                         transactions.price_name, transactions.price")
         cursor.exec_()
         while cursor.next():
-            record = cursor.record()
 
-            yield {field: record.value(field) for field in (
+            yield {field: cursor.value(field) for field in (
                 'nickname',
                 'product',
                 'price_name',

@@ -85,7 +85,7 @@ class AuthPromptWindow(QtWidgets.QDialog):
 
         existing_person = False
         while cursor.next():
-            self.login_input.addItem(cursor.record().value("login"))
+            self.login_input.addItem(cursor.value("login"))
             existing_person = True
 
         if not existing_person:

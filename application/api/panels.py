@@ -155,11 +155,10 @@ def get(**filter_):
     """
     cursor = api.base.filtered_getter("panels", filter_)
     while cursor.next():
-        record = cursor.record()
         yield {
-            'name': record.value('name'),
-            'hidden': record.value('hidden'),
-            'id': record.value('id'),
+            'name': cursor.value('name'),
+            'hidden': cursor.value('hidden'),
+            'id': cursor.value('id'),
         }
 
 
@@ -188,13 +187,12 @@ def get_content(**kwargs):
             cursor.bindValue(":{}".format(key), arg)
         if cursor.exec_():
             while cursor.next():
-                record = cursor.record()
                 yield {
-                    'panel_id': record.value('panel_id'),
-                    'product_id': record.value('product_id'),
-                    'product_name': record.value('product_name'),
-                    'category_id': record.value('category_id'),
-                    'category_name': record.value('category_name'),
+                    'panel_id': cursor.value('panel_id'),
+                    'product_id': cursor.value('product_id'),
+                    'product_name': cursor.value('product_name'),
+                    'category_id': cursor.value('category_id'),
+                    'category_name': cursor.value('category_name'),
                 }
 get_unique = api.base.make_get_unique(get)
 

@@ -71,7 +71,7 @@ def get_list():
         cursor.prepare("SELECT login FROM admins")
         cursor.exec_()
         while cursor.next():
-            yield cursor.record().value('login')
+            yield cursor.value('login')
 
 
 def get_rights(username):
@@ -88,11 +88,10 @@ def get_rights(username):
             """)
         cursor.bindValue(':login', username)
         if cursor.exec_() and cursor.next():
-            record = cursor.record()
             return {
-                'manage_users': record.value('manage_users'),
-                'manage_notes': record.value('manage_notes'),
-                'manage_products': record.value('manage_products'),
+                'manage_users': cursor.value('manage_users'),
+                'manage_notes': cursor.value('manage_notes'),
+                'manage_products': cursor.value('manage_products'),
             }
         else:
             return {
@@ -163,6 +162,6 @@ def is_authorized(username, password):
         if not cursor.next():
             return False
 
-        hashed = cursor.record().value("password")
+        hashed = cursor.value("password")
         return bcrypt.hashpw(password, hashed) == hashed
 

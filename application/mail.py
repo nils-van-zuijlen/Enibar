@@ -52,17 +52,16 @@ def send_scheduled_mails():
         cursor.exec_()
         now = QtCore.QDate.currentDate()
         while cursor.next():
-            record = cursor.record()
-            unit = record.value('schedule_unit')
-            interval = record.value('schedule_interval')
+            unit = cursor.value('schedule_unit')
+            interval = cursor.value('schedule_interval')
             mail_data = {}
 
             # Exlude mail when it's too soon to send them
-            if record.value('last_sent').isValid():
+            if cursor.value('last_sent').isValid():
                 if unit not in UNIT_TO_FUNC:
                     continue
                 send_date = UNIT_TO_FUNC[unit](
-                    record.value('last_sent'),
+                    cursor.value('last_sent'),
                     interval
                 )
                 if send_date > now:
@@ -70,25 +69,25 @@ def send_scheduled_mails():
 
             # Ok send mail
             recipients = api.mail.get_recipients(
-                record.value('filter'),
-                record.value('filter_value'),
+                cursor.value('filter'),
+                cursor.value('filter_value'),
             )
             for recipient in recipients:
                 if recipient['hidden'] or recipient['promo'] == "Prof":
                     continue
                 subject = api.mail.format_message(
-                    record.value('subject'),
+                    cursor.value('subject'),
                     recipient
                 )
                 message = api.mail.format_message(
-                    record.value('message'),
+                    cursor.value('message'),
                     recipient
                 )
                 api.mail.send_mail(
                     recipient['mail'],
                     subject,
                     message,
-                    record.value('sender')
+                    cursor.value('sender')
                 )
 
             # Update database.
@@ -98,7 +97,7 @@ def send_scheduled_mails():
                     WHERE name=:name
                     """
                 )
-                update_cursor.bindValue(":name", record.value('name'))
+                update_cursor.bindValue(":name", cursor.value('name'))
                 update_cursor.exec_()
                 if update_cursor.lastError().isValid():
                     print(update_cursor.lastError().text())

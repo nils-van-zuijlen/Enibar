@@ -106,12 +106,11 @@ def get(**filter_):
     """
     cursor = api.base.filtered_getter("categories", filter_)
     while cursor.next():
-        record = cursor.record()
         yield {
-            'id': record.value('id'),
-            'name': record.value('name'),
-            'alcoholic': record.value('alcoholic'),
-            'color': record.value('color'),
+            'id': cursor.value('id'),
+            'name': cursor.value('name'),
+            'alcoholic': cursor.value('alcoholic'),
+            'color': cursor.value('color'),
         }
 
 

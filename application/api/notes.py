@@ -52,11 +52,10 @@ def rebuild_cache():
         cursor.prepare("SELECT * FROM notes")
         if cursor.exec_():
             while cursor.next():
-                record = cursor.record()
                 if NOTES_FIELDS_CACHE == {}:
-                    NOTES_FIELDS_CACHE = {field: record.indexOf(field) for field
+                    NOTES_FIELDS_CACHE = {field: cursor.indexOf(field) for field
                                           in NOTE_FIELDS}
-                row = {field: record.value(NOTES_FIELDS_CACHE[field]) for field
+                row = {field: cursor.value(NOTES_FIELDS_CACHE[field]) for field
                        in NOTE_FIELDS}
                 row['tot_cons'] = 0
                 row['tot_refill'] = 0
@@ -75,9 +74,8 @@ def _build_categories():
 
         if cursor.exec_():
             while cursor.next():
-                record = cursor.record()
-                NOTES_CACHE[record.value('nickname')]["categories"].append(record.value('name'))
-                NOTES_CACHE[record.value('nickname')]['hidden'] |= record.value('hidden')
+                NOTES_CACHE[cursor.value('nickname')]["categories"].append(cursor.value('name'))
+                NOTES_CACHE[cursor.value('nickname')]['hidden'] |= cursor.value('hidden')
 
 
 def _build_stats():
@@ -96,9 +94,8 @@ def _build_stats():
         if cursor.exec_():
             tot = {}
             while cursor.next():
-                record = cursor.record()
                 if NOTES_STATS_FIELDS_CACHE == {}:
-                    NOTES_STATS_FIELDS_CACHE = {field: record.indexOf(field)
+                    NOTES_STATS_FIELDS_CACHE = {field: cursor.indexOf(field)
                                                 for field in ('lastname',
                                                               'nickname',
                                                               'firstname',
@@ -107,10 +104,10 @@ def _build_stats():
                                                              )
                                                }
 
-                note = record.value(NOTES_STATS_FIELDS_CACHE['nickname'])
+                note = cursor.value(NOTES_STATS_FIELDS_CACHE['nickname'])
                 tot[note] = {}
-                NOTES_CACHE[note]['tot_cons'] = record.value(NOTES_STATS_FIELDS_CACHE['tot_cons'])
-                NOTES_CACHE[note]['tot_refill'] = record.value(NOTES_STATS_FIELDS_CACHE['tot_refill'])
+                NOTES_CACHE[note]['tot_cons'] = cursor.value(NOTES_STATS_FIELDS_CACHE['tot_cons'])
+                NOTES_CACHE[note]['tot_refill'] = cursor.value(NOTES_STATS_FIELDS_CACHE['tot_refill'])
 
 
 def rebuild_note_cache(nick):
@@ -122,11 +119,10 @@ def rebuild_note_cache(nick):
         cursor.bindValue(":nick", nick)
         if cursor.exec_():
             while cursor.next():
-                record = cursor.record()
                 if NOTES_FIELDS_CACHE == {}:
-                    NOTES_FIELDS_CACHE = {field: record.indexOf(field) for field
+                    NOTES_FIELDS_CACHE = {field: cursor.indexOf(field) for field
                                           in NOTE_FIELDS}
-                row = {field: record.value(NOTES_FIELDS_CACHE[field]) for field
+                row = {field: cursor.value(NOTES_FIELDS_CACHE[field]) for field
                        in NOTE_FIELDS}
                 row['tot_cons'] = 0.0
                 row['tot_refill'] = 0.0
@@ -149,9 +145,8 @@ def rebuild_note_cache(nick):
 
                     if cursor.exec_():
                         while cursor.next():
-                            record = cursor.record()
                             if NOTES_STATS_FIELDS_CACHE == {}:
-                                NOTES_STATS_FIELDS_CACHE = {field: record.indexOf(field)
+                                NOTES_STATS_FIELDS_CACHE = {field: cursor.indexOf(field)
                                                             for field in ('lastname',
                                                                           'nickname',
                                                                           'firstname',
@@ -160,9 +155,9 @@ def rebuild_note_cache(nick):
                                                                          )
                                                            }
 
-                            note = record.value(NOTES_STATS_FIELDS_CACHE['nickname'])
-                            NOTES_CACHE[note]['tot_cons'] = record.value(NOTES_STATS_FIELDS_CACHE['tot_cons'])
-                            NOTES_CACHE[note]['tot_refill'] = record.value(NOTES_STATS_FIELDS_CACHE['tot_refill'])
+                            note = cursor.value(NOTES_STATS_FIELDS_CACHE['nickname'])
+                            NOTES_CACHE[note]['tot_cons'] = cursor.value(NOTES_STATS_FIELDS_CACHE['tot_cons'])
+                            NOTES_CACHE[note]['tot_refill'] = cursor.value(NOTES_STATS_FIELDS_CACHE['tot_refill'])
         cursor.prepare("SELECT notes.id, notes.nickname, note_categories.name, note_categories.hidden FROM notes JOIN\
             note_categories_assoc ON note_categories_assoc.note=notes.id JOIN\
             note_categories ON note_categories_assoc.category=note_categories.id\
@@ -171,9 +166,8 @@ def rebuild_note_cache(nick):
 
         if cursor.exec_():
             while cursor.next():
-                record = cursor.record()
-                NOTES_CACHE[record.value('nickname')]["categories"].append(record.value('name'))
-                NOTES_CACHE[record.value('nickname')]['hidden'] |= record.value('hidden')
+                NOTES_CACHE[cursor.value('nickname')]["categories"].append(cursor.value('name'))
+                NOTES_CACHE[cursor.value('nickname')]['hidden'] |= cursor.value('hidden')
 
 
 def _request_multiple_nicks(nicks, request, *, do_not=False):

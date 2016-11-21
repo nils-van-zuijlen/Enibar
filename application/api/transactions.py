@@ -108,9 +108,8 @@ def log_transactions(transactions):
                 fetching_cursor.bindValue(':nick', trans['note'])
                 fetching_cursor.exec_()
                 if fetching_cursor.next():
-                    record = fetching_cursor.record()
-                    lastname = record.value("lastname")
-                    firstname = record.value("firstname")
+                    lastname = fetching_cursor.value("lastname")
+                    firstname = fetching_cursor.value("firstname")
                 else:
                     # Nickname is a fake one, we must not fill lastname and
                     # firstname name
@@ -213,7 +212,7 @@ def get_grouped_entries(col, filters):
             cursor.bindValue(":{}".format(key), value)
         cursor.exec_()
         while cursor.next():
-            yield cursor.record().value(col)
+            yield cursor.value(col)
 
 
 TRANSACTS_FIELDS_CACHE = {}
@@ -229,11 +228,10 @@ def get(max=None, reverse=False, **filter_):
     global TRANSACTS_FIELDS_CACHE
     cursor = api.base.filtered_getter("transactions", filter_, max=max, reverse=reverse)
     while cursor.next():
-        record = cursor.record()
         if TRANSACTS_FIELDS_CACHE == {}:
-            TRANSACTS_FIELDS_CACHE = {field: record.indexOf(field) for field
+            TRANSACTS_FIELDS_CACHE = {field: cursor.indexOf(field) for field
                                       in TRANSACT_FIELDS}
-        yield {field: record.value(TRANSACTS_FIELDS_CACHE[field]) for field
+        yield {field: cursor.value(TRANSACTS_FIELDS_CACHE[field]) for field
                in TRANSACT_FIELDS}
 
 get_unique = api.base.make_get_unique(get)

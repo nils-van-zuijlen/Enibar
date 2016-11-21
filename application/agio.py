@@ -58,11 +58,11 @@ if __name__ == "__main__":
                 """
             )
             update.addBindValue(settings.AGIO_PERCENT)
-            update.addBindValue(cursor.record().value("id"))
+            update.addBindValue(cursor.value("id"))
             if update.exec_():
-                balance = cursor.record().value("note")
+                balance = cursor.value("note")
                 transactions.append({
-                    'note': cursor.record().value("nickname"),
+                    'note': cursor.value("nickname"),
                     'category': 'AGIO',
                     'product': '',
                     'price_name': '',

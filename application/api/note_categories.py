@@ -130,8 +130,7 @@ def get_notes(category_name):
 
         if cursor.exec_():
             while cursor.next():
-                record = cursor.record()
-                yield record.value("nick")
+                yield cursor.value("nick")
 
 
 def rename(old_name, new_name):
@@ -174,12 +173,11 @@ def get(**filter_):
     """
     cursor = api.base.filtered_getter("note_categories", filter_)
     while cursor.next():
-        record = cursor.record()
         yield {
-            'id': record.value('id'),
-            'name': record.value('name'),
-            'hidden': record.value('hidden'),
-            'protected': record.value('protected'),
+            'id': cursor.value('id'),
+            'name': cursor.value('name'),
+            'hidden': cursor.value('hidden'),
+            'protected': cursor.value('protected'),
         }
 
 

@@ -56,7 +56,7 @@ def add_descriptor(name, category, quantity):
                     pcurser.prepare("INSERT INTO prices(price_description, \
                             product, value) VALUES(:desc, :product, :value)")
                     pcurser.bindValue(":desc", desc_id)
-                    pcurser.bindValue(":product", cursor.record().value('id'))
+                    pcurser.bindValue(":product", cursor.value('id'))
                     pcurser.bindValue(":value", 0.00)
                     pcurser.exec_()
             database.commit()
@@ -111,12 +111,11 @@ def get_descriptor(**kwargs):
             cursor.bindValue(":{}".format(key), arg)
         cursor.exec_()
         while cursor.next():
-            record = cursor.record()
             yield {
-                'id': record.value('id'),
-                'label': record.value('label'),
-                'category': record.value('category'),
-                'quantity': record.value('quantity'),
+                'id': cursor.value('id'),
+                'label': cursor.value('label'),
+                'category': cursor.value('category'),
+                'quantity': cursor.value('quantity'),
             }
 
 
@@ -179,14 +178,13 @@ def get(**kwargs):
 
         if cursor.exec_():
             while cursor.next():
-                record = cursor.record()
                 yield {
-                    'id': record.value('id'),
-                    'label': record.value('label'),
-                    'value': record.value('value') + settings.synced.ALCOHOL_MAJORATION * record.value("alcoholic"),
-                    'product': record.value('product'),
-                    'category': record.value('category'),
-                    'percentage': record.value('percentage'),
+                    'id': cursor.value('id'),
+                    'label': cursor.value('label'),
+                    'value': cursor.value('value') + settings.synced.ALCOHOL_MAJORATION * cursor.value("alcoholic"),
+                    'product': cursor.value('product'),
+                    'category': cursor.value('category'),
+                    'percentage': cursor.value('percentage'),
                 }
 
 

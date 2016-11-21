@@ -189,13 +189,12 @@ def get_models(**filter_):
     """
     cursor = api.base.filtered_getter("mail_models", filter_)
     while cursor.next():
-        record = cursor.record()
         yield {
-            'name': record.value('name'),
-            'subject': record.value('subject'),
-            'message': record.value('message'),
-            'filter': record.value('filter'),
-            'filter_value': record.value('filter_value'),
+            'name': cursor.value('name'),
+            'subject': cursor.value('subject'),
+            'message': cursor.value('message'),
+            'filter': cursor.value('filter'),
+            'filter_value': cursor.value('filter_value'),
         }
 
 
@@ -252,19 +251,18 @@ def get_scheduled_mails(**filter_):
     """
     cursor = api.base.filtered_getter("scheduled_mails", filter_)
     while cursor.next():
-        record = cursor.record()
         yield {
-            'name': record.value('name'),
-            'active': record.value('active'),
-            'schedule_interval': record.value('schedule_interval'),
-            'schedule_unit': record.value('schedule_unit'),
-            'schedule_day': record.value('schedule_day'),
-            'subject': record.value('subject'),
-            'message': record.value('message'),
-            'filter': record.value('filter'),
-            'filter_value': record.value('filter_value'),
-            'sender': record.value('sender'),
-            'last_sent': record.value('last_sent'),
+            'name': cursor.value('name'),
+            'active': cursor.value('active'),
+            'schedule_interval': cursor.value('schedule_interval'),
+            'schedule_unit': cursor.value('schedule_unit'),
+            'schedule_day': cursor.value('schedule_day'),
+            'subject': cursor.value('subject'),
+            'message': cursor.value('message'),
+            'filter': cursor.value('filter'),
+            'filter_value': cursor.value('filter_value'),
+            'sender': cursor.value('sender'),
+            'last_sent': cursor.value('last_sent'),
         }
 
 

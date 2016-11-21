@@ -78,7 +78,7 @@ def add(name, *, category_name=None, category_id=None):
             pcursor.bindValue(':product', product)
             pcursor.bindValue(
                 ':price_description',
-                cursor.record().value('id')
+                cursor.value('id')
             )
             pcursor.bindValue(':value', '0.00')
             pcursor.exec_()
@@ -126,8 +126,7 @@ def search_by_name(name):
         cursor.exec_()
 
         while cursor.next():
-            record = cursor.record()
-            yield {field: record.value(field) for field in
+            yield {field: cursor.value(field) for field in
                    PRODUCT_FIELDS}
 
 
@@ -139,11 +138,10 @@ def get(**filter_):
     """
     cursor = api.base.filtered_getter("products", filter_)
     while cursor.next():
-        record = cursor.record()
         yield {
-            'id': record.value('id'),
-            'name': record.value('name'),
-            'category': record.value('category'),
+            'id': cursor.value('id'),
+            'name': cursor.value('name'),
+            'category': cursor.value('category'),
         }
 
 
