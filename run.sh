@@ -32,10 +32,13 @@ else
 fi
 
 cd $DIR/application
+
 python -c "import settings; print(settings.DEBUG)" | grep "True" &> /dev/null
 DEBUG="$?"
 
-WIN_ID=$(wmctrl -l | grep Enibar | cut -d ' ' -f1 | tail -n1)
+if wmctrl -h &>/dev/null; then
+    WIN_ID=$(wmctrl -l | grep Enibar | cut -d ' ' -f1 | tail -n1)
+fi
 
 if [[ "$WIN_ID" = "" || "$DEBUG" = "0" ]]; then
     /bin/sh -c "$PYTHON -OO main.py"
