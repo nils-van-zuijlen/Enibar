@@ -30,6 +30,16 @@ else
 	echo ""
 	exit 1
 fi
+
 cd $DIR/application
-/bin/sh -c "$PYTHON -OO main.py"
+python -c "import settings; print(settings.DEBUG)" | grep "True" &> /dev/null
+DEBUG="$?"
+
+WIN_ID=$(wmctrl -l | grep Enibar | cut -d ' ' -f1 | tail -n1)
+
+if [[ "$WIN_ID" = "" || "$DEBUG" = "0" ]]; then
+    /bin/sh -c "$PYTHON -OO main.py"
+else
+    wmctrl -i -a $WIN_ID
+fi;
 
