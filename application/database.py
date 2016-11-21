@@ -110,6 +110,15 @@ class SqlQuery(QtSql.QSqlQuery):
     def record(self):
         return SqlRecord(super().record())
 
+    def value(self, name_or_id):
+        ret_value = super().value(name_or_id)
+        if isinstance(ret_value, bytes):
+            return int.from_bytes(ret_value, byteorder='little')
+        return ret_value
+
+    def indexOf(self, name):
+        return self.record().indexOf(name)
+
     if settings.DEBUG:
         def exec_(self, *args):
             ret = super().exec_(*args)
