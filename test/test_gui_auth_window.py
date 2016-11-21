@@ -40,7 +40,7 @@ class TestAuthPrompt(basetest.BaseGuiTest):
     def func(self):
         self.func_called = True
 
-    @ask_auth("inexistant right")
+    @ask_auth("inexistant_right")
     def func_inexistant(self):
         self.func_called = True
 

@@ -76,16 +76,14 @@ class AuthPromptWindow(QtWidgets.QDialog):
         uic.loadUi('ui/auth_prompt_window.ui', self)
         self.on_change = api.validator.on_change(self, self.accept_button)
         self.pass_input.set_validator(api.validator.NAME)
-        filter_ = ", ".join("{key}=1".format(key=key) for key in requirements)
+        filter_ = {key: True for key in requirements}
         self.user = ""
 
-        with Cursor() as cursor:
-            cursor.prepare("SELECT * FROM admins WHERE " + filter_)
-            cursor.exec_()
+        users = api.users.get_list(**filter_)
 
         existing_person = False
-        while cursor.next():
-            self.login_input.addItem(cursor.value("login"))
+        for user in users:
+            self.login_input.addItem(user)
             existing_person = True
 
         if not existing_person:

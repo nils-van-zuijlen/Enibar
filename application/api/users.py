@@ -24,6 +24,9 @@ Users
 
 import bcrypt
 from database import Cursor
+import api.base
+
+RIGHTS = ['manage_users', 'manage_notes', 'manage_products']
 
 
 def add(username, password):
@@ -62,16 +65,17 @@ def remove(username):
         return cursor.exec_()
 
 
-def get_list():
+def get_list(**filter_):
     """ Get user list
 
     :return list: list of users name
     """
-    with Cursor() as cursor:
-        cursor.prepare("SELECT login FROM admins")
-        cursor.exec_()
-        while cursor.next():
-            yield cursor.value('login')
+    if any(right not in RIGHTS for right in filter_):
+        return
+
+    cursor = api.base.filtered_getter("admins", filter_)
+    while cursor.next():
+        yield cursor.value('login')
 
 
 def get_rights(username):
