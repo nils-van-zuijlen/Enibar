@@ -28,6 +28,7 @@ The MainWindow class is the main class of the program.
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from functools import partial
 
+from .admin_stats_window import AdminStatsWindow
 from .auth_prompt_window import ask_auth
 from .validation_window import ValidationWindow
 from .products_management_window import ProductsManagementWindow
@@ -654,6 +655,14 @@ class MenuBar(QtWidgets.QMenuBar):
         """
         self._close_window()
         self.cur_window = StatsWindow(by_note=False)
+        self._connect_window()
+
+    @ask_auth("manage_users")
+    def admin_stats_fnc(self, _):
+        """ Open an AdminStatsWindow
+        """
+        self._close_window()
+        self.cur_window = AdminStatsWindow()
         self._connect_window()
 
     def help_fnc(self):

@@ -762,6 +762,8 @@
     <addaction name="menu_Statistiques"/>
     <addaction name="about"/>
     <addaction name="help"/>
+    <addaction name="separator"/>
+    <addaction name="stats_admin"/>
    </widget>
    <widget class="QMenu" name="menuMails">
     <property name="title">
@@ -927,6 +929,11 @@
     <string>Gerer les categories</string>
    </property>
   </action>
+  <action name="stats_admin">
+   <property name="text">
+    <string>Stats admin</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -969,6 +976,7 @@
     <slot>help_fnc()</slot>
     <slot>settings_fnc()</slot>
     <slot>note_categories_management_fnc()</slot>
+    <slot>admin_stats_fnc()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -1461,6 +1469,22 @@
     <hint type="destinationlabel">
      <x>441</x>
      <y>7</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>stats_admin</sender>
+   <signal>triggered()</signal>
+   <receiver>menu_bar</receiver>
+   <slot>admin_stats_fnc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>445</x>
+     <y>9</y>
     </hint>
    </hints>
   </connection>

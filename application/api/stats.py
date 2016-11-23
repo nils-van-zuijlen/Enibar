@@ -57,3 +57,26 @@ def get_notes_stats():
                 'quantity')
             }
 
+def get_red_sum():
+    with Cursor() as cursor:
+        cursor.prepare("SELECT SUM(note) AS red FROM notes WHERE note < 0 AND stats_inscription=TRUE")
+        cursor.exec_()
+        if cursor.next():
+            return cursor.value('red')
+    return 0
+
+def get_green_sum():
+    with Cursor() as cursor:
+        cursor.prepare("SELECT SUM(note) AS red FROM notes WHERE note > 0 AND stats_inscription=TRUE")
+        cursor.exec_()
+        if cursor.next():
+            return cursor.value('red')
+    return 0
+
+def get_red_notes():
+    with Cursor() as cursor:
+        cursor.prepare("SELECT nickname, note FROM notes WHERE note < 0 AND stats_inscription=TRUE ORDER BY note")
+        cursor.exec_()
+        while cursor.next():
+            yield cursor.value('nickname'), cursor.value('note')
+
