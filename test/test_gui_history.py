@@ -82,6 +82,7 @@ class HistoryWindowTest(basetest.BaseGuiTest):
         gui.history_window.HistoryWindow._instance_count = 0
         self.win = gui.history_window.HistoryWindow(parent=None)
         api.notes.rebuild_cache()
+
         async def wait():
             await asyncio.sleep(0.1)
         self.loop.run_until_complete(wait())
@@ -111,6 +112,7 @@ class HistoryWindowTest(basetest.BaseGuiTest):
                 self.win.transaction_list.setCurrentItem(item)
                 QtCore.QTimer.singleShot(100, self.connect)
                 self.win.delete_button.click()
+
                 async def retest_func():
                     res = await redis.blpop(api.sde.QUEUE_NAME)
                     self.assertEqual(json.loads(res[1].decode()), {'token': 'changeme', 'type': 'history', 'price': -2.5, 'id': 2, 'quantity': 1})
@@ -123,6 +125,7 @@ class HistoryWindowTest(basetest.BaseGuiTest):
                     item = self.win.transaction_list.topLevelItem(1)
                     self.win.transaction_list.setCurrentItem(item)
                     self.win.delete_button.click()
+
                     async def final_func():
                         res = await redis.blpop(api.sde.QUEUE_NAME)
                         self.assertEqual(json.loads(res[1].decode()), {'token': 'changeme', 'type': 'history-delete', 'id': 2})

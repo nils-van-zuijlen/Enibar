@@ -208,6 +208,7 @@ class ApiSdeTests(basetest.BaseTest):
     def test_sde_connection_with_proxy(self):
         settings.USE_PROXY = True
         settings.PROXY_AUTH = "http://test:test@127.0.0.1:3222"
+
         async def test_func():
             await api.sde.send_notes(["test1"])
             task = asyncio.ensure_future(api.sde.process_queue())

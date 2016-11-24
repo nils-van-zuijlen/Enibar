@@ -234,4 +234,5 @@ def get(max=None, reverse=False, **filter_):
         yield {field: cursor.value(TRANSACTS_FIELDS_CACHE[field]) for field
                in TRANSACT_FIELDS}
 
+
 get_unique = api.base.make_get_unique(get)

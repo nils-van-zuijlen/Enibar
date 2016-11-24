@@ -194,6 +194,7 @@ def get_content(**kwargs):
                     'category_id': cursor.value('category_id'),
                     'category_name': cursor.value('category_name'),
                 }
-get_unique = api.base.make_get_unique(get)
 
+
+get_unique = api.base.make_get_unique(get)
 
