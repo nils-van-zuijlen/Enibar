@@ -291,9 +291,12 @@ class MainWindow(QtWidgets.QMainWindow):
         """ Set the state of the repay_ecocup button depending on self.eco_diff
         """
         note = api.notes.get(lambda x: x["nickname"] == self.selected_nickname)
-        if list(note)[0]["ecocups"] + self.eco_diff > 0:
+        note = list(note)[0]
+        if note["ecocups"] + self.eco_diff > 0:
+            self.repay_ecocup_btn.setText('Rendre ({})'.format(note["ecocups"] + self.eco_diff))
             self.repay_ecocup_btn.setEnabled(True)
         else:
+            self.repay_ecocup_btn.setText("Rendre");
             self.repay_ecocup_btn.setEnabled(False)
 
     def rebuild_notes_list(self):
