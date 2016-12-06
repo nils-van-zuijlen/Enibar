@@ -34,11 +34,11 @@ class AdminStatsWindow(QtWidgets.QDialog):
     def __init__(self):
         super().__init__()
         uic.loadUi('ui/admin_stats_window.ui', self)
-        red = api.stats.get_red_sum()
-        green = api.stats.get_green_sum()
-        self.red_label.setText("{:.2f} €".format(red))
-        self.green_label.setText("{:.2f} €".format(green))
-        self.total_label.setText("{:.2f} €".format(green + red))
+        nb_red, red = api.stats.get_red_sum()
+        nb_green, green = api.stats.get_green_sum()
+        self.red_label.setText("{:.2f} € ({})".format(red, nb_red))
+        self.green_label.setText("{:.2f} € ({})".format(green, nb_green))
+        self.total_label.setText("{:.2f} € ({})".format(green + red, nb_red + nb_green))
         for note, value in api.stats.get_red_notes():
             item = QtWidgets.QTreeWidgetItem(self.red_notes, [note, "{:.2f}".format(value)])
         self.show()

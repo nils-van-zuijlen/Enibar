@@ -60,20 +60,20 @@ def get_notes_stats():
 
 def get_red_sum():
     with Cursor() as cursor:
-        cursor.prepare("SELECT SUM(note) AS red FROM notes WHERE note < 0 AND stats_inscription=TRUE")
+        cursor.prepare("SELECT COUNT(*) as nb_notes, SUM(note) AS red FROM notes WHERE note < 0 AND stats_inscription=TRUE")
         cursor.exec_()
         if cursor.next():
-            return cursor.value('red')
-    return 0
+            return cursor.value('nb_notes'), cursor.value('red')
+    return 0, 0
 
 
 def get_green_sum():
     with Cursor() as cursor:
-        cursor.prepare("SELECT SUM(note) AS red FROM notes WHERE note > 0 AND stats_inscription=TRUE")
+        cursor.prepare("SELECT COUNT(*) as nb_notes, SUM(note) AS green FROM notes WHERE note > 0 AND stats_inscription=TRUE")
         cursor.exec_()
         if cursor.next():
-            return cursor.value('red')
-    return 0
+            return cursor.value('nb_notes'), cursor.value('green')
+    return 0, 0
 
 
 def get_red_notes():
