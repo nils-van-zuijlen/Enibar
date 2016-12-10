@@ -83,3 +83,13 @@ def get_red_notes():
         while cursor.next():
             yield cursor.value('nickname'), cursor.value('note')
 
+
+def get_ecocups_nb():
+    with Cursor() as cursor:
+        cursor.prepare("SELECT COUNT(ecocups) AS nb_ecocups FROM notes")
+        cursor.exec_()
+        if cursor.next():
+            return cursor.value("nb_ecocups")
+
+    return 0
+

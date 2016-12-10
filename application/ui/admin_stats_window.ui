@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>595</width>
-    <height>180</height>
+    <height>296</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,13 +16,6 @@
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0" colspan="2">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Les statistiques sont calculées sans les notes dont les stats sont desactivées.</string>
-       </property>
-      </widget>
-     </item>
      <item row="3" column="0">
       <widget class="QLabel" name="label_5">
        <property name="text">
@@ -30,14 +23,17 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
-      <widget class="QLabel" name="total_label">
+     <item row="1" column="1">
+      <widget class="QLabel" name="red_label">
+       <property name="styleSheet">
+        <string notr="true">color:red</string>
+       </property>
        <property name="text">
         <string>TextLabel</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="0" colspan="2">
+     <item row="5" column="0" colspan="2">
       <widget class="QTreeWidget" name="red_notes">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
@@ -60,6 +56,13 @@
        </column>
       </widget>
      </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Total des notes dans le vert:</string>
+       </property>
+      </widget>
+     </item>
      <item row="2" column="1">
       <widget class="QLabel" name="green_label">
        <property name="styleSheet">
@@ -70,27 +73,38 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="QLabel" name="red_label">
-       <property name="styleSheet">
-        <string notr="true">color:red</string>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Total des notes dans le rouge:</string>
        </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLabel" name="total_label">
        <property name="text">
         <string>TextLabel</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_2">
+     <item row="0" column="0" colspan="2">
+      <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Total des notes dans le vert:</string>
+        <string>Les statistiques sont calculées sans les notes dont les stats sont desactivées.</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label">
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>Total des notes dans le rouge:</string>
+        <string>Nombre d'écocups sur les notes</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLabel" name="ecocups_nb_label">
+       <property name="text">
+        <string>TextLabel</string>
        </property>
       </widget>
      </item>
