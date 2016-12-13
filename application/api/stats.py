@@ -86,7 +86,7 @@ def get_red_notes():
 
 def get_ecocups_nb():
     with Cursor() as cursor:
-        cursor.prepare("SELECT COUNT(ecocups) AS nb_ecocups FROM notes")
+        cursor.prepare("SELECT SUM(ecocups) AS nb_ecocups FROM notes")
         cursor.exec_()
         if cursor.next():
             return cursor.value("nb_ecocups")
