@@ -296,7 +296,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.repay_ecocup_btn.setText('Rendre ({})'.format(note["ecocups"] + self.eco_diff))
             self.repay_ecocup_btn.setEnabled(True)
         else:
-            self.repay_ecocup_btn.setText("Rendre");
+            self.repay_ecocup_btn.setText("Rendre")
             self.repay_ecocup_btn.setEnabled(False)
 
     def rebuild_notes_list(self):

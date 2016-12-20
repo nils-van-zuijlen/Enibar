@@ -112,7 +112,7 @@ class MultiRefillNoteWindow(QtWidgets.QDialog):
             gui.utils.error("Erreur", "La valeur à ajouter doit etre superieur à\
                 0.01€")
             return
-        prompt = ValidationWindow("Etes vous sûr de vouloir {} {} € sur les\
+        prompt = ValidationWindow("Etes vous sûr de vouloir {} de l'argent sur les\
             \nnotes selectionées".format(self.text, self.to_add.text()),
             settings.ASK_VALIDATION_REFILL)
         if not prompt.is_ok:

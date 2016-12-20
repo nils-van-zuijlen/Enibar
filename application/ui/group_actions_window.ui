@@ -116,21 +116,25 @@
         <string>Notes sélectionnées</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_6">
-        <item row="1" column="0">
-         <widget class="QPlainTextEdit" name="selected_note_report">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="0">
          <widget class="FilteredNotesListWidget" name="note_list" native="true"/>
+        </item>
+        <item row="1" column="0">
+         <widget class="QTreeWidget" name="selected_notes_report">
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <column>
+           <property name="text">
+            <string>Note</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Quantité</string>
+           </property>
+          </column>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -272,6 +276,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>selected_notes_report</sender>
+   <signal>itemDoubleClicked(QTreeWidgetItem*,int)</signal>
+   <receiver>NotesAction</receiver>
+   <slot>check_edit(QTreeWidgetItem*,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>145</x>
+     <y>285</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>del_action()</slot>
@@ -286,5 +306,6 @@
   <slot>take_action()</slot>
   <slot>search_input_changed()</slot>
   <slot>selection_changed()</slot>
+  <slot>check_edit(QTreeWidgetItem*,int)</slot>
  </slots>
 </ui>
