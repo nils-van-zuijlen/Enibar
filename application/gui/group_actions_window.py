@@ -133,6 +133,9 @@ class GroupActionsWindow(QtWidgets.QDialog):
                     return
 
                 to_add = self.cur_window.to_add_value
+                if not to_add:
+                    return
+
                 reason = self.cur_window.reason_value
 
                 transactions = []
