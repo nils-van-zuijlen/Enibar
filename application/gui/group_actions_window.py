@@ -297,6 +297,20 @@ class MultiNotesList(NotesList):
             except IndexError:
                 pass
 
+    def mousePressEvent(self, event):
+        if event.button() == QtCore.Qt.LeftButton:
+            self.mouse_pressed = True
+        super().mousePressEvent(event)
+
+    def mouseMoveEvent(self, event):
+        if not self.mouse_pressed:  # Disable click + drag
+            super().mouseMoveEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        if event.button() == QtCore.Qt.LeftButton:
+            self.mouse_pressed = False
+        super().mouseReleaseEvent(event)
+
 
 class UniqueConsumptionList(ConsumptionList):
     """ A Consumption list where you can select only one item
