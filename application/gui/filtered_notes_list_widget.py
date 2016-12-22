@@ -101,3 +101,9 @@ class FilteredNotesListWidget(QtWidgets.QWidget):
 
     def on_selection_changed(self):
         self.itemSelectionChanged.emit()
+
+    def search_input_validated(self):
+        if self.note_list.nb_shown == 1:
+            item = self.note_list.itemAt(1, 1)  # Hideous hack to get the first visible item
+            self.note_list.setCurrentItem(item,  QtCore.QItemSelectionModel.Toggle)
+

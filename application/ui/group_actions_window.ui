@@ -23,6 +23,9 @@
          <property name="text">
           <string>Supprimer</string>
          </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
         </widget>
        </item>
        <item row="4" column="0" colspan="2">
@@ -41,6 +44,9 @@
            <widget class="QPushButton" name="export_csv_button">
             <property name="text">
              <string>Export CSV</string>
+            </property>
+            <property name="autoDefault">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -83,6 +89,9 @@
             <property name="text">
              <string>Recharger</string>
             </property>
+            <property name="autoDefault">
+             <bool>false</bool>
+            </property>
            </widget>
           </item>
           <item row="1" column="1">
@@ -96,6 +105,9 @@
            <widget class="QPushButton" name="take_button">
             <property name="text">
              <string>Prendre</string>
+            </property>
+            <property name="autoDefault">
+             <bool>false</bool>
             </property>
            </widget>
           </item>

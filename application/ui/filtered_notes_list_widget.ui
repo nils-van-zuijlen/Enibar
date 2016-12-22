@@ -151,11 +151,28 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>search_input</sender>
+   <signal>returnPressed()</signal>
+   <receiver>FilteredNotesListWidget</receiver>
+   <slot>search_input_validated()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>157</x>
+     <y>48</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>218</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>filter_combobox_change()</slot>
   <slot>filter_input_changed()</slot>
   <slot>search_input_changed()</slot>
   <slot>on_selection_changed()</slot>
+  <slot>search_input_validated()</slot>
  </slots>
 </ui>
