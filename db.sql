@@ -52,6 +52,8 @@ CREATE TABLE IF NOT EXISTS notes(
 	stats_inscription BOOLEAN DEFAULT TRUE,
 	UNIQUE(lastname, firstname)
 ) ENGINE=InnoDB;
+CREATE INDEX i_notes_firstname ON notes(firstname(10))
+CREATE INDEX i_notes_lastname ON notes(lastname(10));
 
 delimiter //
 CREATE TRIGGER update_overdraft BEFORE UPDATE ON notes
@@ -118,6 +120,8 @@ CREATE TABLE IF NOT EXISTS transactions(
     percentage DECIMAL(10, 2),
 	deletable BOOLEAN default TRUE
 ) ENGINE=InnoDB;
+CREATE INDEX i_transactions_lastname ON transactions(lastname(10));
+CREATE INDEX i_transactions_firstname ON transactions(firstname(10));
 
 CREATE TABLE IF NOT EXISTS panels(
 	id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,

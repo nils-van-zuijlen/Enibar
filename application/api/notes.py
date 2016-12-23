@@ -86,7 +86,7 @@ def _build_stats():
         cursor.prepare("SELECT nickname, notes.firstname, notes.lastname,\
                         SUM(IF(price>0, price, 0)) as tot_refill,\
                         SUM(IF(price<0, price, 0)) AS tot_cons\
-                        FROM transactions INNER JOIN notes ON\
+                        FROM transactions JOIN notes ON\
                         notes.firstname=transactions.firstname AND\
                         notes.lastname=transactions.lastname\
                         GROUP BY firstname, lastname")
