@@ -1,0 +1,57 @@
+ALTER TABLE transactions MODIFY date DATETIME NOT NULL;
+ALTER TABLE transactions MODIFY note VARCHAR(127) NOT NULL;
+ALTER TABLE transactions MODIFY lastname VARCHAR(127) NOT NULL;
+ALTER TABLE transactions MODIFY firstname VARCHAR(127) NOT NULL;
+ALTER TABLE transactions MODIFY category VARCHAR(127) NOT NULL;
+ALTER TABLE transactions MODIFY product VARCHAR(127) NOT NULL;
+ALTER TABLE transactions MODIFY price_name VARCHAR(127) NOT NULL;
+ALTER TABLE transactions MODIFY price DECIMAL(10, 2) NOT NULL;
+ALTER TABLE transactions MODIFY quantity INTEGER UNSIGNED NOT NULL;
+ALTER TABLE transactions MODIFY liquid_quantity INTEGER UNSIGNED NOT NULL;
+ALTER TABLE transactions MODIFY percentage DECIMAL(10, 2) NOT NULL;
+ALTER TABLE transactions MODIFY deletable BOOLEAN default TRUE NOT NULL;
+
+ALTER TABLE admins MODIFY manage_notes BOOLEAN DEFAULT FALSE NOT NULL;
+ALTER TABLE admins MODIFY manage_users BOOLEAN DEFAULT FALSE NOT NULL;
+ALTER TABLE admins MODIFY manage_products BOOLEAN DEFAULT FALSE NOT NULL;
+
+ALTER TABLE notes MODIFY lastname VARCHAR(127) NOT NULL;
+ALTER TABLE notes MODIFY firstname VARCHAR(127) NOT NULL;
+ALTER TABLE notes MODIFY mail VARCHAR(255) NOT NULL;
+ALTER TABLE notes MODIFY tel VARCHAR(32) NOT NULL;
+ALTER TABLE notes MODIFY birthdate INTEGER UNSIGNED NOT NULL;
+ALTER TABLE notes MODIFY promo ENUM('1A', '2A', '3A', '3S', '4A', '5A', 'Esiab', 'Externe', 'Ancien', 'Prof') NOT NULL;
+ALTER TABLE notes MODIFY note DECIMAL(10, 2) DEFAULT 0 NOT NULL;
+ALTER TABLE notes MODIFY ecocups INTEGER UNSIGNED DEFAULT 0 NOT NULL;
+ALTER TABLE notes MODIFY mails_inscription BOOLEAN DEFAULT TRUE NOT NULL;
+ALTER TABLE notes MODIFY stats_inscription BOOLEAN DEFAULT TRUE NOT NULL;
+
+ALTER TABLE categories MODIFY color VARCHAR(32) DEFAULT "#FFFFFF" NOT NULL;
+ALTER TABLE categories MODIFY alcoholic BOOLEAN DEFAULT FALSE NOT NULL;
+
+ALTER TABLE price_description MODIFY label VARCHAR(127) NOT NULL;
+ALTER TABLE price_description MODIFY quantity INTEGER UNSIGNED NOT NULL;
+
+ALTER TABLE prices MODIFY value DECIMAL(10,2) NOT NULL;
+ALTER TABLE prices MODIFY percentage DECIMAL(10, 2) DEFAULT 0 NOT NULL;
+
+ALTER TABLE panels MODIFY name VARCHAR(255) UNIQUE NOT NULL;
+ALTER TABLE panels MODIFY hidden BOOLEAN DEFAULT FALSE NOT NULL;
+
+ALTER TABLE mail_models MODIFY subject TEXT default "" NOT NULL;
+ALTER TABLE mail_models MODIFY message TEXT default "" NOT NULL;
+ALTER TABLE mail_models MODIFY filter INTEGER UNSIGNED NOT NULL;
+ALTER TABLE mail_models MODIFY filter_value TEXT default "" NOT NULL;
+
+ALTER TABLE scheduled_mails MODIFY active BOOLEAN default FALSE NOT NULL;
+ALTER TABLE scheduled_mails MODIFY filter INTEGER UNSIGNED NOT NULL;
+ALTER TABLE scheduled_mails MODIFY filter_value TEXT default "" NOT NULL;
+ALTER TABLE scheduled_mails MODIFY sender varchar(255) default "" NOT NULL;
+ALTER TABLE scheduled_mails MODIFY subject TEXT default "" NOT NULL;
+ALTER TABLE scheduled_mails MODIFY message TEXT default "" NOT NULL;
+ALTER TABLE scheduled_mails MODIFY schedule_interval SMALLINT UNSIGNED default 1 NOT NULL;
+ALTER TABLE scheduled_mails MODIFY schedule_unit enum('day', 'week', 'month') default "day" NOT NULL;
+ALTER TABLE scheduled_mails MODIFY schedule_day TINYINT default 0 NOT NULL;
+
+ALTER TABLE note_categories MODIFY hidden BOOLEAN DEFAULT FALSE NOT NULL;
+ALTER TABLE note_categories MODIFY protected BOOLEAN DEFAULT FALSE NOT NULL;

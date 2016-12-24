@@ -27,9 +27,9 @@ USE enibar;
 CREATE TABLE IF NOT EXISTS admins(
 	login VARCHAR(127) PRIMARY KEY NOT NULL,
 	password VARCHAR(127) NOT NULL,
-	manage_notes BOOLEAN DEFAULT FALSE,
-	manage_users BOOLEAN DEFAULT FALSE,
-	manage_products BOOLEAN DEFAULT FALSE
+	manage_notes BOOLEAN DEFAULT FALSE NOT NULL,
+	manage_users BOOLEAN DEFAULT FALSE NOT NULL,
+	manage_products BOOLEAN DEFAULT FALSE NOT NULL
 ) ENGINE=InnoDB;
 
 INSERT INTO admins(login, password, manage_notes, manage_users, manage_products) VALUES("admin", "$2a$12$grLadAuopGdXxA7wEIehlO4BpMHTpJFweL3zJAHGaYFOIw1Gp.U5O", TRUE, TRUE, TRUE);
@@ -37,19 +37,19 @@ INSERT INTO admins(login, password, manage_notes, manage_users, manage_products)
 CREATE TABLE IF NOT EXISTS notes(
 	id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
 	nickname VARCHAR(127) UNIQUE NOT NULL,
-	lastname VARCHAR(127),
-	firstname VARCHAR(127),
-	mail VARCHAR(255),
-	tel VARCHAR(32),
-	birthdate INTEGER UNSIGNED,
-	promo ENUM('1A', '2A', '3A', '3S', '4A', '5A', 'Esiab', 'Externe', 'Ancien', 'Prof'),
+	lastname VARCHAR(127) NOT NULL,
+	firstname VARCHAR(127) NOT NULL,
+	mail VARCHAR(255) NOT NULL,
+	tel VARCHAR(32) NOT NULL,
+	birthdate INTEGER UNSIGNED NOT NULL,
+	promo ENUM('1A', '2A', '3A', '3S', '4A', '5A', 'Esiab', 'Externe', 'Ancien', 'Prof') NOT NULL,
 	photo_path VARCHAR(255) DEFAULT NULL,
-	note DECIMAL(10, 2) DEFAULT 0,
+	note DECIMAL(10, 2) DEFAULT 0 NOT NULL,
 	overdraft_date DATE DEFAULT NULL,
 	last_agio DATE DEFAULT NULL,
-	ecocups INTEGER UNSIGNED DEFAULT 0,
-	mails_inscription BOOLEAN DEFAULT TRUE,
-	stats_inscription BOOLEAN DEFAULT TRUE,
+	ecocups INTEGER UNSIGNED DEFAULT 0 NOT NULL,
+	mails_inscription BOOLEAN DEFAULT TRUE NOT NULL,
+	stats_inscription BOOLEAN DEFAULT TRUE NOT NULL,
 	UNIQUE(lastname, firstname)
 ) ENGINE=InnoDB;
 CREATE INDEX i_notes_nickname ON notes(nickname(10));
@@ -76,8 +76,8 @@ delimiter ;
 CREATE TABLE IF NOT EXISTS categories(
 	id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
 	name VARCHAR(127) UNIQUE NOT NULL,
-	color VARCHAR(32) DEFAULT "#FFFFFF",
-	alcoholic BOOLEAN DEFAULT FALSE
+	color VARCHAR(32) DEFAULT "#FFFFFF" NOT NULL,
+	alcoholic BOOLEAN DEFAULT FALSE NOT NULL
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS products(
@@ -90,9 +90,9 @@ CREATE TABLE IF NOT EXISTS products(
 
 CREATE TABLE IF NOT EXISTS price_description(
 	id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-	label VARCHAR(127),
+	label VARCHAR(127) NOT NULL,
 	category INTEGER UNSIGNED,
-    quantity INTEGER UNSIGNED,
+    quantity INTEGER UNSIGNED NOT NULL,
 	UNIQUE (label, category),
 	FOREIGN KEY (category) REFERENCES categories (id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
@@ -101,26 +101,26 @@ CREATE TABLE IF NOT EXISTS prices(
 	id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
 	price_description INTEGER UNSIGNED,
 	product INTEGER UNSIGNED,
-	value DECIMAL(10,2),
-    percentage DECIMAL(10, 2) DEFAULT 0,
+	value DECIMAL(10,2) NOT NULL,
+    percentage DECIMAL(10, 2) DEFAULT 0 NOT NULL,
 	FOREIGN KEY (price_description) REFERENCES price_description (id) ON DELETE CASCADE,
 	FOREIGN KEY (product) REFERENCES products (id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS transactions(
 	id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-	date DATETIME,
-	note VARCHAR(127),
-	lastname VARCHAR(127),
-	firstname VARCHAR(127),
-	category VARCHAR(127),
-	product VARCHAR(127),
-	price_name VARCHAR(127),
-	price DECIMAL(10, 2),
-	quantity INTEGER UNSIGNED,
-    liquid_quantity INTEGER UNSIGNED,
-    percentage DECIMAL(10, 2),
-	deletable BOOLEAN default TRUE
+	date DATETIME NOT NULL,
+	note VARCHAR(127) NOT NULL,
+	lastname VARCHAR(127) NOT NULL,
+	firstname VARCHAR(127) NOT NULL,
+	category VARCHAR(127) NOT NULL,
+	product VARCHAR(127) NOT NULL,
+	price_name VARCHAR(127) NOT NULL,
+	price DECIMAL(10, 2) NOT NULL,
+	quantity INTEGER UNSIGNED NOT NULL,
+    liquid_quantity INTEGER UNSIGNED NOT NULL,
+    percentage DECIMAL(10, 2) NOT NULL,
+	deletable BOOLEAN default TRUE NOT NULL
 ) ENGINE=InnoDB;
 CREATE INDEX i_transactions_lastname ON transactions(lastname(10));
 CREATE INDEX i_transactions_firstname ON transactions(firstname(10));
@@ -142,31 +142,31 @@ CREATE TABLE IF NOT EXISTS panel_content(
 
 CREATE TABLE IF NOT EXISTS mail_models(
 	name varchar(255) PRIMARY KEY,
-	subject TEXT default "",
-	message TEXT default "",
-	filter INTEGER UNSIGNED,
-	filter_value TEXT default ""
+	subject TEXT default "" NOT NULL,
+	message TEXT default "" NOT NULL,
+	filter INTEGER UNSIGNED NOT NULL,
+	filter_value TEXT default "" NOT NULL
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS scheduled_mails(
 	name VARCHAR(255) PRIMARY KEY,
-	active BOOLEAN default FALSE,
-	filter INTEGER UNSIGNED,
-	filter_value TEXT default "",
-	sender varchar(255) default "",
-	subject TEXT default "",
-	message TEXT default "",
-	schedule_interval SMALLINT UNSIGNED default 1,
-	schedule_unit enum('day', 'week', 'month') default "day",
-	schedule_day TINYINT default 0,
+	active BOOLEAN default FALSE NOT NULL,
+	filter INTEGER UNSIGNED NOT NULL,
+	filter_value TEXT default "" NOT NULL,
+	sender varchar(255) default "" NOT NULL,
+	subject TEXT default "" NOT NULL,
+	message TEXT default "" NOT NULL,
+	schedule_interval SMALLINT UNSIGNED default 1 NOT NULL,
+	schedule_unit enum('day', 'week', 'month') default "day" NOT NULL,
+	schedule_day TINYINT default 0 NOT NULL,
 	last_sent DATE
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS note_categories(
     id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) UNIQUE NOT NULL,
-    hidden BOOLEAN DEFAULT FALSE,
-    protected BOOLEAN DEFAULT FALSE
+    hidden BOOLEAN DEFAULT FALSE NOT NULL,
+    protected BOOLEAN DEFAULT FALSE NOT NULL
 ) ENGINE=InnoDB;
 
 INSERT INTO `note_categories` (name, hidden, protected) VALUES ('Non Cotiz', 1, 1);
