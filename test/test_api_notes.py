@@ -488,3 +488,30 @@ class NotesTest(basetest.BaseTest):
         note = notes.get()[0]
         self.assertEqual(note['categories'], ["cat1", "cat2"])
 
+    def test_note_renaming(self):
+        """ Testing note renaming and history following
+        """
+        self.add_note("test")
+        trs = [{
+            'note': "test",
+            'category': "Note",
+            'product': "",
+            'price_name': "test",
+            'quantity': "1",
+            'liquid_quantity': 0,
+            'percentage': 0,
+            'price': -10}]
+        transactions.log_transactions(trs)
+        tr = list(transactions.get())[0]
+        self.assertEqual(tr['note'], 'test')
+
+        api.notes.change_values("test", nickname="test2")
+        tr = list(transactions.get())[0]
+        self.assertEqual(tr['note'], 'test2')
+
+        api.notes.remove(["test2"])
+        self.add_note("test2")
+        api.notes.change_values("test2", nickname="test")
+        tr = list(transactions.get())[0]
+        self.assertEqual(tr['note'], 'test2')
+

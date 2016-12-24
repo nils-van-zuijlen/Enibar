@@ -201,8 +201,18 @@ def change_values(nick, *, do_not=False, **kwargs):
             cursor.bindValue(':{}'.format(key), value)
         cursor.bindValue(':nick', nick)
         value = cursor.exec_()
+
+    renaming = 'nickname' in kwargs
+    if renaming:
+        note = get(lambda x: x['nickname'] == nick)[0]
+        # Make the history follow
+        cursor.prepare("UPDATE transactions SET note=:new_nick WHERE note_id=:id")
+        cursor.bindValue(":new_nick", kwargs['nickname'])
+        cursor.bindValue(":id", note['id'])
+        cursor.exec_()
+
     if not do_not:
-        if 'nickname' in kwargs:  # Note renaming
+        if renaming:
             api.redis.send_message("enibar-delete", [nick, ])
             api.redis.send_message("enibar-notes", [kwargs['nickname'], ])
         else:

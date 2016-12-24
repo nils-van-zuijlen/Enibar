@@ -49,15 +49,17 @@ def log_transaction(nickname, category, product, price_name, quantity, price,
         if notes:
             lastname = notes[0]['lastname']
             firstname = notes[0]['firstname']
+            note_id = notes[0]['id']
         else:
             lastname, firstname = "", ""
+            note_id = None
 
         cursor.prepare("""INSERT INTO transactions(date, note, category,
             product, price_name,quantity, price, firstname, lastname,
-            liquid_quantity, percentage, deletable)
+            liquid_quantity, percentage, deletable, note_id)
             VALUES(:date, :note, :category, :product, :price_name, :quantity,
             :price, :firstname, :lastname, :liquid_quantity,
-            :percentage, :deletable)
+            :percentage, :deletable, :note_id)
             """
         )
         now = datetime.datetime.now().isoformat()
@@ -73,6 +75,7 @@ def log_transaction(nickname, category, product, price_name, quantity, price,
         cursor.bindValue(':liquid_quantity', liquid_quantity)
         cursor.bindValue(':percentage', percentage)
         cursor.bindValue(':deletable', deletable)
+        cursor.bindValue(':note_id', note_id)
         cursor.exec_()
         asyncio.ensure_future(api.sde.send_history_lines([{"id": cursor.lastInsertId(), "date": now, "note": nickname, "category": category, "product": product, "price_name": price_name, "quantity": quantity, "price": price, "liquid_quantity": liquid_quantity, "percentage": percentage}]))
         return True
@@ -90,19 +93,19 @@ def log_transactions(transactions):
         cursor.prepare("""INSERT INTO transactions(
                 date, note, category, product, price_name,
                 quantity, price, firstname, lastname, liquid_quantity,
-                percentage, deletable
+                percentage, deletable, note_id
             )
             VALUES(
                 NOW(), :note, :category, :product, :price_name,
                 :quantity, :price, :firstname, :lastname, :liquid_quantity,
-                :percentage, :deletable
+                :percentage, :deletable, :note_id
             )""")
         now = datetime.datetime.now().isoformat()
         for trans in transactions:
             # Fecth firstname and lastname of user with a bit of caching
             if not trans['note'] in cache:
                 fetching_cursor = QtSql.QSqlQuery(database)
-                fetching_cursor.prepare("""SELECT lastname, firstname
+                fetching_cursor.prepare("""SELECT id, lastname, firstname
                     FROM notes WHERE nickname=:nick"""
                 )
                 fetching_cursor.bindValue(':nick', trans['note'])
@@ -110,17 +113,21 @@ def log_transactions(transactions):
                 if fetching_cursor.next():
                     lastname = fetching_cursor.value("lastname")
                     firstname = fetching_cursor.value("firstname")
+                    note_id = fetching_cursor.value('id')
                 else:
                     # Nickname is a fake one, we must not fill lastname and
                     # firstname name
                     lastname, firstname = "", ""
+                    note_id = None
                 cache[trans['note']] = {
                     'lastname': lastname,
-                    'firstname': firstname
+                    'firstname': firstname,
+                    'id': note_id
                 }
             else:
                 lastname = cache[trans['note']]['lastname']
                 firstname = cache[trans['note']]['firstname']
+                note_id = cache[trans['note']]['id']
 
             cursor.bindValue(':date', now)
             cursor.bindValue(':note', trans['note'])
@@ -134,6 +141,7 @@ def log_transactions(transactions):
             cursor.bindValue(':liquid_quantity', trans.get('liquid_quantity', 0))
             cursor.bindValue(':percentage', trans.get('percentage', 0))
             cursor.bindValue(':deletable', trans.get('deletable', True))
+            cursor.bindValue(':note_id', note_id)
             cursor.exec_()
             trans["id"] = cursor.lastInsertId()
             trans["date"] = now

@@ -120,7 +120,8 @@ CREATE TABLE IF NOT EXISTS transactions(
 	quantity INTEGER UNSIGNED NOT NULL,
     liquid_quantity INTEGER UNSIGNED NOT NULL,
     percentage DECIMAL(10, 2) NOT NULL,
-	deletable BOOLEAN default TRUE NOT NULL
+	deletable BOOLEAN default TRUE NOT NULL,
+    note_id INTEGER UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB;
 CREATE INDEX i_transactions_lastname ON transactions(lastname(10));
 CREATE INDEX i_transactions_firstname ON transactions(firstname(10));
