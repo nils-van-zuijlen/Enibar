@@ -555,6 +555,8 @@ class MenuBar(QtWidgets.QMenuBar):
             if path:
                 self.cur_window = CsvImportWindow(path)
                 self._connect_window("notes_management")
+            else:
+                api.redis.unlock("notes_management")
 
     def about(self):
         """ Open an AboutWindow
