@@ -178,8 +178,8 @@ def get_content(**kwargs):
         categories.id AS category_id,
         categories.name as category_name
         FROM panel_content
-        INNER JOIN products ON products.id=panel_content.product_id
-        INNER JOIN categories ON categories.id=products.category
+        JOIN products ON products.id=panel_content.product_id
+        JOIN categories ON categories.id=products.category
         {} {}""".format("WHERE" * bool(len(filters)), " AND ".join(filters))
 
         cursor.prepare(request)

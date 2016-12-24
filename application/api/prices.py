@@ -130,7 +130,7 @@ def add(product, price_description, value, percentage):
     with Cursor() as cursor:
         cursor.prepare("INSERT INTO prices (product, price_description, value, percentage)\
         (SELECT :product, :price_description, :value, :percentage FROM (SELECT 1) t WHERE\
-        EXISTS(SELECT * FROM products INNER JOIN price_description ON\
+        EXISTS(SELECT * FROM products JOIN price_description ON\
         products.category=price_description.category WHERE products.id=:product\
         AND price_description.id=:price_description))")
         cursor.bindValue(':product', product)
@@ -168,8 +168,8 @@ def get(**kwargs):
             price_description.label as label,\
             price_description.category as category, \
             categories.alcoholic AS alcoholic \
-            from prices INNER JOIN price_description \
-            INNER JOIN categories \
+            from prices JOIN price_description \
+            JOIN categories \
             ON prices.price_description=price_description.id \
             AND categories.id=price_description.category \
             {} {} ".format("WHERE" * bool(filters), " AND ".join(filters)))

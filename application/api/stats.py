@@ -38,7 +38,7 @@ def get_notes_stats():
                         transactions.price/quantity AS price,\
                         transactions.category AS category,\
                         SUM(transactions.quantity) AS quantity\
-                        FROM transactions INNER JOIN notes WHERE\
+                        FROM transactions JOIN notes WHERE\
                         ((notes.lastname = transactions.lastname AND\
                         notes.firstname = transactions.firstname) OR\
                         notes.nickname = transactions.note) AND\
