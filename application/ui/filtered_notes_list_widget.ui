@@ -26,6 +26,11 @@
        </property>
        <item>
         <property name="text">
+         <string>Tout</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
          <string>Montrés</string>
         </property>
        </item>

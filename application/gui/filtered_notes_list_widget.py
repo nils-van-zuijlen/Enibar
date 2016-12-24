@@ -51,20 +51,23 @@ class FilteredNotesListWidget(QtWidgets.QWidget):
         self.note_list.rebuild(api.notes.get(lambda x: self.note_list.custom_filter(x) and self.note_list.current_filter(x)))
 
     def filter_combobox_change(self, id_):
-        """ Called when the filter combobox is chnged
+        """ Called when the filter combobox is changed
         """
         if id_ == 0:
+            self.note_list.current_filter = lambda x: True
+            self.filter_input.setEnabled(False)
+        if id_ == 1:
             self.note_list.current_filter = lambda x: x['hidden'] == 0
             self.filter_input.setEnabled(False)
-        elif id_ == 1:
+        elif id_ == 2:
             self.note_list.current_filter = lambda x: x['hidden'] == 1
             self.filter_input.setEnabled(False)
-        elif id_ == 2:
+        elif id_ == 3:
             self.filter_input.setEnabled(True)
             self.filter_input.setText("0")
             self.note_list.current_filter = lambda x: x['note'] > 0 and\
                 x['hidden'] == 0
-        elif id_ == 3:
+        elif id_ == 4:
             self.filter_input.setEnabled(True)
             self.filter_input.setText("0")
             self.note_list.current_filter = lambda x: x['note'] < 0 and\
