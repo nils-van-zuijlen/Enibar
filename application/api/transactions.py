@@ -102,32 +102,17 @@ def log_transactions(transactions):
             )""")
         now = datetime.datetime.now().isoformat()
         for trans in transactions:
-            # Fecth firstname and lastname of user with a bit of caching
-            if not trans['note'] in cache:
-                fetching_cursor = QtSql.QSqlQuery(database)
-                fetching_cursor.prepare("""SELECT id, lastname, firstname
-                    FROM notes WHERE nickname=:nick"""
-                )
-                fetching_cursor.bindValue(':nick', trans['note'])
-                fetching_cursor.exec_()
-                if fetching_cursor.next():
-                    lastname = fetching_cursor.value("lastname")
-                    firstname = fetching_cursor.value("firstname")
-                    note_id = fetching_cursor.value('id')
-                else:
-                    # Nickname is a fake one, we must not fill lastname and
-                    # firstname name
-                    lastname, firstname = "", ""
-                    note_id = None
-                cache[trans['note']] = {
-                    'lastname': lastname,
-                    'firstname': firstname,
-                    'id': note_id
-                }
+            notes = api.notes.get(lambda x: x['nickname'] == trans['note'])
+            if notes:
+                note = notes[0]
+                lastname = note['lastname']
+                firstname = note['firstname']
+                note_id = note['id']
             else:
-                lastname = cache[trans['note']]['lastname']
-                firstname = cache[trans['note']]['firstname']
-                note_id = cache[trans['note']]['id']
+                # Nickname is a fake one, we must not fill lastname and
+                # firstname name
+                lastname, firstname = "", ""
+                note_id = None
 
             cursor.bindValue(':date', now)
             cursor.bindValue(':note', trans['note'])

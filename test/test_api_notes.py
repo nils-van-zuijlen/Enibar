@@ -352,15 +352,15 @@ class NotesTest(basetest.BaseTest):
         notes.remove(["test0", "test1"])
         self.assertEqual(self.count_notes(), 0)
 
-    def test_remove_line_history(self):
+    def test_removing_a_note_line_history(self):
         self.add_note("test0")
         notes.transactions(['test0', ], 10)
         notes.remove(["test0", ])
         self.assertDictListEqual(list(transactions.get()),
             [{'product': '',
-              'lastname': '',
+              'lastname': 'test0',
               'quantity': 1,
-              'firstname': '',
+              'firstname': 'test0',
               'id': 1,
               'note': 'test0',
               'price': -10.0,
