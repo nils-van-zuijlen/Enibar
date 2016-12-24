@@ -37,12 +37,12 @@ python -c "import settings; print(settings.DEBUG)" | grep "True" &> /dev/null
 DEBUG="$?"
 
 if wmctrl -h &>/dev/null; then
-    WIN_ID=$(wmctrl -l | grep Enibar | cut -d ' ' -f1 | tail -n1)
+    WIN_ID=$(wmctrl -l | grep -e " Enibar$" | cut -d ' ' -f1 | tail -n1)
 fi
 
 if [[ "$WIN_ID" = "" || "$DEBUG" = "0" ]]; then
     /bin/sh -c "$PYTHON -OO main.py"
 else
     wmctrl -i -a $WIN_ID
-fi;
+fi
 
