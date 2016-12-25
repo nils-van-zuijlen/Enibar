@@ -32,7 +32,7 @@ class NotesManagementWindowTest(basetest.BaseGuiTest):
         api.note_categories.add("cat1")
         api.note_categories.add("cat2")
         api.notes.rebuild_cache()
-        self.win = gui.notes_management_window.NotesManagementWindow(None)
+        self.win = gui.notes_management_window.NotesManagementWindow("", None)
 
     def test_notes_list(self):
         self.assertEqual(self.get_items(self.win.note_list), ["test", "test2"])

@@ -274,7 +274,7 @@ class GroupActionsWindow(QtWidgets.QDialog):
             self.selected_notes_report.editItem(item, column)
 
     def notes_management_fnc(self):
-        self.main_window.menu_bar.manage_note_fnc_no_auth(self.performer)
+        self.main_window.menu_bar.manage_note_fnc_no_auth(False, self.performer)
 
 
 class MultiNotesList(NotesList):

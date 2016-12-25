@@ -323,7 +323,7 @@ class NotesManagementWindow(QtWidgets.QDialog):
         self.on_note_selected(self.current_shown)
 
     def group_action_fnc(self):
-        self.main_window.menu_bar.notes_action_fnc_no_auth(self.performer) # XXX
+        self.main_window.menu_bar.notes_action_fnc_no_auth(False, self.performer)
 
 
 class ManageNotesList(gui.notes_list_widget.NotesList):

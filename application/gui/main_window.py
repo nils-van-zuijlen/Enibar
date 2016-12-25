@@ -478,7 +478,7 @@ class MenuBar(QtWidgets.QMenuBar):
         self._connect_window()
 
     @ask_auth("manage_notes", pass_performer=True)
-    def manage_note_fnc(self, _performer):
+    def manage_note_fnc(self, _, _performer):
         """ Open an ManageNotes window
         """
         if self.try_locking("notes_management"):
@@ -486,7 +486,7 @@ class MenuBar(QtWidgets.QMenuBar):
             self.cur_window = NotesManagementWindow(_performer, self.parent())
             self._connect_window("notes_management")
 
-    def manage_note_fnc_no_auth(self, _performer):
+    def manage_note_fnc_no_auth(self, _, _performer):
         """ Open an ManageNotes window
             BE CAREFUL: ONLY CALL THIS FUNCTION FROM TRUSTED FONCTIONS.
             THERE IS NO AUTHENTIFICATION REQUIRED FOR THIS ONE.
@@ -540,7 +540,7 @@ class MenuBar(QtWidgets.QMenuBar):
             self.cur_window = GroupActionsWindow(_performer, self.parent())
             self._connect_window("notes_management")
 
-    def notes_action_fnc_no_auth(self, _performer):
+    def notes_action_fnc_no_auth(self, _, _performer):
         """ Open a NotesAction window
             BE CAREFUL: ONLY CALL THIS FUNCTION FROM TRUSTED FONCTIONS.
             THERE IS NO AUTHENTIFICATION REQUIRED FOR THIS ONE.
