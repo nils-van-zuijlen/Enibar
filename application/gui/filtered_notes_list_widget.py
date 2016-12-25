@@ -56,7 +56,7 @@ class FilteredNotesListWidget(QtWidgets.QWidget):
         if id_ == 0:
             self.note_list.current_filter = lambda x: True
             self.filter_input.setEnabled(False)
-        if id_ == 1:
+        elif id_ == 1:
             self.note_list.current_filter = lambda x: x['hidden'] == 0
             self.filter_input.setEnabled(False)
         elif id_ == 2:
