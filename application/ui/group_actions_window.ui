@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>574</width>
-    <height>544</height>
+    <height>807</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -152,6 +152,13 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item row="2" column="0">
+    <widget class="QPushButton" name="notes_management_button">
+     <property name="text">
+      <string>Gerer les notes</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
@@ -304,6 +311,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>notes_management_button</sender>
+   <signal>clicked()</signal>
+   <receiver>NotesAction</receiver>
+   <slot>notes_management_fnc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>286</x>
+     <y>786</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>403</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>del_action()</slot>
@@ -319,5 +342,6 @@
   <slot>search_input_changed()</slot>
   <slot>selection_changed()</slot>
   <slot>check_edit(QTreeWidgetItem*,int)</slot>
+  <slot>notes_management_fnc()</slot>
  </slots>
 </ui>

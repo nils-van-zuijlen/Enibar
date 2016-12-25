@@ -62,8 +62,9 @@ def get_coeffed_quantity(quantity, coeff):
 
 class GroupActionsWindow(QtWidgets.QDialog):
     """ NotesAction window class """
-    def __init__(self, performer):
+    def __init__(self, performer, main_window):
         super().__init__()
+        self.main_window = main_window
         self.performer = performer
         self.cur_window = None
         self.current_filter = lambda x: x['hidden'] == 0
@@ -271,6 +272,9 @@ class GroupActionsWindow(QtWidgets.QDialog):
         """
         if column == 1:
             self.selected_notes_report.editItem(item, column)
+
+    def notes_management_fnc(self):
+        self.main_window.menu_bar.manage_note_fnc_no_auth(self.performer)
 
 
 class MultiNotesList(NotesList):

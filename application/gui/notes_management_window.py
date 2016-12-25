@@ -38,11 +38,13 @@ import gui.auth_prompt_window
 
 class NotesManagementWindow(QtWidgets.QDialog):
     """ ManageNotes window class """
-    def __init__(self, main_window):
+    def __init__(self, performer, main_window):
         super().__init__()
         uic.loadUi('ui/notes_management_window.ui', self)
 
         self.main_window = main_window
+        self.performer = performer
+
         # Add validators on inputs.
         self.nickname_input.set_validator(api.validator.NAME)
         self.name_input.set_validator(api.validator.NAME)
@@ -319,6 +321,9 @@ class NotesManagementWindow(QtWidgets.QDialog):
             api.notes.transactions([self.current_nickname], -1.0)
             api.transactions.log_transactions(transactions)
         self.on_note_selected(self.current_shown)
+
+    def group_action_fnc(self):
+        self.main_window.menu_bar.notes_action_fnc_no_auth(self.performer) # XXX
 
 
 class ManageNotesList(gui.notes_list_widget.NotesList):
