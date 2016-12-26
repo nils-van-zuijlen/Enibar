@@ -257,7 +257,7 @@ def add(nickname, firstname, lastname, mail, tel, birthdate, promo, photo_path,
     with Cursor() as cursor:
         cursor.prepare("INSERT INTO notes (nickname, lastname, firstname,\
                         mail, tel, birthdate, promo, photo_path,\
-                        mails_inscription, stats_inscription)\
+                        mails_inscription, stats_inscription, agios_inscription)\
                         VALUES(:nickname, :lastname, :firstname, :mail, :tel,\
                         :birthdate, :promo, :photo_path, :mails_inscription,\
                         :stats_inscription, :agios_inscription)")
