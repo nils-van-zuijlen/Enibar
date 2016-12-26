@@ -141,7 +141,8 @@ class NotesManagementWindow(QtWidgets.QDialog):
                                     promo=self.promo_input.currentText(),
                                     nickname=self.nickname_input.text(),
                                     stats_inscription=self.stats_checkbox.isChecked(),
-                                    mails_inscription=self.mails_checkbox.isChecked())
+                                    mails_inscription=self.mails_checkbox.isChecked(),
+                                    agios_inscription=self.agios_checkbox.isChecked())
             if self.photo_selected:
                 api.notes.change_photo(self.nickname_input.text(),
                                        self.photo_selected)
@@ -173,6 +174,7 @@ class NotesManagementWindow(QtWidgets.QDialog):
 
         self.mails_checkbox.setChecked(note['mails_inscription'])
         self.stats_checkbox.setChecked(note['stats_inscription'])
+        self.agios_checkbox.setChecked(note['agios_inscription'])
 
         self.category_list.clear()
         self.category_selector.clear()

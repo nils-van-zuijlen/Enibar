@@ -139,7 +139,7 @@ class BaseTest(unittest.TestCase):
             self.assertMyDictEqual(d1, d2, ignore=ignore)
 
     def add_note(self, nick, name=None, first_name=None, mail="test@pouette.fr",
-            stats_inscription=True, mails_inscription=True):
+            stats_inscription=True, mails_inscription=True, agios_inscription=True):
         note = api.notes.add(nick,
             first_name or nick,
             name or nick,
@@ -149,7 +149,8 @@ class BaseTest(unittest.TestCase):
             '1A',
             '',
             stats_inscription,
-            mails_inscription
+            mails_inscription,
+            agios_inscription
         )
         api.notes.rebuild_cache()
         return note

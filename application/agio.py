@@ -41,6 +41,7 @@ if __name__ == "__main__":
                 ON note_categories.hidden=1 AND note_categories.id=category WHERE note=notes.id
             )
             AND overdraft_date < DATE_SUB(CURDATE(), INTERVAL ? DAY)
+            AND agios_inscription=TRUE
             AND (last_agio < DATE_SUB(CURDATE(), INTERVAL ? DAY) OR last_agio IS NULL)
             """
         )

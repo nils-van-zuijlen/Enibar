@@ -50,6 +50,7 @@ CREATE TABLE IF NOT EXISTS notes(
 	ecocups INTEGER UNSIGNED DEFAULT 0 NOT NULL,
 	mails_inscription BOOLEAN DEFAULT TRUE NOT NULL,
 	stats_inscription BOOLEAN DEFAULT TRUE NOT NULL,
+	agios_inscription BOOLEAN DEFAULT TRUE NOT NULL,
 	UNIQUE(lastname, firstname)
 ) ENGINE=InnoDB;
 CREATE INDEX i_notes_nickname ON notes(nickname(10));

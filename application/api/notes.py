@@ -35,7 +35,7 @@ import tempfile
 
 NOTE_FIELDS = ['id', 'nickname', 'lastname', 'firstname', 'mail', 'tel',
                'birthdate', 'promo', 'note', 'photo_path', 'overdraft_date',
-               'ecocups', 'mails_inscription', 'stats_inscription']
+               'ecocups', 'mails_inscription', 'stats_inscription', 'agios_inscription']
 
 NOTES_CACHE = {}
 NOTES_FIELDS_CACHE = {}
@@ -231,7 +231,7 @@ def unique_file(file_name):
 
 
 def add(nickname, firstname, lastname, mail, tel, birthdate, promo, photo_path,
-        stats_inscription, mails_inscription):
+        stats_inscription, mails_inscription, agios_inscription=True):
     """ Create a note. Copy the image from photo_path to settings.IMG_BASE_DIR
 
     :param str nickname: Nickname
@@ -260,7 +260,7 @@ def add(nickname, firstname, lastname, mail, tel, birthdate, promo, photo_path,
                         mails_inscription, stats_inscription)\
                         VALUES(:nickname, :lastname, :firstname, :mail, :tel,\
                         :birthdate, :promo, :photo_path, :mails_inscription,\
-                        :stats_inscription)")
+                        :stats_inscription, :agios_inscription)")
         birthdate = datetime.datetime.strptime(birthdate,
                                                "%d/%m/%Y").timestamp()
 
@@ -269,7 +269,8 @@ def add(nickname, firstname, lastname, mail, tel, birthdate, promo, photo_path,
                            ':birthdate': birthdate, ':promo': promo,
                            ':photo_path': name if photo_path else "",
                            ':mails_inscription': mails_inscription,
-                           ':stats_inscription': stats_inscription})
+                           ':stats_inscription': stats_inscription,
+                           ':agios_inscription': agios_inscription})
 
         if cursor.exec_():
             api.redis.send_message("enibar-notes", [nickname, ])

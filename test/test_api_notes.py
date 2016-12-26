@@ -115,6 +115,7 @@ class NotesTest(basetest.BaseTest):
                                  'tot_refill': 0.0,
                                  'mails_inscription': False,
                                  'stats_inscription': True,
+                                 'agios_inscription': True,
                                  'hidden': 0,
                                  'categories': []})
         self.assertTrue(os.path.isfile("img/coucou.jpg"))
@@ -173,6 +174,7 @@ class NotesTest(basetest.BaseTest):
                            'tot_refill': 0.0,
                            'mails_inscription': True,
                            'stats_inscription': True,
+                           'agios_inscription': True,
                            'hidden': 0,
                            'categories': []}, res)
 
@@ -218,6 +220,7 @@ class NotesTest(basetest.BaseTest):
                                  'photo_path': '',
                                  'mails_inscription': True,
                                  'stats_inscription': True,
+                                 'agios_inscription': True,
                                  'hidden': 0,
                                  'categories': []}])
 
@@ -263,6 +266,7 @@ class NotesTest(basetest.BaseTest):
                                  'photo_path': '',
                                  'mails_inscription': True,
                                  'stats_inscription': True,
+                                 'agios_inscription': True,
                                  'hidden': 0,
                                  'categories': []}])
 
