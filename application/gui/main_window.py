@@ -478,7 +478,7 @@ class MenuBar(QtWidgets.QMenuBar):
         self._connect_window()
 
     @ask_auth("manage_notes", pass_performer=True)
-    def manage_note_fnc(self, _, _performer):
+    def manage_note_fnc(self, _, _performer=""):
         """ Open an ManageNotes window
         """
         if self.try_locking("notes_management"):
