@@ -64,7 +64,6 @@ def get_red_sum():
         cursor.exec_()
         if cursor.next():
             return cursor.value('nb_notes'), cursor.value('red')
-    return 0, 0
 
 
 def get_green_sum():
@@ -73,7 +72,6 @@ def get_green_sum():
         cursor.exec_()
         if cursor.next():
             return cursor.value('nb_notes'), cursor.value('green')
-    return 0, 0
 
 
 def get_red_notes():
@@ -90,6 +88,4 @@ def get_ecocups_nb():
         cursor.exec_()
         if cursor.next():
             return cursor.value("nb_ecocups")
-
-    return 0
 

@@ -117,11 +117,28 @@ class StatsTests(basetest.BaseTest):
         )
 
     def test_get_stats(self):
-        print(list(stats.get_notes_stats()))
         self.assertEqual(list(stats.get_notes_stats()),
             [{'price_name': 'c', 'category': 'a', 'nickname': 'test1', 'price': -1.0, 'quantity': 1.0, 'product': 'b'},
              {'price_name': 'f', 'category': 'd', 'nickname': 'test1', 'price': -2.0, 'quantity': 1.0, 'product': 'e'},
              {'price_name': 'c', 'category': 'a', 'nickname': 'test2', 'price': -1.0, 'quantity': 1.0, 'product': 'b'},
             ]
         )
+
+    def test_red_sum(self):
+        red = api.stats.get_red_sum()
+        self.assertEqual((2, -17), red)
+
+    def test_green_sum(self):
+        green = api.stats.get_green_sum()
+        self.assertEqual((2, 18), green)
+
+    def test_red_notes(self):
+        red_notes = api.stats.get_red_notes()
+        self.assertEqual([('test3', -10.0), ('test1', -7.0)], list(red_notes))
+
+    def test_ecocups_nb(self):
+        api.notes.change_ecocups("test1", 5)
+        api.notes.change_ecocups("test2", 7)
+        ecocups = api.stats.get_ecocups_nb()
+        self.assertEqual(ecocups, 12)
 
