@@ -6,6 +6,7 @@ import gui.utils
 
 connection = None
 blocking_connection = redis.StrictRedis(host=settings.HOST, port=6379, db=0)
+PING_TIME = 10
 
 
 async def connect():
@@ -52,7 +53,7 @@ async def ping_redis():
         async with connection.get() as redis:
             await redis.ping()
             _renew_locks()
-        await asyncio.sleep(10)
+        await asyncio.sleep(PING_TIME)
 
 
 class LockingException(Exception):

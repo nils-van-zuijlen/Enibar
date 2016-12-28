@@ -17,6 +17,7 @@
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 import aioredis
+import asyncio
 import api.redis
 import asyncio
 import basetest
@@ -122,3 +123,16 @@ class RedisTest(basetest.BaseTest):
         with self.assertRaises(api.redis.LockingException):
             api.redis.unlock(key)
 
+    @give_random_key
+    def test_ping_redis(self, key):
+        api.redis.PING_TIME = 0.5  # We don't want tests to take forever...
+        self.assertTrue(api.redis.lock(key, 1))
+
+        async def wait_2s():
+            await asyncio.sleep(2)
+
+        loop = asyncio.get_event_loop()
+        task = asyncio.ensure_future(api.redis.ping_redis())
+        loop.run_until_complete(asyncio.ensure_future(wait_2s()))
+
+        self.assertFalse(api.redis.lock(key, 1))
