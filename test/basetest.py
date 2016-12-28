@@ -235,15 +235,19 @@ class BaseGuiTest(BaseTest):
     def get_items(self, qlist):
         return [qlist.item(i).text() for i in range(qlist.count())]
 
-    def get_tree(self, qtree):
+    def get_tree(self, qtree, getter=None):
         tree = []
+        if getter is None:
+            def getter(x, i):
+                return x.text(i)
 
         def get_child(item, first=False):
             if item.childCount():
                 if first:
-                    return {tuple(item.text(i) for i in range(item.columnCount())): [get_child(item.child(j)) for j in range(item.childCount())]}
-                return [{tuple(item.text(i) for i in range(item.columnCount())): get_child(item.child(j))} for j in range(item.childCount())]
-            return {tuple(item.text(i) for i in range(item.columnCount())): []}
+                    return {tuple(getter(item, i) for i in range(item.columnCount())): [get_child(item.child(j)) for j in range(item.childCount())]}
+                return [{tuple(getter(item, i) for i in range(item.columnCount())): get_child(item.child(j))} for j in range(item.childCount())]
+            return {tuple(getter(item, i) for i in range(item.columnCount())): []}
+
         for i in range(qtree.topLevelItemCount()):
             tree.append(get_child(qtree.topLevelItem(i), first=True))
         return tree

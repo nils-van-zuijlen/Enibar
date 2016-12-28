@@ -95,12 +95,12 @@ class TestProductsManagement(basetest.BaseGuiTest):
         self.win.input_product.setText("test")
         self.win.button_product_add.click()
         self.assertEqual(list(api.products.get()), [{'category': 1, 'id': 1, 'name': 'test'}])
-        self.assertEqual(self.get_tree(self.win.products), [{('test',): [{('test',): []}]}])
+        self.assertEqual(self.get_tree(self.win.products, getter=lambda x, i: x.data(0, 1) or x.data(0, 0)), [{('test',): [{('test',): []}]}])
         self.win.products.setCurrentItem(test_cat.child(0))
         self.win.input_product.setText("test2")
         self.win.button_product_add.click()
         self.assertEqual(list(api.products.get()), [{'category': 1, 'id': 1, 'name': 'test'}, {'category': 1, 'id': 2, 'name': 'test2'}])
-        self.assertEqual(self.get_tree(self.win.products), [{('test',): [{('test',): []}, {('test2',): []}]}])
+        self.assertEqual(self.get_tree(self.win.products, getter=lambda x, i: x.data(0, 1) or x.data(0, 0)), [{('test',): [{('test',): []}, {('test2',): []}]}])
 
     def test_add_product_no_cat(self):
         """ Testing adding a product with no category selected
@@ -151,6 +151,6 @@ class TestProductsManagement(basetest.BaseGuiTest):
         self.win.input_product.setText("couou")
         self.win.button_product_add.click()
         self.win.button_product_del.click()
-        self.assertEqual(self.get_tree(self.win.products), [{('test',): [{('couou',): []}]}])
+        self.assertEqual(self.get_tree(self.win.products, getter=lambda x, i: x.data(0, 1) or x.data(0, 0)), [{('test',): [{('couou',): []}]}])
 
 

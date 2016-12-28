@@ -95,7 +95,7 @@ class ProductsManagementWindow(QtWidgets.QDialog):
             parent = self.products.topLevelItem(index.parent().row())
             category = api.categories.get_unique(name=parent.text(0))
             product = api.products.get_unique(
-                name=index.data(),
+                name=index.data(1),
                 category=category['id']
             )
             if api.products.remove(product['id']):
@@ -117,7 +117,7 @@ class ProductsManagementWindow(QtWidgets.QDialog):
             if not cat:
                 continue
             product = api.products.get_unique(
-                name=index.data(),
+                name=index.data(1),
                 category=cat['id']
             )
             if not product:
@@ -134,10 +134,23 @@ class ProductsManagementWindow(QtWidgets.QDialog):
                     })
         if not api.prices.set_multiple_values(new_prices):
             gui.utils.error("Erreur", "Impossible de sauvegarder les nouveaux prix")
+
         if self.name_input.isEnabled():
             if api.products.rename(product['id'], self.name_input.text()):
                 for item in self.products.selectedItems():
-                    item.setData(0, 0, self.name_input.text())
+                    item.setData(0, 1, self.name_input.text())
+
+        for item in self.products.selectedItems():
+            if self.name_input.isEnabled():
+                name = self.name_input.text()
+            else:
+                name = item.data(0, 1)
+
+            if new_prices:
+                price = new_prices[0]
+                self.products.itemWidget(item, 0).setText('{} <span style="color: grey">[{:.2f}]</span>'.format(name, price['value']))
+            else:
+                self.products.itemWidget(item, 0).setText(name)
 
     def select_product(self):
         """ Select product
@@ -171,8 +184,8 @@ class ProductsManagementWindow(QtWidgets.QDialog):
 
         item = indexes[-1]
         if item.parent().isValid() and not invalid:
-            self.prices.rebuild(item.data(), item.parent().data())
-            self.name_input.setText(item.data())
+            self.prices.rebuild(item.data(1), item.parent().data())
+            self.name_input.setText(item.data(1))
             self.prices.setEnabled(True)
             self.input_product_save.setEnabled(True)
         else:
@@ -425,9 +438,22 @@ class ConsumptionList(QtWidgets.QTreeWidget):
         if not cat_widget:
             return
 
-        prod_widget = QtWidgets.QTreeWidgetItem([name])
+        prod_widget = QtWidgets.QTreeWidgetItem()
         cat_widget.addChild(prod_widget)
         self.products.append(prod_widget)
+
+        # XXX: This is slow, maybe add dome caching ?
+        cid = api.categories.get_unique(name=category)['id']
+        pid = api.products.get_unique(name=name, category=cid)['id']
+        prices = list(api.prices.get(product=pid))
+
+        if not prices:
+            prod_label = QtWidgets.QLabel(name)
+        else:
+            price = prices[0]
+            prod_label = QtWidgets.QLabel('{} <span style="color: grey">[{:.2f}]</span>'.format(name, price['value']))
+        prod_widget.setData(0, 1, name)
+        self.setItemWidget(prod_widget, 0, prod_label)
 
     def add_category(self, name, id_):
         """ Add product category to product list.
