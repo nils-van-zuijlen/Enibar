@@ -82,9 +82,7 @@ def get_recipients(filter_, filter_arg):
     try:
         filter_fnc = FILTERS[filter_]
         return api.notes.get(lambda x: filter_fnc(x, filter_arg) and x['mails_inscription'])
-    except IndexError:
-        return []
-    except ValueError:
+    except:
         return []
 
 
