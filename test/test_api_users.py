@@ -146,3 +146,12 @@ class UsersTest(basetest.BaseTest):
         self.assertEqual(users.get_rights("test"), {'manage_users': 1,
                                                     'manage_notes': 1,
                                                     'manage_products': 0})
+
+    def test_get_list_wrong_value(self):
+        users.add("test", "test")
+        users.set_rights("test", {'manage_users': True,
+                                  'manage_notes': True,
+                                  'manage_products': True})
+
+        self.assertEqual(list(users.get_list(bla=True)), [])
+
