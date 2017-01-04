@@ -565,7 +565,7 @@ class MenuBar(QtWidgets.QMenuBar):
         """
         if self.try_locking("notes_management"):
             self._close_window()
-            path, _ = QtWidgets.QFileDialog(self).getOpenFileName(
+            path, _ = QtWidgets.QFileDialog().getOpenFileName(
                 self,
                 "Imported",
                 "",
