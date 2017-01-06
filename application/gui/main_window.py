@@ -521,7 +521,7 @@ class MenuBar(QtWidgets.QMenuBar):
             self.cur_window.finished.connect(self._trigger_panel_rebuild)
             self._connect_window("products_management")
 
-    def panel_managment_fnc_no_auth(self, _performer):
+    def panel_managment_fnc_no_auth(self):
         """ Open a PanelManagment window.
             BE CAREFUL: ONLY CALL THIS FUNCTION FROM TRUSTED FONCTIONS.
             THERE IS NO AUTHENTIFICATION REQUIRED FOR THIS ONE.
