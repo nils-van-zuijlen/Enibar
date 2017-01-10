@@ -33,7 +33,7 @@ fi
 
 cd $DIR/application
 
-python -c "import settings; print(settings.DEBUG)" | grep "True" &> /dev/null
+$PYTHON -c "import settings; print(settings.DEBUG)" | grep "True" &> /dev/null
 DEBUG="$?"
 
 if wmctrl -h &>/dev/null; then

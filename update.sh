@@ -17,7 +17,7 @@
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 
-python3 -c 'import sys;(print("Python 3.5 or newer is required") and exit(1)) if sys.version_info < (3, 5) else exit(0)' || exit 1
+python3 -c 'import sys;(print("Python 3.6 or newer is required") and exit(1)) if sys.version_info < (3, 6) else exit(0)' || exit 1
 VENV="enibar-venv"
 VENV_COMMAND="pyvenv"
 
@@ -36,12 +36,12 @@ if [ -e "$VENV" ]; then
 	 . "$VENV/bin/activate"
 	 echo 'Updating dependencies'
 	pip install -r requirements.txt
-	cp -R /usr/lib/python3.5/site-packages/PyQt5 $VENV/lib/python3.5/site-packages/  || {
+	cp -R /usr/lib/python3.6/site-packages/PyQt5 $VENV/lib/python3.6/site-packages/  || {
 		echo ''
 		echo 'You have to install PyQt5 manually'
 		echo ''
 	}
-	cp -R /usr/lib/python3.5/site-packages/sip.so $VENV/lib/python3.5/site-packages/ || {
+	cp -R /usr/lib/python3.6/site-packages/sip.so $VENV/lib/python3.6/site-packages/ || {
 		echo ''
 		echo 'You have to install sip manually'
 		echo ''
@@ -53,12 +53,12 @@ else
 	 . "$VENV/bin/activate"
 
 	pip install -r "requirements.txt" --upgrade
-	cp -R /usr/lib/python3.5/site-packages/PyQt5 $VENV/lib/python3.5/site-packages/  || {
+	cp -R /usr/lib/python3.6/site-packages/PyQt5 $VENV/lib/python3.6/site-packages/  || {
 		echo ''
 		echo 'You have to install PyQt5 manually'
 		echo ''
 	}
-	cp -R /usr/lib/python3.5/site-packages/sip.so $VENV/lib/python3.5/site-packages/ || {
+	cp -R /usr/lib/python3.6/site-packages/sip.so $VENV/lib/python3.6/site-packages/ || {
 		echo ''
 		echo 'You have to install sip manually'
 		echo ''
