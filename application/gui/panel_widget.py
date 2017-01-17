@@ -333,7 +333,7 @@ class ProductsContainer(QtWidgets.QWidget):
                     'products': {}
                 }
             if pid not in self.products[cid]['products']:
-                prices = self.fetch_prices(pid)
+                prices, percentage = self.fetch_prices(pid)
                 price_sum = sum([price for _, price in prices.items()])
                 if not prices or not price_sum:
                     continue
@@ -343,6 +343,7 @@ class ProductsContainer(QtWidgets.QWidget):
                     product['product_name'],
                     product['category_name'],
                     prices,
+                    percentage
                 )
                 self.products[cid]['products'][pid] = {
                     'widget': widget,
@@ -372,9 +373,12 @@ class ProductsContainer(QtWidgets.QWidget):
         :return OrderedDict: prices
         """
         prices = collections.OrderedDict()
+        percentages = []
         for price in api.prices.get(product=pid):
             prices[price['label']] = price['value']
-        return prices
+            percentages.append(price['percentage'])
+
+        return prices, max(percentages)
 
     def get_least_filled(self):
         """ Get least filled
@@ -466,9 +470,19 @@ class Button(BaseProduct, QtWidgets.QPushButton):
     """ Button
     Button used to display products which contain a single price.
     """
-    def __init__(self, cid, pid, name, cat_name, prices):
+    def __init__(self, cid, pid, name, cat_name, prices, percentage=None):
         BaseProduct.__init__(self, cid, pid, name, cat_name, prices)
-        QtWidgets.QPushButton.__init__(self, name)
+        QtWidgets.QPushButton.__init__(self, "")
+
+        self.label_layout = QtWidgets.QGridLayout(self)
+        if percentage:
+            self.label = QtWidgets.QLabel(f"{name} <span style=\"color: red; font-size: 7px\">{percentage} °</span>", self)
+        else:
+            self.label = QtWidgets.QLabel(name, self)
+
+        self.label.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+        self.label_layout.addWidget(self.label, 0, 0)
+
         self.wheel_callback = None
         self.price_name, self.price_value = tuple(iter(prices.items()))[0]
         self.should_accept_adding_products = True
@@ -477,8 +491,6 @@ class Button(BaseProduct, QtWidgets.QPushButton):
         self.wheel_callback = func
 
     def wheelEvent(self, event):
-        """ WheelEvent
-        """
         if self.wheel_callback:
             self.wheel_callback(
                 event,
@@ -505,7 +517,7 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
     should_accept_adding_products variable. It's True when whe wheel over
     something or when we click it but not when we press enter.
     """
-    def __init__(self, cid, pid, name, cat_name, prices):
+    def __init__(self, cid, pid, name, cat_name, prices, percentage=None):
         QtWidgets.QComboBox.__init__(self)
         BaseProduct.__init__(self, cid, pid, name, cat_name, prices)
         self.product_view = QtWidgets.QListWidget()
@@ -515,7 +527,18 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
         self.call = None
         self.should_accept_adding_products = False
 
-        self.product_view.addItem(QtWidgets.QListWidgetItem(self.name))
+        self.name_item = QtWidgets.QListWidgetItem("")
+        self.name_layout = QtWidgets.QHBoxLayout()
+        self.setLayout(self.name_layout)
+
+        if percentage:
+            self.name_label = QtWidgets.QLabel(f"{name} <span style=\"color: red; font-size: 7px\">{percentage} °</span>", self)
+        else:
+            self.name_label = QtWidgets.QLabel(name)
+        self.name_label.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+        self.name_layout.addWidget(self.name_label)
+
+        self.product_view.addItem(self.name_item)
         for price in prices:
             widget = QtWidgets.QListWidgetItem(price)
             widget.setTextAlignment(QtCore.Qt.AlignHCenter |
@@ -526,31 +549,6 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
         self.setView(self.product_view)
         self.activated.connect(self.callback)
         self.product_view.pressed.connect(self.on_click)
-
-    def paintEvent(self, _):
-        """ Complete rewrite of the paint event. We need this to keep things
-            aligned. See #97
-        """
-        painter = QtWidgets.QStylePainter(self)
-        painter.setPen(self.palette().color(QtGui.QPalette.Text))
-        opt = QtWidgets.QStyleOptionComboBox()
-        self.initStyleOption(opt)
-        painter.drawComplexControl(QtWidgets.QStyle.CC_ComboBox, opt)
-        proxy = self.style().proxy()
-        editRect = proxy.subControlRect(QtWidgets.QStyle.CC_ComboBox,
-                                        opt,
-                                        QtWidgets.QStyle.SC_ComboBoxEditField,
-                                        self)
-        painter.save()
-        painter.setClipRect(editRect)
-        proxy.drawItemText(painter,
-                           editRect.adjusted(17, 0, 0, 0),
-                           QtWidgets.QStyle.visualAlignment(opt.direction,
-                               QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter),
-                           opt.palette,
-                           True,
-                           opt.currentText)
-        painter.restore()
 
     def on_click(self, _):
         """ Called when we click on an item to close the QComboBox and not when
@@ -625,7 +623,7 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
         super().hidePopup()
 
 
-def get_product_widget(cid, pid, name, cat_name, prices):
+def get_product_widget(cid, pid, name, cat_name, prices, percentage=None):
     """ Get prduct widget
     Select best widget between Button and ComboBox to use regarding the price
     list. If prices are set to 0 they will not be displayed. Knowing that, you
@@ -645,9 +643,9 @@ def get_product_widget(cid, pid, name, cat_name, prices):
             valid_prices[price] = value
 
     if len(valid_prices) == 1:
-        widget = Button(cid, pid, name, cat_name, valid_prices)
+        widget = Button(cid, pid, name, cat_name, valid_prices, percentage)
     else:
-        widget = ComboBox(cid, pid, name, cat_name, valid_prices)
+        widget = ComboBox(cid, pid, name, cat_name, valid_prices, percentage)
 
     # Set attributes
     widget.setMinimumSize(QtCore.QSize(100, 35))
