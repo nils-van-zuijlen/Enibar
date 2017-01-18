@@ -472,13 +472,20 @@ class Button(BaseProduct, QtWidgets.QPushButton):
     """
     def __init__(self, cid, pid, name, cat_name, prices, percentage=None):
         BaseProduct.__init__(self, cid, pid, name, cat_name, prices)
-        QtWidgets.QPushButton.__init__(self, "")
+        QtWidgets.QPushButton.__init__(self, name)
+
+        shortcut = self.shortcut()
+        self.setText("")
+        self.setShortcut(shortcut)
 
         self.label_layout = QtWidgets.QGridLayout(self)
         if percentage:
             self.label = QtWidgets.QLabel(f"{name} <span style=\"color: red; font-size: 7px\">{percentage} °</span>", self)
         else:
             self.label = QtWidgets.QLabel(name, self)
+
+        # Horrible hack to call updateShortcut on the label to underline letters correctly
+        self.label.setBuddy(None)
 
         self.label.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
         self.label_layout.addWidget(self.label, 0, 0)
