@@ -485,6 +485,7 @@ class Button(BaseProduct, QtWidgets.QPushButton):
             self.label = QtWidgets.QLabel(name, self)
 
         # Horrible hack to call updateShortcut on the label to underline letters correctly
+        self.label.setBuddy(self)
         self.label.setBuddy(None)
 
         self.label.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
