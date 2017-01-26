@@ -466,6 +466,24 @@ class BaseProduct:
         raise NotImplementedError
 
 
+def underline(word):
+    new_word = ""
+    i = 0
+    while i < len(word):
+        c = word[i]
+        if c == '&' and word[i + 1] == '&':
+            new_word += '&'
+            i += 2
+            continue
+        elif c == '&':
+            new_word += "<span style=\"text-decoration: underline\">{}</span>".format(word[i + 1])
+            i += 2
+            continue
+        new_word += c
+        i += 1
+    return new_word
+
+
 class Button(BaseProduct, QtWidgets.QPushButton):
     """ Button
     Button used to display products which contain a single price.
@@ -473,10 +491,11 @@ class Button(BaseProduct, QtWidgets.QPushButton):
     def __init__(self, cid, pid, name, cat_name, prices, percentage=None):
         BaseProduct.__init__(self, cid, pid, name, cat_name, prices)
         QtWidgets.QPushButton.__init__(self, name)
-
         shortcut = self.shortcut()
         self.setText("")
         self.setShortcut(shortcut)
+        name = underline(name)
+        self.setText("")
 
         self.label_layout = QtWidgets.QGridLayout(self)
         if percentage:
@@ -484,10 +503,14 @@ class Button(BaseProduct, QtWidgets.QPushButton):
         else:
             self.label = QtWidgets.QLabel(name, self)
 
-        # Horrible hack to call updateShortcut on the label to underline letters correctly
-        self.label.setBuddy(self)
-        self.label.setBuddy(None)
+        def mousePressEvent(e):
+            self.mousePressEvent(e)
 
+        def mouseReleaseEvent(e):
+            self.mouseReleaseEvent(e)
+
+        self.label.mousePressEvent = mousePressEvent
+        self.label.mouseReleaseEvent = mouseReleaseEvent
         self.label.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
         self.label_layout.addWidget(self.label, 0, 0)
 
