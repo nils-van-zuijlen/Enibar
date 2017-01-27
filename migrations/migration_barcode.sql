@@ -1,2 +1,0 @@
-ALTER TABLE products DROP barcode;
-ALTER TABLE prices ADD COLUMN barcode VARCHAR(127) NOT NULL DEFAULT "";

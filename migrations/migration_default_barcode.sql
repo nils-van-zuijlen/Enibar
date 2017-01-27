@@ -1,1 +1,0 @@
-ALTER TABLE products MODIFY barcode VARCHAR(127) DEFAULT "";
