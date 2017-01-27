@@ -31,7 +31,7 @@ class ChangePasswordTest(basetest.BaseGuiTest):
     def test_ok(self):
         """ Test changing password
         """
-        self.win.pseudo_input.setText("azerty")
+        self.win.pseudo_input.setCurrentText("azerty")
         self.win.old_password_input.setText("azerty")
         self.win.new_password_input.setText("qsdfgh")
         self.win.accept()
@@ -46,7 +46,7 @@ class ChangePasswordTest(basetest.BaseGuiTest):
             self.assertIn("L'authentification", win.informativeText())
             win.accept()
             self.assertFalse(api.users.is_authorized("azerty", "qsdfgh"))
-        self.win.pseudo_input.setText("azerty")
+        self.win.pseudo_input.setCurrentText("azerty")
         self.win.old_password_input.setText("qsdfgh")
         self.win.new_password_input.setText("osef")
         QtCore.QTimer.singleShot(1000, callback)

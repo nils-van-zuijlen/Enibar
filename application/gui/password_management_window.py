@@ -26,6 +26,7 @@ Password Managment Window
 from PyQt5 import QtWidgets, uic
 import api.validator
 import gui.utils
+import api.users
 
 
 class PasswordManagementWindow(QtWidgets.QDialog):
@@ -35,7 +36,8 @@ class PasswordManagementWindow(QtWidgets.QDialog):
         super().__init__()
         uic.loadUi('ui/password_management_window.ui', self)
         self.on_change = api.validator.on_change(self, self.accept_button)
-        self.pseudo_input.set_validator(api.validator.NAME)
+        for user in api.users.get_list():
+            self.pseudo_input.addItem(user)
         self.old_password_input.set_validator(api.validator.NAME)
         self.new_password_input.set_validator(api.validator.NAME)
         self.show()
@@ -43,9 +45,10 @@ class PasswordManagementWindow(QtWidgets.QDialog):
     def accept(self):
         """ Called when "changer" is clicked
         """
-        if api.users.is_authorized(self.pseudo_input.text(),
+        username = self.pseudo_input.currentText()
+        if api.users.is_authorized(username,
                                    self.old_password_input.text()):
-            api.users.change_password(self.pseudo_input.text(),
+            api.users.change_password(username,
                                       self.new_password_input.text())
         else:
             gui.utils.error("Erreur", "L'authentification a échouée.")
