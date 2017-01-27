@@ -21,7 +21,7 @@ along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 DROP DATABASE IF EXISTS enibar;
-CREATE DATABASE enibar;
+CREATE DATABASE enibar CHARACTER SET UTF8;
 USE enibar;
 
 CREATE TABLE IF NOT EXISTS admins(
