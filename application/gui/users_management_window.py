@@ -71,9 +71,10 @@ class UsersManagementWindow(QtWidgets.QDialog):
         """
         self.updating = True
         rights = users.get_rights(self.selected.text())
+        self.set_form_checkable(True)
         for right, value in rights.items():
             self.rights[right].setChecked(value)
-        self.set_form_checkable(True)
+            self.rights[right].checkStateSet()
         self.updating = False
 
     def select_user(self, item):
@@ -110,6 +111,7 @@ class UsersManagementWindow(QtWidgets.QDialog):
             return
         rights = {key: value.isChecked() for key, value in self.rights.items()}
         users.set_rights(self.selected.text(), rights)
+        self.update_form()
 
 
 class UserList(QtWidgets.QListWidget):
