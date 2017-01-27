@@ -70,7 +70,6 @@ class UsersManagementTest(basetest.BaseGuiTest):
         self.select_user("test")
         self.win.manage_users.setChecked(True)
         self.win.manage_notes.setChecked(True)
-        self.win.save_button.click()
         self.assertEqual(api.users.get_rights("test"), {"manage_users": True,
                                                         "manage_notes": True,
                                                         "manage_products": False})
@@ -107,7 +106,6 @@ class UsersManagementTest(basetest.BaseGuiTest):
         self.delete_users()
         self.win = gui.users_management_window.UsersManagementWindow()
         QtCore.QTimer.singleShot(200, callback)
-        self.win.save_button.click()
 
     def test_delete_no_user(self):
         """ Testing deleting with no user

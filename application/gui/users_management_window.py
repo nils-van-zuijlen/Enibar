@@ -34,20 +34,23 @@ class UsersManagementWindow(QtWidgets.QDialog):
         super().__init__()
         uic.loadUi('ui/users_management_window.ui', self)
 
-        self.save_button.clicked.connect(self.save)
-        self.add_button.clicked.connect(self.add)
         self.delete_button.clicked.connect(self.delete)
         self.rights = {
             'manage_users': self.manage_users,
             'manage_products': self.manage_products,
             'manage_notes': self.manage_notes,
         }
+
+        # This variable allows us to not save user rights during user selcection
+        # because checkboxes send the changed signal on every setChecked call
+        self.updating = True
         try:
             self.selected = self.user_list.widgets[0]
             self.update_form()
         except IndexError:
             self.selected = None
             self.set_form_checkable(False)
+        self.updating = False
 
         self.show()
 
@@ -56,18 +59,22 @@ class UsersManagementWindow(QtWidgets.QDialog):
 
         :param bool checkable: Futur checkbox state
         """
+        self.updating = True
         for right in self.rights.values():
             right.setCheckable(checkable)
             if not checkable:
                 right.setCheckState(0)
+        self.updating = False
 
     def update_form(self):
         """ Fetch user rights of newly selected user
         """
+        self.updating = True
         rights = users.get_rights(self.selected.text())
         for right, value in rights.items():
             self.rights[right].setChecked(value)
         self.set_form_checkable(True)
+        self.updating = False
 
     def select_user(self, item):
         """ Callback for user selection in user list
@@ -92,9 +99,9 @@ class UsersManagementWindow(QtWidgets.QDialog):
         if prompt.exec_():
             self.user_list.refresh()
 
-    def save(self):
-        """ Callback to save user when button is pushed
-        """
+    def on_checkbox_change(self, _):
+        if self.updating:
+            return
         if not self.selected:
             gui.utils.error(
                 "Impossible de sauvegarder les droits",
@@ -103,7 +110,6 @@ class UsersManagementWindow(QtWidgets.QDialog):
             return
         rights = {key: value.isChecked() for key, value in self.rights.items()}
         users.set_rights(self.selected.text(), rights)
-        self.user_list.refresh()
 
 
 class UserList(QtWidgets.QListWidget):

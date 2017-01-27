@@ -14,10 +14,10 @@
    <string>Gestion utilisateurs</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="6" column="1">
-    <widget class="QPushButton" name="delete_button">
+   <item row="3" column="2">
+    <widget class="QCheckBox" name="manage_products">
      <property name="text">
-      <string>Supprimer</string>
+      <string>Gérer les consomations</string>
      </property>
     </widget>
    </item>
@@ -41,12 +41,15 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="2">
-    <widget class="QCheckBox" name="manage_notes">
+   <item row="5" column="1">
+    <widget class="QPushButton" name="delete_button">
      <property name="text">
-      <string>Gérer les notes</string>
+      <string>Supprimer</string>
      </property>
     </widget>
+   </item>
+   <item row="0" column="0" rowspan="5" colspan="2">
+    <widget class="UserList" name="user_list"/>
    </item>
    <item row="2" column="2">
     <widget class="QCheckBox" name="manage_users">
@@ -55,29 +58,19 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="2">
-    <widget class="QCheckBox" name="manage_products">
-     <property name="text">
-      <string>Gérer les consomations</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0">
+   <item row="5" column="0">
     <widget class="QPushButton" name="add_button">
      <property name="text">
       <string>Ajouter</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="2">
-    <widget class="QPushButton" name="save_button">
+   <item row="1" column="2">
+    <widget class="QCheckBox" name="manage_notes">
      <property name="text">
-      <string>Sauvegarder</string>
+      <string>Gérer les notes</string>
      </property>
     </widget>
-   </item>
-   <item row="0" column="0" rowspan="6" colspan="2">
-    <widget class="UserList" name="user_list"/>
    </item>
   </layout>
  </widget>
@@ -93,7 +86,6 @@
   <tabstop>manage_notes</tabstop>
   <tabstop>manage_users</tabstop>
   <tabstop>manage_products</tabstop>
-  <tabstop>save_button</tabstop>
   <tabstop>add_button</tabstop>
   <tabstop>delete_button</tabstop>
  </tabstops>
@@ -115,8 +107,74 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>add_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>add()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>69</x>
+     <y>270</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>142</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>manage_notes</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>Dialog</receiver>
+   <slot>on_checkbox_change(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>329</x>
+     <y>29</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>142</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>manage_products</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>Dialog</receiver>
+   <slot>on_checkbox_change(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>329</x>
+     <y>69</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>142</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>manage_users</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>Dialog</receiver>
+   <slot>on_checkbox_change(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>329</x>
+     <y>49</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>142</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>select_user()</slot>
+  <slot>add()</slot>
+  <slot>on_checkbox_change(int)</slot>
  </slots>
 </ui>
