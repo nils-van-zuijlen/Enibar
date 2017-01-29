@@ -19,8 +19,8 @@
 
 TEST_FAILED=0
 export USE_VD=1
+export TEST_ENIBAR=1
 APPLICATION_DIR="application"
-cd $APPLICATION_DIR
 
 TEMP=`getopt -o agp --long api,gui,pep,no-vd -- "$@"`
 eval set -- "$TEMP"
@@ -58,8 +58,11 @@ if [[ $API == 1 || $GUI == 1 ]]; then
     sleep 5;
     echo "Importing"
 	# -- MYSQL --
-	mysql --socket=/tmp/mysql.socket --user="root" --port 4569 < ../db.sql
-    export TEST_ENIBAR=1
+    ls
+	echo "CREATE DATABASE enibar CHARACTER SET UTF8" | mysql --socket=/tmp/mysql.socket --user="root" --port 4569
+    ./migrations.py apply
+    cd $APPLICATION_DIR
+
     if [[ $USE_VD == 1 ]]; then
         Xvfb :1023 -screen 0 1600x1200x24+32 &
         XVFB=$!
@@ -81,8 +84,10 @@ if [[ $API == 1 || $GUI == 1 ]]; then
 
 	mv settings.py.bak settings.py
     kill `cat /tmp/mysql.pid`
+    cd ..
 fi
 
+cd $APPLICATION_DIR
 rm -f img/coucou.jpg
 
 if [[ $PEP == 1 ]]; then
