@@ -73,7 +73,6 @@ def apply_migrations():
         if cursor.next():
             last_applied = cursor.value("version")
 
-    print("last", last_applied)
     migration_file, migration_name = tempfile.mkstemp()
 
     should_apply = False
