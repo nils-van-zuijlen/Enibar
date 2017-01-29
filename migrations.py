@@ -40,9 +40,9 @@ def execute_sql_file(filename):
                 continue
 
             if not cursor.exec_(statement):
-                print("Error while migrating, rolling back")
+                db.rollback()
                 print(cursor.lastError().text())
-
+                print("Error while migrating, rolling back")
                 command = f"mysql -u {settings.USERNAME} {passwd} -h {settings.HOST} {settings.DBNAME} < {backup_name}"
                 os.system(command)
                 break
