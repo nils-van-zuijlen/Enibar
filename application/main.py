@@ -76,6 +76,7 @@ class Tee(object):
             self.stdout.flush()
 
     def flush(self):
+        self.stdout.flush()
         pass
 
 

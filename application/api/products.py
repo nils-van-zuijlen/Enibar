@@ -28,10 +28,10 @@ from database import Cursor, Database
 import api.categories
 import api.base
 
-PRODUCT_FIELDS = ['name', 'category']
+PRODUCT_FIELDS = ['id', 'name', 'category', 'percentage']
 
 
-def add(name, *, category_name=None, category_id=None):
+def add(name, *, category_name=None, category_id=None, percentage=0):
     """ Add a product.
     At least one of category_name and category_id arguments must not be None.
     If both are given then category_id is prefered.
@@ -57,10 +57,11 @@ def add(name, *, category_name=None, category_id=None):
     with Database() as database:
         database.transaction()
         cursor = QtSql.QSqlQuery(database)
-        cursor.prepare("INSERT INTO products(name, category) VALUES(:name,\
-                        :cat)")
+        cursor.prepare("INSERT INTO products(name, category, percentage) VALUES(:name,\
+                        :cat, :percentage)")
         cursor.bindValue(':name', name.strip())
         cursor.bindValue(':cat', cat[0]['id'])
+        cursor.bindValue(':percentage', percentage)
         if not cursor.exec_():
             database.rollback()
             return None
@@ -112,6 +113,16 @@ def rename(product_id, new_name):
         return cursor.exec_()
 
 
+def set_percentage(product_id, percentage):
+    with Cursor() as cursor:
+        cursor.prepare("UPDATE products SET percentage=:percentage WHERE id=:id")
+
+        cursor.bindValue(":id", product_id)
+        cursor.bindValue(":percentage", percentage)
+
+        return cursor.exec_()
+
+
 def search_by_name(name):
     """ Search products by name
 
@@ -132,17 +143,14 @@ def search_by_name(name):
 
 def get(**filter_):
     """ Get products filtered by given values
-    Shuld be used like this api.products.get(name="machin", catgegory=5)
+    Shuld be used like this api.products.get(name="machin", category=5)
 
     :param dict filter_: filter to apply
     """
     cursor = api.base.filtered_getter("products", filter_)
     while cursor.next():
-        yield {
-            'id': cursor.value('id'),
-            'name': cursor.value('name'),
-            'category': cursor.value('category'),
-        }
+        yield {field: cursor.value(field) for field in
+               PRODUCT_FIELDS}
 
 
 get_unique = api.base.make_get_unique(get)

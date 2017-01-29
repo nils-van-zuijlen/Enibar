@@ -175,6 +175,7 @@ def get_content(**kwargs):
         request = """SELECT panel_content.panel_id AS panel_id,
         products.id AS product_id,
         products.name AS product_name,
+        products.percentage AS product_percentage,
         categories.id AS category_id,
         categories.name as category_name
         FROM panel_content
@@ -191,6 +192,7 @@ def get_content(**kwargs):
                     'panel_id': cursor.value('panel_id'),
                     'product_id': cursor.value('product_id'),
                     'product_name': cursor.value('product_name'),
+                    'product_percentage': cursor.value('product_percentage'),
                     'category_id': cursor.value('category_id'),
                     'category_name': cursor.value('category_name'),
                 }

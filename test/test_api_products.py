@@ -1,4 +1,4 @@
-# Copyright (C) 2014-2017 Bastien Orivel <b2orivel@enib.fr>
+# copyright (c) 2014-2017 bastien orivel <b2orivel@enib.fr>
 # Copyright (C) 2014-2017 Arnaud Levaufre <a2levauf@enib.fr>
 #
 # This file is part of Enibar.
@@ -45,6 +45,12 @@ class ProductsTest(basetest.BaseTest):
         self.assertIsNone(products.add("Cidre", category_id=2685240))
         self.assertEqual(self.count_products(), 2)
 
+    def test_percentage(self):
+        pid = products.add("Banane", category_id=self.cat_eat, percentage=2.5)
+        self.assertEqual(list(products.get()), [{"id": pid, "category": self.cat_eat, "name": "Banane", "percentage": 2.5}])
+        self.assertTrue(products.set_percentage(pid, 5))
+        self.assertEqual(list(products.get()), [{"id": pid, "category": self.cat_eat, "name": "Banane", "percentage": 5.0}])
+
     def test_remove(self):
         """ Testing removing products """
         id_ = products.add("test", category_name="Manger")
@@ -54,11 +60,12 @@ class ProductsTest(basetest.BaseTest):
     def test_search_by_name(self):
         """ Testing search_by_name
         """
-        products.add("Banane", category_id=self.cat_eat)
-        products.add("Banana split", category_id=self.cat_eat)
+        id1 = products.add("Banane", category_id=self.cat_eat)
+        id2 = products.add("Banana split", category_id=self.cat_eat)
         self.assertEqual(list(products.search_by_name("banan")),
-            [{'category': self.cat_eat, 'name': "Banana split"},
-             {'category': self.cat_eat, 'name': "Banane"}])
+            [{'id': id1, 'category': self.cat_eat, 'name': "Banane", "percentage": 0.0},
+             {'id': id2, 'category': self.cat_eat, 'name': "Banana split", "percentage": 0.0}]
+        )
 
     def test_get(self):
         """ Testing get
@@ -66,8 +73,9 @@ class ProductsTest(basetest.BaseTest):
         id1 = products.add("Banane", category_id=self.cat_eat)
         id2 = products.add("Banana split", category_id=self.cat_eat)
         self.assertEqual(list(products.get()),
-            [{'id': id2, 'category': self.cat_eat, 'name': "Banana split"},
-             {'id': id1, 'category': self.cat_eat, 'name': "Banane"}])
+            [{'id': id1, 'category': self.cat_eat, 'name': "Banane", "percentage": 0.0},
+             {'id': id2, 'category': self.cat_eat, 'name': "Banana split", "percentage": 0.0}]
+        )
 
     def test_rename(self):
         """ Testing renaming a product
@@ -75,9 +83,9 @@ class ProductsTest(basetest.BaseTest):
         id1 = products.add("Banane", category_id=self.cat_eat)
         products.rename(id1, "Lapin")
         self.assertEqual(list(products.get()),
-            [{'id': id1, 'category': self.cat_eat, 'name': "Lapin"}]
+            [{'id': id1, 'category': self.cat_eat, 'name': "Lapin", "percentage": 0.0}]
         )
         self.assertFalse(products.rename(id1, " "))
         self.assertEqual(list(products.get()),
-            [{'id': id1, 'category': self.cat_eat, 'name': "Lapin"}]
+            [{'id': id1, 'category': self.cat_eat, 'name': "Lapin", "percentage": 0.0}]
         )

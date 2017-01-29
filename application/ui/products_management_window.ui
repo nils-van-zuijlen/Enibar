@@ -212,13 +212,29 @@
        <item row="0" column="3">
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string>Nom</string>
+          <string>Nom / </string>
          </property>
          <layout class="QGridLayout" name="gridLayout_5">
           <item row="0" column="0">
-           <widget class="QLineEdit" name="name_input">
+           <widget class="Input" name="name_input">
             <property name="enabled">
              <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="Input" name="percentage_input">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="placeholderText">
+             <string/>
             </property>
            </widget>
           </item>
@@ -553,7 +569,7 @@
   <customwidget>
    <class>Input</class>
    <extends>QLineEdit</extends>
-   <header>gui/input_widget</header>
+   <header>gui.input_widget</header>
   </customwidget>
   <customwidget>
    <class>ConsumptionPrices</class>

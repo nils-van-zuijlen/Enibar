@@ -333,7 +333,7 @@ class ProductsContainer(QtWidgets.QWidget):
                     'products': {}
                 }
             if pid not in self.products[cid]['products']:
-                prices, percentage = self.fetch_prices(pid)
+                prices = self.fetch_prices(pid)
                 price_sum = sum([price for _, price in prices.items()])
                 if not prices or not price_sum:
                     continue
@@ -343,7 +343,7 @@ class ProductsContainer(QtWidgets.QWidget):
                     product['product_name'],
                     product['category_name'],
                     prices,
-                    percentage
+                    product['product_percentage']
                 )
                 self.products[cid]['products'][pid] = {
                     'widget': widget,
@@ -373,12 +373,10 @@ class ProductsContainer(QtWidgets.QWidget):
         :return OrderedDict: prices
         """
         prices = collections.OrderedDict()
-        percentages = []
         for price in api.prices.get(product=pid):
             prices[price['label']] = price['value']
-            percentages.append(price['percentage'])
 
-        return prices, max(percentages)
+        return prices
 
     def get_least_filled(self):
         """ Get least filled

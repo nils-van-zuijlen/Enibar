@@ -89,8 +89,8 @@ class PricesTest(basetest.BaseTest):
         pid = api.products.add("Lapin", category_id=self.cat_eat)
         test = api.products.add("Lapin", category_id=self.cat_eat)
         self.assertIsNone(test)
-        self.assertIsNone(api.prices.add(None, None, 0, 0))
-        self.assertIsNotNone(api.prices.add(pid, desc_id, 0, 0))
+        self.assertIsNone(api.prices.add(None, None, 0))
+        self.assertIsNotNone(api.prices.add(pid, desc_id, 0))
         # We should have two prices as product insertion creates one
         self.assertEqual(self.count_prices(), 2)
 
@@ -99,7 +99,7 @@ class PricesTest(basetest.BaseTest):
         """
         desc_id = api.prices.add_descriptor("Unité", self.cat_eat, 100)
         pid = api.products.add("Lapin", category_id=self.cat_eat)
-        price = api.prices.add(pid, desc_id, 0, 5)
+        price = api.prices.add(pid, desc_id, 0)
         self.assertTrue(api.prices.remove(price))
         self.assertEqual(self.count_prices(), 1)
 
@@ -124,9 +124,8 @@ class PricesTest(basetest.BaseTest):
             'value': 0,
             'product': pid,
             'category': self.cat_drink,
-            'percentage': 0,
         }])
-        api.prices.add(None, price_desc_id, 0, 5)
+        api.prices.add(None, price_desc_id, 0)
         self.assertTrue(self.count_prices(), 2)
         self.assertEqual(list(api.prices.get(id=price_id)), [{
             'id': price_id,
@@ -134,8 +133,6 @@ class PricesTest(basetest.BaseTest):
             'value': 0,
             'product': pid,
             'category': self.cat_drink,
-            'percentage': 5.0,
-            'percentage': 0,
         }])
 
     def test_get_unique(self):
@@ -143,8 +140,8 @@ class PricesTest(basetest.BaseTest):
         pid = api.products.add("Lapin", category_id=self.cat_eat)
         desc_id1 = api.prices.add_descriptor("Unité", self.cat_eat, 100)
         desc_id2 = api.prices.add_descriptor("Kilo", self.cat_eat, 100)
-        id1 = api.prices.add(pid, desc_id1, 0, 0)
-        api.prices.add(pid, desc_id2, 0, 5)
+        id1 = api.prices.add(pid, desc_id1, 0)
+        api.prices.add(pid, desc_id2, 0)
         self.assertIsNone(api.prices.get_unique(value=0))
         self.assertEqual(api.prices.get_unique(id=id1), {
             'id': id1,
@@ -152,14 +149,13 @@ class PricesTest(basetest.BaseTest):
             'value': 0,
             'product': pid,
             'category': self.cat_eat,
-            'percentage': 0.0,
         })
 
     def test_set_value(self):
         """ Testing setting price value """
         desc_id = api.prices.add_descriptor("Unité", self.cat_eat, 100)
         product = api.products.add("Lapin", category_id=self.cat_eat)
-        pid = api.prices.add(product, desc_id, 0, 5)
+        pid = api.prices.add(product, desc_id, 0)
         self.assertTrue(api.prices.set_value(pid, 12.34))
         self.assertEqual(api.prices.get_unique(id=pid)['value'], 12.34)
 
@@ -169,7 +165,7 @@ class PricesTest(basetest.BaseTest):
         product = api.products.add("Lapin", category_id=self.cat_eat)
         prices = []
         for i in range(10):
-            id_ = api.prices.add(product, desc_id, 0, 5)
+            id_ = api.prices.add(product, desc_id, 0)
             prices.append({'id': id_, 'value': i + 1})
         self.assertTrue(api.prices.set_multiple_values(prices))
         for price in api.prices.get():
@@ -188,10 +184,10 @@ class PricesTest(basetest.BaseTest):
         desc_id = api.prices.add_descriptor("Unité", self.cat_eat, 100)
         settings.synced.ALCOHOL_MAJORATION = 0.0
         settings.synced.refresh_cache()
-        self.assertEqual(list(api.prices.get()), [{'label': 'Unité', 'id': 1, 'product': 1, 'category': 1, 'value': 0.0, 'percentage': 0.0}])
+        self.assertEqual(list(api.prices.get()), [{'label': 'Unité', 'id': 1, 'product': 1, 'category': 1, 'value': 0.0}])
         settings.synced.ALCOHOL_MAJORATION = 5.0
         settings.synced.refresh_cache()
-        self.assertEqual(list(api.prices.get()), [{'label': 'Unité', 'id': 1, 'product': 1, 'category': 1, 'value': 5.0, 'percentage': 0.0}])
+        self.assertEqual(list(api.prices.get()), [{'label': 'Unité', 'id': 1, 'product': 1, 'category': 1, 'value': 5.0}])
         settings.synced.ALCOHOL_MAJORATION = 0.0
         settings.synced.refresh_cache()
 

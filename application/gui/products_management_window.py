@@ -33,15 +33,19 @@ import api.validator
 
 class ProductsManagementWindow(QtWidgets.QDialog):
     """ Consumption ManagmentWindow
-    This window allow user to add products, productcategories and prices.
+    This window allow user to add products, product categories and prices.
     """
     def __init__(self, parent=None):
         super().__init__(parent)
         uic.loadUi('ui/products_management_window.ui', self)
         self.tab_manage_categories.on_change = self.on_change
         self.tab_manage_consumptions.on_change = self.on_change
+        self.groupBox.on_change = self.on_change
         self.input_cat.set_validator(api.validator.NAME)
         self.input_product.set_validator(api.validator.NAME)
+        self.name_input.set_validator(api.validator.NAME)
+        self.percentage_input.set_validator(api.validator.NUMBER)
+
         self.category = None
         self.products.build()
         self.products.sortByColumn(0, QtCore.Qt.AscendingOrder)
@@ -57,6 +61,7 @@ class ProductsManagementWindow(QtWidgets.QDialog):
         self.button_product_add.setDefault(True)
         self.button_cat_add.setEnabled(self.input_cat.valid)
         self.button_product_add.setEnabled(self.input_product.valid)
+        self.input_product_save.setEnabled(self.name_input.valid and self.percentage_input.valid)
 
     def add_product(self):
         """ Add product
@@ -79,7 +84,7 @@ class ProductsManagementWindow(QtWidgets.QDialog):
         elif index.data():
             cat_name = index.data()
         if cat_name and api.products.add(pname, category_name=cat_name):
-            self.products.add_product(pname, cat_name)
+            self.products.add_product(pname, cat_name, 0)
             self.input_product.setText("")
         elif cat_name:
             gui.utils.error("Impossible d'ajouter le produit")
@@ -130,7 +135,6 @@ class ProductsManagementWindow(QtWidgets.QDialog):
                     new_prices.append({
                         'id': price['id'],
                         'value': widget.input.value(),
-                        'percentage': widget.percentage_input.value() if cat['alcoholic'] else 0,
                     })
         if not api.prices.set_multiple_values(new_prices):
             gui.utils.error("Erreur", "Impossible de sauvegarder les nouveaux prix")
@@ -139,6 +143,11 @@ class ProductsManagementWindow(QtWidgets.QDialog):
             if api.products.rename(product['id'], self.name_input.text()):
                 for item in self.products.selectedItems():
                     item.setData(0, 1, self.name_input.text())
+
+        if self.percentage_input.isEnabled():
+            if api.products.set_percentage(product['id'], self.percentage_input.text()):
+                for item in self.products.selectedItems():
+                    item.setData(0, 5, float(self.percentage_input.text()))
 
         for item in self.products.selectedItems():
             if self.name_input.isEnabled():
@@ -165,6 +174,7 @@ class ProductsManagementWindow(QtWidgets.QDialog):
             self.prices.setEnabled(False)
             self.input_product_save.setEnabled(False)
             self.name_input.setEnabled(False)
+            self.percentage_input.setEnabled(False)
             return
 
         if len(indexes) > 1:
@@ -184,15 +194,23 @@ class ProductsManagementWindow(QtWidgets.QDialog):
 
         item = indexes[-1]
         if item.parent().isValid() and not invalid:
+            category = api.categories.get_unique(name=item.parent().data(0))
             self.prices.rebuild(item.data(1), item.parent().data())
             self.name_input.setText(item.data(1))
+            self.percentage_input.setText(str(item.data(5)))
+            if category['alcoholic']:
+                self.percentage_input.setEnabled(True)
+            self.percentage_input.on_change()
             self.prices.setEnabled(True)
             self.input_product_save.setEnabled(True)
         else:
             self.name_input.setText("")
+            self.percentage_input.setText("0.0")
             self.prices.clean()
             self.prices.setEnabled(False)
             self.input_product_save.setEnabled(False)
+            self.percentage_input.setEnabled(False)
+            self.percentage_input.on_change()
 
     def add_category(self):
         """ Add category to category list.
@@ -308,15 +326,14 @@ class ConsumptionPrices(QtWidgets.QGroupBox):
         super().__init__(parent)
         self.widgets = []
 
-    def add_price(self, id_, name, value, percentage):
+    def add_price(self, id_, name, value):
         """ Add price to product's price list
 
         :param int id_: Price id
         :param str name: Price name
         :param float value: Price value
-        :param float percentage: Alochol percentage
         """
-        item = ConsumptionPricesItem(id_, name, value, percentage)
+        item = ConsumptionPricesItem(id_, name, value)
         self.layout().insertWidget(len(self.widgets), item)
         self.widgets.append(item)
 
@@ -351,7 +368,7 @@ class ConsumptionPrices(QtWidgets.QGroupBox):
             return
 
         for price in api.prices.get(product=product['id']):
-            self.add_price(price['id'], price['label'], price['value'], price['percentage'] if category['alcoholic'] else None)
+            self.add_price(price['id'], price['label'], price['value'])
 
 
 class ConsumptionPricesItem(QtWidgets.QWidget):
@@ -359,21 +376,17 @@ class ConsumptionPricesItem(QtWidgets.QWidget):
     """
     BUTTON_ENABLED = True
 
-    def __init__(self, id_, name, value, percentage):
+    def __init__(self, id_, name, value):
         super().__init__()
         self.id_ = id_
         self.name = name
         self.value = value
         self.win = None
-        self.percentage = percentage
 
         self.label = QtWidgets.QLabel(name)
         self.input = QtWidgets.QDoubleSpinBox()
         self.input.setSuffix("€")
 
-        if percentage is not None:
-            self.percentage_input = QtWidgets.QDoubleSpinBox()
-            self.percentage_input.setSuffix("°")
         self.input.setMaximum(999.99)
         self.input.setLocale(QtCore.QLocale('English'))
         self.label.setBuddy(self.input)
@@ -382,16 +395,12 @@ class ConsumptionPricesItem(QtWidgets.QWidget):
         self.layout = QtWidgets.QHBoxLayout(self)
         self.layout.addWidget(self.label)
         self.layout.addWidget(self.input)
-        if percentage is not None:
-            self.layout.addWidget(self.percentage_input)
 
     def _build(self):
         """ Fill the inputs with walues
         """
         self.label = QtWidgets.QLabel(self.name)
         self.input.setValue(self.value)
-        if self.percentage is not None:
-            self.percentage_input.setValue(self.percentage)
 
 
 class ConsumptionList(QtWidgets.QTreeWidget):
@@ -424,11 +433,12 @@ class ConsumptionList(QtWidgets.QTreeWidget):
         for cat in api.categories.get():
             self.add_category(cat['name'], cat['id'])
 
-    def add_product(self, name, category):
+    def add_product(self, name, category, percentage):
         """ Add product to consumption list
 
         :param str name: Product name
         :param str category: Category Name
+        :param int percentage: Alcohol percentage of the product
         """
         # Find category widget
         cat_widget = None
@@ -453,6 +463,7 @@ class ConsumptionList(QtWidgets.QTreeWidget):
             price = prices[0]
             prod_label = QtWidgets.QLabel('{} <span style="color: grey">[{:.2f}]</span>'.format(name, price['value']))
         prod_widget.setData(0, 1, name)
+        prod_widget.setData(0, 5, percentage)
         self.setItemWidget(prod_widget, 0, prod_label)
 
     def add_category(self, name, id_):
@@ -465,7 +476,7 @@ class ConsumptionList(QtWidgets.QTreeWidget):
         cat_widget = QtWidgets.QTreeWidgetItem(self, [name])
         self.categories.append(cat_widget)
         for prod in api.products.get(category=id_):
-            self.add_product(prod['name'], name)
+            self.add_product(prod['name'], name, prod['percentage'])
 
 
 #

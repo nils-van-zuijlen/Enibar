@@ -204,6 +204,8 @@ class GroupActionsWindow(QtWidgets.QDialog):
                                       product=product['id'])
 
         def inner(notes):
+            if not notes:
+                return
             transactions = []
             for note, coeff in notes.items():
                 real_price = get_coeffed_price(price['value'], coeff)
@@ -214,7 +216,7 @@ class GroupActionsWindow(QtWidgets.QDialog):
                     'price_name': price_name,
                     'quantity': get_coeffed_quantity(1, coeff),
                     'liquid_quantity': descriptor['quantity'],
-                    'percentage': price['percentage'],
+                    'percentage': product['percentage'],
                     'price': -real_price
                 }
                 transactions.append(transaction)
@@ -323,7 +325,7 @@ class UniqueConsumptionList(ConsumptionList):
     def __init__(self, parent):
         super().__init__(parent)
 
-    def add_product(self, name, category):
+    def add_product(self, name, category, percentage):
         """ Add product to consumption list. If the products has no null price
             only.
 

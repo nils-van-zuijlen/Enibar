@@ -218,7 +218,7 @@ class PanelList(ConsumptionList):
     def __init__(self, parent):
         super().__init__(parent)
 
-    def add_product(self, pname, cname):
+    def add_product(self, pname, cname, _):
         """ Add product
 
         :param str pname: Product name
@@ -268,7 +268,7 @@ class GlobalConsumptionList(PanelList):
             if cat['name'] in names:
                 for product in api.products.get(category=cat['id']):
                     if not product['name'] in names[cat['name']]:
-                        self.add_product(product['name'], cat['name'])
+                        self.add_product(product['name'], cat['name'], product['percentage'])
             else:
                 self.add_category(cat['name'], cat['id'])
 
@@ -289,7 +289,8 @@ class PanelConsumptionList(PanelList):
         for product in api.panels.get_content(panel_id=paid):
             self.add_product(
                 product['product_name'],
-                product['category_name']
+                product['category_name'],
+                product['product_percentage']
             )
 
     def rebuild(self, paid):

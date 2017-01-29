@@ -84,7 +84,7 @@ class CategoriesTest(basetest.BaseTest):
         self.assertTrue(panels.add_product(pan, pro))
         self.assertTrue(panels.add_product(pan2, pro))
         self.assertEqual(list(panels.get_content(panel_id=pan)), [{'category_id': self.cat_eat,
-            'product_name': 'coucou', 'panel_id': pan, 'category_name': "Manger", 'product_id': pro}])
+            'product_name': 'coucou', 'panel_id': pan, 'category_name': "Manger", 'product_id': pro, "product_percentage": 0.0}])
 
     def test_add_products(self):
         """ Testing add_products
@@ -95,8 +95,8 @@ class CategoriesTest(basetest.BaseTest):
         pro2 = products.add("coucou", category_name="Boire")
         panels.add_products(pan, [pro, pro2])
         self.assertEqual(list(panels.get_content(panel_id=pan)), [{'category_id': self.cat_eat,
-            'product_name': 'coucou', 'panel_id': pan, 'category_name': "Manger", 'product_id': pro},
-            {'category_id': self.cat_drink, 'product_name': 'coucou', 'panel_id': pan, 'category_name': "Boire", 'product_id': pro2}, ])
+            'product_name': 'coucou', 'panel_id': pan, 'category_name': "Manger", 'product_id': pro, "product_percentage": 0.0},
+            {'category_id': self.cat_drink, 'product_name': 'coucou', 'panel_id': pan, 'category_name': "Boire", 'product_id': pro2, "product_percentage": 0.0}, ])
 
     def test_delete_product(self):
         """ Testing delete_product
