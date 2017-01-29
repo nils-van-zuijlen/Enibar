@@ -53,8 +53,9 @@ class Panels(QtWidgets.QTabWidget):
         """
         for panel in api.panels.get(hidden=False):
             widget = PanelTab(panel['id'], self.main_window)
-            self.panels.append(widget)
-            self.addTab(widget, panel['name'])
+            if not widget.empty:
+                self.panels.append(widget)
+                self.addTab(widget, panel['name'])
 
     @ask_auth("manage_products", fail_callback=fail_callback_dummy)
     def change_alcohol(self, _):
@@ -93,6 +94,10 @@ class PanelTab(QtWidgets.QWidget):
         self.scroll_area_content.panel_id = self.panel_id
         self.scroll_area_content.build()
         self.connect_signals()
+
+    @property
+    def empty(self):
+        return self.scroll_area_content.empty
 
     def connect_signals(self):
         """ Connect signals of products widgets with product_clicked
@@ -363,6 +368,10 @@ class ProductsContainer(QtWidgets.QWidget):
             col.count += len(self.products[cat]['products'])
             col.layout.addWidget(self.products[cat]['widget'])
             self.products[cat]['widget'].finalise()
+
+    @property
+    def empty(self):
+        return not bool(self.products)
 
     @staticmethod
     def fetch_prices(pid):
