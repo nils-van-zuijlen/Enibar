@@ -212,7 +212,7 @@
        <item row="0" column="3">
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string>Nom / </string>
+          <string>Nom / Degré d'alcool</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_5">
           <item row="0" column="0">
