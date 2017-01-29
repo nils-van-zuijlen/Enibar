@@ -49,7 +49,6 @@ done
 if [[ $API == 1 || $GUI == 1 ]]; then
 	# -- BACKUP --
 	rm -f img/coucou.jpg
-	cp settings.py settings.py.bak
 
     rm -Rf /tmp/enibar
     mkdir -p /tmp/enibar
@@ -58,7 +57,6 @@ if [[ $API == 1 || $GUI == 1 ]]; then
     sleep 5;
     echo "Importing"
 	# -- MYSQL --
-    ls
 	echo "CREATE DATABASE enibar CHARACTER SET UTF8" | mysql --socket=/tmp/mysql.socket --user="root" --port 4569
     ./migrations.py apply
     cd $APPLICATION_DIR
@@ -82,7 +80,6 @@ if [[ $API == 1 || $GUI == 1 ]]; then
         kill $XVFB
     fi
 
-	mv settings.py.bak settings.py
     kill `cat /tmp/mysql.pid`
     cd ..
 fi
