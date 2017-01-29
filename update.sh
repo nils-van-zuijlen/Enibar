@@ -32,36 +32,24 @@ mv settings.py.bak application/settings.py
 if [ -e "$VENV" ]; then
 	echo 'Trying to upgrade the venv'
 	$VENV_COMMAND --upgrade "$VENV"
-
-	 . "$VENV/bin/activate"
-	 echo 'Updating dependencies'
-	pip install -r requirements.txt
-	cp -R /usr/lib/python3.6/site-packages/PyQt5 $VENV/lib/python3.6/site-packages/  || {
-		echo ''
-		echo 'You have to install PyQt5 manually'
-		echo ''
-	}
-	cp -R /usr/lib/python3.6/site-packages/sip.so $VENV/lib/python3.6/site-packages/ || {
-		echo ''
-		echo 'You have to install sip manually'
-		echo ''
-	}
 else
 	 echo 'Creating the venv'
 	 $VENV_COMMAND "$VENV"
-
-	 . "$VENV/bin/activate"
-
-	pip install -r "requirements.txt" --upgrade
-	cp -R /usr/lib/python3.6/site-packages/PyQt5 $VENV/lib/python3.6/site-packages/  || {
-		echo ''
-		echo 'You have to install PyQt5 manually'
-		echo ''
-	}
-	cp -R /usr/lib/python3.6/site-packages/sip.so $VENV/lib/python3.6/site-packages/ || {
-		echo ''
-		echo 'You have to install sip manually'
-		echo ''
-	}
 fi
 
+. "$VENV/bin/activate"
+
+pip install -r "requirements.txt" --upgrade
+
+./migrations.py apply
+
+cp -R /usr/lib/python3.6/site-packages/PyQt5 $VENV/lib/python3.6/site-packages/  || {
+    echo ''
+    echo 'You have to install PyQt5 manually'
+    echo ''
+}
+cp -R /usr/lib/python3.6/site-packages/sip.so $VENV/lib/python3.6/site-packages/ || {
+    echo ''
+    echo 'You have to install sip manually'
+    echo ''
+}
