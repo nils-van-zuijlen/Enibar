@@ -26,7 +26,7 @@ def execute_sql_file(filename):
     it if it fails
     """
     _, backup_name = tempfile.mkstemp()
-    passwd = "" if not settings.PASSWORD else f"-p={settings.PASSWORD}"
+    passwd = "" if not settings.PASSWORD else f"-p{settings.PASSWORD}"
     command = f"mysqldump -u {settings.USERNAME} {passwd} -h {settings.HOST} {settings.DBNAME} > {backup_name}"
     os.system(command)
     with database.Database() as db, open(filename) as fd:
