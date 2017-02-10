@@ -126,6 +126,9 @@ def add(product, price_description, value):
     :param int price_description: Price description
     :param float value: Price
     """
+    if any(x is None for x in [product, price_description, value]):
+        return None
+
     with Cursor() as cursor:
         cursor.prepare("INSERT INTO prices (product, price_description, value)\
         (SELECT :product, :price_description, :value FROM (SELECT 1) t WHERE\
@@ -135,8 +138,9 @@ def add(product, price_description, value):
         cursor.bindValue(':product', product)
         cursor.bindValue(':price_description', price_description)
         cursor.bindValue(':value', value)
-        cursor.exec_()
-        return cursor.lastInsertId()
+
+        if cursor.exec_():
+            return cursor.lastInsertId()
 
 
 def remove(price_id):
@@ -159,17 +163,18 @@ def get(**kwargs):
         filters = []
         for key in kwargs:
             filters.append("prices.{key}=:{key}".format(key=key))
+
         cursor.prepare("SELECT prices.id as id,\
             prices.product as product,\
             prices.value as value,\
             price_description.label as label,\
             price_description.category as category, \
             categories.alcoholic AS alcoholic \
-            from prices JOIN price_description \
-            JOIN categories \
+            FROM prices JOIN price_description \
             ON prices.price_description=price_description.id \
-            AND categories.id=price_description.category \
-            {} {} ".format("WHERE" * bool(filters), " AND ".join(filters)))
+            JOIN categories \
+            ON categories.id=price_description.category \
+            {} {}".format("WHERE" * bool(filters), " AND ".join(filters)))
         for key, arg in kwargs.items():
             cursor.bindValue(":{}".format(key), arg)
 

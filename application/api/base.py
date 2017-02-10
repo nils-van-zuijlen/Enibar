@@ -42,7 +42,7 @@ def make_get_unique(getter):
     return get_unique
 
 
-def filtered_getter(table, filter_, reverse=False, max=None):
+def filtered_getter(table, filter_, reverse=False, max=None, order_by="id"):
     """ This creates a request in the table table with the filter filter_ and
         returns the cursor of this request for future use.
     """
@@ -56,12 +56,13 @@ def filtered_getter(table, filter_, reverse=False, max=None):
             else:
                 filters.append("{key}=:{key}".format(key=key))
 
-        cursor.prepare("SELECT * FROM {} {} {} {} {}".format(
+        cursor.prepare("SELECT * FROM {} {} {} {} {} {}".format(
             table,
             "WHERE" * bool(len(filters)),
             " AND ".join(filters),
-            "ORDER BY id DESC" * reverse,
-            "LIMIT 0, {}".format(max) * bool(max),
+            "ORDER BY {} DESC".format(order_by) * reverse,
+            "ORDER BY {} ASC".format(order_by) * (not reverse),
+            "LIMIT {}".format(max) * bool(max),
         ))
         for key, arg in filter_.items():
             cursor.bindValue(":{}".format(key), arg)

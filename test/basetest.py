@@ -44,17 +44,19 @@ def getDescription(self, test):
 
 def startTest(self, test):
     super(TextTestResult, self).startTest(test)
+    self.stream.write("[\033[01;32mSTARTING\033[0m] {}".format(self.getDescription(test)))
+    self.stream.flush()
 
 
 def addSuccess(self, test):
     super(TextTestResult, self).addSuccess(test)
     if self.showAll:
-        self.stream.writeln("[ \033[01;32m OK \033[0m ] {}".format(self.getDescription(test)))
+        self.stream.writeln("\r[ \033[01;32m  OK  \033[0m ] {}".format(self.getDescription(test)))
 
 
 def addError(self, test, err):
     super(TextTestResult, self).addError(test, err)
-    self.stream.writeln("[ \033[01;31mERROR \033[0m] {}".format(self.getDescription(test)))
+    self.stream.writeln("\r[ \033[01;31m ERROR  \033[0m] {}".format(self.getDescription(test)))
     traceback.print_exception(*err, file=self.stream)
     self.stream.flush()
 
@@ -62,12 +64,12 @@ def addError(self, test, err):
 def addFailure(self, test, err):
     super(TextTestResult, self).addFailure(test, err)
     # This is ugly.
-    self.stream.writeln("[ \033[01;31mFAIL \033[0m] {}".format(self.failures[-1][-1].replace("\n", "\n       ").replace("AssertionError", "  AssertionError")[:-8]))
+    self.stream.writeln("\r[ \033[01;31m FAIL  \033[0m] {}".format(self.failures[-1][-1].replace("\n", "\n       ").replace("AssertionError", "  AssertionError")[:-8]))
 
 
 def addSkip(self, test, reason):
     super(TextTestResult, self).addSkip(test, reason)
-    self.stream.writeln("[ \033[01;33mSKIP \033[0m] {}: {!r}".format(self.getDescription(test), reason))
+    self.stream.writeln("\r[ \033[01;33m SKIP  \033[0m] {}: {!r}".format(self.getDescription(test), reason))
 
 
 def run(self, test):
@@ -106,13 +108,16 @@ class BaseTest(unittest.TestCase):
             res = await redis.delete(api.sde.QUEUE_NAME)
 
     def _reset_db(self):
-        tables = ["admins", "categories", "products", "price_description",
-                  "notes", "prices", "transactions", "panels", "panel_content",
-                  "scheduled_mails", "mail_models", "note_categories"]
+        tables = ["admins", "note_categories_assoc", "prices", "products",
+        "products", "price_description", "notes", "transactions", "panels",
+        "panel_content", "scheduled_mails", "mail_models", "note_categories", "categories"]
+        name_table = ["admins", "scheduled_mails", "mail_models", "panel_content"]
+
         with Cursor() as cursor:
             for table in tables:
                 cursor.exec_("DELETE FROM {}".format(table))
-                cursor.exec_("ALTER TABLE {} AUTO_INCREMENT = 1".format(table))
+                if table not in name_table:
+                    cursor.exec_("ALTER SEQUENCE {}_id_seq RESTART WITH 1".format(table))
         api.notes.rebuild_cache()
 
     def assertMyDictEqual(self, d1, d2, ignore=None):

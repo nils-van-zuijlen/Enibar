@@ -185,7 +185,7 @@ def get_models(**filter_):
     :param kwargs **filters: Filter to apply when fetching models
     :return generator: Models
     """
-    cursor = api.base.filtered_getter("mail_models", filter_)
+    cursor = api.base.filtered_getter("mail_models", filter_, order_by="name")
     while cursor.next():
         yield {
             'name': cursor.value('name'),
@@ -216,7 +216,7 @@ def save_model(name, subject, message, filter_, filter_value):
         cursor.prepare("""
             INSERT INTO mail_models(name, subject, message, filter, filter_value)
             VALUES (:name, :subject, :message, :filter, :filter_value)
-            ON DUPLICATE KEY UPDATE subject=:subject, message=:message,
+            ON CONFLICT (name) DO UPDATE SET subject=:subject, message=:message,
             filter=:filter, filter_value=:filter_value
             """
         )
@@ -247,7 +247,7 @@ def get_scheduled_mails(**filter_):
     :param kwargs **filters: Filter to apply when fetching mails
     :return generator: scheduled mails
     """
-    cursor = api.base.filtered_getter("scheduled_mails", filter_)
+    cursor = api.base.filtered_getter("scheduled_mails", filter_, order_by="name")
     while cursor.next():
         yield {
             'name': cursor.value('name'),
@@ -295,7 +295,7 @@ def save_scheduled_mails(name, active, sched_int, sched_unit, sched_day,
             VALUES(:name, :active, :sched_interval, :sched_day, :filter,
                 :filter_val, :subject, :sender, :message, :schedule_unit,
                 :last_sent)
-            ON DUPLICATE KEY UPDATE name=:name, active=:active,
+            ON CONFLICT (name) DO UPDATE SET name=:name, active=:active,
                 schedule_interval=:sched_interval, schedule_day=:sched_day,
                 filter=:filter, filter_value=:filter_val, subject=:subject,
                 message=:message, sender=:sender, schedule_unit=:schedule_unit,
@@ -304,7 +304,7 @@ def save_scheduled_mails(name, active, sched_int, sched_unit, sched_day,
         )
 
         cursor.bindValue(':name', name)
-        cursor.bindValue(':active', active)
+        cursor.bindValue(':active', bool(active))
         cursor.bindValue(':sched_interval', sched_int)
         cursor.bindValue(':sched_day', sched_day)
         cursor.bindValue(':filter', filter_)

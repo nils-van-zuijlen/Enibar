@@ -80,7 +80,7 @@ def hide(name):
     :return bool: True if success else False
     """
     with Cursor() as cursor:
-        cursor.prepare("UPDATE panels SET hidden=1 WHERE name=:name")
+        cursor.prepare("UPDATE panels SET hidden=TRUE WHERE name=:name")
         cursor.bindValue(":name", name)
         return cursor.exec_()
 
@@ -93,7 +93,7 @@ def show(name):
     :return bool: True if success else False
     """
     with Cursor() as cursor:
-        cursor.prepare("UPDATE panels SET hidden=0 WHERE name=:name")
+        cursor.prepare("UPDATE panels SET hidden=FALSE WHERE name=:name")
         cursor.bindValue(":name", name)
         return cursor.exec_()
 

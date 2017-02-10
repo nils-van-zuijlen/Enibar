@@ -24,7 +24,7 @@ Products
 """
 
 from PyQt5 import QtSql
-from database import Cursor, Database
+from database import Cursor, Database, SqlQuery
 import api.categories
 import api.base
 
@@ -56,7 +56,7 @@ def add(name, *, category_name=None, category_id=None, percentage=0):
 
     with Database() as database:
         database.transaction()
-        cursor = QtSql.QSqlQuery(database)
+        cursor = SqlQuery(database)
         cursor.prepare("INSERT INTO products(name, category, percentage) VALUES(:name,\
                         :cat, :percentage)")
         cursor.bindValue(':name', name.strip())
@@ -131,9 +131,9 @@ def search_by_name(name):
     :return list: A list of product descriptions.
     """
     with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM products WHERE name LIKE :name")
+        cursor.prepare("SELECT * FROM products WHERE LOWER(name) LIKE :name")
 
-        cursor.bindValue(':name', "%{}%".format(name))
+        cursor.bindValue(':name', "%{}%".format(name.lower()))
         cursor.exec_()
 
         while cursor.next():

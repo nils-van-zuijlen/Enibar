@@ -49,8 +49,7 @@ def rebuild_cache():
     global NOTES_CACHE, NOTES_FIELDS_CACHE
     NOTES_CACHE = {}
     with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM notes")
-        if cursor.exec_():
+        if cursor.exec_("SELECT * FROM notes"):
             while cursor.next():
                 if NOTES_FIELDS_CACHE == {}:
                     NOTES_FIELDS_CACHE = {field: cursor.indexOf(field) for field
@@ -71,7 +70,6 @@ def _build_categories():
         cursor.prepare("SELECT notes.id, notes.nickname, note_categories.name, note_categories.hidden FROM notes JOIN\
             note_categories_assoc ON note_categories_assoc.note=notes.id JOIN\
             note_categories ON note_categories_assoc.category=note_categories.id")
-
         if cursor.exec_():
             while cursor.next():
                 NOTES_CACHE[cursor.value('nickname')]["categories"].append(cursor.value('name'))
@@ -83,14 +81,13 @@ def _build_stats():
     """
     global NOTES_STATS_FIELDS_CACHE
     with Cursor() as cursor:
-        cursor.prepare("SELECT nickname, notes.firstname, notes.lastname,\
-                        SUM(IF(price>0, price, 0)) as tot_refill,\
-                        SUM(IF(price<0, price, 0)) AS tot_cons\
+        cursor.prepare("SELECT notes.nickname, notes.firstname, notes.lastname,\
+                        SUM(CASE WHEN price>0 THEN price ELSE 0 END) as tot_refill,\
+                        SUM(CASE WHEN price<0 THEN price ELSE 0 END) AS tot_cons\
                         FROM transactions JOIN notes ON\
                         notes.firstname=transactions.firstname AND\
                         notes.lastname=transactions.lastname\
-                        GROUP BY firstname, lastname")
-
+                        GROUP BY notes.nickname, notes.firstname, notes.lastname")
         if cursor.exec_():
             tot = {}
             while cursor.next():
@@ -132,14 +129,14 @@ def rebuild_note_cache(nick):
                 NOTES_CACHE[row['nickname']] = row
 
                 with Cursor() as cursor:
-                    cursor.prepare("SELECT nickname, notes.firstname, notes.lastname,\
-                                    SUM(IF(price>0, price, 0)) as tot_refill,\
-                                    SUM(IF(price<0, price, 0)) AS tot_cons\
+                    cursor.prepare("SELECT notes.nickname, notes.firstname, notes.lastname,\
+                                    SUM(CASE WHEN price>0 THEN price ELSE 0 END) as tot_refill,\
+                                    SUM(CASE WHEN price<0 THEN price ELSE 0 END) AS tot_cons\
                                     FROM transactions JOIN notes ON\
                                     notes.firstname=transactions.firstname AND\
                                     notes.lastname=transactions.lastname\
                                     WHERE notes.firstname=:fn AND notes.lastname=:ln\
-                                    GROUP BY firstname, lastname")
+                                    GROUP BY notes.nickname, notes.firstname, notes.lastname")
                     cursor.bindValue(':fn', row['firstname'])
                     cursor.bindValue(':ln', row['lastname'])
 
