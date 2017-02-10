@@ -11,3 +11,6 @@ DROP TABLE note_categories;
 DROP TABLE notes;
 DROP TABLE products;
 DROP TABLE categories;
+DROP TYPE promo;
+DROP TYPE schedule_unit;
+DROP FUNCTION check_overdraft();

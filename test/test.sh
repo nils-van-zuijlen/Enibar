@@ -49,23 +49,26 @@ done
 if [[ $API == 1 || $GUI == 1 ]]; then
 	# -- BACKUP --
 	rm -f img/coucou.jpg
+    killall -u $USER -q -9 postgres Xvfb
+    rm -Rf /tmp/postgres_enibar /tmp/.X1023-lock
 
-    rm -Rf /tmp/enibar
-    mkdir -p /tmp/enibar
-    mysql_install_db --basedir=/usr --datadir=/tmp/enibar
-    mysqld --no-defaults --pid-file=/tmp/mysql.pid -P 4569 --datadir /tmp/enibar/ --socket=/tmp/mysql.socket &
-    sleep 5;
     echo "Importing"
-	# -- MYSQL --
-	echo "CREATE DATABASE enibar CHARACTER SET UTF8" | mysql --socket=/tmp/mysql.socket --user="root" --port 4569
+    mkdir /tmp/postgres_enibar
+    initdb -D /tmp/postgres_enibar -E utf8  -U enibar
+    postgres -D /tmp/postgres_enibar -p 2356 -k /tmp/postgres_enibar &>/dev/null &
+    sleep 5
+    createdb -U enibar -h /tmp/postgres_enibar -p 2356 enibar
     ./migrations.py apply
     cd $APPLICATION_DIR
 
     if [[ $USE_VD == 1 ]]; then
-        Xvfb :1023 -screen 0 1600x1200x24+32 &
+        SCREEN=$(( ( RANDOM % 1000 )  + 1000 ))
+        Xvfb :$SCREEN -screen 0 1600x1200x24+32 &
         XVFB=$!
-        export DISPLAY=:1023
+        export DISPLAY=:$SCREEN
     fi
+
+    echo "Starting tests"
 	# -- TEST --
 	rm -f .coverage
     if [[ $API == 1 ]]; then
@@ -80,8 +83,9 @@ if [[ $API == 1 || $GUI == 1 ]]; then
         kill $XVFB
     fi
 
-    kill `cat /tmp/mysql.pid`
     cd ..
+    sleep 2
+    rm -Rf /tmp/postgres_enibar
 fi
 
 cd $APPLICATION_DIR
@@ -89,7 +93,7 @@ rm -f img/coucou.jpg
 
 if [[ $PEP == 1 ]]; then
 	# Pep8 Validation
-	pycodestyle --exclude=documentation,enibar-venv,.ropeproject,utils --ignore=E501,W391,E128,E124 ../ || TEST_FAILED=1
+	pycodestyle --exclude=documentation,enibar-venv,.ropeproject,utils --ignore=E722,E501,W391,E128,E124 ../ || TEST_FAILED=1
 fi
 
 exit $TEST_FAILED

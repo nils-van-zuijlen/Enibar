@@ -25,12 +25,11 @@ import api.transactions
 import api.notes
 import api.redis
 import json
-from freezegun import freeze_time
 from database import Cursor
+import datetime
 
 
 class HistoryWindowTest(basetest.BaseGuiTest):
-    @freeze_time("2015-11-20 21:36:22")
     def setUp(self):
         super().setUp()
         self._reset_db()
@@ -58,9 +57,8 @@ class HistoryWindowTest(basetest.BaseGuiTest):
             True,
             True
         )
-        with Cursor() as cursor:
-            cursor.exec_("SET TIMESTAMP=unix_timestamp('2015-11-20 21:36:22')")
 
+        self.now = datetime.datetime.now()
         api.transactions.log_transactions([{'note': "test1",
                                         'category': "a",
                                         'product': "b",
@@ -88,13 +86,13 @@ class HistoryWindowTest(basetest.BaseGuiTest):
         self.loop.run_until_complete(wait())
         self.loop.run_until_complete(self.reset_redis())
 
-    @freeze_time("2015-11-20 21:36:22")
     def test_show_lines(self):
         """ Testing showing history
         """
         def test_func():
+            d = self.now.strftime("%Y/%m/%d %H:%M:%S")
             self.assertCountEqual(self.get_tree(self.win.transaction_list),
-                [{('2015/11/20 21:36:22', 'test1', 'a', 'b', 'c', '1', '-', '1.0', '1'): []}, {('2015/11/20 21:36:22', 'test1', 'b', 'd', 'c', '2', '-', '5.0', '2'): []}, {('2015/11/20 21:36:22', 'test2', 'e', 'f', 'g', '2', '5.0', '-', '3'): []}]
+                [{(d, 'test1', 'a', 'b', 'c', '1', '-', '1.0', '1'): []}, {(d, 'test1', 'b', 'd', 'c', '2', '-', '5.0', '2'): []}, {(d, 'test2', 'e', 'f', 'g', '2', '5.0', '-', '3'): []}]
             )
             self.app.exit()
 
@@ -118,8 +116,9 @@ class HistoryWindowTest(basetest.BaseGuiTest):
                     self.assertEqual(json.loads(res[1].decode()), {'token': 'changeme', 'type': 'history', 'price': -2.5, 'id': 2, 'quantity': 1})
                     redis.delete(api.sde.QUEUE_NAME)
 
+                    d = self.now.strftime("%Y/%m/%d %H:%M:%S")
                     self.assertEqual(self.get_tree(self.win.transaction_list),
-                        [{('2015/11/20 21:36:22', 'test1', 'a', 'b', 'c', '1', '-', '1.0', '1'): []}, {('2015/11/20 21:36:22', 'test1', 'b', 'd', 'c', '1', '-', '2.5', '2'): []}, {('2015/11/20 21:36:22', 'test2', 'e', 'f', 'g', '2', '5.0', '-', '3'): []}]
+                        [{(d, 'test1', 'a', 'b', 'c', '1', '-', '1.0', '1'): []}, {(d, 'test1', 'b', 'd', 'c', '1', '-', '2.5', '2'): []}, {(d, 'test2', 'e', 'f', 'g', '2', '5.0', '-', '3'): []}]
                     )
                     QtCore.QTimer.singleShot(100, self.connect)
                     item = self.win.transaction_list.topLevelItem(1)
@@ -127,10 +126,11 @@ class HistoryWindowTest(basetest.BaseGuiTest):
                     self.win.delete_button.click()
 
                     async def final_func():
+                        d = self.now.strftime("%Y/%m/%d %H:%M:%S")
                         res = await redis.blpop(api.sde.QUEUE_NAME)
                         self.assertEqual(json.loads(res[1].decode()), {'token': 'changeme', 'type': 'history-delete', 'id': 2})
                         self.assertEqual(self.get_tree(self.win.transaction_list),
-                            [{('2015/11/20 21:36:22', 'test1', 'a', 'b', 'c', '1', '-', '1.0', '1'): []}, {('2015/11/20 21:36:22', 'test2', 'e', 'f', 'g', '2', '5.0', '-', '3'): []}]
+                            [{(d, 'test1', 'a', 'b', 'c', '1', '-', '1.0', '1'): []}, {(d, 'test2', 'e', 'f', 'g', '2', '5.0', '-', '3'): []}]
                         )
                         self.app.exit()
                     task = asyncio.ensure_future(final_func())
@@ -146,10 +146,11 @@ class HistoryWindowTest(basetest.BaseGuiTest):
         """
         async def test_func():
             async def final_func():
+                d = self.now.strftime("%Y/%m/%d %H:%M:%S")
                 res = await redis.blpop(api.sde.QUEUE_NAME)
                 self.assertEqual(json.loads(res[1].decode()), {'token': 'changeme', 'type': 'history-delete', 'id': 2})
                 self.assertEqual(self.get_tree(self.win.transaction_list),
-                    [{('2015/11/20 21:36:22', 'test1', 'a', 'b', 'c', '1', '-', '1.0', '1'): []}, {('2015/11/20 21:36:22', 'test2', 'e', 'f', 'g', '2', '5.0', '-', '3'): []}]
+                    [{(d, 'test1', 'a', 'b', 'c', '1', '-', '1.0', '1'): []}, {(d, 'test2', 'e', 'f', 'g', '2', '5.0', '-', '3'): []}]
                 )
                 self.app.exit()
             async with api.redis.connection.get() as redis:

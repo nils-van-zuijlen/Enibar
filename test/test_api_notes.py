@@ -42,8 +42,6 @@ class NotesTest(basetest.BaseTest):
             os.remove("img/coucou2.jpg")
         except FileNotFoundError:
             pass
-        with Cursor() as cursor:
-            cursor.exec_("SET TIMESTAMP=unix_timestamp('2014-12-24 06:00:00')")
         notes.NOTES_STATS_FIELDS_CACHE = {}
         notes.NOTES_FIELDS_CACHE = {}  # Ensure that this cache is rebuilt in rebuild_cache
 
@@ -410,7 +408,7 @@ class NotesTest(basetest.BaseTest):
 
         notes.transactions(["test0", ], -1)
         note = notes.get()[0]
-        now = PyQt5.QtCore.QDateTime(PyQt5.QtCore.QDate(2014, 12, 24))
+        now = PyQt5.QtCore.QDateTime.currentDateTime()
         self.assertEqual(note['overdraft_date'], now.date())
 
         notes.transactions(["test0", ], 1)

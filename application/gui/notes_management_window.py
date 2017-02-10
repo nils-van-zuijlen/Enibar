@@ -311,7 +311,7 @@ class NotesManagementWindow(QtWidgets.QDialog):
 
     def cotiz_fnc(self):
         transactions = []
-        if api.note_categories.remove_notes([self.current_nickname], "Non cotiz"):
+        if api.note_categories.remove_notes([self.current_nickname], "Non Cotiz"):
             transactions.append({'note': self.current_nickname,
                              'category': "Note",
                              'product': "cotiz",

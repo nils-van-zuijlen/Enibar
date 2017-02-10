@@ -14,10 +14,7 @@ import settings  # nopep8
 
 def create_migrations_table():
     with database.Cursor() as cursor:
-        cursor.prepare("""CREATE TABLE IF NOT EXISTS __migrations (
-            version INTEGER UNSIGNED PRIMARY KEY
-        )""")
-        cursor.exec_()
+        cursor.exec_("""CREATE TABLE IF NOT EXISTS __migrations (version SERIAL PRIMARY KEY)""")
 
 
 def execute_sql_file(filename):
@@ -25,10 +22,6 @@ def execute_sql_file(filename):
     do a full backup before starting the migration and if it fails, and reapply
     it if it fails
     """
-    _, backup_name = tempfile.mkstemp()
-    passwd = "" if not settings.PASSWORD else f"-p{settings.PASSWORD}"
-    command = f"mysqldump -u {settings.USERNAME} {passwd} -h {settings.HOST} {settings.DBNAME} > {backup_name}"
-    os.system(command)
     with database.Database() as db, open(filename) as fd:
         if not db.transaction():
             print("Failed to start the migration")
@@ -42,13 +35,9 @@ def execute_sql_file(filename):
             if not cursor.exec_(statement):
                 db.rollback()
                 print(cursor.lastError().text())
-                print("Error while migrating, rolling back")
-                command = f"mysql -u {settings.USERNAME} {passwd} -h {settings.HOST} {settings.DBNAME} < {backup_name}"
-                os.system(command)
                 break
         else:
             db.commit()
-    os.remove(backup_name)
 
 
 def new_migration(name):
@@ -67,7 +56,7 @@ def new_migration(name):
 def apply_migrations():
     # Get the latest applied migration
     with database.Cursor() as cursor:
-        cursor.prepare("SELECT version FROM __migrations ORDER BY version DESC LIMIT 0,1")
+        cursor.prepare("SELECT version FROM __migrations ORDER BY version DESC LIMIT 1")
         cursor.exec_()
         last_applied = -1
         if cursor.next():
@@ -90,7 +79,7 @@ def apply_migrations():
         print("Nothing to do")
         sys.exit(1)
 
-    os.write(migration_file, f"INSERT INTO __migrations(version) VALUES({nb});\nCOMMIT;\n".encode())
+    os.write(migration_file, f"INSERT INTO __migrations(version) VALUES({nb});\n".encode())
 
     # Execute the generated file.
     execute_sql_file(migration_name)
@@ -104,7 +93,7 @@ def rollback_migrations():
     lower = -1
     upper = -1
     with database.Cursor() as cursor:
-        cursor.prepare("SELECT version FROM __migrations ORDER BY version DESC LIMIT 0,2")
+        cursor.prepare("SELECT version FROM __migrations ORDER BY version DESC LIMIT 2")
         cursor.exec_()
         if cursor.next():
             upper = int(cursor.value("version"))
@@ -123,7 +112,7 @@ def rollback_migrations():
             with open(os.path.join("migrations", migration, "down.sql")) as fd:
                 os.write(migration_file, fd.read().encode())
 
-    os.write(migration_file, f"DELETE FROM __migrations WHERE version={upper};\nCOMMIT;\n".encode())
+    os.write(migration_file, f"DELETE FROM __migrations WHERE version={upper};\n".encode())
 
     if should_apply:
         execute_sql_file(migration_name)

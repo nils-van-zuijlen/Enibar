@@ -117,7 +117,7 @@ class StatsTests(basetest.BaseTest):
         )
 
     def test_get_stats(self):
-        self.assertEqual(list(stats.get_notes_stats()),
+        self.assertCountEqual(list(stats.get_notes_stats()),
             [{'price_name': 'c', 'category': 'a', 'nickname': 'test1', 'price': -1.0, 'quantity': 1.0, 'product': 'b'},
              {'price_name': 'f', 'category': 'd', 'nickname': 'test1', 'price': -2.0, 'quantity': 1.0, 'product': 'e'},
              {'price_name': 'c', 'category': 'a', 'nickname': 'test2', 'price': -1.0, 'quantity': 1.0, 'product': 'b'},

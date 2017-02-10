@@ -40,7 +40,7 @@ def add(username, password):
     with Cursor() as cursor:
         if not username or not password:
             return False
-        cursor.prepare("INSERT INTO admins VALUES(:login, :pass, 0, 0, 0)")
+        cursor.prepare("INSERT INTO admins VALUES(:login, :pass, FALSE, FALSE, FALSE)")
         cursor.bindValue(':login', username)
         cursor.bindValue(':pass', bcrypt.hashpw(password,
                                                 bcrypt.gensalt()))
@@ -56,9 +56,9 @@ def remove(username):
     :return bool: True if success else False.
     """
     with Cursor() as cursor:
-        cursor.prepare("DELETE FROM admins WHERE ((SELECT * FROM (SELECT \
-        manage_users FROM admins WHERE login=:username) AS t)=0 OR (SELECT * \
-        FROM(SELECT COUNT(*) FROM admins WHERE manage_users=1) AS p)>1) AND \
+        cursor.prepare("DELETE FROM admins WHERE ((SELECT \
+        manage_users FROM admins WHERE login=:username)=FALSE OR ( \
+        SELECT COUNT(*) FROM admins WHERE manage_users=TRUE)>1) AND \
         login=:username")
         cursor.bindValue(':username', username)
 
@@ -73,7 +73,7 @@ def get_list(**filter_):
     if any(right not in RIGHTS for right in filter_):
         return
 
-    cursor = api.base.filtered_getter("admins", filter_)
+    cursor = api.base.filtered_getter("admins", filter_, order_by="login")
     while cursor.next():
         yield cursor.value('login')
 
@@ -121,11 +121,9 @@ def set_rights(username, rights):
             SET manage_users=:manage_users,
             manage_notes=:manage_notes,
             manage_products=:manage_products
-            WHERE ((SELECT * FROM (SELECT \
-            manage_users FROM admins WHERE login=:login) AS t)=0 OR (SELECT * \
-            FROM(SELECT COUNT(*) FROM admins WHERE manage_users=1) AS p)>1 \
-            OR :manage_users=1) AND \
-            login=:login
+            WHERE ((SELECT  manage_users FROM admins WHERE login=:login)=FALSE \
+            OR ( SELECT COUNT(*) FROM admins WHERE manage_users=TRUE) >1 \
+            OR :manage_users=TRUE) AND login=:login
             """)
         for right, value in rights.items():
             cursor.bindValue(':{}'.format(right), value)

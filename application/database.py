@@ -58,15 +58,15 @@ class Database:
         """ Connect to the database and set some parameters.
         """
         if Database.database is None:
-            Database.database = QtSql.QSqlDatabase("QMYSQL")
-            if "TEST_ENIBAR" in os.environ:
-                Database.database.setPort(int(settings.PORT))
-                Database.database.setConnectOptions("MYSQL_OPT_RECONNECT=1;UNIX_SOCKET=/tmp/mysql.socket")
+            Database.database = QtSql.QSqlDatabase("QPSQL")
             Database.database.setHostName(settings.HOST)
             Database.database.setUserName(settings.USERNAME)
             Database.database.setPassword(settings.PASSWORD)
             Database.database.setDatabaseName(settings.DBNAME)
-            Database.database.setConnectOptions("MYSQL_OPT_RECONNECT=1")
+            if "TEST_ENIBAR" in os.environ:
+                Database.database.setPort(2356)
+                Database.database.setHostName("/tmp/postgres_enibar")
+                Database.database.setUserName("enibar")
             if not Database.database.open():
                 # We need this to create an app before opening a window.
                 import gui.utils
@@ -74,9 +74,6 @@ class Database:
                 gui.utils.error("Error", "Can't join database")
                 print("Can't join database")
                 sys.exit(1)
-            cursor = SqlQuery(self.database)
-            cursor.exec_("SET AUTOCOMMIT=0")
-            cursor.exec_("SET innodb_flush_log_at_trx_commit=0")
 
 
 class Cursor(Database):
@@ -85,13 +82,13 @@ class Cursor(Database):
         super().__init__()
         self.cursor = None
 
+    def prepare(self, query):
+        super().prepare(query)
+
     def __enter__(self):
         super().__enter__()
         self.cursor = SqlQuery(self.database)
         return self.cursor
-
-    def __exit__(self, type_, value, traceback):
-        self.database.commit()
 
     if settings.DEBUG:
         def exec_(self, *args):
@@ -102,6 +99,12 @@ class Cursor(Database):
 
         def execBatch(self, *args):
             ret = super().execBatch(*args)
+            if not ret:
+                print(self.lastError().text())
+            return ret
+
+        def prepare(self, query):
+            ret = super().prepare(query)
             if not ret:
                 print(self.lastError().text())
             return ret
@@ -141,6 +144,12 @@ class SqlQuery(QtSql.QSqlQuery):
 
         def execBatch(self, *args):
             ret = super().execBatch(*args)
+            if not ret:
+                print(self.lastError().text())
+            return ret
+
+        def prepare(self, query):
+            ret = super().prepare(query)
             if not ret:
                 print(self.lastError().text())
             return ret

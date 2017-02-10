@@ -35,16 +35,17 @@ def get_notes_stats():
         cursor.prepare("SELECT notes.nickname AS nickname,\
                         transactions.product AS product,\
                         transactions.price_name AS price_name,\
-                        transactions.price/quantity AS price,\
+                        transactions.price/transactions.quantity AS price,\
                         transactions.category AS category,\
-                        SUM(transactions.quantity) AS quantity\
-                        FROM transactions JOIN notes WHERE\
-                        ((notes.lastname = transactions.lastname AND\
-                        notes.firstname = transactions.firstname) OR\
-                        notes.nickname = transactions.note) AND\
-                        notes.stats_inscription = TRUE\
+                        SUM(transactions.quantity) AS quantity \
+                        FROM transactions JOIN notes ON \
+                        ((notes.lastname = transactions.lastname AND \
+                        notes.firstname = transactions.firstname) OR \
+                        notes.nickname = transactions.note) AND \
+                        notes.stats_inscription = TRUE \
                         GROUP BY notes.nickname, transactions.product,\
-                        transactions.price_name, transactions.price")
+                        transactions.price_name, transactions.price, \
+                        transactions.quantity, transactions.category")
         cursor.exec_()
         while cursor.next():
 

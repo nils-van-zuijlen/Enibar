@@ -160,7 +160,7 @@ def rollback_transaction(id_, full=False):
     with Cursor() as cursor:
         if quantity > 1 and not full:
             cursor.prepare("UPDATE transactions SET quantity=quantity - 1,\
-                    price=:price WHERE id=:id AND deletable=1")
+                    price=:price WHERE id=:id AND deletable=TRUE")
             price = trans['price'] / quantity
             cursor.bindValue(':price', trans['price'] - price)
             cursor.bindValue(':id', trans['id'])
@@ -168,7 +168,7 @@ def rollback_transaction(id_, full=False):
         else:
             task = api.sde.send_history_deletion([trans['id']])
             cursor.prepare("DELETE FROM transactions WHERE id=:id "
-                "AND deletable=1")
+                "AND deletable=TRUE")
             cursor.bindValue(':id', trans['id'])
             price = trans['price']
 
@@ -196,7 +196,7 @@ def get_grouped_entries(col, filters):
         cursor.prepare("""
             SELECT {c} FROM transactions
             {w} {filters}
-            GROUP BY binary {c}
+            GROUP BY {c}
             ORDER BY {c}
             """.format(c=col, w="WHERE" * bool(sqlfilters),
                 filters=' AND '.join(sqlfilters))

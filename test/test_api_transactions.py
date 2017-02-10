@@ -184,7 +184,7 @@ class TransactionsTest(basetest.BaseTest):
             "e",
             "f",
             "g",
-            "a",
+            1,
             5
         )
         transactions.log_transaction(
@@ -192,7 +192,7 @@ class TransactionsTest(basetest.BaseTest):
             "e",
             "f",
             "g",
-            "a",
+            1,
             5,
             False
         )
