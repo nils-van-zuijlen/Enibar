@@ -18,16 +18,19 @@
 
 
 python3 -c 'import sys;(print("Python 3.6 or newer is required") and exit(1)) if sys.version_info < (3, 6) else exit(0)' || exit 1
-VENV="enibar-venv"
-VENV_COMMAND="pyvenv"
+cd $(dirname $0)
 
-mv application/settings.py settings.py.bak
+VENV="../.enibar-venv"
+VENV_COMMAND="pyvenv"
+APP_DIR="../application"
+
+mv $APP_DIR/settings.py settings.py.bak
 git pull origin master || {
 	echo "Failed to update."
-	mv settings.py.bak application/settings.py
+    mv settings.py.bak $APP_DIR/settings.py
 	exit 1
 }
-mv settings.py.bak application/settings.py
+mv settings.py.bak $APP_DIR/settings.py
 
 if [ -e "$VENV" ]; then
 	echo 'Trying to upgrade the venv'
@@ -41,8 +44,6 @@ fi
 
 pip install -r "requirements.txt" --upgrade
 
-./migrations.py apply
-
 cp -R /usr/lib/python3.6/site-packages/PyQt5 $VENV/lib/python3.6/site-packages/  || {
     echo ''
     echo 'You have to install PyQt5 manually'
@@ -53,3 +54,5 @@ cp -R /usr/lib/python3.6/site-packages/sip.so $VENV/lib/python3.6/site-packages/
     echo 'You have to install sip manually'
     echo ''
 }
+
+$(dirname $0)/migrations.py apply

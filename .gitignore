@@ -3,9 +3,9 @@ application/__pycache__
 application/api/__pycache__
 application/gui/__pycache__
 application/img
-documentation/build
-documentation/html
+application/error
+.enibar-venv/
 enibar-venv/
 img/*
-test/__pycache__
+tests/__pycache__
 .ropeproject/*

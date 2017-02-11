@@ -6,7 +6,8 @@ import sqlparse
 import sys
 import tempfile
 from PyQt5 import QtSql
-sys.path.append("application")
+os.chdir(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append("../application")
 
 import database  # nopep8
 import settings  # nopep8
@@ -43,11 +44,11 @@ def execute_sql_file(filename):
 def new_migration(name):
     # Get version from the last miration created
     version = -1
-    for migration in os.listdir("migrations"):
+    for migration in os.listdir("../migrations"):
         version += 1
     version += 1
     print(f"Creating migration {version:0>5}_{name}")
-    directory = f"migrations/{version:0>5}_{name}"
+    directory = f"../migrations/{version:0>5}_{name}"
     os.makedirs(directory)
     open(os.path.join(directory, "up.sql"), 'a').close()
     open(os.path.join(directory, "down.sql"), 'a').close()
@@ -66,13 +67,13 @@ def apply_migrations():
 
     should_apply = False
     nb = 0
-    for migration in sorted(os.listdir("migrations")):
+    for migration in sorted(os.listdir("../migrations")):
         nb = int(migration.split("_")[0])
         if nb <= last_applied:
             continue
         should_apply = True
         print(f"Applying {migration}")
-        with open(os.path.join("migrations", migration, "up.sql")) as fd:
+        with open(os.path.join("../migrations", migration, "up.sql")) as fd:
             os.write(migration_file, fd.read().encode())
 
     if not should_apply:
@@ -104,12 +105,12 @@ def rollback_migrations():
 
     migration_file, migration_name = tempfile.mkstemp()
 
-    for migration in sorted(os.listdir("migrations"), reverse=True):
+    for migration in sorted(os.listdir("../migrations"), reverse=True):
         nb = int(migration.split("_")[0])
         if lower < nb <= upper:
             should_apply = True
             print(f"Rollback {migration}")
-            with open(os.path.join("migrations", migration, "down.sql")) as fd:
+            with open(os.path.join("../migrations", migration, "down.sql")) as fd:
                 os.write(migration_file, fd.read().encode())
 
     os.write(migration_file, f"DELETE FROM __migrations WHERE version={upper};\n".encode())
@@ -144,7 +145,7 @@ if __name__ == "__main__":
     create_migrations_table()
 
     # Then the migrations dir
-    os.makedirs("migrations", exist_ok=True)
+    os.makedirs("../migrations", exist_ok=True)
 
     if sys.argv[1] == 'new':
         new_migration(sys.argv[2])

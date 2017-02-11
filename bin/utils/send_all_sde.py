@@ -1,5 +1,5 @@
 import sys
-sys.path.append("../application")
+sys.path.append("../../application")
 
 import api.notes
 import api.sde

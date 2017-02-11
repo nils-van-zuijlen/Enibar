@@ -28,7 +28,7 @@ class CsvImportTest(basetest.BaseGuiTest):
         super().setUp()
         self.add_note("test", mail="test@test.fr")
         self.add_note("test2", mail="test2@test.fr")
-        self.win = gui.csv_import_window.CsvImportWindow("../test/resources/test.csv")
+        self.win = gui.csv_import_window.CsvImportWindow("../tests/resources/test.csv")
 
     def test_import(self):
         """ Testing csv import """

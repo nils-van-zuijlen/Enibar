@@ -5,12 +5,12 @@ stages:
 
 api:
     stage: api
-    script: ./test.sh -a
+    script: ./bin/test.sh -a
 
 gui:
     stage: gui
-    script: ./test.sh -g
+    script: ./bin/test.sh -g
 
 pep:
     stage: pep
-    script: ./test.sh -p
+    script: ./bin/test.sh -p

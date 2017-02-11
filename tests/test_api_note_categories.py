@@ -44,7 +44,7 @@ class NoteCategoriesTest(basetest.BaseTest):
             "0600000000",
             '12/12/2001',
             '1A',
-            '../test/resources/coucou.jpg',
+            '../tests/resources/coucou.jpg',
             True,
             True
         )
@@ -55,7 +55,7 @@ class NoteCategoriesTest(basetest.BaseTest):
             "0600000000",
             '12/12/2001',
             '1A',
-            '../test/resources/coucou.jpg',
+            '../tests/resources/coucou.jpg',
             True,
             True
         )

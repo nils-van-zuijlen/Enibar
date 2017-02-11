@@ -55,7 +55,7 @@ class NotesTest(basetest.BaseTest):
             "0600000000",
             '12/12/2001',
             '1A',
-            '../test/resources/coucou.jpg',
+            '../tests/resources/coucou.jpg',
             True,
             True
         ), 1)
@@ -66,7 +66,7 @@ class NotesTest(basetest.BaseTest):
             "0600000000",
             '12/12/2001',
             '1A',
-            '../test/resources/coucou.jpg',
+            '../tests/resources/coucou.jpg',
             True,
             True
         ), 2)
@@ -92,7 +92,7 @@ class NotesTest(basetest.BaseTest):
             "0600000000",
             '12/12/2001',
             '1A',
-            '../test/resources/coucou.jpg',
+            '../tests/resources/coucou.jpg',
             True,
             False
         )
@@ -425,13 +425,13 @@ class NotesTest(basetest.BaseTest):
         """
         self.add_note("test0")
 
-        notes.change_photo("test0", "../test/resources/coucou2.jpg")
+        notes.change_photo("test0", "../tests/resources/coucou2.jpg")
         note = notes.get()[0]
         self.assertEqual(note['photo_path'], "coucou2.jpg")
-        notes.change_photo("test0", "../test/resources/coucou.jpg")
+        notes.change_photo("test0", "../tests/resources/coucou.jpg")
         note = notes.get()[0]
         self.assertEqual(note['photo_path'], "coucou.jpg")
-        notes.change_photo("test0", "../test/resources/coucou2.jpg")
+        notes.change_photo("test0", "../tests/resources/coucou2.jpg")
         note = notes.get()[0]
         self.assertIn("coucou2", note['photo_path'])
         self.assertNotEqual("coucou2.jpg", note['photo_path'])
