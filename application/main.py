@@ -41,7 +41,7 @@ def excepthook(*args):
 sys.excepthook = excepthook
 SUB = None
 
-VERSION = 1
+VERSION = 2
 try:
     CURRENT_VERSION = int(api.redis.get_key_blocking("ENIBAR_VERSION").decode())
 except ValueError:
