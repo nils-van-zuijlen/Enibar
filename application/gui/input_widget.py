@@ -67,6 +67,7 @@ class Input(QtWidgets.QLineEdit):
         # call self.setGraphicsEffect(None)
         if not self.isEnabled():
             self.setGraphicsEffect(None)
+            self.valid = True
             return
         self.shadow = QtWidgets.QGraphicsDropShadowEffect()
         self.shadow.setBlurRadius(5)
