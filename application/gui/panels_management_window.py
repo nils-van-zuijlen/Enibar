@@ -232,9 +232,8 @@ class PanelList(ConsumptionList):
             cat_widget = QtWidgets.QTreeWidgetItem(self, [cname])
             self.categories.append(cat_widget)
 
-        if cname not in [widget.text(0) for widget in self.products]:
-            pro_widget = QtWidgets.QTreeWidgetItem(cat_widget, [pname])
-            self.products.append(pro_widget)
+        pro_widget = QtWidgets.QTreeWidgetItem(cat_widget, [pname])
+        self.products.append(pro_widget)
 
 
 class GlobalConsumptionList(PanelList):
