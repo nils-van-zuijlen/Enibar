@@ -55,4 +55,4 @@ cp -R /usr/lib/python3.6/site-packages/sip.so $VENV/lib/python3.6/site-packages/
     echo ''
 }
 
-$(dirname $0)/migrations.py apply
+./migrations.py apply
