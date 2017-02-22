@@ -42,7 +42,7 @@ fi
 
 . "$VENV/bin/activate"
 
-pip install -r "requirements.txt" --upgrade
+pip install -r "../requirements.txt" --upgrade
 
 cp -R /usr/lib/python3.6/site-packages/PyQt5 $VENV/lib/python3.6/site-packages/  || {
     echo ''
