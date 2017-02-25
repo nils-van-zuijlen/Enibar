@@ -60,8 +60,7 @@ class RefillNoteWindow(QtWidgets.QDialog):
             return
 
         prompt = ValidationWindow("Etes vous sûr de vouloir ajouter {} € sur la note\
-            \nde {}".format(self.to_add.text(), self.selected_note),
-            settings.ASK_VALIDATION_REFILL)
+            \nde {}".format(self.to_add.text(), self.selected_note))
         if not prompt.is_ok:
             return
         reason = self.reason.text()
@@ -113,8 +112,7 @@ class MultiRefillNoteWindow(QtWidgets.QDialog):
                 0.01€")
             return
         prompt = ValidationWindow("Etes vous sûr de vouloir {} de l'argent sur les\
-            \nnotes selectionées".format(self.text, self.to_add.text()),
-            settings.ASK_VALIDATION_REFILL)
+            \nnotes selectionées".format(self.text, self.to_add.text()))
         if not prompt.is_ok:
             return
         self.to_add_value = to_add

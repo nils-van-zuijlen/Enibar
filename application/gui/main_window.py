@@ -351,7 +351,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     <br/>de {}<br/><br/><span style=\"font-size:12pt;\
                     font-weight:600; color:#ff0000;\">NE PAS OUBLIER LES\
                     ECOCUPS !!!!</span>".format(total, self.selected.text())
-            prompt = ValidationWindow(text, settings.ASK_VALIDATION_VALIDATE)
+            prompt = ValidationWindow(text)
             if not prompt.is_ok:
                 return
             transactions = []
