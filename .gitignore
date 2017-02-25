@@ -9,3 +9,5 @@ enibar-venv/
 img/*
 tests/__pycache__
 .ropeproject/*
+*.so
+target/

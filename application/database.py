@@ -36,6 +36,7 @@ You can use the DB class like that:
 
 from PyQt5 import QtSql, QtWidgets
 import asyncio
+import rapi
 import os
 import settings
 import sys
@@ -68,10 +69,11 @@ class Database:
                 Database.database.setHostName("/tmp/postgres_enibar")
                 Database.database.setUserName("enibar")
             if not Database.database.open():
-                # We need this to create an app before opening a window.
-                import gui.utils
-                self.tmp = QtWidgets.QApplication(sys.argv)
-                gui.utils.error("Error", "Can't join database")
+                if rapi.utils.check_x11():
+                    # We need this to create an app before opening a window.
+                    import gui.utils
+                    self.tmp = QtWidgets.QApplication(sys.argv)
+                    gui.utils.error("Error", "Can't join database")
                 print("Can't join database")
                 sys.exit(1)
 

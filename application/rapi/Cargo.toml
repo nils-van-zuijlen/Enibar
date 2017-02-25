@@ -1,0 +1,11 @@
+[package]
+name = "rapi"
+version = "0.1.0"
+authors = ["Eijebong <eijebong@bananium.fr>"]
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+cpython={ git="https://github.com/dgrunwald/rust-cpython.git" }
+x11 = { version="2.12.1", features=["xlib"] }

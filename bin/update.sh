@@ -18,10 +18,18 @@
 
 
 python3 -c 'import sys;(print("Python 3.6 or newer is required") and exit(1)) if sys.version_info < (3, 6) else exit(0)' || exit 1
+rustup -h &> /dev/null || {
+    echo "You need to install rustup. If you're on archlinux, sudo pacman -S rustup"
+    exit 2
+}
+
+rustup override set nightly
+rustup update
+
 cd $(dirname $0)
 
 VENV="../.enibar-venv"
-VENV_COMMAND="pyvenv"
+VENV_COMMAND="python3.6 -m venv"
 APP_DIR="../application"
 
 mv $APP_DIR/settings.py settings.py.bak
@@ -54,5 +62,14 @@ cp -R /usr/lib/python3.6/site-packages/sip.so $VENV/lib/python3.6/site-packages/
     echo 'You have to install sip manually'
     echo ''
 }
+
+
+cd $APP_DIR
+
+cd rapi
+cargo build --release
+cd ..
+cp rapi/target/release/librapi.so rapi.so
+cd ../bin
 
 ./migrations.py apply
