@@ -5,13 +5,13 @@ import redis
 import gui.utils
 
 connection = None
-blocking_connection = redis.StrictRedis(host=settings.HOST, port=6379, db=0)
+blocking_connection = redis.StrictRedis(host=settings.REDIS_HOST, port=6379, db=0, password=settings.REDIS_PASSWORD)
 PING_TIME = 10
 
 
 async def connect():
     global connection
-    connection = await aioredis.create_pool((settings.HOST, 6379), maxsize=10)
+    connection = await aioredis.create_pool((settings.REDIS_HOST, 6379), maxsize=10, password=settings.REDIS_PASSWORD)
 
 
 def send_message(channel, message):

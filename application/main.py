@@ -86,7 +86,7 @@ t = Tee("error", "a")
 async def install_redis_handle(app):
     global SUB
     while True:
-        SUB = await aioredis.create_redis((settings.HOST, 6379))
+        SUB = await aioredis.create_redis((settings.REDIS_HOST, 6379), password=settings.REDIS_PASSWORD)
         res = await SUB.psubscribe("enibar-*")
         subscriber = res[0]
 

@@ -30,11 +30,11 @@ Database
 .. glossary::
     :sorted:
 
-    HOST
+    DB_HOST
 
             **Default value:** ``127.0.0.1``
 
-            Adress of the mysql server.
+            Adress of the postgresql server.
 
     USERNAME
 
@@ -54,6 +54,21 @@ Database
             **Default value:** ``enibar``
 
             The name of the database used by the software.
+
+Redis
+^^^^^
+.. glossary::
+    :sorted:
+
+    REDIS_HOST
+        **Default value:** ``127.0.0.1``
+
+        Adress of the redis server.
+
+    REDIS_PASSWORD
+        **Default value:** ``None``
+
+        The password of the redis instance if it requires one, None otherwise.
 
 
 Ecocups
@@ -199,11 +214,16 @@ MAX_HISTORY = 5
 # Database settings
 #
 
-HOST = "127.0.0.1"
+DB_HOST = "127.0.0.1"
 USERNAME = "root"
 PASSWORD = ""
 DBNAME = "enibar"
 
+#
+# Redis settings
+#
+REDIS_HOST = "127.0.0.1"
+REDIS_PASSWORD = None
 
 #
 # Agio settings
@@ -216,6 +236,7 @@ AGIO_PERCENT = 5.0
 #
 # Cotiz settings
 #
+
 NONCOTIZ_CATEGORY = "Non Cotiz"
 COTIZ_PRICE = 1.0
 
@@ -235,12 +256,14 @@ ECOCUP_NAME = "Ecocup"
 #
 # MAIL
 #
+
 SMTP_SERVER_ADDR = 'smtp.enib.fr'
 SMTP_SERVER_PORT = 25
 
 #
 # WEBSITE
 #
+
 WEB_URL = 'http://127.0.0.1:8000/enibar/'
 AUTH_SDE_TOKEN = 'changeme'
 USE_PROXY = False

@@ -60,7 +60,7 @@ class Database:
         """
         if Database.database is None:
             Database.database = QtSql.QSqlDatabase("QPSQL")
-            Database.database.setHostName(settings.HOST)
+            Database.database.setHostName(settings.DB_HOST)
             Database.database.setUserName(settings.USERNAME)
             Database.database.setPassword(settings.PASSWORD)
             Database.database.setDatabaseName(settings.DBNAME)
