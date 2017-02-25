@@ -38,15 +38,13 @@ if __name__ == "__main__":
         SELECT id, nickname, note FROM notes WHERE
             NOT EXISTS(
                 SELECT note, category FROM note_categories_assoc JOIN note_categories
-                ON note_categories.hidden=1 AND note_categories.id=category WHERE note=notes.id
+                ON note_categories.hidden=TRUE AND note_categories.id=category WHERE note=notes.id
             )
-            AND overdraft_date < DATE_SUB(CURDATE(), INTERVAL ? DAY)
+            AND overdraft_date < (DATE(NOW()) - INTERVAL '%s DAYS')
             AND agios_inscription=TRUE
-            AND (last_agio < DATE_SUB(CURDATE(), INTERVAL ? DAY) OR last_agio IS NULL)
-            """
+            AND (last_agio < (DATE(NOW()) - INTERVAL '%s DAYS') OR last_agio IS NULL)
+            """ % (settings.AGIO_THRESHOLD, settings.AGIO_EVERY)
         )
-        cursor.addBindValue(settings.AGIO_THRESHOLD)
-        cursor.addBindValue(settings.AGIO_EVERY)
         cursor.exec_()
 
         transactions = []
@@ -54,7 +52,7 @@ if __name__ == "__main__":
             update = QtSql.QSqlQuery(database)
             update.prepare("""
                 UPDATE notes
-                SET note=note + note * ? / 100, last_agio=CURDATE()
+                SET note=note + note * ? / 100, last_agio=DATE(NOW())
                 WHERE id=?
                 """
             )
