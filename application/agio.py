@@ -23,14 +23,19 @@ Must be frequently called by a cron job
 
 """
 
+import asyncio
 import settings
 import api.transactions
+import api.redis
 
 from PyQt5 import QtSql
 from database import Database
 
 
 if __name__ == "__main__":
+    LOOP = asyncio.get_event_loop()
+    LOOP.run_until_complete(api.redis.connect())
+
     with Database() as database:
         database.transaction()
         cursor = QtSql.QSqlQuery(database)
@@ -72,3 +77,7 @@ if __name__ == "__main__":
         api.transactions.log_transactions(transactions)
         database.commit()
 
+    async def wait_5s():
+        await asyncio.sleep(5)
+
+    LOOP.run_until_complete(wait_5s())
