@@ -183,7 +183,7 @@ def get(**kwargs):
                 yield {
                     'id': cursor.value('id'),
                     'label': cursor.value('label'),
-                    'value': cursor.value('value') + settings.synced.ALCOHOL_MAJORATION * cursor.value("alcoholic"),
+                    'value': cursor.value('value') + settings.ALCOHOL_MAJORATION * cursor.value("alcoholic"),
                     'product': cursor.value('product'),
                     'category': cursor.value('category'),
                 }

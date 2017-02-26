@@ -9,40 +9,283 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>261</width>
-    <height>87</height>
+    <width>639</width>
+    <height>750</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Paramètres</string>
   </property>
-  <layout class="QFormLayout" name="formLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="majoration_label">
-     <property name="text">
-      <string>Majoration alcools</string>
+  <layout class="QGridLayout" name="gridLayout_13">
+   <item row="1" column="0" colspan="2">
+    <widget class="QGroupBox" name="web_groupbox">
+     <property name="title">
+      <string>Web sync</string>
      </property>
+     <layout class="QGridLayout" name="gridLayout_8">
+      <item row="0" column="0">
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="QLabel" name="web_url_label">
+          <property name="text">
+           <string>URL</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="Input" name="web_key_input"/>
+        </item>
+        <item row="2" column="2">
+         <widget class="QCheckBox" name="web_use_proxy_input">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>9</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="web_use_proxy_label">
+          <property name="text">
+           <string>Use proxy</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="Input" name="web_url_input"/>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="web_key_label">
+          <property name="text">
+           <string>Secret key</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="2">
+         <widget class="Input" name="web_proxy_url_input"/>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="web_proxy_url_label">
+          <property name="text">
+           <string>Proxy URL</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
     </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="key_label">
-     <property name="text">
-      <string>Secret key</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="Input" name="key_input"/>
    </item>
    <item row="2" column="0" colspan="2">
+    <widget class="QGroupBox" name="cotiz_groupbox">
+     <property name="title">
+      <string>Cotiz</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_7">
+      <item row="0" column="0">
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QLabel" name="cotiz_noncotiz_name_label">
+          <property name="text">
+           <string>Non cotiz category name</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="cotiz_price_label">
+          <property name="text">
+           <string>Cotiz price</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="Input" name="cotiz_noncotiz_input"/>
+        </item>
+        <item row="1" column="1">
+         <widget class="Input" name="cotiz_price_input"/>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="2">
+    <widget class="QGroupBox" name="ecocups_groupbox">
+     <property name="title">
+      <string>Ecocups</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_9">
+      <item row="0" column="1">
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="0">
+         <widget class="QLabel" name="ecocups_price_label">
+          <property name="text">
+           <string>Ecocup price</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="4">
+         <widget class="Input" name="ecocups_repay_input"/>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="ecocups_buy_label">
+          <property name="text">
+           <string>Ecocup buy</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="ecocups_category_label">
+          <property name="text">
+           <string>Ecocup Category</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="ecocups_name_label">
+          <property name="text">
+           <string>Ecocup name</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QLabel" name="ecocups_repay_label">
+          <property name="text">
+           <string>Ecocup give back</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="Input" name="ecocups_buy_input"/>
+        </item>
+        <item row="0" column="1" colspan="4">
+         <widget class="Input" name="ecocups_price_input"/>
+        </item>
+        <item row="1" column="1" colspan="4">
+         <widget class="Input" name="ecocups_category_input"/>
+        </item>
+        <item row="4" column="1" colspan="4">
+         <widget class="Input" name="ecocups_name_input"/>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="2">
+    <widget class="QGroupBox" name="mails_groupbox">
+     <property name="title">
+      <string>Mails</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_11">
+      <item row="0" column="0">
+       <layout class="QGridLayout" name="gridLayout_4">
+        <item row="1" column="0">
+         <widget class="QLabel" name="smtp_server_port_label">
+          <property name="text">
+           <string>SMTP server port</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="smtp_server_address_label">
+          <property name="text">
+           <string>SMTP server address</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="Input" name="smtp_server_address_input"/>
+        </item>
+        <item row="1" column="1">
+         <widget class="Input" name="smtp_server_port_input"/>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="2">
+    <widget class="QGroupBox" name="agio_groupbox">
+     <property name="title">
+      <string>Agios</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_10">
+      <item row="0" column="0">
+       <layout class="QGridLayout" name="gridLayout_5">
+        <item row="0" column="0">
+         <widget class="QLabel" name="agio_threshold_label">
+          <property name="text">
+           <string>AGIO threshold</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="agio_percent_label">
+          <property name="text">
+           <string>AGIO percent</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="agio_every_label">
+          <property name="text">
+           <string>AGIO every</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="Input" name="agio_threshold_input"/>
+        </item>
+        <item row="2" column="1">
+         <widget class="Input" name="agio_every_input"/>
+        </item>
+        <item row="3" column="1">
+         <widget class="Input" name="agio_percent_input"/>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="6" column="0" colspan="2">
+    <widget class="QGroupBox" name="diverse_groupbox">
+     <property name="title">
+      <string>Divers</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_12">
+      <item row="0" column="0">
+       <layout class="QGridLayout" name="gridLayout_6">
+        <item row="0" column="0">
+         <widget class="QLabel" name="majoration_label">
+          <property name="text">
+           <string>Majoration alcools</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="Input" name="majoration_input"/>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="8" column="0" colspan="2">
     <widget class="QPushButton" name="save_button">
      <property name="text">
       <string>Sauvegarder</string>
      </property>
     </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="Input" name="majoration_input"/>
    </item>
   </layout>
  </widget>
@@ -54,8 +297,23 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>web_url_input</tabstop>
+  <tabstop>web_key_input</tabstop>
+  <tabstop>web_use_proxy_input</tabstop>
+  <tabstop>web_proxy_url_input</tabstop>
+  <tabstop>cotiz_noncotiz_input</tabstop>
+  <tabstop>cotiz_price_input</tabstop>
+  <tabstop>ecocups_price_input</tabstop>
+  <tabstop>ecocups_category_input</tabstop>
+  <tabstop>ecocups_buy_input</tabstop>
+  <tabstop>ecocups_repay_input</tabstop>
+  <tabstop>ecocups_name_input</tabstop>
+  <tabstop>smtp_server_address_input</tabstop>
+  <tabstop>smtp_server_port_input</tabstop>
+  <tabstop>agio_threshold_input</tabstop>
+  <tabstop>agio_every_input</tabstop>
+  <tabstop>agio_percent_input</tabstop>
   <tabstop>majoration_input</tabstop>
-  <tabstop>key_input</tabstop>
   <tabstop>save_button</tabstop>
  </tabstops>
  <resources/>
@@ -76,5 +334,24 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>web_use_proxy_input</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SettingsWindow</receiver>
+   <slot>on_proxy_usage_change(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>345</x>
+     <y>88</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>319</x>
+     <y>374</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
+ <slots>
+  <slot>on_proxy_usage_change(bool)</slot>
+ </slots>
 </ui>

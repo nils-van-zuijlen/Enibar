@@ -50,7 +50,7 @@ class ApiSdeTests(basetest.BaseTest):
             api.notes.transactions(["test" + str(i)], -i)
             api.notes.rebuild_cache()
         self.loop = asyncio.get_event_loop()
-        settings.USE_PROXY = False
+        settings.USE_PROXY = 0
 
     def test_sde_add_note(self):
         """ Testing adding a note to the queue
@@ -206,7 +206,7 @@ class ApiSdeTests(basetest.BaseTest):
         self.loop.run_until_complete(server.wait_closed())
 
     def test_sde_connection_with_proxy(self):
-        settings.USE_PROXY = True
+        settings.USE_PROXY = 1
         settings.PROXY_AUTH = "http://test:test@127.0.0.1:3222"
 
         async def test_func():

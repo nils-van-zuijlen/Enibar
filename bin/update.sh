@@ -73,3 +73,10 @@ cp rapi/target/release/librapi.so rapi.so
 cd ../bin
 
 ./migrations.py apply
+
+if [[ ! -e "${APP_DIR}/local_settings.py" ]]; then
+    echo ''
+    echo 'The local_settings.py file is non existant'
+    echo 'You should probably run ./bin/setup.py'
+    echo ''
+fi

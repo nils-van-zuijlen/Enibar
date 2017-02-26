@@ -134,7 +134,7 @@ class MainWindow(QtWidgets.QMainWindow):
         elif channel == "enibar-alcohol":
             self.check_alcohol()
         elif channel == "enibar-settings":
-            settings.synced.refresh_cache()
+            settings.refresh_cache()
             self.panels.rebuild()
         elif channel == "enibar-panels":
             self.panels.rebuild()

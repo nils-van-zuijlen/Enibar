@@ -58,7 +58,19 @@ if [[ $API == 1 || $GUI == 1 ]]; then
     postgres -D /tmp/postgres_enibar -p 2356 -k /tmp/postgres_enibar &>/dev/null &
     sleep 5
     createdb -U enibar -h /tmp/postgres_enibar -p 2356 enibar
+
+    cd $APPLICATION_DIR/rapi
+    cargo build
+    cp target/debug/librapi.so ../rapi.so
+    cd ../../bin
+
+    if [[ -e "$APPLICATION_DIR/local_settings.py" ]]; then
+        mv $APPLICATION_DIR/local_settings.py $APPLICATION_DIR/local_settings.py.bak
+    fi
+    echo -e "DEBUG=False\nIMG_BASE_DIR='img/'\nMAX_HISTORY=5\nREDIS_HOST='127.0.0.1'\nREDIS_PASSWORD=None" > $APPLICATION_DIR/local_settings.py
+
     ./migrations.py apply
+
     cd $APPLICATION_DIR
 
     if [[ $USE_VD == 1 ]]; then
@@ -83,6 +95,9 @@ if [[ $API == 1 || $GUI == 1 ]]; then
         kill $XVFB
     fi
 
+    if [[ -e "$APPLICATION_DIR/local_settings.py.bak" ]]; then
+        mv $APPLICATION_DIR/local_settings.py.bak $APPLICATION_DIR/local_settings.py
+    fi
     sleep 2
     rm -Rf /tmp/postgres_enibar
 fi

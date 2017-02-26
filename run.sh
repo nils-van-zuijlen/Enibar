@@ -20,6 +20,7 @@
 python3 -c 'import sys;(print("Python 3.4 or newer is required") and exit(1)) if sys.version_info < (3, 4) else exit(0)' || exit 1
 VENV=".enibar-venv"
 DIR=$(dirname "$0")
+DEBUG=0
 DEV=0
 
 TEMP=`getopt -o d--long dev -- "$@"`
@@ -47,25 +48,40 @@ fi
 
 cd $DIR/application
 
-$PYTHON -c "import settings; print(settings.DEBUG)" | grep "True" &> /dev/null
-DEBUG="$?"
+if [[ $DEV == 1 ]]; then
+    cd rapi
+    cargo build || exit
+    cd ..
+    cp rapi/target/debug/librapi.so rapi.so
+else
+    cd rapi
+    cargo build --release || exit
+    cd ..
+    cp rapi/target/release/librapi.so rapi.so
+fi
+
+if [[ ! -e "local_settings.py" ]]; then
+    echo ''
+    echo 'The local_settings.py file is non existant'
+    echo 'You should probably run ./bin/setup.py'
+    echo ''
+fi
+
+
+OUT="$($PYTHON -c 'import settings; print(settings.DEBUG)')"
+if [[ $? -eq 5 ]]; then
+    exit 5
+fi
+
+if [[ $(echo $OUT | grep "True" &> /dev/null) ]]; then
+    DEBUG="1"
+fi
 
 if wmctrl -h &>/dev/null; then
     WIN_ID=$(wmctrl -l | grep -e " Enibar$" | cut -d ' ' -f1 | tail -n1)
 fi
 
 if [[ "$WIN_ID" = "" || "$DEBUG" = "0" ]]; then
-    if [[ $DEV == 1 ]]; then
-        cd rapi
-        cargo build || exit
-        cd ..
-        cp rapi/target/debug/librapi.so rapi.so
-    else
-        cd rapi
-        cargo build --release || exit
-        cd ..
-        cp rapi/target/release/librapi.so rapi.so
-    fi
     /bin/sh -c "$PYTHON -OO main.py"
 else
     wmctrl -i -a $WIN_ID

@@ -26,15 +26,15 @@ class SettingsGuiTest(basetest.BaseGuiTest):
     def setUp(self):
         self._reset_db()
         super().setUp()
-        settings.synced.ALCOHOL_MAJORATION = 0
-        settings.synced.refresh_cache()
+        settings.ALCOHOL_MAJORATION = 0
+        settings.refresh_cache()
         self.win = gui.settings_window.SettingsWindow()
 
     def test_changing_setting(self):
         """ Testing changing a setting. """
         def callback():
-            settings.synced.refresh_cache()
-            self.assertEqual(settings.synced.ALCOHOL_MAJORATION, 4.0)
+            settings.refresh_cache()
+            self.assertEqual(settings.ALCOHOL_MAJORATION, 4.0)
             self.app.exit()
         self.win.majoration_input.setText("4")
         QtCore.QTimer.singleShot(200, callback)

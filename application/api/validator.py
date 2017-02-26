@@ -34,6 +34,7 @@ NAME = QtGui.QRegExpValidator(QtCore.QRegExp(".+"))
 NOTHING = QtGui.QRegExpValidator(QtCore.QRegExp(".*"))
 NUMBER = QtGui.QRegExpValidator(QtCore.QRegExp("[0-9]+([,.][0-9]+)?"))
 ALL_NUMBER = QtGui.QRegExpValidator(QtCore.QRegExp("-?[0-9]+([,.][0-9]+)?"))
+URL = QtGui.QRegExpValidator(QtCore.QRegExp("^(https?):\/\/((?:[a-z0-9.-]|%[0-9A-F]{2}){3,})(?::(\d+))?((?:\/(?:[a-z0-9-._~!$&'()*+,;=:@]|%[0-9A-F]{2})*)*)(?:\?((?:[a-z0-9-._~!$&'()*+,;=:\/?@]|%[0-9A-F]{2})*))?(?:#((?:[a-z0-9-._~!$&'()*+,;=:\/?@]|%[0-9A-F]{2})*))?$"))
 MAIL = QtGui.QRegExpValidator(QtCore.QRegExp(
     r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]{2,4}$"))
 BIRTHDATE = QtGui.QRegExpValidator(QtCore.QRegExp((
