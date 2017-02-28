@@ -48,6 +48,8 @@ fi
 
 cd $DIR/application
 
+rustup override set nightly
+
 if [[ $DEV == 1 ]]; then
     cd rapi
     cargo build || exit
