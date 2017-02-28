@@ -48,18 +48,13 @@ fi
 
 cd $DIR/application
 
-rustup override set nightly
 
 if [[ $DEV == 1 ]]; then
+    rustup override set nightly
     cd rapi
     cargo build || exit
     cd ..
     cp rapi/target/debug/librapi.so rapi.so
-else
-    cd rapi
-    cargo build --release || exit
-    cd ..
-    cp rapi/target/release/librapi.so rapi.so
 fi
 
 if [[ ! -e "local_settings.py" ]]; then
