@@ -125,15 +125,6 @@ class SqlQuery(QtSql.QSqlQuery):
         for key, value in kwargs.items():
             self.bindValue(key, value)
 
-    def record(self):
-        return SqlRecord(super().record())
-
-    def value(self, name_or_id):
-        ret_value = super().value(name_or_id)
-        if isinstance(ret_value, bytes):
-            return int.from_bytes(ret_value, byteorder='little')
-        return ret_value
-
     def indexOf(self, name):
         return self.record().indexOf(name)
 
@@ -155,21 +146,6 @@ class SqlQuery(QtSql.QSqlQuery):
             if not ret:
                 print(self.lastError().text())
             return ret
-
-
-class SqlRecord:
-    def __init__(self, record):
-        self._record = record
-
-    def __getattr__(self, name):
-        if name != 'value':
-            return getattr(self._record, name)
-
-    def value(self, name_or_id):
-        ret_value = self._record.value(name_or_id)
-        if isinstance(ret_value, bytes):
-            return int.from_bytes(ret_value, byteorder='little')
-        return ret_value
 
 
 async def ping_sql(app):
