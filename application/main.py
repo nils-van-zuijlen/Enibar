@@ -31,7 +31,6 @@ import gui.main_window
 import gui.utils
 import settings
 from PyQt5 import QtWidgets
-import random
 
 
 def excepthook(*args):
@@ -83,15 +82,6 @@ class Tee(object):
 
 t = Tee("error", "a")
 
-async def joke(app):
-    color = ['red', 'blue']
-    i = 0
-    while True:
-        app.setStyleSheet("background-color: hsl({}, 255, 255);".format(i))
-        app.note_history.setStyleSheet("background-color: hsl({}, 255, 255);".format(i))
-        await asyncio.sleep(0.05)
-        i = (i + 1) % 360
-
 
 async def install_redis_handle(app):
     global SUB
@@ -120,7 +110,6 @@ if __name__ == "__main__":
         TASKS.append(asyncio.ensure_future(api.redis.ping_redis()))
         TASKS.append(asyncio.ensure_future(api.sde.process_queue()))
         TASKS.append(asyncio.ensure_future(install_redis_handle(MYAPP)))
-        TASKS.append(asyncio.ensure_future(joke(MYAPP)))
         try:
             LOOP.run_forever()
         finally:
