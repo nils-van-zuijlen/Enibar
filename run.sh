@@ -23,7 +23,7 @@ DIR=$(dirname "$0")
 DEBUG=0
 DEV=0
 
-TEMP=`getopt -o d--long dev -- "$@"`
+TEMP=`getopt -o d --long dev -- "$@"`
 eval set -- "$TEMP"
 
 while true ; do
