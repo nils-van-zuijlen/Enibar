@@ -31,9 +31,9 @@ import api.notes
 import api.validator
 import api.note_categories
 import datetime
+import gui.auth_prompt_window
 import gui.notes_list_widget
 import settings
-import gui.auth_prompt_window
 
 
 class NotesManagementWindow(QtWidgets.QDialog):

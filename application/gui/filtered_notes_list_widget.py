@@ -24,10 +24,9 @@ NotesList
 A custom QListWidget that contains the list of notes and can be filtered
 """
 
-from PyQt5 import QtWidgets, QtCore, QtGui, uic
+from PyQt5 import QtWidgets, QtCore, uic
 import api.notes
 import api.validator
-import time
 
 
 class FilteredNotesListWidget(QtWidgets.QWidget):
@@ -42,12 +41,12 @@ class FilteredNotesListWidget(QtWidgets.QWidget):
         self.filter_input.set_validator(api.validator.ALL_NUMBER)
         self.search_input.setFocus(True)
 
-    def set_filter(self, filter):
-        self.note_list.current_filter = filter
+    def set_filter(self, filter_):
+        self.note_list.current_filter = filter_
         self.note_list.rebuild(api.notes.get(lambda x: self.note_list.custom_filter(x) and self.note_list.current_filter(x)))
 
-    def set_custom_filter(self, filter):
-        self.note_list.custom_filter = filter
+    def set_custom_filter(self, filter_):
+        self.note_list.custom_filter = filter_
         self.note_list.rebuild(api.notes.get(lambda x: self.note_list.custom_filter(x) and self.note_list.current_filter(x)))
 
     def filter_combobox_change(self, id_):

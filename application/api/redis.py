@@ -2,7 +2,7 @@ import settings
 import asyncio
 import aioredis
 import redis
-import gui.utils
+
 
 connection = None
 blocking_connection = redis.StrictRedis(host=settings.REDIS_HOST, port=6379, db=0, password=settings.REDIS_PASSWORD)

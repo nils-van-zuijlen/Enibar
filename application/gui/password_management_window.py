@@ -25,8 +25,8 @@ Password Managment Window
 
 from PyQt5 import QtWidgets, uic
 import api.validator
-import gui.utils
 import api.users
+import gui.utils
 
 
 class PasswordManagementWindow(QtWidgets.QDialog):

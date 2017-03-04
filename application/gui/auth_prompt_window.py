@@ -36,9 +36,8 @@ match a combination in database.
 
 
 from PyQt5 import QtWidgets, uic
-from api import users
+import api.users
 import api.validator
-from database import Cursor
 import gui.utils
 import settings
 
@@ -95,7 +94,7 @@ class AuthPromptWindow(QtWidgets.QDialog):
     def accept(self):
         """ Called when "Login" is clicked """
         self.user = self.login_input.currentText()
-        if users.is_authorized(self.user,
+        if api.users.is_authorized(self.user,
                                self.pass_input.text()):
             self.is_authorized = True
         else:

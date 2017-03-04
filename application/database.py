@@ -84,9 +84,6 @@ class Cursor(Database):
         super().__init__()
         self.cursor = None
 
-    def prepare(self, query):
-        super().prepare(query)
-
     def __enter__(self):
         super().__enter__()
         self.cursor = SqlQuery(self.database)

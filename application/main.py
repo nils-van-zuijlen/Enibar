@@ -77,7 +77,6 @@ class Tee(object):
 
     def flush(self):
         self.stdout.flush()
-        pass
 
 
 t = Tee("error", "a")
@@ -90,7 +89,7 @@ async def install_redis_handle(app):
         res = await SUB.psubscribe("enibar-*")
         subscriber = res[0]
 
-        while (await subscriber.wait_message()):
+        while await subscriber.wait_message():
             reply = await subscriber.get_json()
             await app.redis_handle(reply[0].decode(), reply[1])
         await asyncio.sleep(1)

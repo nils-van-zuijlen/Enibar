@@ -37,12 +37,12 @@ def make_get_unique(getter):
         results = list(get(**kwargs))
         if len(results) != 1:
             return None
-        else:
-            return results[0]
+        return results[0]
+
     return get_unique
 
 
-def filtered_getter(table, filter_, reverse=False, max=None, order_by="id"):
+def filtered_getter(table, filter_, reverse=False, max_=None, order_by="id"):
     """ This creates a request in the table table with the filter filter_ and
         returns the cursor of this request for future use.
     """
@@ -62,7 +62,7 @@ def filtered_getter(table, filter_, reverse=False, max=None, order_by="id"):
             " AND ".join(filters),
             "ORDER BY {} DESC".format(order_by) * reverse,
             "ORDER BY {} ASC".format(order_by) * (not reverse),
-            "LIMIT {}".format(max) * bool(max),
+            "LIMIT {}".format(max_) * bool(max_),
         ))
         for key, arg in filter_.items():
             cursor.bindValue(":{}".format(key), arg)

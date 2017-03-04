@@ -38,10 +38,9 @@ def add(name):
     with Cursor() as cursor:
         cursor.prepare("INSERT INTO panels(name) VALUES(:name)")
         cursor.bindValue(':name', name)
+
         if cursor.exec_():
             return cursor.lastInsertId()  # Return the created panel
-        else:
-            return None
 
 
 def remove(name):

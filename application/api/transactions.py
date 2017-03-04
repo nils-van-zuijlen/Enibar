@@ -87,7 +87,6 @@ def log_transactions(transactions):
     :param list transactions:
     """
     with Database() as database:
-        cache = {}
         database.transaction()
         cursor = QtSql.QSqlQuery(database)
         cursor.prepare("""INSERT INTO transactions(
@@ -177,8 +176,8 @@ def rollback_transaction(id_, full=False):
         if not cursor.lastError().isValid() and cursor.numRowsAffected() > 0:
             asyncio.ensure_future(task)
             return api.notes.transactions([note['nickname'], ], -price)
-        else:
-            return False
+
+    return False
 
 
 def get_grouped_entries(col, filters):
@@ -214,13 +213,13 @@ TRANSACT_FIELDS = ['id', 'date', 'note', 'lastname', 'firstname', 'category',
                    'product', 'price_name', 'quantity', 'price', 'liquid_quantity', 'percentage']
 
 
-def get(max=None, reverse=False, **filter_):
+def get(max_=None, reverse=False, **filter_):
     """ Get transactions matching filter.
 
     :param dict filter_: filter to apply
     """
     global TRANSACTS_FIELDS_CACHE
-    cursor = api.base.filtered_getter("transactions", filter_, max=max, reverse=reverse)
+    cursor = api.base.filtered_getter("transactions", filter_, max_=max_, reverse=reverse)
     while cursor.next():
         if TRANSACTS_FIELDS_CACHE == {}:
             TRANSACTS_FIELDS_CACHE = {field: cursor.indexOf(field) for field

@@ -32,7 +32,6 @@ import api.transactions
 import api.validator
 import gui.utils
 from .validation_window import ValidationWindow
-import settings
 
 
 class RefillNoteWindow(QtWidgets.QDialog):
@@ -112,7 +111,7 @@ class MultiRefillNoteWindow(QtWidgets.QDialog):
                 0.01€")
             return
         prompt = ValidationWindow("Etes vous sûr de vouloir {} de l'argent sur les\
-            \nnotes selectionées".format(self.text, self.to_add.text()))
+            \nnotes selectionées".format(self.text))
         if not prompt.is_ok:
             return
         self.to_add_value = to_add

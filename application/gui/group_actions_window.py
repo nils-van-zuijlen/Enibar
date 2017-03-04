@@ -35,7 +35,6 @@ from .notes_list_widget import NotesList
 from .panels_management_window import ConsumptionList
 from .refill_note_window import MultiRefillNoteWindow
 from .validation_window import ValidationWindow
-from .tree_item_widget import TreeWidget
 import datetime
 import fractions
 import sip
@@ -112,8 +111,8 @@ class GroupActionsWindow(QtWidgets.QDialog):
 
         if with_coeffs:
             return fnc(notes, *args, **kwargs)
-        else:
-            return fnc(list(notes.keys()), *args, **kwargs)
+
+        return fnc(list(notes.keys()), *args, **kwargs)
 
     def take_action(self):
         """ Called when we want to take on notes
@@ -284,6 +283,7 @@ class MultiNotesList(NotesList):
     """
     def __init__(self, parent):
         super().__init__(parent)
+        self.mouse_pressed = False
 
     def rebuild(self, notes_list):
         """ Just rebuild the notes list
@@ -321,10 +321,6 @@ class MultiNotesList(NotesList):
 class UniqueConsumptionList(ConsumptionList):
     """ A Consumption list where you can select only one item
     """
-
-    def __init__(self, parent):
-        super().__init__(parent)
-
     def add_product(self, name, category, percentage):
         """ Add product to consumption list. If the products has no null price
             only.

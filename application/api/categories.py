@@ -37,13 +37,12 @@ def add(name):
     """
     if not name.strip():
         return None
+
     with Cursor() as cursor:
         cursor.prepare("INSERT INTO categories(name) VALUES(:cat_name)")
         cursor.bindValue(':cat_name', name.strip())
         if cursor.exec_():
             return cursor.lastInsertId()  # Return the created category
-        else:
-            return None
 
 
 def set_alcoholic(cat_id, is_alcoholic):

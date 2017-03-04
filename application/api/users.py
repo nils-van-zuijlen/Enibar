@@ -97,12 +97,12 @@ def get_rights(username):
                 'manage_notes': cursor.value('manage_notes'),
                 'manage_products': cursor.value('manage_products'),
             }
-        else:
-            return {
-                'manage_users': False,
-                'manage_notes': False,
-                'manage_products': False,
-            }
+
+    return {
+        'manage_users': False,
+        'manage_notes': False,
+        'manage_products': False,
+    }
 
 
 def set_rights(username, rights):

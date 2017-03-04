@@ -590,8 +590,7 @@ class CategoryList(QtWidgets.QListWidget):
 
         :param item: Text or item if text is new. (Yay that's qt)
         """
-
-        if type(item) is CategoryListItem:
+        if isinstance(item, CategoryListItem):
             item.rename()
 
 

@@ -28,7 +28,7 @@ class SendMailRecapWindow(QtWidgets.QDialog):
         super().__init__(parent)
         uic.loadUi('ui/send_mail_recap_window.ui', self)
         for mail in mails:
-            widget = TreeWidget(self.mail_list, (
+            TreeWidget(self.mail_list, (
                 mail['nickname'],
                 mail['mail'],
                 mail['status'],

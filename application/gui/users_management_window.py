@@ -123,7 +123,7 @@ class UserList(QtWidgets.QListWidget):
         for user in users.get_list():
             widget = QtWidgets.QListWidgetItem(user, self)
             self.widgets.append(widget)
-        if len(self.widgets):
+        if self.widgets:
             self.widgets[0].setSelected(True)
 
     def refresh(self):

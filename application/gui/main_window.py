@@ -213,7 +213,7 @@ class MainWindow(QtWidgets.QMainWindow):
         )
         if infos:
             infos = infos[0]
-        note_hist = api.transactions.get(note=self.selected.text(), reverse=True, max=settings.MAX_HISTORY)
+        note_hist = api.transactions.get(note=self.selected.text(), reverse=True, max_=settings.MAX_HISTORY)
 
         # Construct the note history
         for product in note_hist:
@@ -360,7 +360,6 @@ class MainWindow(QtWidgets.QMainWindow):
                     cat = api.categories.get_unique(name=product['category'])
                     desc = api.prices.get_unique_descriptor(category=cat['id'], label=product['price_name'])
                     p = api.products.get_unique(name=product['product'], category=cat['id'])
-                    price = api.prices.get_unique(price_description=desc['id'], product=p['id'])
 
                     transaction = {
                         'note': self.selected.text(),
@@ -628,7 +627,7 @@ class MenuBar(QtWidgets.QMenuBar):
 
     def export(self, notes):
         """ Generic export notes function """
-        path, format_ = QtWidgets.QFileDialog(self).getSaveFileName(
+        path, _ = QtWidgets.QFileDialog(self).getSaveFileName(
             self,
             "Exporter vers",
             "{}.csv".format(datetime.datetime.now().strftime("%Y-%m-%d")),

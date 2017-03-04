@@ -23,7 +23,7 @@ Panels Widget for Main window
 
 """
 
-from PyQt5 import QtWidgets, QtCore, uic, QtGui
+from PyQt5 import QtWidgets, QtCore, uic
 import collections
 import api.panels
 import settings
@@ -363,7 +363,7 @@ class ProductsContainer(QtWidgets.QWidget):
         ))
         for cat in indexes:
             col = self.get_least_filled()
-            if not len(self.products[cat]['products']):
+            if not self.products[cat]['products']:
                 continue
             col.count += len(self.products[cat]['products'])
             col.layout.addWidget(self.products[cat]['widget'])

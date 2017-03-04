@@ -24,7 +24,7 @@ Stats window
 Provide neat stats
 """
 
-from PyQt5 import QtWidgets, uic, QtCore
+from PyQt5 import QtWidgets, uic
 import api.stats
 
 
@@ -41,6 +41,6 @@ class AdminStatsWindow(QtWidgets.QDialog):
         self.total_label.setText("{:.2f} € ({})".format(green + red, nb_red + nb_green))
         self.ecocups_nb_label.setText(str(api.stats.get_ecocups_nb()))
         for note, value in api.stats.get_red_notes():
-            item = QtWidgets.QTreeWidgetItem(self.red_notes, [note, "{:.2f}".format(value)])
+            QtWidgets.QTreeWidgetItem(self.red_notes, [note, "{:.2f}".format(value)])
         self.show()
 
