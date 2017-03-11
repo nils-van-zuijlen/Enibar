@@ -1,5 +1,5 @@
 ALTER TABLE notes ALTER COLUMN promo SET DATA TYPE VARCHAR;
-ALTER TABLE notes ADD CONSTRAINT promochk CHECK(promo in ('1A', '2A', '3A', '3S', '4A', '5A', 'Externe', 'Esiab', 'Ancien'));
+ALTER TABLE notes ADD CONSTRAINT promochk CHECK(promo in ('1A', '2A', '3A', '3S', '4A', '5A', 'Externe', 'Esiab', 'Ancien', 'Prof'));
 DROP TYPE promo;
 
 ALTER TABLE scheduled_mails ALTER COLUMN schedule_unit SET DATA TYPE VARCHAR;
