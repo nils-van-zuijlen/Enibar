@@ -23,8 +23,6 @@ rustup -h &> /dev/null || {
     exit 2
 }
 
-rustup override set nightly
-rustup update
 
 cd $(dirname $0)
 
@@ -67,6 +65,8 @@ cp -R /usr/lib/python3.6/site-packages/sip.so $VENV/lib/python3.6/site-packages/
 cd $APP_DIR
 
 cd rapi
+rustup override set nightly
+rustup update
 cargo build --release
 cd ..
 cp rapi/target/release/librapi.so rapi.so
