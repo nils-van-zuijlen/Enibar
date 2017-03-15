@@ -40,6 +40,7 @@ import api.users
 import api.validator
 import gui.utils
 import settings
+import rapi
 
 
 def ask_auth(*dargs, fail_callback=None, pass_performer=False):
@@ -51,54 +52,16 @@ def ask_auth(*dargs, fail_callback=None, pass_performer=False):
             if settings.DEBUG:
                 func(*args, **kwargs)
                 return
-            prompt = AuthPromptWindow(dargs)
-            if prompt.is_authorized:
+            result, error = rapi.gui.check_password("manage_notes" in dargs, "manage_users" in dargs, "manage_products" in dargs)
+            if result:
                 if pass_performer:
                     kwargs["_performer"] = prompt.user
                 func(*args, **kwargs)
             else:
-                if prompt.show_error:
+                if error:
                     gui.utils.error("Error", "Erreur d'authentification")
                 if fail_callback is not None:
                     fail_callback()
         return wrapper
     return decorator
-
-
-class AuthPromptWindow(QtWidgets.QDialog):
-    """ Authorization prompt class """
-    def __init__(self, requirements):
-        super().__init__()
-        self.requirements = requirements
-        self.is_authorized = False
-        self.show_error = False
-        uic.loadUi('ui/auth_prompt_window.ui', self)
-        self.on_change = api.validator.on_change(self, self.accept_button)
-        self.pass_input.set_validator(api.validator.NAME)
-        filter_ = {key: True for key in requirements}
-        self.user = ""
-
-        users = api.users.get_list(**filter_)
-
-        existing_person = False
-        for user in users:
-            self.login_input.addItem(user)
-            existing_person = True
-
-        if not existing_person:
-            gui.utils.error("Error", "Personne n'a le droit de faire ça")
-        else:
-            self.login_input.setFocus()
-            self.exec_()
-
-    def accept(self):
-        """ Called when "Login" is clicked """
-        self.user = self.login_input.currentText()
-        if api.users.is_authorized(self.user,
-                               self.pass_input.text()):
-            self.is_authorized = True
-        else:
-            self.show_error = True
-            self.is_authorized = False
-        return super().accept()
 
