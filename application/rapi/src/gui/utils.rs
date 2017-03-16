@@ -13,7 +13,7 @@ pub fn setup_combobox(cb: &gtk::ComboBox, model: &gtk::ListStore, id_column: i32
     let cell = gtk::CellRendererText::new();
     cb.pack_start(&cell, true);
     cb.add_attribute(&cell, "text", text_column);
-    cb.set_active(0);
+    //cb.set_active(0);
 
     let string_typed  = Rc::new(RefCell::new(String::new()));
     let last_char_typed_time = Rc::new(RefCell::new(0));
