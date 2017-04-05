@@ -134,7 +134,7 @@ class NotesManagementWindow(QtWidgets.QDialog):
         else:
             birthdate = datetime.datetime.strptime(self.birthdate_input.text(),
                                                    "%d/%m/%Y").timestamp()
-            api.notes.change_values(self.current_nickname,
+            if not api.notes.change_values(self.current_nickname,
                                     tel=self.phone_input.text(),
                                     mail=self.mail_input.text(),
                                     birthdate=birthdate,
@@ -142,7 +142,9 @@ class NotesManagementWindow(QtWidgets.QDialog):
                                     nickname=self.nickname_input.text(),
                                     stats_inscription=self.stats_checkbox.isChecked(),
                                     mails_inscription=self.mails_checkbox.isChecked(),
-                                    agios_inscription=self.agios_checkbox.isChecked())
+                                    agios_inscription=self.agios_checkbox.isChecked()):
+                gui.utils.error("Erreur", "Impossible de modifier la note.")
+                return
             if self.photo_selected:
                 api.notes.change_photo(self.nickname_input.text(),
                                        self.photo_selected)

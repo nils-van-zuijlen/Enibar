@@ -199,6 +199,9 @@ def change_values(nick, *, do_not=False, **kwargs):
         cursor.bindValue(':nick', nick)
         value = cursor.exec_()
 
+    if not value:
+        return False
+
     renaming = 'nickname' in kwargs
     if renaming:
         note = get(lambda x: x['nickname'] == nick)[0]
