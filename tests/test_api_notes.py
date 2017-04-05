@@ -385,6 +385,17 @@ class NotesTest(basetest.BaseTest):
             True,
             True
         )
+        notes.add("crash",
+            "crash",
+            "crash",
+            "crash@pouette.com",
+            "0600000000",
+            "01/01/1994",
+            '1A',
+            '',
+            True,
+            True
+        )
 
         notes.change_values("test0", tel="0200000000", promo="3A")
         note = notes.get()[0]
@@ -394,10 +405,13 @@ class NotesTest(basetest.BaseTest):
         notes.NOTES_FIELDS_CACHE = {}
         notes.rebuild_cache()
 
-        note = notes.get()[0]
+        note = notes.get(lambda x: x['nickname'] == "test1")[0]
         self.assertEqual(note["nickname"], "test1")
         self.assertEqual(note["tel"], "0200000000")
         self.assertEqual(note["promo"], "3A")
+        self.assertFalse(notes.change_values("test1", nickname="crash"))
+        note = notes.get(lambda x: x['nickname'] == "test1")[0]
+        self.assertIsNotNone(note)
 
     def test_overdraft(self):
         """ Testing overdraft support
