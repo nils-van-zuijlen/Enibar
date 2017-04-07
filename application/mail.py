@@ -45,7 +45,7 @@ def send_scheduled_mails():
         cursor.prepare("""
             SELECT * FROM scheduled_mails
             WHERE active is TRUE
-            AND (schedule_day = DAYOFWEEK(NOW()) OR schedule_day = 0)
+            AND (schedule_day = (EXTRACT(DOW FROM NOW()) + 1) OR schedule_day = 0)
             """
         )
 
@@ -93,7 +93,7 @@ def send_scheduled_mails():
             # Update database.
             with Cursor() as update_cursor:
                 update_cursor.prepare("""
-                    UPDATE scheduled_mails SET last_sent=CURDATE()
+                    UPDATE scheduled_mails SET last_sent=DATE(NOW())
                     WHERE name=:name
                     """
                 )
