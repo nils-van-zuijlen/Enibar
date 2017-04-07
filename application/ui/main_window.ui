@@ -701,7 +701,7 @@
      <x>0</x>
      <y>0</y>
      <width>891</width>
-     <height>20</height>
+     <height>15</height>
     </rect>
    </property>
    <widget class="QMenu" name="administration">
@@ -795,6 +795,9 @@
    <property name="text">
     <string>Gerer les &amp;notes</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
+   </property>
   </action>
   <action name="export_with_profs">
    <property name="text">
@@ -819,6 +822,9 @@
   <action name="notes_action">
    <property name="text">
     <string>&amp;Faire des actions sur plusieurs notes</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
    </property>
   </action>
   <action name="refill_note">
@@ -864,6 +870,9 @@
    </property>
    <property name="text">
     <string>Prendre &amp;sur une note</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
    </property>
   </action>
   <action name="refresh_panels">
