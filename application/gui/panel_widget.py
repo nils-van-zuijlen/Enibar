@@ -52,6 +52,8 @@ class Panels(QtWidgets.QTabWidget):
         """ Build panels from panels found in database
         """
         for panel in api.panels.get(hidden=False):
+            if settings.SHOWN_PANELS and not panel['name'] in settings.SHOWN_PANELS:
+                continue
             widget = PanelTab(panel['id'], self.main_window)
             if not widget.empty:
                 self.panels.append(widget)

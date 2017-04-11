@@ -256,6 +256,8 @@ DEFAULT_LOCAL_SETTINGS = {
     'MAX_HISTORY': 5,
     'REDIS_HOST': "127.0.0.1",
     'REDIS_PASSWORD': None,
+    # If this is empty, show all panels
+    'SHOWN_PANELS': [],
 }
 
 
