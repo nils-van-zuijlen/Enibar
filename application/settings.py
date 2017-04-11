@@ -213,48 +213,61 @@ except ModuleNotFoundError:
         import gui.utils
         from PyQt5 import QtWidgets
         tmp = QtWidgets.QApplication(sys.argv)
-        gui.utils.error("Error", "Can't find local_setitngs.py\nRun ./bin/setup.py")
+        gui.utils.error("Error", "Can't find local_settngs.py\nRun ./bin/setup.py")
         sys.exit(5)
 
 CACHED_SETTINGS = {}
 
+SYNCED_SETTINGS_DEFAULT = {
+    'ALCOHOL_MAJORATION': 0.0,
+    'AUTH_SDE_TOKEN': 'changeme',
+
+    'DB_HOST': "127.0.0.1",
+    'USERNAME': "root",
+    'PASSWORD': "",
+    'DBNAME': "enibar",
+
+    'AGIO_THRESHOLD': 14,
+    'AGIO_EVERY': 7,
+    'AGIO_PERCENT': 5.0,
+
+    'NONCOTIZ_CATEGORY': "Non Cotiz",
+    'COTIZ_PRICE': 1.0,
+
+    'ECOCUP_PRICE': 1.0,
+    'ECOCUP_CATEGORY': "Bar",
+    'ECOCUP_PRICE_TYPES': {'take': "Achat", 'repay': "Remboursement"},
+    # Note that changing the following settings will break ecocup count.
+    # Do not change it unless you know what you are doing.
+    'ECOCUP_NAME': "Ecocup",
+
+    'SMTP_SERVER_ADDR': 'smtp.enib.fr',
+    'SMTP_SERVER_PORT': 25,
+
+    'WEB_URL': 'http://127.0.0.1:8000/enibar/',
+    'AUTH_SDE_TOKEN': 'changeme',
+    'USE_PROXY': 0,
+    'PROXY_AUTH': "",
+}
+
+DEFAULT_LOCAL_SETTINGS = {
+    'DEBUG': False,
+    'IMG_BASE_DIR': "img/",
+    'MAX_HISTORY': 5,
+    'REDIS_HOST': "127.0.0.1",
+    'REDIS_PASSWORD': None,
+}
+
 
 class SyncedSettings:
-    SETTINGS = {'ALCOHOL_MAJORATION': 0.0,
-                'AUTH_SDE_TOKEN': 'changeme',
-
-                'DB_HOST': "127.0.0.1",
-                'USERNAME': "root",
-                'PASSWORD': "",
-                'DBNAME': "enibar",
-
-                'AGIO_THRESHOLD': 14,
-                'AGIO_EVERY': 7,
-                'AGIO_PERCENT': 5.0,
-
-                'NONCOTIZ_CATEGORY': "Non Cotiz",
-                'COTIZ_PRICE': 1.0,
-
-                'ECOCUP_PRICE': 1.0,
-                'ECOCUP_CATEGORY': "Bar",
-                'ECOCUP_PRICE_TYPES': {'take': "Achat", 'repay': "Remboursement"},
-                # Note that changing the following settings will break ecocup count.
-                # Do not change it unless you know what you are doing.
-                'ECOCUP_NAME': "Ecocup",
-
-                'SMTP_SERVER_ADDR': 'smtp.enib.fr',
-                'SMTP_SERVER_PORT': 25,
-
-                'WEB_URL': 'http://127.0.0.1:8000/enibar/',
-                'AUTH_SDE_TOKEN': 'changeme',
-                'USE_PROXY': 0,
-                'PROXY_AUTH': "", }
-
     def __getattr__(self, name):
-        if name not in self.SETTINGS:
-            return getattr(local_settings, name)
+        if name not in SYNCED_SETTINGS_DEFAULT:
+            try:
+                return getattr(local_settings, name)
+            except AttributeError:
+                return DEFAULT_LOCAL_SETTINGS[name]
 
-        default = self.SETTINGS[name]
+        default = SYNCED_SETTINGS_DEFAULT[name]
         if name not in CACHED_SETTINGS:
             if type(default) == dict:
 
@@ -264,7 +277,7 @@ class SyncedSettings:
         return CACHED_SETTINGS[name]
 
     def __setattr__(self, name, value):
-        if name not in self.SETTINGS:
+        if name not in SYNCED_SETTINGS_DEFAULT:
             return setattr(local_settings, name, value)
 
         api.redis.set_key_blocking(name, value)
