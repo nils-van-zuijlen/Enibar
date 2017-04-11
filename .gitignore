@@ -4,6 +4,7 @@ application/api/__pycache__
 application/gui/__pycache__
 application/img
 application/error
+application/local_settings.py
 .enibar-venv/
 enibar-venv/
 img/*
