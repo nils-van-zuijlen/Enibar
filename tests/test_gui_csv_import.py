@@ -57,3 +57,16 @@ class CsvImportTest(basetest.BaseGuiTest):
         QtCore.QTimer.singleShot(200, callback)
         self.win.validation_button.click()
 
+    def test_import_empty_amount(self):
+        """ Testing csv import with an empty amount
+        """
+        def callback():
+            win = self.app.activeWindow()
+            self.assertIsInstance(win, QtWidgets.QMessageBox)
+            self.assertIn("montant", win.informativeText())
+            for note in api.notes.get():
+                self.assertEqual(note['note'], 0)
+            win.accept()
+        self.win.reason.setText("coucou")
+        QtCore.QTimer.singleShot(200, callback)
+        self.win.validation_button.click()

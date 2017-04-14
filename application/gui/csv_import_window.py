@@ -94,7 +94,7 @@ class CsvImportWindow(QtWidgets.QDialog):
             return
 
         self.validated = True
-        if float(self.amount.text()) > 0.01:
+        if self.amount.text() and float(self.amount.text()) > 0.01:
             api.notes.import_csv(
                 self.notes,
                 self.reason.text(),
