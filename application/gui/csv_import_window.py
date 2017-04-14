@@ -52,6 +52,7 @@ class CsvImportWindow(QtWidgets.QDialog):
             self._build_recap()
         except KeyError:
             gui.utils.error("Erreur", "Le fichier CSV fourni est mal formé")
+            raise csv.Error
         else:
             self.show()
 

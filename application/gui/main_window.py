@@ -54,6 +54,7 @@ import api.notes
 import api.soundsystem
 import api.transactions
 import api.redis
+import csv
 import datetime
 import gui.utils
 import settings
@@ -572,8 +573,11 @@ class MenuBar(QtWidgets.QMenuBar):
             )
 
             if path:
-                self.cur_window = CsvImportWindow(path)
-                self._connect_window("notes_management")
+                try:
+                    self.cur_window = CsvImportWindow(path)
+                    self._connect_window("notes_management")
+                except csv.Error:
+                    api.redis.unlock("notes_management")
             else:
                 api.redis.unlock("notes_management")
 
