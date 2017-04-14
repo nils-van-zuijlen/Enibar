@@ -18,16 +18,6 @@
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="2" rowspan="2">
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="7" column="0" colspan="2">
-        <widget class="QPushButton" name="del_button">
-         <property name="text">
-          <string>Supprimer</string>
-         </property>
-         <property name="autoDefault">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
        <item row="4" column="0" colspan="2">
         <widget class="QGroupBox" name="groupBox_2">
          <property name="sizePolicy">
@@ -183,22 +173,6 @@
  </customwidgets>
  <resources/>
  <connections>
-  <connection>
-   <sender>del_button</sender>
-   <signal>clicked()</signal>
-   <receiver>NotesAction</receiver>
-   <slot>del_action()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>426</x>
-     <y>567</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>294</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>export_csv_button</sender>
    <signal>clicked()</signal>

@@ -79,19 +79,6 @@ class GroupActionsWindow(QtWidgets.QDialog):
     def redis_handle(self, channel, message):
         self.note_list.refresh()
 
-    def del_action(self, _):
-        """ Called when "Supprimer" is clicked
-        """
-        prompt = ValidationWindow("Etes vous sûr de vouloir supprimer ces notes ?")
-        if not prompt.is_ok:
-            return
-        indexes = self.note_list.selectedIndexes()
-        to_del = []
-        for index in reversed(indexes):
-            to_del.append(index.data())
-            self.note_list.takeItem(index.row())
-        api.notes.remove(to_del)
-
     def _multiple_action(self, fnc, *args, **kwargs):
         """ Execute a function on the currently selected notes.
             Pass a dict of note: coeff if with_coeffs is True (default),
