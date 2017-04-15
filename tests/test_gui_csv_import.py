@@ -70,3 +70,29 @@ class CsvImportTest(basetest.BaseGuiTest):
         self.win.reason.setText("coucou")
         QtCore.QTimer.singleShot(200, callback)
         self.win.validation_button.click()
+
+    def test_import_wrong_then_ok(self):
+        """ Testing CSV import wrong then right
+        """
+
+        def callback():
+            win = self.app.activeWindow()
+            self.assertIsInstance(win, QtWidgets.QMessageBox)
+            self.assertIn("montant", win.informativeText())
+            for note in api.notes.get():
+                self.assertEqual(note['note'], 0)
+            win.accept()
+
+        self.win.reason.setText("coucou")
+        QtCore.QTimer.singleShot(200, callback)
+        self.win.validation_button.click()
+
+        self.win.amount.setText("20")
+        self.win.validation_button.click()
+        self.assertEqual(self.get_tree(self.win.recap),
+        [{('test2', 'test2@test.fr'): []}, {('test', 'test@test.fr'): []}, {('[test test]', 'test3@test.fr'): []}, {('[a b]', ''): []}])
+        self.assertEqual(self.win.recap.topLevelItem(2).background(0), QtCore.Qt.red)
+        self.assertEqual(self.win.recap.topLevelItem(3).background(0), QtCore.Qt.red)
+        for note in api.notes.get():
+            self.assertEqual(note['note'], -20)
+

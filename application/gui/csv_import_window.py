@@ -106,4 +106,5 @@ class CsvImportWindow(QtWidgets.QDialog):
             self.close()
         else:
             gui.utils.error("Erreur", "Verifiez le montant")
+            self.validated = False
 
