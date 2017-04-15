@@ -78,7 +78,7 @@ if wmctrl -h &>/dev/null; then
     WIN_ID=$(wmctrl -l | grep -e " Enibar$" | cut -d ' ' -f1 | tail -n1)
 fi
 
-if [[ "$WIN_ID" = "" || "$DEBUG" = "0" ]]; then
+if [[ "$WIN_ID" = "" || "$DEBUG" = "1" ]]; then
     /bin/sh -c "$PYTHON -OO main.py"
 else
     wmctrl -i -a $WIN_ID
