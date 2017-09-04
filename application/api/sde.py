@@ -71,11 +71,13 @@ async def _process_queue_item(item):
     else:
         conn = None
     if type_.endswith('-delete'):
-        async with aiohttp.delete(settings.WEB_URL + type_[:-7], connector=conn, data=json.dumps(parsed_item)) as req:
-            if req.status != 200:
-                raise QueueProcessingException(req.status)
+        async with aiohttp.ClientSession(connector=conn) as session:
+            async with session.delete(settings.WEB_URL + type_[:-7], data=json.dumps(parsed_item)) as req:
+                if req.status != 200:
+                    raise QueueProcessingException(req.status)
     else:
-        async with aiohttp.put(settings.WEB_URL + type_, connector=conn, data=json.dumps(parsed_item)) as req:
-            if req.status != 200:
-                raise QueueProcessingException(req.status)
+        async with aiohttp.ClientSession(connector=conn) as session:
+            async with session.put(settings.WEB_URL + type_, data=json.dumps(parsed_item)) as req:
+                if req.status != 200:
+                    raise QueueProcessingException(req.status)
 
