@@ -63,6 +63,7 @@ class NotesManagementWindow(QtWidgets.QDialog):
         self.on_change = api.validator.on_change(self, self.save_button)
         self.note_list.current_filter = lambda x: True
         self.note_list.refresh(api.notes.get())
+        self.note_list.setFocus(True)
         self.show()
 
     def redis_handle(self, channel, message):
