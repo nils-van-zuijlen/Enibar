@@ -8,4 +8,4 @@ crate-type = ["cdylib"]
 
 [dependencies]
 cpython={ git="https://github.com/dgrunwald/rust-cpython.git" }
-x11 = { version="2.14", features=["xlib"] }
+x11 = { version="2.15", features=["xlib"] }
