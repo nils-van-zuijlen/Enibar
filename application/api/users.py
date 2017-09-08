@@ -25,6 +25,7 @@ Users
 import bcrypt
 from database import Cursor
 import api.base
+import rapi
 
 RIGHTS = ['manage_users', 'manage_notes', 'manage_products']
 
@@ -37,15 +38,7 @@ def add(username, password):
 
     :return bool: True if success else False.
     """
-    with Cursor() as cursor:
-        if not username or not password:
-            return False
-        cursor.prepare("INSERT INTO admins VALUES(:login, :pass, FALSE, FALSE, FALSE)")
-        cursor.bindValue(':login', username)
-        cursor.bindValue(':pass', bcrypt.hashpw(password,
-                                                bcrypt.gensalt()))
-
-        return cursor.exec_()
+    return rapi.users.add(username, password)
 
 
 def remove(username):
@@ -139,13 +132,7 @@ def change_password(username, new_password):
 
     :return bool: True if success else False.
     """
-    with Cursor() as cursor:
-        cursor.prepare("UPDATE admins SET password=:pass WHERE login=:login")
-        cursor.bindValue(':login', username)
-        cursor.bindValue(':pass', bcrypt.hashpw(new_password,
-                                                bcrypt.gensalt()))
-
-        return cursor.exec_()
+    return rapi.users.change_password(username, new_password)
 
 
 def is_authorized(username, password):
@@ -156,14 +143,4 @@ def is_authorized(username, password):
 
     :return bool: True if authorized else False.
     """
-    with Cursor() as cursor:
-        cursor.prepare("SELECT password FROM admins WHERE login=:login")
-        cursor.bindValue(':login', username)
-        cursor.exec_()
-
-        if not cursor.next():
-            return False
-
-        hashed = cursor.value("password")
-        return bcrypt.hashpw(password, hashed) == hashed
-
+    return rapi.users.is_authorized(username, password)

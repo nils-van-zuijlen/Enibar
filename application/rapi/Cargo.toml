@@ -7,5 +7,14 @@ authors = ["Eijebong <eijebong@bananium.fr>"]
 crate-type = ["cdylib"]
 
 [dependencies]
-cpython={ git="https://github.com/dgrunwald/rust-cpython.git" }
+cpython={ git="https://github.com/dgrunwald/rust-cpython.git", features=["python3-sys"] }
 x11 = { version="2.15", features=["xlib"] }
+diesel = { version = "0.16", features = ["postgres", "chrono"] }
+diesel_codegen = { version = "0.16", features = ["postgres"] }
+r2d2 = "0.7"
+r2d2-diesel = "0.16"
+lazy_static = "0.2"
+dotenv = "0.10"
+bcrypt = "0.1"
+error-chain = "0.10"
+redis = "0.8"

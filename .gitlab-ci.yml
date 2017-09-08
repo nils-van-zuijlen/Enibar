@@ -2,6 +2,7 @@ stages:
     - api
     - gui
     - pep
+    - rust
 
 api:
     stage: api
@@ -14,3 +15,7 @@ gui:
 pep:
     stage: pep
     script: ./bin/test.sh -p
+
+rust:
+    stage: rust
+    script: ./bin/test.sh -r

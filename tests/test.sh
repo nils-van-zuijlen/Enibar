@@ -18,12 +18,13 @@
 
 
 TEST_FAILED=0
+TEST=0
 export USE_VD=1
 export TEST_ENIBAR=1
 cd $(dirname $0)
 APPLICATION_DIR="../application"
 
-TEMP=`getopt -o agp --long api,gui,pep,no-vd -- "$@"`
+TEMP=`getopt -o agrp --long api,gui,rust,pep,no-vd -- "$@"`
 eval set -- "$TEMP"
 
 # == EXTRACT OPTIONS
@@ -34,10 +35,16 @@ while true ; do
 			shift;;
 		-a|--api)
 			API=1
+            TEST=1
 			shift ;;
 		-g|--gui)
 			GUI=1
+            TEST=1
 			shift ;;
+        -r|--rust)
+            RUST=1
+            TEST=1
+            shift ;;
 		--no-vd)
 			export USE_VD=0
 			shift;;
@@ -46,8 +53,7 @@ while true ; do
 	esac
 done
 
-
-if [[ $API == 1 || $GUI == 1 ]]; then
+if [[ $TEST -eq 1 ]]; then
 	# -- BACKUP --
     killall -u $USER -q -9 postgres Xvfb
     rm -Rf /tmp/postgres_enibar /tmp/.X1023-lock
@@ -60,7 +66,7 @@ if [[ $API == 1 || $GUI == 1 ]]; then
     createdb -U enibar -h /tmp/postgres_enibar -p 2356 enibar
 
     cd $APPLICATION_DIR/rapi
-    cargo build
+    cargo build || exit 1
     cp target/debug/librapi.so ../rapi.so
     cd ../../bin
 
@@ -81,14 +87,21 @@ if [[ $API == 1 || $GUI == 1 ]]; then
     fi
 
     echo "Starting tests"
-	# -- TEST --
 	rm -f .coverage
+
+	# -- TEST --
     if [[ $API == 1 ]]; then
 	    nosetests ../tests/*api*.py -v --with-coverage --cover-package=api || TEST_FAILED=1
     fi
 
     if [[ $GUI == 1 ]]; then
 	    nosetests ../tests/*gui*.py -v --with-coverage --cover-package=gui || TEST_FAILED=1
+    fi
+
+    if [[ $RUST == 1 ]]; then
+        cd $APPLICATION_DIR/rapi
+        cargo test || TEST_FAILED=1
+        cd ..
     fi
 
     if [[ $USE_VD == 1 ]]; then
