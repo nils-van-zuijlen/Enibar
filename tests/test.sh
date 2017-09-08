@@ -66,8 +66,8 @@ if [[ $TEST -eq 1 ]]; then
     createdb -U enibar -h /tmp/postgres_enibar -p 2356 enibar
 
     cd $APPLICATION_DIR/rapi
-    cargo build || exit 1
-    cp target/debug/librapi.so ../rapi.so
+    cargo build --release || exit 1
+    cp target/release/librapi.so ../rapi.so
     cd ../../bin
 
     if [[ -e "$APPLICATION_DIR/local_settings.py" ]]; then
