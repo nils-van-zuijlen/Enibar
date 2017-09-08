@@ -204,6 +204,7 @@ Other
 
 import json
 import sys
+import types
 
 try:
     import local_settings
@@ -261,7 +262,7 @@ DEFAULT_LOCAL_SETTINGS = {
 }
 
 
-class SyncedSettings:
+class SyncedSettings(types.ModuleType):
     def __getattr__(self, name):
         if name not in SYNCED_SETTINGS_DEFAULT:
             try:
@@ -290,6 +291,6 @@ class SyncedSettings:
         CACHED_SETTINGS = {}
 
 
-sys.modules[__name__] = SyncedSettings()
+sys.modules[__name__] = SyncedSettings(__name__)
 
 import api.redis  # nopep8
