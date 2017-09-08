@@ -66,7 +66,7 @@ class Database:
             Database.database.setDatabaseName(settings.DBNAME)
             if "TEST_ENIBAR" in os.environ:
                 Database.database.setPort(2356)
-                Database.database.setHostName("/tmp/postgres_enibar")
+                Database.database.setHostName("127.0.0.1")
                 Database.database.setUserName("enibar")
             if not Database.database.open():
                 if rapi.utils.check_x11():
