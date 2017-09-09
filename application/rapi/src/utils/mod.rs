@@ -1,4 +1,4 @@
-use cpython::{PyModule, Python, PyBool, PyResult};
+use cpython::{PyBool, PyModule, PyResult, Python};
 use x11::xlib;
 use std::ptr;
 

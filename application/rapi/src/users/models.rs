@@ -1,7 +1,7 @@
-use ::schema::admins;
+use schema::admins;
 
 #[derive(Insertable)]
-#[table_name="admins"]
+#[table_name = "admins"]
 pub struct NewUser<'a> {
     pub login: &'a str,
     pub password: &'a str,
@@ -19,7 +19,7 @@ pub struct User {
 
 impl User {
     #[cfg(test)]
-    pub fn new(login: &str) -> Self{
+    pub fn new(login: &str) -> Self {
         User {
             login: login.into(),
             password: "".into(),

@@ -12,4 +12,3 @@ error_chain!{
         }
     }
 }
-

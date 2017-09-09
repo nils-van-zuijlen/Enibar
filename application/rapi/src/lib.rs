@@ -1,12 +1,17 @@
 #![allow(unused_doc_comment)]
 
-#[macro_use] extern crate cpython;
-#[macro_use] extern crate diesel;
-#[macro_use] extern crate diesel_codegen;
-#[macro_use] extern crate lazy_static;
-#[macro_use] extern crate error_chain;
 extern crate bcrypt;
+#[macro_use]
+extern crate cpython;
+#[macro_use]
+extern crate diesel;
+#[macro_use]
+extern crate diesel_codegen;
 extern crate dotenv;
+#[macro_use]
+extern crate error_chain;
+#[macro_use]
+extern crate lazy_static;
 extern crate r2d2;
 extern crate r2d2_diesel;
 extern crate redis;
