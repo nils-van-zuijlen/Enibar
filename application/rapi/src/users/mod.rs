@@ -8,6 +8,9 @@ use diesel;
 use errors::*;
 use errors::ErrorKind::*;
 use ::schema::admins;
+use diesel::expression::AsExpression;
+use diesel::types::{BigInt, Bool};
+
 
 impl User {
     /// Adds an user with default rights.
@@ -54,6 +57,22 @@ impl User {
     pub fn get(conn: &PgConnection, username: &str) -> Result<User> {
         admins::table.filter(admins::login.eq(username)).first::<User>(conn).map_err(|e| e.into())
     }
+
+    /// Removes the user
+    pub fn remove(self, conn: &PgConnection) -> Result<()> {
+        diesel::delete(
+            admins::table.filter(
+                admins::login.eq(&self.login).and(
+                        AsExpression::<BigInt>::as_expression(1).ne_any(admins::table.filter(admins::manage_users.eq(true)).count())
+                    .or(
+                        AsExpression::<Bool>::as_expression(false).eq_any(admins::table.filter(admins::login.eq(&self.login)).select(admins::manage_users))
+                    )
+                )
+            )
+        ).execute(conn)?;
+
+        Ok(())
+    }
 }
 
 pub fn py_add(py: Python, username: String, password: String) -> PyResult<PyBool> {
@@ -63,6 +82,20 @@ pub fn py_add(py: Python, username: String, password: String) -> PyResult<PyBool
         Err(_) => Ok(PyBool::get(py, false)),
         Ok(_) => Ok(PyBool::get(py, true)),
     }
+}
+
+pub fn py_remove(py: Python, username: String) -> PyResult<PyBool> {
+    let conn = ::DB_POOL.get().unwrap();
+    let user = User::get(&*conn, &username);
+
+    if let Ok(user) = user {
+        match user.remove(&*conn) {
+            Err(_) => return Ok(PyBool::get(py, false)),
+            Ok(_) => return Ok(PyBool::get(py, true)),
+        }
+    }
+
+    Ok(PyBool::get(py, false))
 }
 
 pub fn py_is_authorized(py: Python, username: String, hash: String) -> PyResult<PyBool> {
@@ -96,5 +129,6 @@ pub fn as_module(py: Python) -> PyModule {
     let _ = module.add(py, "add", py_fn!(py, py_add(username: String, password: String)));
     let _ = module.add(py, "is_authorized", py_fn!(py, py_is_authorized(username: String, hash: String)));
     let _ = module.add(py, "change_password", py_fn!(py, py_change_password(username: String, new_password: String)));
+    let _ = module.add(py, "remove", py_fn!(py, py_remove(username: String)));
     module
 }

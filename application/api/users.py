@@ -48,15 +48,7 @@ def remove(username):
 
     :return bool: True if success else False.
     """
-    with Cursor() as cursor:
-        cursor.prepare("DELETE FROM admins WHERE ((SELECT \
-        manage_users FROM admins WHERE login=:username)=FALSE OR ( \
-        SELECT COUNT(*) FROM admins WHERE manage_users=TRUE)>1) AND \
-        login=:username")
-        cursor.bindValue(':username', username)
-
-        return cursor.exec_()
-
+    return rapi.users.remove(username)
 
 def get_list(**filter_):
     """ Get user list

@@ -47,3 +47,12 @@ fn change_password() {
     assert!(!user.is_authorized("coucou").unwrap());
     assert!(user.is_authorized("test").unwrap());
 }
+
+#[test]
+fn remove_user() {
+    let conn = connection();
+    let user = User::add(&conn, "coucou", "coucou").unwrap();
+    assert!(User::get(&conn, "coucou").is_ok());
+    assert!(user.remove(&conn).is_ok());
+    assert!(User::get(&conn, "coucou").is_err());
+}
