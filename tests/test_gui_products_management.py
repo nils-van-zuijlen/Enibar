@@ -26,7 +26,6 @@ from PyQt5 import QtWidgets, QtCore
 
 class CategoryManagementTest(basetest.BaseGuiTest):
     def setUp(self):
-        self._reset_db()
         super().setUp()
         api.categories.add('test')
         self.win = gui.products_management_window.ProductsManagementWindow()
@@ -82,7 +81,6 @@ class CategoryManagementTest(basetest.BaseGuiTest):
 
 class TestProductsManagement(basetest.BaseGuiTest):
     def setUp(self):
-        self._reset_db()
         super().setUp()
         api.categories.add('test')
         self.win = gui.products_management_window.ProductsManagementWindow()

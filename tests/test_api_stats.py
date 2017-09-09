@@ -28,7 +28,6 @@ class StatsTests(basetest.BaseTest):
     def setUp(self):
         super().setUp()
         api.redis.send_message = lambda x, y: [notes.rebuild_note_cache(note) for note in y]
-        self._reset_db()
         notes.add("test1",
             "test1",
             "test1",

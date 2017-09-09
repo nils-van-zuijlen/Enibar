@@ -25,7 +25,6 @@ import api.notes as notes
 class TestNotecategoriesManagementWindow(basetest.BaseGuiTest):
     def setUp(self):
         super().setUp()
-        self._reset_db()
         self.note0 = notes.add("test0",
             "test",
             "test",

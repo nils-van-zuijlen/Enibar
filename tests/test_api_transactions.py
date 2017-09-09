@@ -26,7 +26,6 @@ class TransactionsTest(basetest.BaseTest):
     def setUp(self):
         notes.api.redis.send_message = lambda x, y: [notes.rebuild_note_cache(note) for note in y]
         super().setUp()
-        self._reset_db()
         notes.add("test1",
             "test1",
             "test1",

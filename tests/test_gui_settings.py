@@ -24,7 +24,6 @@ import gui.settings_window
 
 class SettingsGuiTest(basetest.BaseGuiTest):
     def setUp(self):
-        self._reset_db()
         super().setUp()
         settings.ALCOHOL_MAJORATION = 0
         settings.refresh_cache()

@@ -32,7 +32,6 @@ import mock
 class TestPanelsManagementWindow(basetest.BaseGuiTest):
     def setUp(self):
         super().setUp()
-        self._reset_db()
         panels.add("a")
         panels.add("b")
         panels.hide("b")

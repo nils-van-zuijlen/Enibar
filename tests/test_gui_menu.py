@@ -37,7 +37,6 @@ from gui.settings_window import SettingsWindow
 class MenuTest(basetest.BaseGuiTest):
     def setUp(self):
         super().setUp()
-        self._reset_db()
         self.win = gui.main_window.MainWindow()
 
     def tearDown(self):

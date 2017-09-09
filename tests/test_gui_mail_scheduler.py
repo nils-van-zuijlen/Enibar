@@ -29,7 +29,6 @@ import api.mail
 class MailTest(basetest.BaseGuiTest):
     def setUp(self):
         super().setUp()
-        self._reset_db()
         api.notes.add("Nick", "Nick", "Name", "n2name@enib.fr", "+33605040302",
             "01/02/1994", "3A", "", True, True)
         api.mail.save_model("Stock model", "Subject", "message", 0, "")

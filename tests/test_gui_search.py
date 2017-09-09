@@ -26,7 +26,6 @@ from PyQt5 import QtTest
 
 class SearchTest(basetest.BaseGuiTest):
     def setUp(self):
-        self._reset_db()
         super().setUp()
         self.add_note("test", "abc", "def")
         self.add_note("test1", "bcd", "fgh")

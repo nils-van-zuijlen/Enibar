@@ -32,7 +32,6 @@ def callback_for_func():
 class TestAuthPrompt(basetest.BaseGuiTest):
     def setUp(self):
         super().setUp()
-        self._reset_db()
         TestAuthPrompt.callback_called = False
         self.func_called = False
 

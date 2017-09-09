@@ -34,7 +34,6 @@ class MailTest(basetest.BaseGuiTest):
 
     def setUp(self):
         super().setUp()
-        self._reset_db()
         self.send_mail_was_called = False
         self.win = gui.send_mail_window.SendMailWindow()
         api.notes.add("Nick", "Nick", "Name", "n2name@enib.fr", "+33605040302",

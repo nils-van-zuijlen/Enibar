@@ -25,7 +25,6 @@ import api.notes as notes
 class NoteCategoriesTest(basetest.BaseTest):
     def setUp(self):
         super().setUp()
-        self._reset_db()
         self.note0 = notes.add("test0",
             "test",
             "test",

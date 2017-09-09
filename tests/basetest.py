@@ -102,6 +102,7 @@ class BaseTest(unittest.TestCase):
         if api.redis.connection:
             api.redis.connection.close()
             self.loop.run_until_complete(api.redis.connection.wait_closed())
+        self._reset_db()
 
     async def reset_redis(self):
         async with api.redis.connection.get() as redis:
@@ -206,6 +207,11 @@ class BaseTest(unittest.TestCase):
 class BaseGuiTest(BaseTest):
     def setUp(self):
         super().setUp()
+        api.users.add("azerty", "azerty")
+        api.users.set_rights("azerty", {'manage_users': True,
+                                        'manage_notes': True,
+                                        'manage_products': True}
+        )
         api.redis.send_message = lambda x, y: [api.notes.rebuild_note_cache(note) for note in y]
         self.app = QtWidgets.QApplication(sys.argv)
         signal.signal(signal.SIGALRM, self.handle_timeout)
@@ -224,11 +230,6 @@ class BaseGuiTest(BaseTest):
         """ Reset the db but add an user that can do anything
         """
         super()._reset_db()
-        api.users.add("azerty", "azerty")
-        api.users.set_rights("azerty", {'manage_users': True,
-                                        'manage_notes': True,
-                                        'manage_products': True}
-        )
 
     def connect(self):
         def connect_callback():

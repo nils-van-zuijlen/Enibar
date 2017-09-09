@@ -24,7 +24,6 @@ import api.notes
 
 class EmpttNoteTest(basetest.BaseGuiTest):
     def setUp(self):
-        self._reset_db()
         super().setUp()
         self.add_note("test")
         self.win = gui.empty_note_window.EmptyNoteWindow("test")

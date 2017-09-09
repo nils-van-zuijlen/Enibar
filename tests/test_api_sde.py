@@ -33,7 +33,6 @@ class MockBadSdeServer(MockSdeServer):
 class ApiSdeTests(basetest.BaseTest):
     def setUp(self):
         super().setUp()
-        self._reset_db()
         for i in range(3):
             name = "test" + str(i)
             api.notes.add(name,

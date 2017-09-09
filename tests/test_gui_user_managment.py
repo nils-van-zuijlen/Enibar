@@ -26,7 +26,6 @@ import api.users
 class UsersManagementTest(basetest.BaseGuiTest):
     def setUp(self):
         super().setUp()
-        self._reset_db()
         api.users.add("test", "test")  # Test user
         self.win = gui.users_management_window.UsersManagementWindow()
 

@@ -25,7 +25,6 @@ import gui.validation_window
 
 class RefillNoteTest(basetest.BaseGuiTest):
     def setUp(self):
-        self._reset_db()
         super().setUp()
         self.add_note("test")
         self.win = gui.refill_note_window.RefillNoteWindow("test", "azerty")
@@ -79,7 +78,6 @@ class RefillNoteTest(basetest.BaseGuiTest):
 
 class RefillNoteMultiTest(basetest.BaseGuiTest):
     def setUp(self):
-        self._reset_db()
         super().setUp()
         self.win = gui.refill_note_window.MultiRefillNoteWindow("azerty")
 

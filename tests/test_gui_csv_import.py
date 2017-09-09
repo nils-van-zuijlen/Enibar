@@ -24,7 +24,6 @@ import gui.csv_import_window
 
 class CsvImportTest(basetest.BaseGuiTest):
     def setUp(self):
-        self._reset_db()
         super().setUp()
         self.add_note("test", mail="test@test.fr")
         self.add_note("test2", mail="test2@test.fr")

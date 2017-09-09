@@ -25,7 +25,6 @@ import api.note_categories
 
 class NotesManagementWindowTest(basetest.BaseGuiTest):
     def setUp(self):
-        self._reset_db()
         super().setUp()
         self.add_note("test")
         self.add_note("test2")

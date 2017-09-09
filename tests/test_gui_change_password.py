@@ -24,7 +24,6 @@ import gui.password_management_window
 
 class ChangePasswordTest(basetest.BaseGuiTest):
     def setUp(self):
-        self._reset_db()
         super().setUp()
         self.win = gui.password_management_window.PasswordManagementWindow()
 

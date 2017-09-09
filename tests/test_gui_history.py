@@ -32,7 +32,6 @@ import datetime
 class HistoryWindowTest(basetest.BaseGuiTest):
     def setUp(self):
         super().setUp()
-        self._reset_db()
         self.loop = asyncio.get_event_loop()
         self.loop.run_until_complete(api.redis.connect())
         api.notes.add("test1",

@@ -32,7 +32,6 @@ import mock
 class MailTest(basetest.BaseTest):
     def setUp(self):
         super().setUp()
-        self._reset_db()
         if os.path.isfile("mail.log"):
             os.remove("mail.log")
         text = "cocou"

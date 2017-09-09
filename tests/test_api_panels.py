@@ -26,7 +26,6 @@ import api.panels as panels
 class CategoriesTest(basetest.BaseTest):
     def setUp(self):
         super().setUp()
-        self._reset_db()
         self.cat_eat = categories.add("Manger")
         self.cat_drink = categories.add("Boire")
         self.banana = products.add("Banane", category_name="Manger")
