@@ -7,3 +7,12 @@ table!(
         manage_products -> Bool,
     }
 );
+
+table!(
+    categories(id) {
+        id -> Int4,
+	    name -> Text,
+	    color -> Text,
+	    alcoholic -> Bool,
+    }
+);

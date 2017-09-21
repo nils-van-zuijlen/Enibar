@@ -17,10 +17,11 @@ extern crate r2d2_diesel;
 extern crate redis;
 extern crate x11;
 
+mod categories;
+mod errors;
 mod utils;
 mod users;
 mod schema;
-mod errors;
 
 #[cfg(test)]
 mod tests;
@@ -62,5 +63,6 @@ lazy_static! {
 py_module_initializer!(rapi, initrapi, PyInit_rapi, |py, m| {
     m.add(py, "utils", utils::as_module(py))?;
     m.add(py, "users", users::as_module(py))?;
+    m.add(py, "categories", categories::as_module(py))?;
     Ok(())
 });

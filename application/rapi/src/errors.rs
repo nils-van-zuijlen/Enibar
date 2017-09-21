@@ -10,5 +10,9 @@ error_chain!{
             description("The user creation failed")
             display("Failed to create this user: {}", t)
         }
+        CategoryCreationError(t: String) {
+            description("The category creation failed")
+            display("Failed to create this category: {}", t)
+        }
     }
 }

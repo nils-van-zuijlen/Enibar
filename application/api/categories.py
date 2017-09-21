@@ -27,6 +27,7 @@ This api handle category managment.
 
 from database import Cursor
 import api.base
+import rapi
 
 
 def add(name):
@@ -35,14 +36,7 @@ def add(name):
     :param str name: Category name
     :return int: Category id
     """
-    if not name.strip():
-        return None
-
-    with Cursor() as cursor:
-        cursor.prepare("INSERT INTO categories(name) VALUES(:cat_name)")
-        cursor.bindValue(':cat_name', name.strip())
-        if cursor.exec_():
-            return cursor.lastInsertId()  # Return the created category
+    return rapi.categories.add(name)
 
 
 def set_alcoholic(cat_id, is_alcoholic):
@@ -51,12 +45,7 @@ def set_alcoholic(cat_id, is_alcoholic):
     :param int cat_id: Category id
     :param bool is_alcoholic: True if categorie products contain alcohol
     """
-    with Cursor() as cursor:
-        cursor.prepare("UPDATE categories SET alcoholic=:alcoholic WHERE id=:id")
-        cursor.bindValue(':alcoholic', is_alcoholic)
-        cursor.bindValue(':id', cat_id)
-        return cursor.exec_()
-
+    return rapi.categories.set_alcoholic(cat_id, is_alcoholic)
 
 def set_color(name, color):
     """ Set category color
@@ -64,11 +53,7 @@ def set_color(name, color):
     :param str name: Category name
     :param bool: True if operation succed or False
     """
-    with Cursor() as cursor:
-        cursor.prepare("UPDATE categories SET color=:color WHERE name=:name")
-        cursor.bindValue(':color', color)
-        cursor.bindValue(':name', name)
-        return cursor.exec_()
+    return rapi.categories.set_color(name, color)
 
 
 def rename(oldname, newname):
@@ -77,13 +62,7 @@ def rename(oldname, newname):
     :param str oldname: Old category name
     :param str newname: New category name
     """
-    if not newname.strip():
-        return False
-    with Cursor() as cursor:
-        cursor.prepare("UPDATE categories SET name=:newname WHERE name=:oldname")
-        cursor.bindValue(':newname', newname)
-        cursor.bindValue(':oldname', oldname)
-        return cursor.exec_()
+    return rapi.categories.rename(oldname, newname)
 
 
 def remove(name):
@@ -92,10 +71,7 @@ def remove(name):
     :param str name: Category name
     :return bool: True if operation succeed or False
     """
-    with Cursor() as cursor:
-        cursor.prepare("DELETE FROM categories WHERE name=:name")
-        cursor.bindValue(':name', name)
-        return cursor.exec_()
+    return rapi.categories.remove(name)
 
 
 def get(**filter_):
