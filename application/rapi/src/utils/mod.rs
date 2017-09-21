@@ -5,7 +5,7 @@ use std::ptr;
 pub fn check_x11(py: Python) -> PyResult<PyBool> {
     unsafe {
         let display = xlib::XOpenDisplay(ptr::null());
-        Ok(PyBool::get(py, display.is_null()))
+        Ok(PyBool::get(py, !display.is_null()))
     }
 }
 
