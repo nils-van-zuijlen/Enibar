@@ -2,10 +2,25 @@ import settings
 import asyncio
 import aioredis
 import redis
+import sys
+import rapi
+from PyQt5 import QtWidgets
 
 
 connection = None
 blocking_connection = redis.StrictRedis(host=settings.REDIS_HOST, port=6379, db=0, password=settings.REDIS_PASSWORD)
+
+try:
+    blocking_connection.ping()
+except redis.exceptions.ConnectionError:
+    if rapi.utils.check_x11():
+        # We need this to create an app before opening a window.
+        import gui.utils
+        tmp = QtWidgets.QApplication(sys.argv)
+        gui.utils.error("Error", "Can't join redis")
+    print("Can't join redis")
+    sys.exit(5)
+
 PING_TIME = 10
 
 
