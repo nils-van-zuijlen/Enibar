@@ -7,7 +7,6 @@ extern crate cpython;
 extern crate diesel;
 #[macro_use]
 extern crate diesel_codegen;
-extern crate dotenv;
 #[macro_use]
 extern crate error_chain;
 #[macro_use]
@@ -34,7 +33,6 @@ use redis::Commands;
 
 lazy_static! {
     pub static ref DB_POOL: r2d2::Pool<ConnectionManager<PgConnection>> = {
-        dotenv::dotenv().expect("Can't load the .env file");
         let config = r2d2::Config::default();
         let manager = ConnectionManager::<PgConnection>::new(
             if env::var("TEST_ENIBAR").is_ok() {
