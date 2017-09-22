@@ -5,7 +5,9 @@
 #[macro_use] extern crate diesel_codegen;
 #[macro_use] extern crate lazy_static;
 #[macro_use] extern crate error_chain;
+extern crate bigdecimal;
 extern crate bcrypt;
+extern crate chrono;
 extern crate dotenv;
 extern crate r2d2;
 extern crate r2d2_diesel;
@@ -14,6 +16,7 @@ extern crate x11;
 
 mod utils;
 mod users;
+mod notes;
 mod schema;
 mod errors;
 
@@ -57,5 +60,6 @@ lazy_static! {
 py_module_initializer!(rapi, initrapi, PyInit_rapi, |py, m| {
     m.add(py, "utils", utils::as_module(py))?;
     m.add(py, "users", users::as_module(py))?;
+    m.add(py, "notes", notes::as_module(py))?;
     Ok(())
 });

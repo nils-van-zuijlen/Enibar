@@ -47,7 +47,9 @@ def rebuild_cache():
         get actions
     """
     global NOTES_CACHE, NOTES_FIELDS_CACHE
-    NOTES_CACHE = {}
+    NOTES_CACHE = rapi.notes.get_cache()
+    return
+    """
     with Cursor() as cursor:
         if cursor.exec_("SELECT * FROM notes"):
             while cursor.next():
@@ -63,6 +65,7 @@ def rebuild_cache():
                 NOTES_CACHE[row['nickname']] = row
     _build_stats()
     _build_categories()
+    """
 
 
 def _build_categories():
