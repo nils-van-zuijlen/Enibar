@@ -273,9 +273,9 @@ class SyncedSettings(types.ModuleType):
         default = SYNCED_SETTINGS_DEFAULT[name]
         if name not in CACHED_SETTINGS:
             if type(default) == dict:
-
-                return json.loads(api.redis.get_key_blocking(name, json.dumps(default)))
-            value = type(default)(api.redis.get_key_blocking(name, default).decode())
+                value = json.loads(api.redis.get_key_blocking(name, json.dumps(default)))
+            else:
+                value = type(default)(api.redis.get_key_blocking(name, default).decode())
             CACHED_SETTINGS[name] = value
         return CACHED_SETTINGS[name]
 
