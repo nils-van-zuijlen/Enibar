@@ -5,21 +5,18 @@ use users::models::*;
 fn add_user() {
     let conn = connection();
 
-    let mut user = User::add(&conn, "coucou", "coucou").unwrap();
+    let user = User::add(&conn, "coucou", "coucou").unwrap();
     // Test that the password has been hashed and replace the password
     assert!(user.password.starts_with('$'));
-    user.password = "".into();
-    assert_eq!(user, User::new("coucou"));
+    assert_eq!(user.login, "coucou");
 
-    let mut user = User::add(&conn, "coucou2", "coucou2").unwrap();
+    let user = User::add(&conn, "coucou2", "coucou2").unwrap();
     assert!(user.password.starts_with('$'));
-    user.password = "".into();
-    assert_eq!(user, User::new("coucou2"));
+    assert_eq!(user.login, "coucou2");
 
-    let mut user = User::add(&conn, "coucou3", "coucou2").unwrap();
+    let user = User::add(&conn, "coucou3", "coucou2").unwrap();
     assert!(user.password.starts_with('$'));
-    user.password = "".into();
-    assert_eq!(user, User::new("coucou3"));
+    assert_eq!(user.login, "coucou3");
 
     assert!(User::add(&conn, "coucou", "coucou").is_err());
     assert!(User::add(&conn, "coucou", "coucou2").is_err());
