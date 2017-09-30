@@ -44,7 +44,7 @@ pub fn derive_model(item: syn::DeriveInput) -> Tokens {
                     ::diesel::update(
                         ::diesel::FindDsl::find(
                             <Self as ::diesel::associations::HasTable>::table(),
-                            (#(self.#primary_keys),*)
+                            (#(self.#primary_keys.clone()),*)
                         )
                     )
                     .set(&self),
