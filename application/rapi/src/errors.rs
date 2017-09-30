@@ -1,3 +1,5 @@
+use validator::ValidationErrors;
+
 error_chain!{
     foreign_links {
         DieselError(::diesel::result::Error);
@@ -6,6 +8,10 @@ error_chain!{
     }
 
     errors {
+        ValidationError(t: ValidationErrors) {
+            description("Validation failed")
+            display("Failed to validate this model") // TODO: Use t and provide a better error message
+        }
         UserCreationError(t: String) {
             description("The user creation failed")
             display("Failed to create this user: {}", t)

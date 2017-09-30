@@ -15,12 +15,21 @@ extern crate r2d2;
 extern crate r2d2_diesel;
 extern crate redis;
 extern crate x11;
+#[macro_use]
+extern crate rapi_codegen;
+extern crate validator;
+#[macro_use]
+extern crate validator_derive;
 
 mod categories;
 mod errors;
 mod utils;
 mod users;
 mod schema;
+mod model;
+mod validators;
+
+pub use model::Model;
 
 #[cfg(test)]
 mod tests;

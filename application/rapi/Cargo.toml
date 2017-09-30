@@ -17,3 +17,6 @@ lazy_static = "0.2"
 bcrypt = "0.1"
 error-chain = "0.10"
 redis = "0.8"
+rapi_codegen = { path = "./rapi_codegen" }
+validator = "0.6"
+validator_derive = "0.6"

@@ -1,5 +1,6 @@
 use cpython::{Python, PyResult, PyObject, ToPyObject, PythonObject, PyBool};
 use categories::models::Category;
+use model::Model;
 
 pub fn py_add(py: Python, name: String) -> PyResult<PyObject> {
     let conn = ::DB_POOL.get().unwrap();

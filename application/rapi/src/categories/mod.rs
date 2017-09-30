@@ -11,7 +11,7 @@ use errors::ErrorKind::*;
 use schema::categories;
 
 impl Category {
-    fn add(conn: &PgConnection, name: &str) -> Result<Self> {
+    pub fn add(conn: &PgConnection, name: &str) -> Result<Self> {
         if name == "" {
             return Err(Error::from(
                 CategoryCreationError(
@@ -23,7 +23,7 @@ impl Category {
         insert(&category).into(categories::table).get_result(conn).map_err(|e| e.into())
     }
 
-    fn get(conn: &PgConnection, name: &str) -> Result<Self> {
+    pub fn get(conn: &PgConnection, name: &str) -> Result<Self> {
         categories::table.filter(categories::name.eq(name)).first(conn).map_err(|e| e.into())
     }
 
@@ -32,15 +32,8 @@ impl Category {
         categories::table.find(id).first(conn).map_err(|e| e.into())
     }
 
-    fn delete(self, conn: &PgConnection) -> Result<()> {
+    pub fn delete(self, conn: &PgConnection) -> Result<()> {
         delete(categories::table.find(self.id)).execute(conn).map(|_| ()).map_err(|e| e.into())
-    }
-
-    fn save(self, conn: &PgConnection) -> Result<Self> {
-        if self.name.trim() == "" {
-            return Err(Error::from(CategoryCreationError("".into())))
-        }
-        update(categories::table.find(self.id)).set(&self).get_result(conn).map_err(|e| e.into())
     }
 }
 

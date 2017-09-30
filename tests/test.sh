@@ -100,7 +100,7 @@ if [[ $TEST -eq 1 ]]; then
 
     if [[ $RUST == 1 ]]; then
         cd $APPLICATION_DIR/rapi
-        cargo test || TEST_FAILED=1
+        cargo test || TEST_FAILED=1
         cd ..
     fi
 
