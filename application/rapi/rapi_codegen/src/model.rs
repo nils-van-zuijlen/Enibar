@@ -5,12 +5,11 @@ use util::*;
 pub fn derive_model(item: syn::DeriveInput) -> Tokens {
     let name = item.ident.clone();
     let fields: Vec<syn::Ident> = match item.body {
-        syn::Body::Enum(..) => {
-            panic!("#[derive{Model})] cannot be used with enums")
-        },
-        syn::Body::Struct(ref body) => {
-            body.fields().iter().map(|f| f.ident.clone().unwrap()).collect()
-        }
+        syn::Body::Enum(..) => panic!("#[derive{Model})] cannot be used with enums"),
+        syn::Body::Struct(ref body) => body.fields()
+            .iter()
+            .map(|f| f.ident.clone().unwrap())
+            .collect(),
     };
 
     let fields2 = fields.clone(); // TODO: Find out if I can remove this and have fields twice in the expansion

@@ -20,8 +20,6 @@ fn add_category() {
     assert!(Category::add(&conn, "coucou2").is_err());
     assert!(Category::add(&conn, " ").is_err());
     assert!(Category::add(&conn, "").is_err());
-
-
 }
 #[test]
 fn remove_category() {

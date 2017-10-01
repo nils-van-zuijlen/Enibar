@@ -23,4 +23,3 @@ fn list_value_of_attr<'a>(attr: &'a Attribute, name: &str) -> Vec<&'a Ident> {
         _ => panic!(r#"`{}` must be in the form `#[{}(something)]`"#, name, name),
     }
 }
-

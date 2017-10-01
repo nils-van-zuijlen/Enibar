@@ -13,13 +13,13 @@ extern crate error_chain;
 extern crate lazy_static;
 extern crate r2d2;
 extern crate r2d2_diesel;
-extern crate redis;
-extern crate x11;
 #[macro_use]
 extern crate rapi_codegen;
+extern crate redis;
 extern crate validator;
 #[macro_use]
 extern crate validator_derive;
+extern crate x11;
 
 mod categories;
 mod errors;

@@ -1,5 +1,5 @@
 use users::models::*;
-use cpython::{Python, PyBool, PyResult};
+use cpython::{PyBool, PyResult, Python};
 
 pub fn py_add(py: Python, username: String, password: String) -> PyResult<PyBool> {
     let conn = ::DB_POOL.get().unwrap();
@@ -17,10 +17,10 @@ pub fn py_is_authorized(py: Python, username: String, hash: String) -> PyResult<
     if let Ok(user) = user {
         let is_authorized = user.is_authorized(&hash);
         if let Ok(is_authorized) = is_authorized {
-            return Ok(PyBool::get(py, is_authorized))
+            return Ok(PyBool::get(py, is_authorized));
         }
     }
-    return Ok(PyBool::get(py, false))
+    return Ok(PyBool::get(py, false));
 }
 
 pub fn py_change_password(py: Python, username: String, new_password: String) -> PyResult<PyBool> {
@@ -33,7 +33,7 @@ pub fn py_change_password(py: Python, username: String, new_password: String) ->
         false
     };
 
-    return Ok(PyBool::get(py, is_ok))
+    return Ok(PyBool::get(py, is_ok));
 }
 
 pub fn py_remove(py: Python, username: String) -> PyResult<PyBool> {
@@ -49,4 +49,3 @@ pub fn py_remove(py: Python, username: String) -> PyResult<PyBool> {
 
     Ok(PyBool::get(py, false))
 }
-

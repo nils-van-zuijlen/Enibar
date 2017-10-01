@@ -2,7 +2,7 @@ pub mod models;
 mod py;
 
 use self::models::*;
-use bcrypt::{DEFAULT_COST, hash, verify};
+use bcrypt::{hash, verify, DEFAULT_COST};
 use cpython::{PyModule, Python};
 use diesel::prelude::*;
 use diesel;

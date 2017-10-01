@@ -1,4 +1,4 @@
-use cpython::{Python, PyResult, PyObject, ToPyObject, PythonObject, PyBool};
+use cpython::{PyBool, PyObject, PyResult, Python, PythonObject, ToPyObject};
 use categories::models::Category;
 use model::Model;
 
@@ -7,12 +7,8 @@ pub fn py_add(py: Python, name: String) -> PyResult<PyObject> {
 
     let category = Category::add(&*conn, &name);
     match category {
-        Ok(c) => {
-            Ok(c.id.to_py_object(py).into_object())
-        },
-        Err(_) => {
-            Ok(py.None())
-        }
+        Ok(c) => Ok(c.id.to_py_object(py).into_object()),
+        Err(_) => Ok(py.None()),
     }
 }
 
@@ -22,7 +18,7 @@ pub fn py_remove(py: Python, name: String) -> PyResult<PyBool> {
     let category = Category::get(&*conn, &name);
     if let Ok(c) = category {
         if c.delete(&*conn).is_ok() {
-            return Ok(py.True())
+            return Ok(py.True());
         }
     }
 
@@ -37,7 +33,7 @@ pub fn py_set_alcoholic(py: Python, id: i32, is_alcoholic: bool) -> PyResult<PyB
         category.alcoholic = is_alcoholic;
 
         if category.save(&*conn).is_ok() {
-            return Ok(py.True())
+            return Ok(py.True());
         }
     }
 
@@ -52,7 +48,7 @@ pub fn py_set_color(py: Python, name: String, color: String) -> PyResult<PyBool>
         category.color = color;
 
         if category.save(&*conn).is_ok() {
-            return Ok(py.True())
+            return Ok(py.True());
         }
     }
 
@@ -67,7 +63,7 @@ pub fn py_rename(py: Python, oldname: String, newname: String) -> PyResult<PyBoo
         category.name = newname;
 
         if category.save(&*conn).is_ok() {
-            return Ok(py.True())
+            return Ok(py.True());
         }
     }
 
