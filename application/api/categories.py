@@ -47,6 +47,7 @@ def set_alcoholic(cat_id, is_alcoholic):
     """
     return rapi.categories.set_alcoholic(cat_id, is_alcoholic)
 
+
 def set_color(name, color):
     """ Set category color
 

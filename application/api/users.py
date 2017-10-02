@@ -50,6 +50,7 @@ def remove(username):
     """
     return rapi.users.remove(username)
 
+
 def get_list(**filter_):
     """ Get user list
 
