@@ -1,8 +1,8 @@
 stages:
     - api
     - gui
-    - pep
     - rust
+    - pep
 
 api:
     stage: api
