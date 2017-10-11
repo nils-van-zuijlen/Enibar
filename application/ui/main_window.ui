@@ -701,7 +701,7 @@
      <x>0</x>
      <y>0</y>
      <width>891</width>
-     <height>15</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="administration">
@@ -862,6 +862,9 @@
   <action name="transaction_history">
    <property name="text">
     <string>Consulter l'&amp;historique des transactions</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+H</string>
    </property>
   </action>
   <action name="empty_note">
