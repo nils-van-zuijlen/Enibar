@@ -66,7 +66,7 @@ if [[ $TEST -eq 1 ]]; then
     createdb -U enibar -h /tmp/postgres_enibar -p 2356 enibar
 
     cd $APPLICATION_DIR/rapi
-    cargo build --release || exit 1
+    cargo build --all --release || exit 1
     cp target/release/librapi.so ../rapi.so
     cd ../../bin
 
@@ -100,7 +100,7 @@ if [[ $TEST -eq 1 ]]; then
 
     if [[ $RUST == 1 ]]; then
         cd $APPLICATION_DIR/rapi
-        cargo test || TEST_FAILED=1
+        cargo test --all || TEST_FAILED=1
         cd ..
     fi
 

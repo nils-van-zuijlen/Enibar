@@ -1,20 +1,9 @@
 [root]
-name = "rapi"
+name = "rapi_codegen"
 version = "0.1.0"
 dependencies = [
- "bcrypt 0.1.4 (registry+https://github.com/rust-lang/crates.io-index)",
- "cpython 0.1.0 (git+https://github.com/dgrunwald/rust-cpython.git)",
- "diesel 0.16.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "diesel_codegen 0.16.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "error-chain 0.11.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "lazy_static 0.2.9 (registry+https://github.com/rust-lang/crates.io-index)",
- "r2d2 0.7.4 (registry+https://github.com/rust-lang/crates.io-index)",
- "r2d2-diesel 0.16.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "rapi_codegen 0.1.0",
- "redis 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "validator 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "validator_derive 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "x11 2.15.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "quote 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)",
+ "syn 0.11.11 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -350,11 +339,22 @@ dependencies = [
 ]
 
 [[package]]
-name = "rapi_codegen"
+name = "rapi"
 version = "0.1.0"
 dependencies = [
- "quote 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)",
- "syn 0.11.11 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bcrypt 0.1.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cpython 0.1.0 (git+https://github.com/dgrunwald/rust-cpython.git)",
+ "diesel 0.16.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "diesel_codegen 0.16.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "error-chain 0.11.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "lazy_static 0.2.9 (registry+https://github.com/rust-lang/crates.io-index)",
+ "r2d2 0.7.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "r2d2-diesel 0.16.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rapi_codegen 0.1.0",
+ "redis 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "validator 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "validator_derive 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "x11 2.15.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
