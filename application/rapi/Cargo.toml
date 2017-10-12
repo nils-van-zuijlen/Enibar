@@ -15,8 +15,11 @@ r2d2 = "0.7"
 r2d2-diesel = "0.16"
 lazy_static = "0.2"
 bcrypt = "0.1"
-error-chain = "0.10"
+error-chain = "0.11"
 redis = "0.8"
 rapi_codegen = { path = "./rapi_codegen" }
 validator = "0.6"
 validator_derive = "0.6"
+
+[patch.crates-io]
+metadeps = { git = "https://github.com/Eijebong/metadeps.git", branch = "bump_error_chain" }
