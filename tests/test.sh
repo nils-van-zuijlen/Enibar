@@ -58,6 +58,8 @@ if [[ $TEST -eq 1 ]]; then
     killall -u $USER -q -9 postgres Xvfb
     rm -Rf /tmp/postgres_enibar /tmp/.X1023-lock
 
+	rustup update
+
     echo "Importing"
     mkdir /tmp/postgres_enibar
     initdb -D /tmp/postgres_enibar -E utf8  -U enibar
