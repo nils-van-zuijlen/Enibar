@@ -34,7 +34,6 @@ from .utils import valid, error
 from .notes_list_widget import NotesList
 from .panels_management_window import ConsumptionList
 from .refill_note_window import MultiRefillNoteWindow
-from .validation_window import ValidationWindow
 import datetime
 import fractions
 import sip

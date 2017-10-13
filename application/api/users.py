@@ -22,7 +22,6 @@ Users
 
 """
 
-import bcrypt
 from database import Cursor
 import api.base
 import rapi

@@ -25,7 +25,6 @@ This api handle category managment.
 
 """
 
-from database import Cursor
 import api.base
 import rapi
 
