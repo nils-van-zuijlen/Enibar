@@ -40,7 +40,7 @@ class MailTest(basetest.BaseGuiTest):
             "01/02/1994", "3A", "", True, True)
         api.mail.save_model("Stock model", "Subject", "message", 0, "")
         api.mail.send_mail = self.send_mail
-        self.hidden_category = api.note_categories.add("hidden", hidden=True)
+        self.hidden_category = self.add_hidden_notes_category("hidden")
 
     def test_send_mail(self):
         """ Testing gui send mail

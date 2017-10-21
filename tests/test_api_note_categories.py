@@ -20,6 +20,7 @@ import basetest
 
 import api.note_categories as note_categories
 import api.notes as notes
+from database import Cursor
 
 
 class NoteCategoriesTest(basetest.BaseTest):
@@ -116,7 +117,10 @@ class NoteCategoriesTest(basetest.BaseTest):
         self.assertEqual(list(note_categories.get()), [{'name': 'test', 'hidden': 0, 'id': 1, 'protected': 0}])
 
     def test_protected_categories(self):
-        note_categories.add("test", protected=True)
+        note_categories.add("test")
+        with Cursor() as cursor:
+            cursor.prepare("UPDATE note_categories SET protected=TRUE WHERE name='test'")
+            cursor.exec_()
         note_categories.delete(["test"])
         note_categories.set_hidden(["test"], True)
         note_categories.rename("test", "test2")

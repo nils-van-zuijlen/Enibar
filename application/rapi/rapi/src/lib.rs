@@ -28,6 +28,7 @@ mod users;
 mod schema;
 mod model;
 mod validators;
+mod note_categories;
 
 pub use model::Model;
 
@@ -71,5 +72,6 @@ py_module_initializer!(rapi, initrapi, PyInit_rapi, |py, m| {
     m.add(py, "utils", utils::as_module(py))?;
     m.add(py, "users", users::as_module(py))?;
     m.add(py, "categories", categories::as_module(py))?;
+    m.add(py, "note_categories", note_categories::as_module(py))?;
     Ok(())
 });

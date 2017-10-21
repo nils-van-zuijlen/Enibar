@@ -161,6 +161,14 @@ class BaseTest(unittest.TestCase):
         api.notes.rebuild_cache()
         return note
 
+    def add_hidden_notes_category(self, name):
+        category = api.note_categories.add(name)
+        with Cursor() as cursor:
+            cursor.prepare("UPDATE note_categories SET hidden=TRUE WHERE name=:name")
+            cursor.bindValue(':name', name)
+            cursor.exec_()
+        return category
+
     def _count(self, db):
         with Cursor() as cursor:
             cursor.exec("SELECT COUNT(*) FROM {}".format(db))

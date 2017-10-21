@@ -16,3 +16,12 @@ table!(
 	    alcoholic -> Bool,
     }
 );
+
+table! {
+    note_categories(id) {
+        id -> Int4,
+        name -> Varchar,
+        hidden -> Bool,
+        protected -> Bool,
+    }
+}

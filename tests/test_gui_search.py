@@ -21,6 +21,7 @@ import gui.search_window
 import gui.main_window
 import api.notes
 import api.note_categories
+from database import Cursor
 from PyQt5 import QtTest
 
 
@@ -32,7 +33,7 @@ class SearchTest(basetest.BaseGuiTest):
         self.add_note("test2", "rty", "jhg")
         self.main_win = gui.main_window.MainWindow()
         self.search_window = gui.search_window.SearchWindow(self.main_win.menu_bar)
-        self.hidden_category = api.note_categories.add("hidden", hidden=True)
+        self.hidden_category = self.add_hidden_notes_category("hidden")
 
     def test_search_by_firstname(self):
         """ Testing search by firstname

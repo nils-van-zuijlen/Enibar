@@ -25,39 +25,23 @@ Note categories
 from database import Cursor
 import api.base
 import api.notes
+import rapi
 
 
-def add(name, hidden=False, protected=False):
+def add(name):
     """ Add an empty note category
 
     :param str name: Note category name
-    :param bool hidden: The notes in this category should be considered as hidden ?
-    :param bool protected: If True, this category cannot be deleted, shown/hidden nor renamed.
     :return int: Note category id
     """
-    with Cursor() as cursor:
-        cursor.prepare("INSERT INTO note_categories (name, hidden, protected)\
-            VALUES(:name, :hidden, :protected)")
-
-        cursor.bindValue(":name", name)
-        cursor.bindValue(":hidden", hidden)
-        cursor.bindValue(":protected", protected)
-
-        if cursor.exec_():
-            return cursor.lastInsertId()
-
+    return rapi.note_categories.add(name)
 
 def delete(names):
     """ Delete a note category
 
     :param str name: The name of the category to delete
     """
-    with Cursor() as cursor:
-        cursor.prepare("DELETE FROM note_categories WHERE name=:name AND protected=FALSE")
-
-        cursor.bindValue(":name", names)
-        return cursor.execBatch()
-
+    return rapi.note_categories.remove(names)
 
 def add_notes(note_names, category_name):
     """ Add notes to the note category
