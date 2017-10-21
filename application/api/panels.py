@@ -26,6 +26,7 @@ Panels
 from PyQt5 import QtSql
 from database import Cursor, Database
 import api.base
+import rapi
 
 
 def add(name):
@@ -35,12 +36,7 @@ def add(name):
 
     :return bool: True if success else False.
     """
-    with Cursor() as cursor:
-        cursor.prepare("INSERT INTO panels(name) VALUES(:name)")
-        cursor.bindValue(':name', name)
-
-        if cursor.exec_():
-            return cursor.lastInsertId()  # Return the created panel
+    return rapi.panels.add(name)
 
 
 def remove(name):
@@ -50,11 +46,7 @@ def remove(name):
 
     :return bool: True if success else False.
     """
-    with Cursor() as cursor:
-        cursor.prepare("DELETE FROM panels WHERE name=:name")
-        cursor.bindValue(':name', name)
-
-        return cursor.exec_()
+    return rapi.panels.remove(name)
 
 
 def add_product(paid, product):
@@ -78,10 +70,7 @@ def hide(name):
 
     :return bool: True if success else False
     """
-    with Cursor() as cursor:
-        cursor.prepare("UPDATE panels SET hidden=TRUE WHERE name=:name")
-        cursor.bindValue(":name", name)
-        return cursor.exec_()
+    return rapi.panels.hide(name)
 
 
 def show(name):
@@ -91,10 +80,7 @@ def show(name):
 
     :return bool: True if success else False
     """
-    with Cursor() as cursor:
-        cursor.prepare("UPDATE panels SET hidden=FALSE WHERE name=:name")
-        cursor.bindValue(":name", name)
-        return cursor.exec_()
+    return rapi.panels.show(name)
 
 
 def add_products(paid, products):

@@ -25,3 +25,11 @@ table! {
         protected -> Bool,
     }
 }
+
+table! {
+    panels(id) {
+        id -> Int4,
+        name -> Varchar,
+        hidden -> Bool,
+    }
+}
