@@ -36,12 +36,14 @@ def add(name):
     """
     return rapi.note_categories.add(name)
 
+
 def delete(names):
     """ Delete a note category
 
     :param str name: The name of the category to delete
     """
     return rapi.note_categories.remove(names)
+
 
 def add_notes(note_names, category_name):
     """ Add notes to the note category
