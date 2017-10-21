@@ -1,6 +1,5 @@
 use syn;
 use quote::Tokens;
-use util::*;
 
 pub fn derive_model(item: syn::DeriveInput) -> Tokens {
     let name = item.ident.clone();
@@ -13,9 +12,6 @@ pub fn derive_model(item: syn::DeriveInput) -> Tokens {
     };
 
     let fields2 = fields.clone(); // TODO: Find out if I can remove this and have fields twice in the expansion
-    let primary_keys = list_value_of_attr_with_name(&item.attrs, "primary_key")
-        .map(|v| v.into_iter().cloned().collect())
-        .unwrap_or_else(|| vec![syn::Ident::new("id")]);
 
     let to_py = quote!(
         impl ::cpython::ToPyObject for #name {
@@ -41,10 +37,7 @@ pub fn derive_model(item: syn::DeriveInput) -> Tokens {
 
                 ::diesel::LoadDsl::get_result(
                     ::diesel::update(
-                        ::diesel::FindDsl::find(
-                            <Self as ::diesel::associations::HasTable>::table(),
-                            (#(self.#primary_keys.clone()),*)
-                        )
+                        &self
                     )
                     .set(&self),
                     conn

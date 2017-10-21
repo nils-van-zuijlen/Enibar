@@ -7,7 +7,6 @@ extern crate syn;
 use proc_macro::TokenStream;
 use syn::parse_derive_input;
 mod model;
-mod util;
 
 #[proc_macro_derive(Model, attributes(primary_key))]
 pub fn derive_insertable(input: TokenStream) -> TokenStream {
