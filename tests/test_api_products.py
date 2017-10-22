@@ -56,16 +56,6 @@ class ProductsTest(basetest.BaseTest):
         self.assertTrue(products.remove(id_))
         self.assertEqual(self.count_products(), 0)
 
-    def test_search_by_name(self):
-        """ Testing search_by_name
-        """
-        id1 = products.add("Banane", category_id=self.cat_eat)
-        id2 = products.add("Banana split", category_id=self.cat_eat)
-        self.assertEqual(list(products.search_by_name("banan")),
-            [{'id': id1, 'category': self.cat_eat, 'name': "Banane", "percentage": 0.0},
-             {'id': id2, 'category': self.cat_eat, 'name': "Banana split", "percentage": 0.0}]
-        )
-
     def test_get(self):
         """ Testing get
         """

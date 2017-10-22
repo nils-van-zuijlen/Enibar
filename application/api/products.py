@@ -123,24 +123,6 @@ def set_percentage(product_id, percentage):
         return cursor.exec_()
 
 
-def search_by_name(name):
-    """ Search products by name
-
-    :param str name: The name you want to search
-
-    :return list: A list of product descriptions.
-    """
-    with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM products WHERE LOWER(name) LIKE :name")
-
-        cursor.bindValue(':name', "%{}%".format(name.lower()))
-        cursor.exec_()
-
-        while cursor.next():
-            yield {field: cursor.value(field) for field in
-                   PRODUCT_FIELDS}
-
-
 def get(**filter_):
     """ Get products filtered by given values
     Shuld be used like this api.products.get(name="machin", category=5)
