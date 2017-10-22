@@ -45,6 +45,7 @@ if should_config_db.lower() == "y":
     database.setDatabaseName(db_name)
     if not database.open():
         print("Your postgres credentials are wrong, please check them and try again")
+        sys.exit()
 
     rs.set("DB_HOST", db_host)
     rs.set("USERNAME", db_user)
