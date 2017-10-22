@@ -63,7 +63,7 @@ class TestAuthPrompt(basetest.BaseGuiTest):
     def fill_fail_auth(self, callback):
         """ Used to fill the window
         """
-        QtCore.QTimer.singleShot(1000, callback)
+        QtCore.QTimer.singleShot(10000, callback)
         win = self.app.activeWindow()
         win.pass_input.setText("coucuo")
         win.accept()
@@ -77,7 +77,7 @@ class TestAuthPrompt(basetest.BaseGuiTest):
             self.assertIn("Personne n'a", win.informativeText())
             win.accept()
             self.assertFalse(self.func_called)
-        QtCore.QTimer.singleShot(200, callback)
+        QtCore.QTimer.singleShot(5000, callback)
         self.func_inexistant()
 
     def test_bad_passwd(self):
@@ -91,7 +91,7 @@ class TestAuthPrompt(basetest.BaseGuiTest):
             self.assertIn("Erreur d'auth", win.informativeText())
             win.accept()
             self.assertFalse(self.func_called)
-        QtCore.QTimer.singleShot(200, lambda: self.fill_fail_auth(callback))
+        QtCore.QTimer.singleShot(10000, lambda: self.fill_fail_auth(callback))
 
     def test_fail_callback(self):
         """ Testing fail callback in auth
@@ -101,7 +101,7 @@ class TestAuthPrompt(basetest.BaseGuiTest):
             self.assertFalse(self.func_called)
             win.accept()
 
-        QtCore.QTimer.singleShot(1000, lambda: self.fill_fail_auth(callback))
+        QtCore.QTimer.singleShot(10000, lambda: self.fill_fail_auth(callback))
         self.func_callback()
 
     def test_pass_performer(self):

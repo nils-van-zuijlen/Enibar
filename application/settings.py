@@ -224,6 +224,7 @@ SYNCED_SETTINGS_DEFAULT = {
     'AUTH_SDE_TOKEN': 'changeme',
 
     'DB_HOST': "127.0.0.1",
+    'DB_PORT': 5432,
     'USERNAME': "root",
     'PASSWORD': "",
     'DBNAME': "enibar",
