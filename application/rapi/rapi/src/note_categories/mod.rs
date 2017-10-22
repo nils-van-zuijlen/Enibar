@@ -45,12 +45,12 @@ impl NoteCategory {
 
 pub fn as_module(py: Python) -> PyModule {
     let module = PyModule::new(py, "note_categories").unwrap();
-    let _ = module.add(py, "add", py_fn!(py, py_add(name: String)));
+    let _ = module.add(py, "add", py_fn!(py, py_add(name: &str)));
     let _ = module.add(py, "remove", py_fn!(py, py_remove(names: Vec<String>)));
     let _ = module.add(
         py,
         "rename",
-        py_fn!(py, py_rename(old_name: String, new_name: String)),
+        py_fn!(py, py_rename(old_name: &str, new_name: &str)),
     );
     module
 }

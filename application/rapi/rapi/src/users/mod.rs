@@ -23,13 +23,13 @@ impl User {
         }
 
         let hash = if cfg!(test) {
-            hash(&password, 4)?
+            hash(password, 4)?
         } else {
-            hash(&password, DEFAULT_COST)?
+            hash(password, DEFAULT_COST)?
         };
 
         let user = NewUser {
-            login: &username,
+            login: username,
             password: &hash,
         };
 
@@ -92,21 +92,18 @@ pub fn as_module(py: Python) -> PyModule {
     let _ = module.add(
         py,
         "add",
-        py_fn!(py, py_add(username: String, password: String)),
+        py_fn!(py, py_add(username: &str, password: &str)),
     );
     let _ = module.add(
         py,
         "is_authorized",
-        py_fn!(py, py_is_authorized(username: String, hash: String)),
+        py_fn!(py, py_is_authorized(username: &str, hash: &str)),
     );
     let _ = module.add(
         py,
         "change_password",
-        py_fn!(
-            py,
-            py_change_password(username: String, new_password: String)
-        ),
+        py_fn!(py, py_change_password(username: &str, new_password: &str)),
     );
-    let _ = module.add(py, "remove", py_fn!(py, py_remove(username: String)));
+    let _ = module.add(py, "remove", py_fn!(py, py_remove(username: &str)));
     module
 }

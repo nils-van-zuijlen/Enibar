@@ -1,4 +1,4 @@
-#![allow(unused_doc_comment)]
+#![allow(unknown_lints)]
 
 extern crate bcrypt;
 #[macro_use]

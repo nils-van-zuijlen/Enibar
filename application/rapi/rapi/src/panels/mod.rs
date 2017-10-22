@@ -3,7 +3,6 @@ mod py;
 
 use cpython::{PyModule, Python};
 use diesel::*;
-use diesel::prelude::*;
 use errors::*;
 use errors::ErrorKind::*;
 use validator::Validate;
@@ -40,10 +39,10 @@ impl Panel {
 
 pub fn as_module(py: Python) -> PyModule {
     let module = PyModule::new(py, "panels").unwrap();
-    let _ = module.add(py, "add", py_fn!(py, py_add(name: String)));
-    let _ = module.add(py, "remove", py_fn!(py, py_remove(name: String)));
-    let _ = module.add(py, "hide", py_fn!(py, py_hide(name: String)));
-    let _ = module.add(py, "show", py_fn!(py, py_show(name: String)));
+    let _ = module.add(py, "add", py_fn!(py, py_add(name: &str)));
+    let _ = module.add(py, "remove", py_fn!(py, py_remove(name: &str)));
+    let _ = module.add(py, "hide", py_fn!(py, py_hide(name: &str)));
+    let _ = module.add(py, "show", py_fn!(py, py_show(name: &str)));
 
     module
 }

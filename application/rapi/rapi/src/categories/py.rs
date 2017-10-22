@@ -2,20 +2,20 @@ use cpython::{PyBool, PyObject, PyResult, Python, PythonObject, ToPyObject};
 use categories::models::Category;
 use model::Model;
 
-pub fn py_add(py: Python, name: String) -> PyResult<PyObject> {
+pub fn py_add(py: Python, name: &str) -> PyResult<PyObject> {
     let conn = ::DB_POOL.get().unwrap();
 
-    let category = Category::add(&*conn, &name);
+    let category = Category::add(&*conn, name);
     match category {
         Ok(c) => Ok(c.id.to_py_object(py).into_object()),
         Err(_) => Ok(py.None()),
     }
 }
 
-pub fn py_remove(py: Python, name: String) -> PyResult<PyBool> {
+pub fn py_remove(py: Python, name: &str) -> PyResult<PyBool> {
     let conn = ::DB_POOL.get().unwrap();
 
-    let category = Category::get(&*conn, &name);
+    let category = Category::get(&*conn, name);
     if let Ok(c) = category {
         if c.delete(&*conn).is_ok() {
             return Ok(py.True());
@@ -40,12 +40,12 @@ pub fn py_set_alcoholic(py: Python, id: i32, is_alcoholic: bool) -> PyResult<PyB
     Ok(py.False())
 }
 
-pub fn py_set_color(py: Python, name: String, color: String) -> PyResult<PyBool> {
+pub fn py_set_color(py: Python, name: &str, color: &str) -> PyResult<PyBool> {
     let conn = ::DB_POOL.get().unwrap();
-    let category = Category::get(&*conn, &name);
+    let category = Category::get(&*conn, name);
 
     if let Ok(mut category) = category {
-        category.color = color;
+        category.color = color.into();
 
         if category.save(&*conn).is_ok() {
             return Ok(py.True());
@@ -55,12 +55,12 @@ pub fn py_set_color(py: Python, name: String, color: String) -> PyResult<PyBool>
     Ok(py.False())
 }
 
-pub fn py_rename(py: Python, oldname: String, newname: String) -> PyResult<PyBool> {
+pub fn py_rename(py: Python, old_name: &str, new_name: &str) -> PyResult<PyBool> {
     let conn = ::DB_POOL.get().unwrap();
-    let category = Category::get(&*conn, &oldname);
+    let category = Category::get(&*conn, old_name);
 
     if let Ok(mut category) = category {
-        category.name = newname;
+        category.name = new_name.into();
 
         if category.save(&*conn).is_ok() {
             return Ok(py.True());
