@@ -107,12 +107,7 @@ def delete_product(paid, product):
     :param int paid: Panel id
     :param int product: Product
     """
-    with Cursor() as cursor:
-        cursor.prepare("DELETE FROM panel_content WHERE panel_id=:panel_id and \
-                product_id=:product_id")
-        cursor.bindValue(':panel_id', paid)
-        cursor.bindValue(':product_id', product)
-        return cursor.exec_()
+    return delete_products(paid, [product])
 
 
 def delete_products(paid, products):
