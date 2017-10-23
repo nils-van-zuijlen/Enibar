@@ -33,3 +33,12 @@ table! {
         hidden -> Bool,
     }
 }
+
+table! {
+    products(id) {
+        id -> Int4,
+        name -> Varchar,
+        category -> Int4,
+        percentage -> Numeric,
+    }
+}

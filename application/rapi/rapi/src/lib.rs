@@ -1,6 +1,7 @@
 #![allow(unknown_lints)]
 
 extern crate bcrypt;
+extern crate bigdecimal;
 #[macro_use]
 extern crate cpython;
 #[macro_use]
@@ -11,6 +12,7 @@ extern crate diesel_codegen;
 extern crate error_chain;
 #[macro_use]
 extern crate lazy_static;
+extern crate num_traits;
 extern crate r2d2;
 extern crate r2d2_diesel;
 #[macro_use]
@@ -30,6 +32,9 @@ mod model;
 mod validators;
 mod note_categories;
 mod panels;
+mod products;
+mod py_helpers;
+mod diesel_helpers;
 
 pub use model::Model;
 
@@ -41,6 +46,9 @@ use diesel::PgConnection;
 use r2d2_diesel::ConnectionManager;
 use std::env;
 use redis::Commands;
+
+pub(crate) use diesel_helpers::*;
+
 
 lazy_static! {
     pub static ref DB_POOL: r2d2::Pool<ConnectionManager<PgConnection>> = {
@@ -75,5 +83,6 @@ py_module_initializer!(rapi, initrapi, PyInit_rapi, |py, m| {
     m.add(py, "categories", categories::as_module(py))?;
     m.add(py, "note_categories", note_categories::as_module(py))?;
     m.add(py, "panels", panels::as_module(py))?;
+    m.add(py, "products", products::as_module(py))?;
     Ok(())
 });

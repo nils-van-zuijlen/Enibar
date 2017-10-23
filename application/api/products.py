@@ -27,6 +27,7 @@ from PyQt5 import QtSql
 from database import Cursor, Database, SqlQuery
 import api.categories
 import api.base
+import rapi
 
 PRODUCT_FIELDS = ['id', 'name', 'category', 'percentage']
 
@@ -93,34 +94,17 @@ def remove(id_):
     :param str name: The name of the product to delete
     :return bool: True if success else False.
     """
-    with Cursor() as cursor:
-        cursor.prepare("DELETE FROM products WHERE id=:id")
-        cursor.bindValue(':id', id_)
-        return cursor.exec_()
+    return rapi.products.remove(id_)
 
 
 def rename(product_id, new_name):
     """ Rename a product
     """
-    if not new_name.strip():
-        return False
-    with Cursor() as cursor:
-        cursor.prepare("UPDATE products SET name=:new WHERE id=:id")
-
-        cursor.bindValue(":new", new_name.strip())
-        cursor.bindValue(":id", product_id)
-
-        return cursor.exec_()
+    return rapi.products.rename(product_id, new_name)
 
 
 def set_percentage(product_id, percentage):
-    with Cursor() as cursor:
-        cursor.prepare("UPDATE products SET percentage=:percentage WHERE id=:id")
-
-        cursor.bindValue(":id", product_id)
-        cursor.bindValue(":percentage", percentage)
-
-        return cursor.exec_()
+    return rapi.products.set_percentage(product_id, percentage)
 
 
 def get(**filter_):
