@@ -67,21 +67,22 @@ impl User {
 
     /// Removes the user
     pub fn remove(self, conn: &PgConnection) -> Result<()> {
-        diesel::delete(
-            admins::table.filter(
-                admins::login.eq(&self.login).and(
-                    AsExpression::<BigInt>::as_expression(1)
-                        .ne_any(admins::table.filter(admins::manage_users.eq(true)).count())
-                        .or(
-                            AsExpression::<Bool>::as_expression(false).eq_any(
-                                admins::table
-                                    .filter(admins::login.eq(&self.login))
-                                    .select(admins::manage_users),
-                            ),
-                        ),
+        let users_with_admin_rights = admins::table
+            .filter(admins::manage_users.eq(true))
+            .count()
+            .first::<i64>(conn)?;
+        if users_with_admin_rights > 1 {
+            diesel::delete(&self).execute(conn)?;
+        } else {
+            // We might be the last one
+            diesel::delete(
+                admins::table.filter(
+                    admins::login
+                        .eq(&self.login)
+                        .and(admins::manage_users.eq(false)),
                 ),
-            ),
-        ).execute(conn)?;
+            ).execute(conn)?;
+        }
 
         Ok(())
     }
