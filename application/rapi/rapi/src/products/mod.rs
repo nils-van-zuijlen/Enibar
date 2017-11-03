@@ -8,8 +8,6 @@ use cpython::{PyModule, Python};
 use diesel::prelude::*;
 use diesel::*;
 use errors::*;
-use errors::ErrorKind::*;
-use BigDecimal;
 
 impl Product {
     pub fn delete(self, conn: &PgConnection) -> Result<()> {

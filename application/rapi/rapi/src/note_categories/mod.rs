@@ -17,8 +17,8 @@ impl NoteCategory {
         new_category
             .validate()
             .map_err(|e| Error::from(ValidationError(e)))?;
-        insert(&new_category)
-            .into(note_categories::table)
+        insert_into(note_categories::table)
+            .values(&new_category)
             .get_result(conn)
             .map_err(|e| e.into())
     }

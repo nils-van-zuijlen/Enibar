@@ -19,8 +19,8 @@ impl Category {
         }
 
         let category = NewCategory { name: name };
-        insert(&category)
-            .into(categories::table)
+        insert_into(categories::table)
+            .values(&category)
             .get_result(conn)
             .map_err(|e| e.into())
     }

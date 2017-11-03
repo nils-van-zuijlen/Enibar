@@ -1,8 +1,5 @@
-use cpython::{FromPyObject, ObjectProtocol, PyObject, PyResult, PyString, Python, PythonObject,
-              ToPyObject};
+use cpython::{ObjectProtocol, PyObject, PyString, Python, ToPyObject};
 use BigDecimal;
-use num_traits::cast::ToPrimitive;
-use bigdecimal;
 
 impl ToPyObject for BigDecimal {
     type ObjectType = PyObject;

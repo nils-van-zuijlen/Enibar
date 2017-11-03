@@ -1,8 +1,6 @@
-use cpython::{PyBool, PyObject, PyResult, Python, PythonObject, ToPyObject};
+use cpython::{PyBool, PyResult, Python};
 use products::models::Product;
 use model::Model;
-use diesel::*;
-use errors::*;
 use BigDecimal;
 use bigdecimal;
 use num_traits::FromPrimitive;

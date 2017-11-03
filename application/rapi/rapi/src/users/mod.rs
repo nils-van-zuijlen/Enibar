@@ -5,12 +5,10 @@ use self::models::*;
 use bcrypt::{hash, verify, DEFAULT_COST};
 use cpython::{PyModule, Python};
 use diesel::prelude::*;
-use diesel;
+use diesel::*;
 use errors::*;
 use errors::ErrorKind::*;
 use schema::admins;
-use diesel::expression::AsExpression;
-use diesel::types::{BigInt, Bool};
 use self::py::*;
 
 impl User {
@@ -33,8 +31,8 @@ impl User {
             password: &hash,
         };
 
-        diesel::insert(&user)
-            .into(::schema::admins::table)
+        insert_into(admins::table)
+            .values(&user)
             .get_result::<User>(conn)
             .map_err(|e| e.into())
     }
@@ -52,7 +50,7 @@ impl User {
             hash(new_password, DEFAULT_COST)?
         };
 
-        diesel::update(admins::table.find(self.login.clone()))
+        update(admins::table.find(self.login.clone()))
             .set(admins::password.eq(&hash))
             .get_result::<User>(conn)
             .map_err(|e| e.into())
@@ -72,10 +70,10 @@ impl User {
             .count()
             .first::<i64>(conn)?;
         if users_with_admin_rights > 1 {
-            diesel::delete(&self).execute(conn)?;
+            delete(&self).execute(conn)?;
         } else {
             // We might be the last one
-            diesel::delete(
+            delete(
                 admins::table.filter(
                     admins::login
                         .eq(&self.login)

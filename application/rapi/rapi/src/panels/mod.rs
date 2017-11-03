@@ -16,8 +16,8 @@ impl Panel {
         new_panel
             .validate()
             .map_err(|e| Error::from(ValidationError(e)))?;
-        insert(&new_panel)
-            .into(panels::table)
+        insert_into(panels::table)
+            .values(&new_panel)
             .get_result(conn)
             .map_err(|e| e.into())
     }

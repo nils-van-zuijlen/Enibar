@@ -3,7 +3,6 @@ use diesel::types::*;
 use diesel::expression::AsExpression;
 use diesel::expression::bound::Bound;
 use diesel::row::Row;
-use diesel::prelude::*;
 use bigdecimal;
 use std::ops::Deref;
 use std::error::Error;
