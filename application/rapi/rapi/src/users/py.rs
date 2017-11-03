@@ -1,5 +1,5 @@
 use users::models::*;
-use cpython::{PyBool, PyResult, Python};
+use cpython::{PyBool, PyDict, PyResult, Python};
 
 pub fn py_add(py: Python, username: &str, password: &str) -> PyResult<PyBool> {
     let conn = ::DB_POOL.get().unwrap();
@@ -48,4 +48,23 @@ pub fn py_remove(py: Python, username: &str) -> PyResult<PyBool> {
     }
 
     Ok(PyBool::get(py, false))
+}
+
+pub fn py_get_rights(py: Python, username: &str) -> PyResult<PyDict> {
+    let conn = ::DB_POOL.get().unwrap();
+    let user = User::get(&*conn, username);
+
+    if let Ok(user) = user {
+        return dict!(py,
+                     {"manage_notes" => user.manage_notes,
+                     "manage_users" => user.manage_users,
+                     "manage_products" => user.manage_products}
+                    );
+    }
+
+    dict!(py,
+          {"manage_notes" => false,
+          "manage_users" => false,
+          "manage_products" => false}
+    )
 }

@@ -68,26 +68,7 @@ def get_rights(username):
 
     :return dict: rights for given username
     """
-    with Cursor() as cursor:
-        cursor.prepare("""SELECT
-            manage_users,
-            manage_notes,
-            manage_products
-            FROM admins WHERE login=:login
-            """)
-        cursor.bindValue(':login', username)
-        if cursor.exec_() and cursor.next():
-            return {
-                'manage_users': cursor.value('manage_users'),
-                'manage_notes': cursor.value('manage_notes'),
-                'manage_products': cursor.value('manage_products'),
-            }
-
-    return {
-        'manage_users': False,
-        'manage_notes': False,
-        'manage_products': False,
-    }
+    return rapi.users.get_rights(username)
 
 
 def set_rights(username, rights):

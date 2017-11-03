@@ -23,6 +23,8 @@ extern crate validator;
 extern crate validator_derive;
 extern crate x11;
 
+#[macro_use]
+mod py_helpers;
 mod categories;
 mod errors;
 mod utils;
@@ -33,7 +35,6 @@ mod validators;
 mod note_categories;
 mod panels;
 mod products;
-mod py_helpers;
 mod diesel_helpers;
 
 pub use model::Model;

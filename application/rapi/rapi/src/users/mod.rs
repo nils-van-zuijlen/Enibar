@@ -104,5 +104,6 @@ pub fn as_module(py: Python) -> PyModule {
         py_fn!(py, py_change_password(username: &str, new_password: &str)),
     );
     let _ = module.add(py, "remove", py_fn!(py, py_remove(username: &str)));
+    let _ = module.add(py, "get_rights", py_fn!(py, py_get_rights(username: &str)));
     module
 }

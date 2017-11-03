@@ -15,3 +15,14 @@ impl ToPyObject for BigDecimal {
         return decimal(&format!("{}", self.0).into_py_object(py));
     }
 }
+
+#[macro_export]
+macro_rules! dict {
+    ($py: ident, { $($key: expr => $value: expr),+ }) => {
+        {
+        let d = ::cpython::PyDict::new($py);
+        $(d.set_item($py, $key, $value)?;)+
+        Ok(d)
+        }
+    }
+}
