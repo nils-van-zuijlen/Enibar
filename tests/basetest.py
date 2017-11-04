@@ -34,6 +34,14 @@ from unittest.runner import TextTestResult, TextTestRunner
 from unittest.signals import registerResult
 
 
+def excepthook(type_, value, tb):
+    QtWidgets.QApplication.quit()
+    sys.__excepthook__(type_, value, tb)
+
+
+sys.excepthook = excepthook
+
+
 def getDescription(self, test):
     doc_first_line = test.shortDescription()
     if self.descriptions and doc_first_line:
