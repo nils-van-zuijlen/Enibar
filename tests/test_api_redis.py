@@ -17,12 +17,12 @@
 # along with Enibar.  If not, see <http://www.gnu.org/licenses/>.
 
 import aioredis
-import asyncio
 import api.redis
 import asyncio
 import basetest
 import functools
 import imp
+import os
 import sys
 import time
 import uuid
@@ -44,7 +44,10 @@ class RedisTest(basetest.BaseTest):
 
     def test_send_message(self):
         async def func():
-            SUB = await aioredis.create_redis(("127.0.0.1", 6379))
+            SUB = await aioredis.create_redis((os.environ.get(
+                "REDIS_HOST",
+                "127.0.0.1"
+            ), 6379))
             res = await SUB.psubscribe("enibar-*")
             subscriber = res[0]
 

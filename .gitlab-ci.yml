@@ -1,21 +1,99 @@
+image: enibar:ci
+
 stages:
-    - api
-    - gui
-    - rust
-    - pep
+    - preparation
+    - build
+    - test
+    - style
+
+services:
+    - postgres:latest
+    - redis:latest
+
+cache:
+    paths:
+        - application/rapi/target
+        - application/rapi/.cargo
+
+variables:
+    DATABASE_HOST: postgres
+    DATABASE_PORT: 5432
+    DATABASE_USER: postgres
+    DATABASE_PASSwORD: postgres
+    DATABASE_URL: "postgres://postgres:postgres@postgres/enibar"
+    POSTGRES_PASSWORD: postgres
+    REDIS_HOST: redis
+    PGPASSWORD: postgres
+    CARGO_INCREMENTAL: 1
+    CARGO_HOME: .cargo
+    NOSE_NOCAPTURE: 1
+    DISPLAY: ":1069"
+
+before_script:
+    - echo -e "DEBUG=False\nIMG_BASE_DIR='img/'\nMAX_HISTORY=5\nREDIS_HOST='$REDIS_HOST'\nREDIS_PASSWORD=None" > application/local_settings.py
+    - redis-cli -h $REDIS_HOST set DB_HOST $DATABASE_HOST
+    - redis-cli -h $REDIS_HOST set DB_PORT $DATABASE_PORT
+    - redis-cli -h $REDIS_HOST set USERNAME $DATABASE_USER
+    - redis-cli -h $REDIS_HOST set PASSWORD $DATABASE_PASSwORD
+    - redis-cli -h $REDIS_HOST set DBNAME enibar
+    - createdb -U $DATABASE_USER -h $DATABASE_HOST -p $DATABASE_PORT enibar
+    - pushd bin
+    - ./migrations.py apply
+    - popd
 
 api:
-    stage: api
-    script: ./bin/test.sh -a
-
+    stage: test
+    tags:
+        - docker
+    script:
+        - cd application
+        - nosetests ../tests/*api*.py -v --with-coverage --cover-package=api
+rapi:
+    stage: test
+    tags:
+        - docker
+    script:
+        - cd application/rapi
+        - cargo test --all
 gui:
-    stage: gui
-    script: ./bin/test.sh -g
+    stage: test
+    tags:
+        - docker
+    dependencies:
+        - rust
+    script:
+        - cd application
+        - Xvfb $DISPLAY -screen 0 1600x1200x24+32 &
+        - export DISPLAY=$DISPLAY
+        - nosetests ../tests/*gui*.py -v --with-coverage --cover-package=gui
 
 pep:
-    stage: pep
-    script: ./bin/test.sh -p
+    stage: style
+    tags:
+        - docker
+    script:
+        - pycodestyle --exclude=documentation,application/local_settings.py,application/rapi/.cargo,.enibar-venv,.ropeproject,utils --ignore=E722,E501,W391,E128,E124 application
 
 rust:
-    stage: rust
-    script: ./bin/test.sh -r
+    stage: build
+    tags:
+        - docker
+    artifacts:
+        expire_in: 1h
+        paths:
+            - application/rapi.so
+    script:
+        - cd application/rapi
+        - cargo build --all --release
+        - cp target/release/librapi.so ../rapi.so
+
+build_ci_image:
+    stage: preparation
+    only:
+        - schedules
+        - web
+    before_script:
+        - echo "nop"
+    script:
+        - cd tests/ci
+        - docker build --no-cache -t enibar:ci .

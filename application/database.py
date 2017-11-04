@@ -60,14 +60,26 @@ class Database:
         """
         if Database.database is None:
             Database.database = QtSql.QSqlDatabase("QPSQL")
-            Database.database.setHostName(settings.DB_HOST)
-            Database.database.setUserName(settings.USERNAME)
-            Database.database.setPassword(settings.PASSWORD)
-            Database.database.setDatabaseName(settings.DBNAME)
-            if "TEST_ENIBAR" in os.environ:
-                Database.database.setPort(2356)
-                Database.database.setHostName("127.0.0.1")
-                Database.database.setUserName("enibar")
+            Database.database.setHostName(os.environ.get(
+                "DATABASE_HOST",
+                settings.DB_HOST
+            ))
+            Database.database.setPort(int(os.environ.get(
+                "DATABASE_PORT",
+                settings.DB_PORT,
+            )))
+            Database.database.setUserName(os.environ.get(
+                "DATABASE_USER",
+                settings.USERNAME
+            ))
+            Database.database.setPassword(os.environ.get(
+                "DATABASE_PASSWORD",
+                settings.PASSWORD
+            ))
+            Database.database.setDatabaseName(os.environ.get(
+                "DATABASE_NAME",
+                settings.DBNAME
+            ))
             if not Database.database.open():
                 if rapi.utils.check_x11():
                     # We need this to create an app before opening a window.

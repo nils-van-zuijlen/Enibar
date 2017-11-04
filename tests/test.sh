@@ -21,6 +21,10 @@ TEST_FAILED=0
 TEST=0
 export USE_VD=1
 export TEST_ENIBAR=1
+export DATABASE_HOST="127.0.0.1"
+export DATABASE_PORT=2356
+export DATABASE_USER="enibar"
+export DATABASE_URL="postgres://$DATABASE_USER@$DATABASE_HOST:$DATABASE_PORT/enibar"
 cd $(dirname $0)
 APPLICATION_DIR="../application"
 
@@ -62,10 +66,10 @@ if [[ $TEST -eq 1 ]]; then
 
     echo "Importing"
     mkdir /tmp/postgres_enibar
-    initdb -D /tmp/postgres_enibar -E utf8  -U enibar
-    postgres -D /tmp/postgres_enibar -p 2356 -k /tmp/postgres_enibar &>/dev/null &
+    initdb -D /tmp/postgres_enibar -E utf8  -U $DATABASE_USER
+    postgres -D /tmp/postgres_enibar -h $DATABASE_HOST -p $DATABASE_PORT -k /tmp/postgres_enibar &>/dev/null &
     sleep 5
-    createdb -U enibar -h /tmp/postgres_enibar -p 2356 enibar
+    createdb -U $DATABASE_USER -h $DATABASE_HOST -p $DATABASE_PORT enibar
 
     cd $APPLICATION_DIR/rapi
     cargo build --all --release || exit 1
