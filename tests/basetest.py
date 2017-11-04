@@ -37,6 +37,7 @@ from unittest.signals import registerResult
 def excepthook(type_, value, tb):
     QtWidgets.QApplication.quit()
     sys.__excepthook__(type_, value, tb)
+    sys.exit(1)
 
 
 sys.excepthook = excepthook
