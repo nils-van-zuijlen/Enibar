@@ -1,5 +1,6 @@
 use super::schema::*;
 use users::models::*;
+use model::Model;
 
 #[test]
 fn add_user() {
@@ -52,4 +53,28 @@ fn remove_user() {
     assert!(User::get(&conn, "coucou").is_ok());
     assert!(user.remove(&conn).is_ok());
     assert!(User::get(&conn, "coucou").is_err());
+}
+
+#[test]
+fn set_rights_users() {
+    let conn = connection();
+    let mut user = User::add(&conn, "coucou", "coucou").unwrap();
+    assert!(!user.manage_users);
+    assert!(!user.manage_products);
+    assert!(!user.manage_notes);
+
+    user.manage_users = true;
+    user.manage_products = true;
+    let mut user = user.save(&conn).unwrap();
+    assert!(user.manage_users);
+    assert!(user.manage_products);
+    assert!(!user.manage_notes);
+
+    user.manage_users = false;
+    assert!(user.save(&conn).is_ok());
+
+    let mut user = User::get(&conn, "admin").unwrap();
+    assert!(user.manage_users);
+    user.manage_users = false;
+    assert!(user.save(&conn).is_err());
 }

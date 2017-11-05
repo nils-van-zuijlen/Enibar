@@ -124,10 +124,12 @@ class BaseTest(unittest.TestCase):
         name_table = ["admins", "scheduled_mails", "mail_models", "panel_content"]
 
         with Cursor() as cursor:
+            assert(cursor.exec_("ALTER TABLE admins DISABLE TRIGGER at_least_one_manage_users"))
             for table in tables:
                 cursor.exec_("DELETE FROM {}".format(table))
                 if table not in name_table:
                     cursor.exec_("ALTER SEQUENCE {}_id_seq RESTART WITH 1".format(table))
+            cursor.exec_("ALTER TABLE admins ENABLE TRIGGER at_least_one_manage_users")
         api.notes.rebuild_cache()
 
     def assertMyDictEqual(self, d1, d2, ignore=None):

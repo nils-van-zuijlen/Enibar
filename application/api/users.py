@@ -82,19 +82,7 @@ def set_rights(username, rights):
 
     :return bool: Operation status
     """
-    with Cursor() as cursor:
-        cursor.prepare("""UPDATE admins
-            SET manage_users=:manage_users,
-            manage_notes=:manage_notes,
-            manage_products=:manage_products
-            WHERE ((SELECT  manage_users FROM admins WHERE login=:login)=FALSE \
-            OR ( SELECT COUNT(*) FROM admins WHERE manage_users=TRUE) >1 \
-            OR :manage_users=TRUE) AND login=:login
-            """)
-        for right, value in rights.items():
-            cursor.bindValue(':{}'.format(right), value)
-        cursor.bindValue(':login', username)
-        return cursor.exec_()
+    return rapi.users.set_rights(username, rights)
 
 
 def change_password(username, new_password):

@@ -1,5 +1,6 @@
 use users::models::*;
 use cpython::{PyBool, PyDict, PyResult, Python};
+use model::Model;
 
 pub fn py_add(py: Python, username: &str, password: &str) -> PyResult<PyBool> {
     let conn = ::DB_POOL.get().unwrap();
@@ -67,4 +68,25 @@ pub fn py_get_rights(py: Python, username: &str) -> PyResult<PyDict> {
           "manage_users" => false,
           "manage_products" => false}
     )
+}
+
+pub fn py_set_rights(py: Python, username: &str, rights: PyDict) -> PyResult<PyBool> {
+    let conn = ::DB_POOL.get().unwrap();
+    let user = User::get(&*conn, username);
+
+    if let Ok(mut user) = user {
+        if let Some(r) = rights.get_item(py, "manage_notes") {
+            user.manage_notes = r.extract(py)?;
+        }
+        if let Some(r) = rights.get_item(py, "manage_users") {
+            user.manage_users = r.extract(py)?;
+        }
+        if let Some(r) = rights.get_item(py, "manage_products") {
+            user.manage_products = r.extract(py)?;
+        }
+
+        return Ok(PyBool::get(py, user.save(&*conn).is_ok()));
+    }
+
+    Ok(PyBool::get(py, false))
 }

@@ -3,7 +3,7 @@ mod py;
 
 use self::models::*;
 use bcrypt::{hash, verify, DEFAULT_COST};
-use cpython::{PyModule, Python};
+use cpython::{PyDict, PyModule, Python};
 use diesel::prelude::*;
 use diesel::*;
 use errors::*;
@@ -65,23 +65,7 @@ impl User {
 
     /// Removes the user
     pub fn remove(self, conn: &PgConnection) -> Result<()> {
-        let users_with_admin_rights = admins::table
-            .filter(admins::manage_users.eq(true))
-            .count()
-            .first::<i64>(conn)?;
-        if users_with_admin_rights > 1 {
-            delete(&self).execute(conn)?;
-        } else {
-            // We might be the last one
-            delete(
-                admins::table.filter(
-                    admins::login
-                        .eq(&self.login)
-                        .and(admins::manage_users.eq(false)),
-                ),
-            ).execute(conn)?;
-        }
-
+        delete(&self).execute(conn)?;
         Ok(())
     }
 }
@@ -105,5 +89,10 @@ pub fn as_module(py: Python) -> PyModule {
     );
     let _ = module.add(py, "remove", py_fn!(py, py_remove(username: &str)));
     let _ = module.add(py, "get_rights", py_fn!(py, py_get_rights(username: &str)));
+    let _ = module.add(
+        py,
+        "set_rights",
+        py_fn!(py, py_set_rights(username: &str, rights: PyDict)),
+    );
     module
 }
