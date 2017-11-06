@@ -77,7 +77,7 @@ class TestAuthPrompt(basetest.BaseGuiTest):
             self.assertIn("Personne n'a", win.informativeText())
             win.accept()
             self.assertFalse(self.func_called)
-        QtCore.QTimer.singleShot(5000, callback)
+        QtCore.QTimer.singleShot(10000, callback)
         self.func_inexistant()
 
     def test_bad_passwd(self):
@@ -111,6 +111,6 @@ class TestAuthPrompt(basetest.BaseGuiTest):
             win = self.app.activeWindow()
             win.pass_input.setText("azerty")
             win.accept()
-        QtCore.QTimer.singleShot(200, callback)
+        QtCore.QTimer.singleShot(10000, callback)
         self.func_performer()
 
