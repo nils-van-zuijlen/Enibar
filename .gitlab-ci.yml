@@ -23,6 +23,7 @@ variables:
     CARGO_HOME: .cargo
     NOSE_NOCAPTURE: 1
     DISPLAY: ":1069"
+    BCRYPT_COST: 4
 
 before_script:
     - echo -e "DEBUG=False\nIMG_BASE_DIR='img/'\nMAX_HISTORY=5\nREDIS_HOST='$REDIS_HOST'\nREDIS_PASSWORD=None" > application/local_settings.py
