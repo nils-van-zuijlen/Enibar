@@ -10,6 +10,7 @@ use errors::*;
 use errors::ErrorKind::*;
 use schema::admins;
 use self::py::*;
+use std::env;
 
 impl User {
     /// Adds an user with default rights.
@@ -23,7 +24,10 @@ impl User {
         let hash = if cfg!(test) {
             hash(password, 4)?
         } else {
-            hash(password, DEFAULT_COST)?
+            match env::var("BCRYPT_COST"){
+                Ok(val) => hash(password, val.parse().unwrap())?,
+                Err(_) => hash(password, DEFAULT_COST)?,
+            }
         };
 
         let user = NewUser {
@@ -47,7 +51,10 @@ impl User {
         let hash = if cfg!(test) {
             hash(new_password, 4)?
         } else {
-            hash(new_password, DEFAULT_COST)?
+            match env::var("BCRYPT_COST"){
+                Ok(val) => hash(new_password, val.parse().unwrap())?,
+                Err(_) => hash(new_password, DEFAULT_COST)?,
+            }
         };
 
         update(admins::table.find(self.login.clone()))
