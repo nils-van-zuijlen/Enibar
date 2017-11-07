@@ -2,7 +2,7 @@ pub mod models;
 mod py;
 
 use self::py::*;
-use self::models::*;
+pub use self::models::*;
 use schema::products;
 use cpython::{PyModule, Python};
 use diesel::prelude::*;

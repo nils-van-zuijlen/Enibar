@@ -42,3 +42,13 @@ table! {
         percentage -> Numeric,
     }
 }
+
+table! {
+    panel_content (panel_id, product_id) {
+        panel_id -> Int4,
+        product_id -> Int4,
+    }
+}
+
+joinable!(panel_content -> panels (panel_id));
+joinable!(panel_content -> products (product_id));

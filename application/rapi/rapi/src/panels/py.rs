@@ -1,6 +1,7 @@
 use cpython::{PyBool, PyObject, PyResult, Python, PythonObject, ToPyObject};
 use panels::models::Panel;
 use model::Model;
+use diesel::*;
 
 pub fn py_add(py: Python, name: &str) -> PyResult<PyObject> {
     let conn = ::DB_POOL.get().unwrap();
@@ -49,6 +50,25 @@ pub fn py_show(py: Python, name: &str) -> PyResult<PyBool> {
 
         if p.save(&*conn).is_ok() {
             return Ok(py.False());
+        }
+    }
+
+    Ok(py.False())
+}
+
+pub fn py_add_products(py: Python, id: i32, product_ids: Vec<i32>) -> PyResult<PyBool> {
+    // XXX: Since the python API is so bad, I'm allowing this function to do a SQL request without
+    // passing by the rust RAPI for performances reasons.
+    use schema::products;
+    let conn = ::DB_POOL.get().unwrap();
+
+    let panel = Panel::get_by_id(&*conn, id);
+    if let Ok(mut p) = panel {
+        if let Ok(products) = products::table
+            .filter(products::id.eq_any(product_ids))
+            .load(&*conn)
+        {
+            return Ok(PyBool::get(py, p.add_products(&*conn, &products).is_ok()));
         }
     }
 

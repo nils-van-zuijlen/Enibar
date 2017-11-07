@@ -55,12 +55,7 @@ def add_product(paid, product):
     :param int paid: Panel id
     :param int product: Product id
     """
-    with Cursor() as cursor:
-        cursor.prepare("INSERT INTO panel_content(panel_id, product_id) \
-                VALUES(:paid, :poid)")
-        cursor.bindValue(':paid', paid)
-        cursor.bindValue(':poid', product)
-        return cursor.exec_()
+    return add_products(paid, [product])
 
 
 def hide(name):
@@ -89,16 +84,7 @@ def add_products(paid, products):
     :param int paid: panel id
     :param list products: list of products id
     """
-    with Database() as database:
-        database.transaction()
-        cursor = QtSql.QSqlQuery(database)
-        cursor.prepare("INSERT INTO panel_content(panel_id, product_id) VALUES\
-                (:paid, :poid)")
-        for product in products:
-            cursor.bindValue(":paid", paid)
-            cursor.bindValue(":poid", product)
-            cursor.exec_()
-        database.commit()
+    return rapi.panels.add_products(paid, products)
 
 
 def delete_product(paid, product):

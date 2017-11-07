@@ -8,7 +8,8 @@ use errors::ErrorKind::*;
 use validator::Validate;
 use self::models::*;
 use self::py::*;
-use schema::panels;
+use schema::{panel_content, panels};
+use products::models::Product;
 
 impl Panel {
     pub fn add(conn: &PgConnection, name: &str) -> Result<Self> {
@@ -29,11 +30,32 @@ impl Panel {
             .map_err(|e| e.into())
     }
 
+    // TODO: Remove this when it's not necessary anymore
+    pub fn get_by_id(conn: &PgConnection, id: i32) -> Result<Self> {
+        panels::table.find(id).first(conn).map_err(|e| e.into())
+    }
+
     pub fn delete(self, conn: &PgConnection) -> Result<()> {
         delete(panels::table.find(self.id))
             .execute(conn)
             .map(|_| ())
             .map_err(|e| e.into())
+    }
+
+    pub fn add_products(self, conn: &PgConnection, products: &[Product]) -> Result<()> {
+        insert_into(panel_content::table)
+            .values(&products
+                .iter()
+                .map(|product| {
+                    (
+                        panel_content::panel_id.eq(self.id),
+                        panel_content::product_id.eq(product.id),
+                    )
+                })
+                .collect::<Vec<_>>())
+            .execute(conn)?;
+
+        Ok(())
     }
 }
 
@@ -43,6 +65,11 @@ pub fn as_module(py: Python) -> PyModule {
     let _ = module.add(py, "remove", py_fn!(py, py_remove(name: &str)));
     let _ = module.add(py, "hide", py_fn!(py, py_hide(name: &str)));
     let _ = module.add(py, "show", py_fn!(py, py_show(name: &str)));
+    let _ = module.add(
+        py,
+        "add_products",
+        py_fn!(py, py_add_products(id: i32, product_ids: Vec<i32>)),
+    );
 
     module
 }
