@@ -63,12 +63,32 @@ pub fn py_add_products(py: Python, id: i32, product_ids: Vec<i32>) -> PyResult<P
     let conn = ::DB_POOL.get().unwrap();
 
     let panel = Panel::get_by_id(&*conn, id);
-    if let Ok(mut p) = panel {
+    if let Ok(p) = panel {
         if let Ok(products) = products::table
             .filter(products::id.eq_any(product_ids))
             .load(&*conn)
         {
             return Ok(PyBool::get(py, p.add_products(&*conn, &products).is_ok()));
+        }
+    }
+
+    Ok(py.False())
+}
+
+pub fn py_remove_products(py: Python, id: i32, product_ids: Vec<i32>) -> PyResult<PyBool> {
+    use schema::products;
+    let conn = ::DB_POOL.get().unwrap();
+
+    let panel = Panel::get_by_id(&*conn, id);
+    if let Ok(p) = panel {
+        if let Ok(products) = products::table
+            .filter(products::id.eq_any(product_ids))
+            .load(&*conn)
+        {
+            return Ok(PyBool::get(
+                py,
+                p.remove_products(&*conn, &products).is_ok(),
+            ));
         }
     }
 

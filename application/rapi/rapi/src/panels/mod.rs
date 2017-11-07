@@ -57,6 +57,23 @@ impl Panel {
 
         Ok(())
     }
+
+    pub fn remove_products(self, conn: &PgConnection, products: &[Product]) -> Result<()> {
+        delete(
+            panel_content::table.filter(
+                panel_content::panel_id.eq(self.id).and(
+                    panel_content::product_id.eq_any(
+                        products
+                            .iter()
+                            .map(|product| product.id)
+                            .collect::<Vec<_>>(),
+                    ),
+                ),
+            ),
+        ).execute(conn)?;
+
+        Ok(())
+    }
 }
 
 pub fn as_module(py: Python) -> PyModule {
@@ -69,6 +86,11 @@ pub fn as_module(py: Python) -> PyModule {
         py,
         "add_products",
         py_fn!(py, py_add_products(id: i32, product_ids: Vec<i32>)),
+    );
+    let _ = module.add(
+        py,
+        "remove_products",
+        py_fn!(py, py_remove_products(id: i32, product_ids: Vec<i32>)),
     );
 
     module

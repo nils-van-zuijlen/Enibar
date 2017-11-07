@@ -102,16 +102,7 @@ def delete_products(paid, products):
     :param int paid: Panel id
     :param int product: Product
     """
-    with Database() as database:
-        database.transaction()
-        cursor = QtSql.QSqlQuery(database)
-        cursor.prepare("DELETE FROM panel_content WHERE panel_id=:paid and \
-                product_id=:poid")
-        for product in products:
-            cursor.bindValue(":paid", paid)
-            cursor.bindValue(":poid", product)
-            cursor.exec_()
-        database.commit()
+    return rapi.panels.remove_products(paid, products)
 
 
 def get(**filter_):
