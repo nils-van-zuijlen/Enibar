@@ -22,7 +22,8 @@ macro_rules! dict {
         {
         let d = ::cpython::PyDict::new($py);
         $(d.set_item($py, $key, $value)?;)+
-        Ok(d)
+        let ret: ::cpython::PyResult<::cpython::PyDict> = Ok(d);
+        ret
         }
     }
 }

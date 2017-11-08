@@ -52,3 +52,6 @@ table! {
 
 joinable!(panel_content -> panels (panel_id));
 joinable!(panel_content -> products (product_id));
+joinable!(products -> categories (category));
+
+allow_tables_to_appear_in_same_query!(admins, categories, panel_content, panels, products,);

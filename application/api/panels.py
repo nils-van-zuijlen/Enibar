@@ -119,40 +119,12 @@ def get(**filter_):
         }
 
 
-def get_content(**kwargs):
+def get_content(panel_id):
     """ Get panel content
 
     :param kwargs: filter to apply
     """
-    with Cursor() as cursor:
-        filters = []
-        for key in kwargs:
-            filters.append("panel_content.{key}=:{key}".format(key=key))
-
-        request = """SELECT panel_content.panel_id AS panel_id,
-        products.id AS product_id,
-        products.name AS product_name,
-        products.percentage AS product_percentage,
-        categories.id AS category_id,
-        categories.name as category_name
-        FROM panel_content
-        JOIN products ON products.id=panel_content.product_id
-        JOIN categories ON categories.id=products.category
-        {} {}""".format("WHERE" * bool(len(filters)), " AND ".join(filters))
-
-        cursor.prepare(request)
-        for key, arg in kwargs.items():
-            cursor.bindValue(":{}".format(key), arg)
-        if cursor.exec_():
-            while cursor.next():
-                yield {
-                    'panel_id': cursor.value('panel_id'),
-                    'product_id': cursor.value('product_id'),
-                    'product_name': cursor.value('product_name'),
-                    'product_percentage': cursor.value('product_percentage'),
-                    'category_id': cursor.value('category_id'),
-                    'category_name': cursor.value('category_name'),
-                }
+    return rapi.panels.get_content(panel_id)
 
 
 get_unique = api.base.make_get_unique(get)

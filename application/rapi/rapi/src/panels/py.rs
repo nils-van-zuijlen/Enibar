@@ -1,4 +1,4 @@
-use cpython::{PyBool, PyObject, PyResult, Python, PythonObject, ToPyObject};
+use cpython::{PyBool, PyList, PyObject, PyResult, Python, PythonObject, ToPyObject};
 use panels::models::Panel;
 use model::Model;
 use diesel::*;
@@ -93,4 +93,28 @@ pub fn py_remove_products(py: Python, id: i32, product_ids: Vec<i32>) -> PyResul
     }
 
     Ok(py.False())
+}
+
+pub fn py_get_content(py: Python, id: i32) -> PyResult<PyList> {
+    let conn = ::DB_POOL.get().unwrap();
+
+    let mut content = vec![];
+    let panel = Panel::get_by_id(&*conn, id);
+    if let Ok(p) = panel {
+        for c in p.content(&*conn).unwrap() {
+            content.push(
+                dict!(py,
+               {"panel_id" => p.id,
+                "product_id" => c.product.id,
+                "product_name" => c.product.name,
+                "product_percentage" => c.product.percentage,
+                "category_id" => c.category.id,
+                "category_name" => c.category.name}
+            ).unwrap()
+                    .into_object(),
+            );
+        }
+    }
+
+    Ok(PyList::new(py, &content))
 }

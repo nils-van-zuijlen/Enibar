@@ -8,7 +8,7 @@ use errors::ErrorKind::*;
 use validator::Validate;
 use self::models::*;
 use self::py::*;
-use schema::{panel_content, panels};
+use schema::{categories, panel_content, panels, products};
 use products::models::Product;
 
 impl Panel {
@@ -74,6 +74,15 @@ impl Panel {
 
         Ok(())
     }
+
+    pub fn content(&self, conn: &PgConnection) -> Result<Vec<PanelItem>> {
+        panel_content::table
+            .inner_join(products::table.inner_join(categories::table))
+            .filter(panel_content::panel_id.eq(self.id))
+            .select((products::all_columns, categories::all_columns))
+            .load(conn)
+            .map_err(|e| e.into())
+    }
 }
 
 pub fn as_module(py: Python) -> PyModule {
@@ -92,6 +101,7 @@ pub fn as_module(py: Python) -> PyModule {
         "remove_products",
         py_fn!(py, py_remove_products(id: i32, product_ids: Vec<i32>)),
     );
+    let _ = module.add(py, "get_content", py_fn!(py, py_get_content(id: i32)));
 
     module
 }
