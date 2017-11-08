@@ -1,5 +1,6 @@
 use diesel::pg::Pg;
 use diesel::types::*;
+use diesel::Queryable;
 use diesel::expression::AsExpression;
 use diesel::expression::bound::Bound;
 use diesel::row::Row;
@@ -41,5 +42,12 @@ impl FromSqlRow<Numeric, Pg> for BigDecimal {
         Ok(BigDecimal(
             <bigdecimal::BigDecimal as FromSqlRow<Numeric, Pg>>::build_from_row(row)?,
         ))
+    }
+}
+
+impl Queryable<Numeric, Pg> for BigDecimal {
+    type Row = Self;
+    fn build(row: Self) -> Self {
+        row
     }
 }

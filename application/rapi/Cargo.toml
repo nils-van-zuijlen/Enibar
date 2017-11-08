@@ -8,3 +8,4 @@ members = [
 metadeps = { git = "https://github.com/Eijebong/metadeps.git", branch = "bump_error_chain" }
 diesel = { git = "https://github.com/diesel-rs/diesel.git" }
 diesel_infer_schema = { git = "https://github.com/diesel-rs/diesel.git" }
+diesel_codegen = { git = "https://github.com/diesel-rs/diesel.git" }
