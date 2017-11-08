@@ -6,7 +6,7 @@ CREATE TABLE admins(
 	manage_products BOOLEAN DEFAULT FALSE NOT NULL
 );
 
-INSERT INTO admins(login, password, manage_notes, manage_users, manage_products) VALUES('admin', '$2a$12$grLadAuopGdXxA7wEIehlO4BpMHTpJFweL3zJAHGaYFOIw1Gp.U5O', TRUE, TRUE, TRUE);
+INSERT INTO admins(login, password, manage_notes, manage_users, manage_products) VALUES('admin', '$2a$04$vRE564ijZKQIm9RHiflh1u38ONpZNDc6UcFs9bJpVOV3xzUCqUvEa', TRUE, TRUE, TRUE);
 CREATE TYPE promo AS ENUM('1A', '2A', '3A', '3S', '4A', '5A', 'Esiab', 'Externe', 'Ancien', 'Prof');
 
 CREATE TABLE notes(
