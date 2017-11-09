@@ -36,7 +36,7 @@ pub fn as_module(py: Python) -> PyModule {
     let _ = module.add(
         py,
         "set_percentage",
-        py_fn!(py, py_set_percentage(id: i32, percentage: f64)),
+        py_fn!(py, py_set_percentage(id: i32, percentage: String)),
     );
 
     module

@@ -47,7 +47,7 @@ class ProductsTest(basetest.BaseTest):
     def test_percentage(self):
         pid = products.add("Banane", category_id=self.cat_eat, percentage=2.5)
         self.assertEqual(list(products.get()), [{"id": pid, "category": self.cat_eat, "name": "Banane", "percentage": 2.5}])
-        self.assertTrue(products.set_percentage(pid, 5))
+        self.assertTrue(products.set_percentage(pid, "5"))
         self.assertEqual(list(products.get()), [{"id": pid, "category": self.cat_eat, "name": "Banane", "percentage": 5.0}])
 
     def test_remove(self):
