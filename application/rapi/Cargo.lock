@@ -119,7 +119,7 @@ dependencies = [
 [[package]]
 name = "diesel"
 version = "0.16.0"
-source = "git+https://github.com/diesel-rs/diesel.git#7dc978bb5a70704fe7ae9dc2cace70fa81b585f4"
+source = "git+https://github.com/diesel-rs/diesel.git#07f80c3a0d07daa26efff3166fbf0297dc0f0a7b"
 dependencies = [
  "bigdecimal 0.0.10 (registry+https://github.com/rust-lang/crates.io-index)",
  "bitflags 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -134,7 +134,7 @@ dependencies = [
 [[package]]
 name = "diesel_codegen"
 version = "0.16.0"
-source = "git+https://github.com/diesel-rs/diesel.git#7dc978bb5a70704fe7ae9dc2cace70fa81b585f4"
+source = "git+https://github.com/diesel-rs/diesel.git#07f80c3a0d07daa26efff3166fbf0297dc0f0a7b"
 dependencies = [
  "diesel 0.16.0 (git+https://github.com/diesel-rs/diesel.git)",
  "diesel_infer_schema 0.16.0 (git+https://github.com/diesel-rs/diesel.git)",
@@ -145,7 +145,7 @@ dependencies = [
 [[package]]
 name = "diesel_infer_schema"
 version = "0.16.0"
-source = "git+https://github.com/diesel-rs/diesel.git#7dc978bb5a70704fe7ae9dc2cace70fa81b585f4"
+source = "git+https://github.com/diesel-rs/diesel.git#07f80c3a0d07daa26efff3166fbf0297dc0f0a7b"
 dependencies = [
  "diesel 0.16.0 (git+https://github.com/diesel-rs/diesel.git)",
 ]
