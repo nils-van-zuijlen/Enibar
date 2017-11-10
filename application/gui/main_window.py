@@ -278,16 +278,16 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.red_since_label.setHidden(True)
         self.red_since.setHidden(True)
-        if infos['note'] < 0:
-            self.note_box.setStyleSheet("background-color: red;")
-            self.red_since.setText(infos['overdraft_date'].toString("dd/MM/yyyy"))
-            self.red_since_label.setHidden(False)
-            self.red_since.setHidden(False)
         if time.time() - infos['birthdate'] < 18 * 365 * 24 * 3600:
             if infos['note'] < 0:
                 self.note_box.setStyleSheet("background-color: orange;")
             else:
                 self.note_box.setStyleSheet("background-color: pink;")
+        elif infos['note'] < 0:
+            self.note_box.setStyleSheet("background-color: red;")
+            self.red_since.setText(infos['overdraft_date'].toString("dd/MM/yyyy"))
+            self.red_since_label.setHidden(False)
+            self.red_since.setHidden(False)
         else:
             self.note_box.setStyleSheet("background-color: none;")
 
