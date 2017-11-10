@@ -36,6 +36,7 @@ class NotesList(QtWidgets.QListWidget):
         self.custom_filter = lambda x: True
         self.minors_color = QtGui.QColor(255, 192, 203)
         self.overdraft_color = QtCore.Qt.red
+        self.minors_overdraft = QtGui.QColor(0xFF, 0xA5, 0)
         self.search_text = ""
         self.nb_shown = 0
 
@@ -46,10 +47,13 @@ class NotesList(QtWidgets.QListWidget):
         current_time = time.time()
         for note in notes_list:
             widget = QtWidgets.QListWidgetItem(note["nickname"], self)
-            if note['note'] < 0:
+            if current_time - note["birthdate"] < 18 * 365 * 24 * 3600:
+                if note['note'] < 0:
+                    widget.setBackground(self.minors_overdraft)
+                else:
+                    widget.setBackground(self.minors_color)
+            elif note['note'] < 0:
                 widget.setBackground(self.overdraft_color)
-            elif current_time - note["birthdate"] < 18 * 365 * 24 * 3600:
-                widget.setBackground(self.minors_color)
 
             if not note['nickname'].lower().startswith(self.search_text):
                 widget.setHidden(True)
