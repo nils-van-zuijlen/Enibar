@@ -79,11 +79,11 @@ class FilteredNotesListWidget(QtWidgets.QWidget):
         QtWidgets.QLineEdit.keyPressEvent(self.filter_input, event)
         text = self.filter_input.text()
         try:
-            if self.filter_combobox.currentIndex() == 2:
+            if self.filter_combobox.currentIndex() == 3:
                 self.note_list.current_filter = lambda x: x['note'] >\
                     float(text) and x['hidden'] == 0
                 self.note_list.rebuild(api.notes.get(lambda x: self.note_list.custom_filter(x) and self.note_list.current_filter(x)))
-            elif self.filter_combobox.currentIndex() == 3:
+            elif self.filter_combobox.currentIndex() == 4:
                 self.note_list.current_filter = lambda x: x['note'] <\
                     float(text) and x['hidden'] == 0
                 self.note_list.rebuild(api.notes.get(lambda x: self.note_list.custom_filter(x) and self.note_list.current_filter(x)))
