@@ -37,6 +37,17 @@ class TransactionsTest(basetest.BaseTest):
             True,
             True
         )
+        notes.add("test2",
+            "test2",
+            "test2",
+            "test2@pouette.com",
+            "0600000002",
+            '12/12/2002',
+            '2A',
+            '',
+            True,
+            True
+        )
 
     def test_log_transaction(self):
         """ Testing log_transaction
@@ -86,9 +97,9 @@ class TransactionsTest(basetest.BaseTest):
               'category': 'b',
               'price_name': 'c'},
              {'product': 'f',
-              'lastname': '',
+              'lastname': 'test2',
               'quantity': 2,
-              'firstname': '',
+              'firstname': 'test2',
               'id': 3,
               'note': 'test2',
               'price': 5.0,
@@ -139,9 +150,9 @@ class TransactionsTest(basetest.BaseTest):
               'category': 'b',
               'price_name': 'c'},
              {'product': 'f',
-              'lastname': '',
+              'lastname': 'test2',
               'quantity': 2,
-              'firstname': '',
+              'firstname': 'test2',
               'id': 3,
               'note': 'test2',
               'price': 5.0,
@@ -154,39 +165,39 @@ class TransactionsTest(basetest.BaseTest):
         """ Testing rollback_transaction
         """
         self.assertFalse(transactions.rollback_transaction(5))
-        transactions.log_transaction(
+        self.assertTrue(transactions.log_transaction(
             "test1",
             "a",
             "b",
             "c",
             "1",
             -1
-        )
-        transactions.log_transaction(
+        ))
+        self.assertTrue(transactions.log_transaction(
             "test1",
             "b",
             "d",
             "c",
             5,
             -5
-        )
-        transactions.log_transaction(
+        ))
+        self.assertTrue(transactions.log_transaction(
             "test2",
             "e",
             "f",
             "g",
             "2",
             5
-        )
-        transactions.log_transaction(
+        ))
+        self.assertTrue(transactions.log_transaction(
             "test2",
             "e",
             "f",
             "g",
             1,
             5
-        )
-        transactions.log_transaction(
+        ))
+        self.assertTrue(transactions.log_transaction(
             "test1",
             "e",
             "f",
@@ -194,7 +205,7 @@ class TransactionsTest(basetest.BaseTest):
             1,
             5,
             False
-        )
+        ))
 
         self.assertEqual(self.count_transactions(), 5)
         self.assertTrue(transactions.rollback_transaction(1))
@@ -215,11 +226,14 @@ class TransactionsTest(basetest.BaseTest):
         self.assertEqual(self.count_transactions(), 4)
         self.assertTrue(transactions.rollback_transaction(2, full=True))
         self.assertEqual(self.count_transactions(), 3)
-        self.assertFalse(transactions.rollback_transaction(3))
-        self.assertEqual(self.count_transactions(), 3)
+        notes.remove(["test2"])
+        notes.rebuild_cache()
+        self.assertEqual(self.count_transactions(), 4)
         self.assertFalse(transactions.rollback_transaction(4))
-        self.assertEqual(self.count_transactions(), 3)
+        self.assertEqual(self.count_transactions(), 4)
         self.assertFalse(transactions.rollback_transaction(5))
+        self.assertEqual(self.count_transactions(), 4)
+        self.assertFalse(transactions.rollback_transaction(6))
 
     def test_get_grouped_entries(self):
         """ Testing get_grouped_entries
@@ -248,7 +262,7 @@ class TransactionsTest(basetest.BaseTest):
             "2",
             5
         )
-        self.assertEqual(list(transactions.get_grouped_entries("note", {'lastname': ""})), ['test2'])
+        self.assertEqual(list(transactions.get_grouped_entries("note", {'lastname': "test2"})), ['test2'])
         self.assertEqual(list(transactions.get_grouped_entries("note", {})), ['test1', 'test2'])
 
     def test_get_gt(self):

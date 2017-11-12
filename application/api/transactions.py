@@ -51,8 +51,7 @@ def log_transaction(nickname, category, product, price_name, quantity, price,
             firstname = notes[0]['firstname']
             note_id = notes[0]['id']
         else:
-            lastname, firstname = "", ""
-            note_id = None
+            return False
 
         cursor.prepare("""INSERT INTO transactions(date, note, category,
             product, price_name,quantity, price, firstname, lastname,
@@ -108,10 +107,7 @@ def log_transactions(transactions):
                 firstname = note['firstname']
                 note_id = note['id']
             else:
-                # Nickname is a fake one, we must not fill lastname and
-                # firstname name
-                lastname, firstname = "", ""
-                note_id = None
+                return False
 
             cursor.bindValue(':date', now)
             cursor.bindValue(':note', trans['note'])
