@@ -1,53 +1,45 @@
 use diesel::pg::Pg;
 use diesel::types::*;
-use diesel::Queryable;
-use diesel::expression::AsExpression;
-use diesel::expression::bound::Bound;
 use diesel::row::Row;
 use bigdecimal;
 use std::ops::Deref;
 use std::error::Error;
 use std::io::Write;
 
-#[derive(Debug, Clone)]
-pub struct BigDecimal(pub bigdecimal::BigDecimal);
 
-impl Deref for BigDecimal {
-    type Target = bigdecimal::BigDecimal;
+macro_rules! diesel_wrapper {
+    ($sql_type: ident -> $rust_type: ident ($real_type: path)) => {
+        #[derive(Debug, Clone)]
+        pub struct $rust_type(pub $real_type);
 
-    fn deref(&self) -> &Self::Target {
-        &self.0
+        expression_impls!($sql_type -> $rust_type);
+        queryable_impls!($sql_type -> $rust_type);
+
+        impl ToSql<$sql_type, Pg> for $rust_type {
+            fn to_sql<W: Write>(
+                &self,
+                out: &mut ToSqlOutput<W, Pg>,
+            ) -> Result<IsNull, Box<Error + Send + Sync>> {
+                <$real_type as ToSql<$sql_type, Pg>>::to_sql(&self.0, out)
+            }
+        }
+
+        impl FromSqlRow<$sql_type, Pg> for $rust_type {
+            fn build_from_row<T: Row<Pg>>(row: &mut T) -> Result<Self, Box<Error + Send + Sync>> {
+                Ok($rust_type(
+                    <$real_type as FromSqlRow<$sql_type, Pg>>::build_from_row(row)?,
+                ))
+            }
+        }
+
+        impl Deref for $rust_type {
+            type Target = $real_type;
+
+            fn deref(&self) -> &Self::Target {
+                &self.0
+            }
+        }
     }
 }
 
-impl<'a> AsExpression<Numeric> for &'a BigDecimal {
-    type Expression = Bound<Numeric, &'a BigDecimal>;
-
-    fn as_expression(self) -> Self::Expression {
-        Bound::new(self)
-    }
-}
-
-impl ToSql<Numeric, Pg> for BigDecimal {
-    fn to_sql<W: Write>(
-        &self,
-        out: &mut ToSqlOutput<W, Pg>,
-    ) -> Result<IsNull, Box<Error + Send + Sync>> {
-        <bigdecimal::BigDecimal as ToSql<Numeric, Pg>>::to_sql(&self.0, out)
-    }
-}
-
-impl FromSqlRow<Numeric, Pg> for BigDecimal {
-    fn build_from_row<T: Row<Pg>>(row: &mut T) -> Result<Self, Box<Error + Send + Sync>> {
-        Ok(BigDecimal(
-            <bigdecimal::BigDecimal as FromSqlRow<Numeric, Pg>>::build_from_row(row)?,
-        ))
-    }
-}
-
-impl Queryable<Numeric, Pg> for BigDecimal {
-    type Row = Self;
-    fn build(row: Self) -> Self {
-        row
-    }
-}
+diesel_wrapper!(Numeric -> BigDecimal(bigdecimal::BigDecimal));
