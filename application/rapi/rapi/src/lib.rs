@@ -7,8 +7,6 @@ extern crate cpython;
 #[macro_use]
 extern crate diesel;
 #[macro_use]
-extern crate diesel_codegen;
-#[macro_use]
 extern crate error_chain;
 #[macro_use]
 extern crate lazy_static;
@@ -53,7 +51,6 @@ pub(crate) use diesel_helpers::*;
 
 lazy_static! {
     pub static ref DB_POOL: r2d2::Pool<ConnectionManager<PgConnection>> = {
-        let config = r2d2::Config::default();
         let manager = ConnectionManager::<PgConnection>::new(
             match env::var("DATABASE_URL") {
                 Ok(val) => val,
@@ -74,7 +71,7 @@ lazy_static! {
             }
         );
 
-        r2d2::Pool::new(config, manager).expect("Failed to connect to psql")
+        r2d2::Pool::builder().build(manager).expect("Failed to connect to psql")
     };
 }
 
