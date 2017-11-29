@@ -8,14 +8,15 @@ RUN pacman -Syq --noconfirm \
     postgresql-libs \
     python \
     python-pip \
-    python-pyqt5 \
     qt5 \
     redis \
     rustup \
     xorg-server-xvfb
 
 RUN rustup override set nightly
+
 RUN pip install \
+    PyQt5 \
     Quamash==0.5.5 \
     aiohttp==2.2.5 \
     aioredis==0.3.3 \
