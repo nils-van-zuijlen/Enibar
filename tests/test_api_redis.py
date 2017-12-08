@@ -128,7 +128,7 @@ class RedisTest(basetest.BaseTest):
 
     @give_random_key
     def test_ping_redis(self, key):
-        api.redis.PING_TIME = 0.5  # We don't want tests to take forever...
+        api.redis.PING_TIME = 0.2  # We don't want tests to take forever...
         self.assertTrue(api.redis.lock(key, 1))
 
         async def wait_2s():

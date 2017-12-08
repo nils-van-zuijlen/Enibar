@@ -17,19 +17,19 @@ async def send_notes(notes):
     for note in api.notes.get(lambda n: n['nickname'] in notes):
         req = {"token": settings.AUTH_SDE_TOKEN, "type": "note", "id": note["id"], "nickname": note["nickname"],
             "mail": note["mail"], "note": note["note"]}
-        async with api.redis.connection.get() as redis:
+        with await api.redis.connection as redis:
             await redis.rpush(QUEUE_NAME, json.dumps(req))
 
 
 async def send_note_deletion(notes_id):
     for note_id in notes_id:
         req = {"token": settings.AUTH_SDE_TOKEN, "type": "note-delete", "id": note_id}
-        async with api.redis.connection.get() as redis:
+        with await api.redis.connection as redis:
             await redis.rpush(QUEUE_NAME, json.dumps(req))
 
 
 async def send_history_lines(lines):
-    async with api.redis.connection.get() as redis:
+    with await api.redis.connection as redis:
         for line in lines:
             try:
                 line.pop("deletable")
@@ -43,12 +43,12 @@ async def send_history_lines(lines):
 async def send_history_deletion(lines_id):
     for line_id in lines_id:
         req = {"token": settings.AUTH_SDE_TOKEN, "type": "history-delete", "id": line_id}
-        async with api.redis.connection.get() as redis:
+        with await api.redis.connection as redis:
             await redis.rpush(QUEUE_NAME, json.dumps(req))
 
 
 async def process_queue():
-    async with api.redis.connection.get() as redis:
+    with await api.redis.connection as redis:
         while True:
             try:
                 item = await redis.blpop(QUEUE_NAME)

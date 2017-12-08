@@ -114,7 +114,7 @@ class BaseTest(unittest.TestCase):
         self._reset_db()
 
     async def reset_redis(self):
-        async with api.redis.connection.get() as redis:
+        with await api.redis.connection as redis:
             res = await redis.delete(api.sde.QUEUE_NAME)
 
     def _reset_db(self):

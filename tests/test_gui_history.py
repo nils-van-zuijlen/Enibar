@@ -102,7 +102,7 @@ class HistoryWindowTest(basetest.BaseGuiTest):
         """ Testing deleting one item of history
         """
         async def test_func():
-            async with api.redis.connection.get() as redis:
+            with await api.redis.connection as redis:
                 redis.delete(api.sde.QUEUE_NAME)
 
                 item = self.win.transaction_list.topLevelItem(1)
@@ -111,26 +111,28 @@ class HistoryWindowTest(basetest.BaseGuiTest):
                 self.win.delete_button.click()
 
                 async def retest_func():
-                    res = await redis.blpop(api.sde.QUEUE_NAME)
-                    self.assertEqual(json.loads(res[1].decode()), {'token': 'changeme', 'type': 'history', 'price': -2.5, 'id': 2, 'quantity': 1})
-                    redis.delete(api.sde.QUEUE_NAME)
+                    with await api.redis.connection as redis:
+                        res = await redis.blpop(api.sde.QUEUE_NAME)
+                        self.assertEqual(json.loads(res[1].decode()), {'token': 'changeme', 'type': 'history', 'price': -2.5, 'id': 2, 'quantity': 1})
+                        redis.delete(api.sde.QUEUE_NAME)
 
-                    d = self.now.strftime("%Y/%m/%d %H:%M:%S")
-                    self.assertEqual(self.get_tree(self.win.transaction_list),
-                        [{(d, 'test1', 'a', 'b', 'c', '1', '-', '1.0', '1'): []}, {(d, 'test1', 'b', 'd', 'c', '1', '-', '2.5', '2'): []}, {(d, 'test2', 'e', 'f', 'g', '2', '5.0', '-', '3'): []}]
-                    )
-                    QtCore.QTimer.singleShot(100, self.connect)
-                    item = self.win.transaction_list.topLevelItem(1)
-                    self.win.transaction_list.setCurrentItem(item)
-                    self.win.delete_button.click()
+                        d = self.now.strftime("%Y/%m/%d %H:%M:%S")
+                        self.assertEqual(self.get_tree(self.win.transaction_list),
+                            [{(d, 'test1', 'a', 'b', 'c', '1', '-', '1.0', '1'): []}, {(d, 'test1', 'b', 'd', 'c', '1', '-', '2.5', '2'): []}, {(d, 'test2', 'e', 'f', 'g', '2', '5.0', '-', '3'): []}]
+                        )
+                        QtCore.QTimer.singleShot(100, self.connect)
+                        item = self.win.transaction_list.topLevelItem(1)
+                        self.win.transaction_list.setCurrentItem(item)
+                        self.win.delete_button.click()
 
                     async def final_func():
                         d = self.now.strftime("%Y/%m/%d %H:%M:%S")
-                        res = await redis.blpop(api.sde.QUEUE_NAME)
-                        self.assertEqual(json.loads(res[1].decode()), {'token': 'changeme', 'type': 'history-delete', 'id': 2})
-                        self.assertEqual(self.get_tree(self.win.transaction_list),
-                            [{(d, 'test1', 'a', 'b', 'c', '1', '-', '1.0', '1'): []}, {(d, 'test2', 'e', 'f', 'g', '2', '5.0', '-', '3'): []}]
-                        )
+                        with await api.redis.connection as redis:
+                            res = await redis.blpop(api.sde.QUEUE_NAME)
+                            self.assertEqual(json.loads(res[1].decode()), {'token': 'changeme', 'type': 'history-delete', 'id': 2})
+                            self.assertEqual(self.get_tree(self.win.transaction_list),
+                                [{(d, 'test1', 'a', 'b', 'c', '1', '-', '1.0', '1'): []}, {(d, 'test2', 'e', 'f', 'g', '2', '5.0', '-', '3'): []}]
+                            )
                         self.app.exit()
                     task = asyncio.ensure_future(final_func())
                     QtCore.QTimer.singleShot(1000, lambda: self.loop.run_until_complete(task))
@@ -146,13 +148,14 @@ class HistoryWindowTest(basetest.BaseGuiTest):
         async def test_func():
             async def final_func():
                 d = self.now.strftime("%Y/%m/%d %H:%M:%S")
-                res = await redis.blpop(api.sde.QUEUE_NAME)
-                self.assertEqual(json.loads(res[1].decode()), {'token': 'changeme', 'type': 'history-delete', 'id': 2})
-                self.assertEqual(self.get_tree(self.win.transaction_list),
-                    [{(d, 'test1', 'a', 'b', 'c', '1', '-', '1.0', '1'): []}, {(d, 'test2', 'e', 'f', 'g', '2', '5.0', '-', '3'): []}]
-                )
+                with await api.redis.connection as redis:
+                    res = await redis.blpop(api.sde.QUEUE_NAME)
+                    self.assertEqual(json.loads(res[1].decode()), {'token': 'changeme', 'type': 'history-delete', 'id': 2})
+                    self.assertEqual(self.get_tree(self.win.transaction_list),
+                        [{(d, 'test1', 'a', 'b', 'c', '1', '-', '1.0', '1'): []}, {(d, 'test2', 'e', 'f', 'g', '2', '5.0', '-', '3'): []}]
+                    )
                 self.app.exit()
-            async with api.redis.connection.get() as redis:
+            with await api.redis.connection as redis:
                 item = self.win.transaction_list.topLevelItem(1)
                 self.win.transaction_list.setCurrentItem(item)
                 QtCore.QTimer.singleShot(100, self.connect)

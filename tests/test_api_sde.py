@@ -55,7 +55,7 @@ class ApiSdeTests(basetest.BaseTest):
         """ Testing adding a note to the queue
         """
         async def func_test():
-            async with api.redis.connection.get() as redis:
+            with await api.redis.connection as redis:
                 await redis.delete(api.sde.QUEUE_NAME)
                 await api.sde.send_notes(["test1", "test2"])
 
@@ -73,7 +73,7 @@ class ApiSdeTests(basetest.BaseTest):
         """ Testing deleting a note from the queue
         """
         async def func_test():
-            async with api.redis.connection.get() as redis:
+            with await api.redis.connection as redis:
                 await redis.delete(api.sde.QUEUE_NAME)
                 await api.sde.send_note_deletion([1, 2])
 
@@ -91,7 +91,7 @@ class ApiSdeTests(basetest.BaseTest):
         """ Testing adding an history line to the queue
         """
         async def func_test():
-            async with api.redis.connection.get() as redis:
+            with await api.redis.connection as redis:
                 await redis.delete(api.sde.QUEUE_NAME)
                 await api.sde.send_history_lines(
                     [{"price_name": "test", "note": "test1", "category": "test", "price": -0.8, "quantity": 2, "product": "test", "id": 1},
@@ -111,7 +111,7 @@ class ApiSdeTests(basetest.BaseTest):
         """ Testing deleting an history line from the queue
         """
         async def func_test():
-            async with api.redis.connection.get() as redis:
+            with await api.redis.connection as redis:
                 await redis.delete(api.sde.QUEUE_NAME)
                 await api.sde.send_history_deletion([1, 2])
 
@@ -176,7 +176,7 @@ class ApiSdeTests(basetest.BaseTest):
             task = asyncio.ensure_future(api.sde.process_queue())
             await asyncio.sleep(1)
             task.cancel()
-            async with api.redis.connection.get() as redis:
+            with await api.redis.connection as redis:
                 res = await redis.lpop(api.sde.QUEUE_NAME)
                 self.assertIsNone(res)
         coro = self.loop.create_server(MockSdeServer, '127.0.0.1', 52412)
@@ -194,7 +194,7 @@ class ApiSdeTests(basetest.BaseTest):
             task = asyncio.ensure_future(api.sde.process_queue())
             await asyncio.sleep(1)
             task.cancel()
-            async with api.redis.connection.get() as redis:
+            with await api.redis.connection as redis:
                 res = await redis.lpop(api.sde.QUEUE_NAME)
                 self.assertEqual(json.loads(res.decode()), {"token": "changeme", "id": 1, "type": "note-delete"})
         coro = self.loop.create_server(MockBadSdeServer, '127.0.0.1', 52412)
