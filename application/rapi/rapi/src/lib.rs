@@ -2,6 +2,7 @@
 
 extern crate bcrypt;
 extern crate bigdecimal;
+extern crate chrono;
 #[macro_use]
 extern crate cpython;
 #[macro_use]
@@ -34,6 +35,7 @@ mod note_categories;
 mod panels;
 mod products;
 mod diesel_helpers;
+mod notes;
 
 pub use model::Model;
 
@@ -82,5 +84,6 @@ py_module_initializer!(rapi, initrapi, PyInit_rapi, |py, m| {
     m.add(py, "note_categories", note_categories::as_module(py))?;
     m.add(py, "panels", panels::as_module(py))?;
     m.add(py, "products", products::as_module(py))?;
+    m.add(py, "notes", notes::as_module(py))?;
     Ok(())
 });

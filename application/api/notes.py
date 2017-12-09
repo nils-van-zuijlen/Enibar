@@ -31,6 +31,7 @@ import os.path
 import settings
 import shutil
 import tempfile
+import rapi
 
 
 NOTE_FIELDS = ['id', 'nickname', 'lastname', 'firstname', 'mail', 'tel',
@@ -167,25 +168,6 @@ def rebuild_note_cache(nick):
                 NOTES_CACHE[cursor.value('nickname')]['hidden'] |= cursor.value('hidden')
 
 
-def _request_multiple_nicks(nicks, request, *, do_not=False):
-    """ Execute the request on multiple notes
-
-    :param list nicks: Nicknames of the notes on wich the request\
-    will be executed
-    :param str request: The request
-    """
-
-    with Database() as database:
-        database.transaction()
-        cursor = QtSql.QSqlQuery(database)
-        cursor.prepare(request)
-        for nick in nicks:
-            cursor.bindValue(':nick', nick)
-            cursor.exec_()
-        value = database.commit()
-    return value
-
-
 def change_values(nick, *, do_not=False, **kwargs):
     """ Change the value of the columns for the note with the nickname
         `nickname`
@@ -302,7 +284,7 @@ def remove(nicks):
         del NOTES_CACHE[nick]
 
     api.redis.send_message("enibar-delete", nicks)
-    _request_multiple_nicks(nicks, "DELETE FROM notes WHERE nickname=:nick")
+    rapi.notes.remove(nicks)
     api.transactions.log_transactions(trs)
 
 

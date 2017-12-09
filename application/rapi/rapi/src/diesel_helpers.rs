@@ -2,6 +2,7 @@ use diesel::pg::Pg;
 use diesel::types::*;
 use diesel::row::Row;
 use bigdecimal;
+use chrono;
 use std::ops::Deref;
 use std::error::Error;
 use std::io::Write;
@@ -43,3 +44,4 @@ macro_rules! diesel_wrapper {
 }
 
 diesel_wrapper!(Numeric -> BigDecimal(bigdecimal::BigDecimal));
+diesel_wrapper!(Date -> NaiveDate(chrono::NaiveDate));
