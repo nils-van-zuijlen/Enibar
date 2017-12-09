@@ -62,12 +62,6 @@ impl User {
             .first::<User>(conn)
             .map_err(|e| e.into())
     }
-
-    /// Removes the user
-    pub fn remove(self, conn: &PgConnection) -> Result<()> {
-        delete(&self).execute(conn)?;
-        Ok(())
-    }
 }
 
 pub fn as_module(py: Python) -> PyModule {

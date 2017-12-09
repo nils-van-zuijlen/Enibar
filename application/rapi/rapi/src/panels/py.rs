@@ -18,7 +18,7 @@ pub fn py_remove(py: Python, name: &str) -> PyResult<PyBool> {
 
     let panel = Panel::get(&*conn, name);
     if let Ok(p) = panel {
-        if p.delete(&*conn).is_ok() {
+        if p.remove(&*conn).is_ok() {
             return Ok(py.True());
         }
     }

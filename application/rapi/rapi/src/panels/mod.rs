@@ -35,13 +35,6 @@ impl Panel {
         panels::table.find(id).first(conn).map_err(|e| e.into())
     }
 
-    pub fn delete(self, conn: &PgConnection) -> Result<()> {
-        delete(panels::table.find(self.id))
-            .execute(conn)
-            .map(|_| ())
-            .map_err(|e| e.into())
-    }
-
     pub fn add_products(self, conn: &PgConnection, products: &[Product]) -> Result<()> {
         insert_into(panel_content::table)
             .values(&products

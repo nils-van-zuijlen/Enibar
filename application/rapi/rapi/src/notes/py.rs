@@ -11,7 +11,7 @@ pub fn py_remove(py: Python, names: Vec<String>) -> PyResult<PyBool> {
         for name in &names {
             let note = Note::get(&*conn, name);
             if let Ok(n) = note {
-                n.delete(&conn)?;
+                n.remove(&conn)?;
             }
         }
 

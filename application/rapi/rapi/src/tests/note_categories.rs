@@ -27,14 +27,14 @@ fn remove_note_category() {
     let conn = connection();
     let category = NoteCategory::add(&conn, "coucou").unwrap();
     assert!(NoteCategory::get(&conn, "coucou").is_ok());
-    assert!(category.delete(&conn).is_ok());
+    assert!(category.remove(&conn).is_ok());
     assert!(NoteCategory::get(&conn, "coucou").is_err());
 
     let mut category = NoteCategory::add(&conn, "coucou").unwrap();
     category.protected = true;
     let category = category.save(&conn).unwrap();
     assert!(NoteCategory::get(&conn, "coucou").is_ok());
-    assert!(category.delete(&conn).is_ok());
+    assert!(category.remove(&conn).is_ok());
     assert!(NoteCategory::get(&conn, "coucou").is_ok());
 }
 

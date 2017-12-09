@@ -30,7 +30,7 @@ impl NoteCategory {
             .map_err(|e| e.into())
     }
 
-    pub fn delete(self, conn: &PgConnection) -> Result<()> {
+    pub fn remove(self, conn: &PgConnection) -> Result<()> {
         delete(
             note_categories::table.filter(
                 note_categories::id

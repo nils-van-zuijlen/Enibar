@@ -12,7 +12,7 @@ pub fn py_remove(py: Python, id: i32) -> PyResult<PyBool> {
 
     let product = Product::get_by_id(&*conn, id);
     if let Ok(p) = product {
-        if p.delete(&conn).is_ok() {
+        if p.remove(&conn).is_ok() {
             return Ok(py.True());
         }
     }

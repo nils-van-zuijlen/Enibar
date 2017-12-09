@@ -8,4 +8,5 @@ where
 {
     fn save(self, conn: &PgConnection) -> Result<Self>;
     fn all(conn: &PgConnection) -> Result<Vec<Self>>;
+    fn remove(self, conn: &PgConnection) -> Result<()>;
 }

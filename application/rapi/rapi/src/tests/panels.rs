@@ -24,7 +24,7 @@ fn remove_panel() {
     let conn = connection();
     let panel = Panel::add(&conn, "coucou").unwrap();
     assert!(Panel::get(&conn, "coucou").is_ok());
-    assert!(panel.delete(&conn).is_ok());
+    assert!(panel.remove(&conn).is_ok());
     assert!(Panel::get(&conn, "coucou").is_err());
 }
 

@@ -26,7 +26,7 @@ fn remove_category() {
     let conn = connection();
     let category = Category::add(&conn, "coucou").unwrap();
     assert!(Category::get(&conn, "coucou").is_ok());
-    assert!(category.delete(&conn).is_ok());
+    assert!(category.remove(&conn).is_ok());
     assert!(Category::get(&conn, "coucou").is_err());
 }
 

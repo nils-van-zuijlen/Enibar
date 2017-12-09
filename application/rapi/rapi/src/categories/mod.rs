@@ -36,13 +36,6 @@ impl Category {
     fn get_by_id(conn: &PgConnection, id: i32) -> Result<Self> {
         categories::table.find(id).first(conn).map_err(|e| e.into())
     }
-
-    pub fn delete(self, conn: &PgConnection) -> Result<()> {
-        delete(categories::table.find(self.id))
-            .execute(conn)
-            .map(|_| ())
-            .map_err(|e| e.into())
-    }
 }
 
 pub fn as_module(py: Python) -> PyModule {

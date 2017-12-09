@@ -22,7 +22,7 @@ pub fn py_remove(py: Python, names: Vec<String>) -> PyResult<PyBool> {
         for name in &names {
             let category = NoteCategory::get(&*conn, name);
             if let Ok(c) = category {
-                c.delete(&conn)?;
+                c.remove(&conn)?;
             }
         }
 

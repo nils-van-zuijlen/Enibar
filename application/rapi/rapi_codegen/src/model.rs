@@ -52,6 +52,14 @@ pub fn derive_model(item: syn::DeriveInput) -> Tokens {
                 )
                 .map_err(|e| e.into())
             }
+
+            fn remove(self, conn: &::diesel::PgConnection) -> ::errors::Result<()> {
+                ::diesel::ExecuteDsl::execute(
+                    ::diesel::delete(&self),
+                    conn
+                )?;
+                Ok(())
+            }
         }
     )
 }

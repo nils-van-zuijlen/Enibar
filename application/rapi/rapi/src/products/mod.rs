@@ -10,13 +10,6 @@ use diesel::*;
 use errors::*;
 
 impl Product {
-    pub fn delete(self, conn: &PgConnection) -> Result<()> {
-        delete(products::table.find(self.id))
-            .execute(conn)
-            .map(|_| ())
-            .map_err(|e| e.into())
-    }
-
     pub fn get(conn: &PgConnection, name: &str) -> Result<Self> {
         products::table
             .filter(products::name.eq(name))

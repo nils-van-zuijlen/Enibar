@@ -17,7 +17,7 @@ pub fn py_remove(py: Python, name: &str) -> PyResult<PyBool> {
 
     let category = Category::get(&*conn, name);
     if let Ok(c) = category {
-        if c.delete(&*conn).is_ok() {
+        if c.remove(&*conn).is_ok() {
             return Ok(py.True());
         }
     }

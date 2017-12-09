@@ -13,11 +13,6 @@ impl Note {
     pub fn get(conn: &PgConnection, name: &str) -> Result<Self> {
         notes::table.filter(notes::nickname.eq(name)).first(conn).map_err(|e| e.into())
     }
-
-    pub fn delete(self, conn: &PgConnection) -> Result<()> {
-        diesel::delete(&self).execute(conn)?;
-        Ok(())
-    }
 }
 
 pub fn as_module(py: Python) -> PyModule {
