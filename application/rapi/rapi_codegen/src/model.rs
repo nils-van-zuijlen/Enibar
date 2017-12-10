@@ -35,7 +35,7 @@ pub fn derive_model(item: syn::DeriveInput) -> Tokens {
                     return Err(::errors::Error::from(::errors::ErrorKind::ValidationError(e)))
                 }
 
-                ::diesel::LoadDsl::get_result(
+                ::diesel::RunQueryDsl::get_result(
                     ::diesel::update(
                         &self
                     )
@@ -46,7 +46,7 @@ pub fn derive_model(item: syn::DeriveInput) -> Tokens {
             }
 
             fn all(conn: &::diesel::PgConnection) -> ::errors::Result<Vec<Self>> {
-                ::diesel::LoadDsl::load(
+                ::diesel::RunQueryDsl::load(
                     <Self as ::diesel::associations::HasTable>::table(),
                     conn
                 )
@@ -54,7 +54,7 @@ pub fn derive_model(item: syn::DeriveInput) -> Tokens {
             }
 
             fn remove(self, conn: &::diesel::PgConnection) -> ::errors::Result<()> {
-                ::diesel::ExecuteDsl::execute(
+                ::diesel::RunQueryDsl::execute(
                     ::diesel::delete(&self),
                     conn
                 )?;
