@@ -48,6 +48,8 @@ api:
     script:
         - cd application
         - nosetests ../tests/*api*.py -v --with-coverage --cover-package=api
+    cache:
+        paths: []
 rapi:
     stage: test
     tags:
@@ -66,6 +68,8 @@ gui:
         - Xvfb $DISPLAY -screen 0 1600x1200x24+32 &
         - export DISPLAY=$DISPLAY
         - nosetests ../tests/*gui*.py -v --with-coverage --cover-package=gui
+    cache:
+        paths: []
 
 pep:
     stage: style
@@ -73,6 +77,8 @@ pep:
         - docker
     script:
         - pycodestyle --exclude=documentation,application/local_settings.py,application/rapi/.cargo,.enibar-venv,.ropeproject,utils --ignore=E722,E501,W391,E128,E124 application
+    cache:
+        paths: []
 
 rust:
     stage: build
@@ -86,6 +92,8 @@ rust:
         - cd application/rapi
         - cargo build --all --release
         - cp target/release/librapi.so ../rapi.so
+    cache:
+        policy: push
 
 build_ci_image:
     stage: preparation
