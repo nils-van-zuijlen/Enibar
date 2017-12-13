@@ -17,9 +17,9 @@ RUN rustup override set nightly
 
 RUN pip install \
     PyQt5 \
-    Quamash==0.5.5 \
-    aiohttp==2.2.5 \
-    aioredis==0.3.3 \
+    Quamash==0.6.0 \
+    aiohttp==2.3.6 \
+    aioredis==1.0.0 \
     coverage \
     freezegun \
     hiredis==0.2.0 \
@@ -28,7 +28,7 @@ RUN pip install \
     pycodestyle \
     redis==2.10.6 \
     requests==2.18.4 \
-    sqlparse==0.2.3
+    sqlparse==0.2.4
 
 ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
