@@ -530,3 +530,28 @@ class NotesTest(basetest.BaseTest):
         tr = list(transactions.get())[0]
         self.assertEqual(tr['note'], 'test2')
 
+    def test_notes_stats(self):
+        """ Testing notes stats
+        """
+        id0 = self.add_note("test")
+        api.notes.transactions(['test'], 10)
+        api.notes.transactions(['test'], -9)
+        self.assertEqual(notes.get(lambda x: x["id"] == id0), [{'id': id0,
+                                 'nickname': 'test',
+                                 'lastname': 'test',
+                                 'firstname': 'test',
+                                 'mail': 'test@pouette.fr',
+                                 'tel': '0600000000',
+                                 'birthdate': 1008111600,
+                                 'promo': '1A',
+                                 'note': 1.0,
+                                 'tot_cons': 10.0,
+                                 'tot_refill': -9.0,
+                                 'overdraft_date': PyQt5.QtCore.QDate(),
+                                 'ecocups': 0,
+                                 'photo_path': '',
+                                 'mails_inscription': True,
+                                 'stats_inscription': True,
+                                 'agios_inscription': True,
+                                 'hidden': False,
+                                 'categories': []}])
