@@ -75,12 +75,12 @@ def apply_migrations():
         print(f"Applying {migration}")
         with open(os.path.join("../migrations", migration, "up.sql")) as fd:
             os.write(migration_file, fd.read().encode())
+        os.write(migration_file, f"INSERT INTO __migrations(version) VALUES({nb});\n".encode())
 
     if not should_apply:
         print("Nothing to do")
         sys.exit(1)
 
-    os.write(migration_file, f"INSERT INTO __migrations(version) VALUES({nb});\n".encode())
 
     # Execute the generated file.
     execute_sql_file(migration_name)
