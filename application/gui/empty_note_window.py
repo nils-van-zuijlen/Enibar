@@ -54,13 +54,12 @@ class EmptyNoteWindow(QtWidgets.QDialog):
         to_add = float(self.to_add.text().replace(',', '.'))
         # See #96
         if 1000 > round(to_add, 2) > 0:
-            api.notes.transactions([self.selected_note, ], -to_add)
             api.transactions.log_transaction(
                 self.selected_note,
                 "Note",
                 self.reason.text(),
                 "Solde",
-                "1",
+                1,
                 -to_add
             )
             super().accept()

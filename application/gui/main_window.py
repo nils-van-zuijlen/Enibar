@@ -391,8 +391,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
                 transactions.append(transaction)
             if api.transactions.log_transactions(transactions):
-                api.notes.transactions([self.selected.text(), ], -total,
-                    do_not=True)
                 api.notes.change_ecocups(self.selected_nickname, self.eco_diff)
                 self.reset_product_list()
 

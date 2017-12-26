@@ -81,7 +81,6 @@ def apply_migrations():
         print("Nothing to do")
         sys.exit(1)
 
-
     # Execute the generated file.
     execute_sql_file(migration_name)
 

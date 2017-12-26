@@ -23,6 +23,7 @@ import api.users
 import api.notes
 import api.redis
 import api.sde
+import api.transactions
 import asyncio
 import os
 import sys
@@ -171,6 +172,18 @@ class BaseTest(unittest.TestCase):
         )
         api.notes.rebuild_cache()
         return note
+
+    def add_transaction(self, notes, amount):
+        trs = [{
+            'note': note,
+            'category': "Test",
+            'product': "test",
+            'price_name': "test",
+            'quantity': 1,
+            'liquid_quantity': 0,
+            'percentage': 0,
+            'price': amount} for note in notes]
+        api.transactions.log_transactions(trs)
 
     def add_hidden_notes_category(self, name):
         category = api.note_categories.add(name)

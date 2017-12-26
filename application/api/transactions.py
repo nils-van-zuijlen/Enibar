@@ -77,6 +77,7 @@ def log_transaction(nickname, category, product, price_name, quantity, price,
         cursor.bindValue(':note_id', note_id)
         cursor.exec_()
         asyncio.ensure_future(api.sde.send_history_lines([{"id": cursor.lastInsertId(), "date": now, "note": nickname, "category": category, "product": product, "price_name": price_name, "quantity": quantity, "price": price, "liquid_quantity": liquid_quantity, "percentage": percentage, "note_id": note_id}]))
+        api.redis.send_message("enibar-notes", [notes[0]['nickname']])
         return True
 
 
@@ -127,8 +128,9 @@ def log_transactions(transactions):
             trans["date"] = now
             trans["note_id"] = note_id
 
-        asyncio.ensure_future(api.sde.send_history_lines(transactions))
         database.commit()
+        asyncio.ensure_future(api.sde.send_history_lines(transactions))
+        api.redis.send_message("enibar-notes", list(set(x['note'] for x in transactions)))
         return True
 
 
@@ -171,7 +173,8 @@ def rollback_transaction(id_, full=False):
         cursor.exec_()
         if not cursor.lastError().isValid() and cursor.numRowsAffected() > 0:
             asyncio.ensure_future(task)
-            return api.notes.transactions([note['nickname'], ], -price)
+            api.redis.send_message("enibar-notes", [note['nickname']])
+            return True
 
     return False
 

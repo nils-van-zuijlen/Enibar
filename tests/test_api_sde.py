@@ -3,6 +3,7 @@ import api.redis
 import asyncio
 import json
 import settings
+import api.transactions
 
 
 settings.WEB_URL = 'http://127.0.0.1:52412/'
@@ -46,8 +47,9 @@ class ApiSdeTests(basetest.BaseTest):
                 True,
                 True
             )
-            api.notes.transactions(["test" + str(i)], -i)
             api.notes.rebuild_cache()
+            self.add_transaction(["test" + str(i)], -i)
+        api.notes.rebuild_cache()
         self.loop = asyncio.get_event_loop()
         settings.USE_PROXY = 0
 
@@ -190,6 +192,9 @@ class ApiSdeTests(basetest.BaseTest):
         """ Testing processing a full queue with bad server
         """
         async def test_func():
+            with await api.redis.connection as redis:
+                await redis.delete(api.sde.QUEUE_NAME)
+
             await api.sde.send_note_deletion([1])
             task = asyncio.ensure_future(api.sde.process_queue())
             await asyncio.sleep(1)

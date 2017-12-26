@@ -36,11 +36,11 @@ import rapi
 
 NOTE_FIELDS = ['id', 'nickname', 'lastname', 'firstname', 'mail', 'tel',
                'birthdate', 'promo', 'note', 'photo_path', 'overdraft_date',
-               'ecocups', 'mails_inscription', 'stats_inscription', 'agios_inscription']
+               'ecocups', 'mails_inscription', 'stats_inscription', 'agios_inscription',
+               'tot_refill', 'tot_cons']
 
 NOTES_CACHE = {}
 NOTES_FIELDS_CACHE = {}
-NOTES_STATS_FIELDS_CACHE = {}
 
 
 def rebuild_cache():
@@ -57,12 +57,9 @@ def rebuild_cache():
                                           in NOTE_FIELDS}
                 row = {field: cursor.value(NOTES_FIELDS_CACHE[field]) for field
                        in NOTE_FIELDS}
-                row['tot_cons'] = 0
-                row['tot_refill'] = 0
                 row['categories'] = []
                 row['hidden'] = False
                 NOTES_CACHE[row['nickname']] = row
-    _build_stats()
     _build_categories()
 
 
@@ -77,41 +74,10 @@ def _build_categories():
                 NOTES_CACHE[cursor.value('nickname')]['hidden'] |= cursor.value('hidden')
 
 
-def _build_stats():
-    """ Add stats to the notes in the cache.
-    """
-    global NOTES_STATS_FIELDS_CACHE
-    with Cursor() as cursor:
-        cursor.prepare("SELECT notes.nickname, notes.firstname, notes.lastname,\
-                        SUM(CASE WHEN price>0 THEN price ELSE 0 END) as tot_refill,\
-                        SUM(CASE WHEN price<0 THEN price ELSE 0 END) AS tot_cons\
-                        FROM transactions JOIN notes ON\
-                        notes.firstname=transactions.firstname AND\
-                        notes.lastname=transactions.lastname\
-                        GROUP BY notes.nickname, notes.firstname, notes.lastname")
-        if cursor.exec_():
-            tot = {}
-            while cursor.next():
-                if NOTES_STATS_FIELDS_CACHE == {}:
-                    NOTES_STATS_FIELDS_CACHE = {field: cursor.indexOf(field)
-                                                for field in ('lastname',
-                                                              'nickname',
-                                                              'firstname',
-                                                              'tot_cons',
-                                                              'tot_refill'
-                                                             )
-                                               }
-
-                note = cursor.value(NOTES_STATS_FIELDS_CACHE['nickname'])
-                tot[note] = {}
-                NOTES_CACHE[note]['tot_cons'] = cursor.value(NOTES_STATS_FIELDS_CACHE['tot_cons'])
-                NOTES_CACHE[note]['tot_refill'] = cursor.value(NOTES_STATS_FIELDS_CACHE['tot_refill'])
-
-
 def rebuild_note_cache(nick):
     """ Rebuild a row in the cache
     """
-    global NOTES_FIELDS_CACHE, NOTES_STATS_FIELDS_CACHE
+    global NOTES_FIELDS_CACHE
     with Cursor() as cursor:
         cursor.prepare("SELECT * FROM notes WHERE nickname=:nick")
         cursor.bindValue(":nick", nick)
@@ -122,40 +88,11 @@ def rebuild_note_cache(nick):
                                           in NOTE_FIELDS}
                 row = {field: cursor.value(NOTES_FIELDS_CACHE[field]) for field
                        in NOTE_FIELDS}
-                row['tot_cons'] = 0.0
-                row['tot_refill'] = 0.0
                 row['categories'] = []
                 row['hidden'] = False
 
                 NOTES_CACHE[row['nickname']] = row
 
-                with Cursor() as cursor:
-                    cursor.prepare("SELECT notes.nickname, notes.firstname, notes.lastname,\
-                                    SUM(CASE WHEN price>0 THEN price ELSE 0 END) as tot_refill,\
-                                    SUM(CASE WHEN price<0 THEN price ELSE 0 END) AS tot_cons\
-                                    FROM transactions JOIN notes ON\
-                                    notes.firstname=transactions.firstname AND\
-                                    notes.lastname=transactions.lastname\
-                                    WHERE notes.firstname=:fn AND notes.lastname=:ln\
-                                    GROUP BY notes.nickname, notes.firstname, notes.lastname")
-                    cursor.bindValue(':fn', row['firstname'])
-                    cursor.bindValue(':ln', row['lastname'])
-
-                    if cursor.exec_():
-                        while cursor.next():
-                            if NOTES_STATS_FIELDS_CACHE == {}:
-                                NOTES_STATS_FIELDS_CACHE = {field: cursor.indexOf(field)
-                                                            for field in ('lastname',
-                                                                          'nickname',
-                                                                          'firstname',
-                                                                          'tot_cons',
-                                                                          'tot_refill'
-                                                                         )
-                                                           }
-
-                            note = cursor.value(NOTES_STATS_FIELDS_CACHE['nickname'])
-                            NOTES_CACHE[note]['tot_cons'] = cursor.value(NOTES_STATS_FIELDS_CACHE['tot_cons'])
-                            NOTES_CACHE[note]['tot_refill'] = cursor.value(NOTES_STATS_FIELDS_CACHE['tot_refill'])
         cursor.prepare("SELECT notes.id, notes.nickname, note_categories.name, note_categories.hidden FROM notes JOIN\
             note_categories_assoc ON note_categories_assoc.note=notes.id JOIN\
             note_categories ON note_categories_assoc.category=note_categories.id\
@@ -281,11 +218,13 @@ def remove(nicks):
             'percentage': 0,
             'price': -note['note']}
         )
-        del NOTES_CACHE[nick]
 
-    api.redis.send_message("enibar-delete", nicks)
-    rapi.notes.remove(nicks)
     api.transactions.log_transactions(trs)
+    rapi.notes.remove(nicks)
+    api.redis.send_message("enibar-delete", nicks)
+
+    for nick in nicks:
+        del NOTES_CACHE[nick]
 
 
 def change_photo(nickname, new_photo):
@@ -321,28 +260,6 @@ def get(filter_function=None):
     if filter_function is None:
         return list(NOTES_CACHE.values())
     return list(filter(filter_function, NOTES_CACHE.values()))
-
-
-def transactions(notes, diff, *, do_not=False):
-    """ Change the note on multiple notes
-
-        :param str nickname: The nickname of the note
-        :param float diff: Will add the diff to the note.
-
-        :return bool: True if success else False
-    """
-    with Database() as database:
-        database.transaction()
-        cursor = QtSql.QSqlQuery(database)
-        cursor.prepare("UPDATE notes SET note=note+:diff WHERE nickname=:nick")
-        for nick in notes:
-            cursor.bindValue(':nick', nick)
-            cursor.bindValue(':diff', diff)
-            cursor.exec_()
-        value = database.commit()
-    if not do_not:
-        api.redis.send_message("enibar-notes", notes)
-    return value
 
 
 def change_ecocups(nick, diff, do_not=False):
@@ -403,9 +320,8 @@ def import_csv(notes, reason, amount, *, do_not=False):
             'percentage': 0,
             'price': amount}
         )
-    if transactions(notes, amount):
-        if api.transactions.log_transactions(trs):
-            return len(trs)
+    if api.transactions.log_transactions(trs):
+        return len(trs)
 
 
 rebuild_cache()

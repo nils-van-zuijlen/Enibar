@@ -22,7 +22,7 @@ import gui.empty_note_window
 import api.notes
 
 
-class EmpttNoteTest(basetest.BaseGuiTest):
+class EmptyNoteTest(basetest.BaseGuiTest):
     def setUp(self):
         super().setUp()
         self.add_note("test")

@@ -47,7 +47,7 @@ class MailTest(basetest.BaseTest):
                 diff = 0
             elif i > 5:
                 diff = 5
-            api.notes.transactions(api.notes.get(lambda x: x['nickname'] == text), diff)
+            self.add_transaction(api.notes.get(lambda x: x['nickname'] == text), diff)
 
     def _populate_models(self, count=10):
         """ Populate database with model

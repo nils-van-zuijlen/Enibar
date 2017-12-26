@@ -39,7 +39,7 @@ class StatsTests(basetest.BaseTest):
             True,
             True
         )
-        notes.transactions(["test1", ], -7)
+        self.add_transaction(["test1", ], -7)
         notes.add("test2",
             "test2",
             "test2",
@@ -51,7 +51,7 @@ class StatsTests(basetest.BaseTest):
             True,
             True
         )
-        notes.transactions(["test2", ], 10)
+        self.add_transaction(["test2", ], 10)
         notes.add("test3",
             "test3",
             "test3",
@@ -63,7 +63,7 @@ class StatsTests(basetest.BaseTest):
             True,
             True
         )
-        notes.transactions(["test3", ], -10)
+        self.add_transaction(["test3", ], -10)
         notes.add("test4",
             "test4",
             "test4",
@@ -75,7 +75,7 @@ class StatsTests(basetest.BaseTest):
             True,
             True
         )
-        notes.transactions(["test4", ], 8)
+        self.add_transaction(["test4", ], 8)
         notes.add("test12",
             "test12",
             "test12",
@@ -88,7 +88,7 @@ class StatsTests(basetest.BaseTest):
             True
         )
 
-        # Hitory
+        # History
 
         transactions.log_transaction(
             "test1",
@@ -117,7 +117,11 @@ class StatsTests(basetest.BaseTest):
 
     def test_get_stats(self):
         self.assertCountEqual(list(stats.get_notes_stats()),
-            [{'price_name': 'c', 'category': 'a', 'nickname': 'test1', 'price': -1.0, 'quantity': 1.0, 'product': 'b'},
+            [{'nickname': 'test1', 'product': 'test', 'price_name': 'test', 'price': -7.0, 'category': 'Test', 'quantity': 1},
+             {'nickname': 'test3', 'product': 'test', 'price_name': 'test', 'price': -10.0, 'category': 'Test', 'quantity': 1},
+             {'nickname': 'test2', 'product': 'test', 'price_name': 'test', 'price': 10.0, 'category': 'Test', 'quantity': 1},
+             {'nickname': 'test4', 'product': 'test', 'price_name': 'test', 'price': 8.0, 'category': 'Test', 'quantity': 1},
+             {'price_name': 'c', 'category': 'a', 'nickname': 'test1', 'price': -1.0, 'quantity': 1.0, 'product': 'b'},
              {'price_name': 'f', 'category': 'd', 'nickname': 'test1', 'price': -2.0, 'quantity': 1.0, 'product': 'e'},
              {'price_name': 'c', 'category': 'a', 'nickname': 'test2', 'price': -1.0, 'quantity': 1.0, 'product': 'b'},
             ]
@@ -125,15 +129,15 @@ class StatsTests(basetest.BaseTest):
 
     def test_red_sum(self):
         red = api.stats.get_red_sum()
-        self.assertEqual((2, -17), red)
+        self.assertEqual((2, -20), red)
 
     def test_green_sum(self):
         green = api.stats.get_green_sum()
-        self.assertEqual((2, 18), green)
+        self.assertEqual((2, 17), green)
 
     def test_red_notes(self):
         red_notes = api.stats.get_red_notes()
-        self.assertEqual([('test3', -10.0), ('test1', -7.0)], list(red_notes))
+        self.assertEqual([('test3', -10.0), ('test1', -10.0)], list(red_notes))
 
     def test_ecocups_nb(self):
         api.notes.change_ecocups("test1", 5)

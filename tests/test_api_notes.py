@@ -267,30 +267,6 @@ class NotesTest(basetest.BaseTest):
                                  'hidden': 0,
                                  'categories': []}])
 
-    def test_transaction_multiple(self):
-        """ Testing transactions
-        """
-
-        self.add_note("test0")
-        self.add_note("test1")
-
-        notes.transactions(['test0', 'test1'], 10)
-        for note in notes.get():
-            self.assertEqual(note['note'], 10)
-        notes.transactions(['test0', 'test1'], 10)
-        for note in notes.get():
-            self.assertEqual(note['note'], 20)
-        notes.transactions(['test0', 'test1'], -5)
-        for note in notes.get():
-            self.assertEqual(note['note'], 15)
-        notes.transactions(['test0', 'test1'], -15)
-        for note in notes.get():
-            self.assertEqual(note['note'], 0)
-        notes.transactions(['test0', 'test1'], 5)
-        notes.transactions(['test0', 'test1'], -4.95)
-        for note in notes.get():
-            self.assertEqual(note['note'], 0.05)
-
     def test_export_csv(self):
         """ Testing csv export
         """
@@ -355,14 +331,14 @@ class NotesTest(basetest.BaseTest):
 
     def test_removing_a_note_line_history(self):
         self.add_note("test0")
-        notes.transactions(['test0', ], 10)
+        self.add_transaction(['test0', ], 10)
         notes.remove(["test0", ])
-        self.assertDictListEqual(list(transactions.get()),
+        self.assertDictListEqual(list(transactions.get())[-1:],
             [{'product': '',
               'lastname': 'test0',
               'quantity': 1,
               'firstname': 'test0',
-              'id': 1,
+              'id': 2,
               'note': 'test0',
               'price': -10.0,
               'category': 'Note',
@@ -419,12 +395,12 @@ class NotesTest(basetest.BaseTest):
         note = notes.get()[0]
         self.assertEqual(note['overdraft_date'], PyQt5.QtCore.QDate())
 
-        notes.transactions(["test0", ], -1)
+        self.add_transaction(["test0", ], -1)
         note = notes.get()[0]
         now = PyQt5.QtCore.QDateTime.currentDateTime()
         self.assertEqual(note['overdraft_date'], now.date())
 
-        notes.transactions(["test0", ], 1)
+        self.add_transaction(["test0", ], 1)
         note = notes.get()[0]
         self.assertEqual(note['overdraft_date'], PyQt5.QtCore.QDate())
 
@@ -469,29 +445,6 @@ class NotesTest(basetest.BaseTest):
         self.assertEqual(notes.get(lambda x: x['nickname'] == "test")[0]['note'], -2.5)
         self.assertEqual(notes.get(lambda x: x['nickname'] == "test2")[0]['note'], 0)
 
-    def test_do_not(self):
-        """ Testing do_not arg.
-        """
-        self.add_note("test")
-        notes.transactions(['test'], 10, do_not=True)
-        trs = [{
-            'note': "test",
-            'category': "Note",
-            'product': "",
-            'price_name': "test",
-            'quantity': "1",
-            'liquid_quantity': 0,
-            'percentage': 0,
-            'price': -10}]
-        transactions.log_transactions(trs)
-        self.assertEqual(notes.get()[0]['note'], 0)
-        notes.NOTES_FIELDS_CACHE = {}
-        notes.rebuild_cache()
-        self.assertEqual(notes.get()[0]['note'], 10)
-        notes.NOTES_STATS_FIELDS_CACHE = {}
-        notes.rebuild_note_cache("test1")
-        self.assertEqual(notes.get()[0]['note'], 10)
-
     def test_note_categories_in_notes(self):
         self.add_note("test")
         note_categories.add("cat1")
@@ -530,3 +483,29 @@ class NotesTest(basetest.BaseTest):
         tr = list(transactions.get())[0]
         self.assertEqual(tr['note'], 'test2')
 
+    def test_notes_stats(self):
+        """ Testing notes stats
+        """
+        id0 = self.add_note("test")
+        self.add_transaction(['test'], 10)
+        self.add_transaction(['test'], -9)
+        api.notes.rebuild_cache()
+        self.assertEqual(notes.get(lambda x: x["id"] == id0), [{'id': id0,
+                                 'nickname': 'test',
+                                 'lastname': 'test',
+                                 'firstname': 'test',
+                                 'mail': 'test@pouette.fr',
+                                 'tel': '0600000000',
+                                 'birthdate': 1008111600,
+                                 'promo': '1A',
+                                 'note': 1.0,
+                                 'tot_cons': -9.0,
+                                 'tot_refill': 10.0,
+                                 'overdraft_date': PyQt5.QtCore.QDate(),
+                                 'ecocups': 0,
+                                 'photo_path': '',
+                                 'mails_inscription': True,
+                                 'stats_inscription': True,
+                                 'agios_inscription': True,
+                                 'hidden': False,
+                                 'categories': []}])

@@ -26,7 +26,6 @@ RefillNote Window
 
 from PyQt5 import QtWidgets, uic
 
-import api.notes
 import api.soundsystem
 import api.transactions
 import api.validator
@@ -63,7 +62,6 @@ class RefillNoteWindow(QtWidgets.QDialog):
         if not prompt.is_ok:
             return
         reason = self.reason.text()
-        api.notes.transactions([self.selected_note, ], to_add)
         api.transactions.log_transaction(
             self.selected_note,
             "Note",

@@ -135,7 +135,6 @@ class GroupActionsWindow(QtWidgets.QDialog):
                                          'price': -price
                                         }
                     )
-                api.notes.transactions(notes, -price)
                 api.transactions.log_transactions(transactions)
             self._multiple_action(take)
 
@@ -167,7 +166,6 @@ class GroupActionsWindow(QtWidgets.QDialog):
                                          'price': price
                                         }
                     )
-                api.notes.transactions(notes, price)
                 api.transactions.log_transactions(transactions)
             self._multiple_action(refill)
 
@@ -207,7 +205,6 @@ class GroupActionsWindow(QtWidgets.QDialog):
                 transactions.append(transaction)
 
             if api.transactions.log_transactions(transactions):
-                api.notes.transactions(notes, -real_price)
                 valid("OK", "Transaction effectuée")
 
         self._multiple_action(inner)

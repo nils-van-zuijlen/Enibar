@@ -323,7 +323,6 @@ class NotesManagementWindow(QtWidgets.QDialog):
                              'price': -settings.COTIZ_PRICE,
                             }
             )
-            api.notes.transactions([self.current_nickname], -1.0)
             api.transactions.log_transactions(transactions)
         self.on_note_selected(self.current_shown)
 
