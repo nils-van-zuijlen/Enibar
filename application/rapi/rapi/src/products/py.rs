@@ -3,7 +3,6 @@ use products::models::Product;
 use model::Model;
 use BigDecimal;
 use bigdecimal;
-use num_traits::FromPrimitive;
 use std::str::FromStr;
 
 

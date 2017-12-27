@@ -1,4 +1,4 @@
-use cpython::{PyBool, PyObject, PyResult, Python, PythonObject, ToPyObject};
+use cpython::{PyBool, PyResult, Python};
 use notes::models::Note;
 use model::Model;
 use errors::*;
@@ -18,5 +18,5 @@ pub fn py_remove(py: Python, names: Vec<String>) -> PyResult<PyBool> {
         Ok(())
     }).is_ok();
 
-    Ok(py.False())
+    Ok(PyBool::get(py, res))
 }

@@ -6,7 +6,6 @@ pub use self::models::*;
 use schema::products;
 use cpython::{PyModule, Python};
 use diesel::prelude::*;
-use diesel::*;
 use errors::*;
 
 impl Product {

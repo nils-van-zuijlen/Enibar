@@ -6,7 +6,6 @@ pub use self::models::*;
 use schema::notes;
 use cpython::{PyModule, Python};
 use diesel::prelude::*;
-use diesel;
 use errors::*;
 
 impl Note {

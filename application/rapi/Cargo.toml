@@ -6,4 +6,3 @@ members = [
 
 [patch.crates-io]
 metadeps = { git = "https://github.com/Eijebong/metadeps.git", branch = "bump_error_chain" }
-rand = { git = "https://github.com/Eijebong/rand.git", branch = "bump_zircon" }
