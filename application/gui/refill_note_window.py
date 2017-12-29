@@ -62,14 +62,14 @@ class RefillNoteWindow(QtWidgets.QDialog):
         if not prompt.is_ok:
             return
         reason = self.reason.text()
-        api.transactions.log_transaction(
-            self.selected_note,
-            "Note",
-            "{} {}".format(self.performer, "[{}]".format(reason) if reason else ""),
-            "Rechargement",
-            "1",
-            to_add
-        )
+        api.transactions.log_transactions([{
+            'note': self.selected_note,
+            'category': "Note",
+            'product': "{} {}".format(self.performer, "[{}]".format(reason) if reason else ""),
+            'price_name': "Rechargement",
+            'quantity': 1,
+            'price': to_add,
+        }])
         super().accept()
         api.soundsystem.play('refill')
 

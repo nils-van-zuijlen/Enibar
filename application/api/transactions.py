@@ -33,54 +33,6 @@ import api.sde
 import datetime
 
 
-def log_transaction(nickname, category, product, price_name, quantity, price,
-        deletable=True, liquid_quantity=0, percentage=0):
-    """ Insert a transaction log line in database
-
-    :param str nickname: Note nickname
-    :param str category: Product's category
-    :param str product: Product's name
-    :param str price_name: Product's price name
-    :param int quantity: Product quantity on this transaction
-    :param float price: total price of the transaction
-    """
-    with Cursor() as cursor:
-        notes = api.notes.get(lambda x: x["nickname"] == nickname)
-        if notes:
-            lastname = notes[0]['lastname']
-            firstname = notes[0]['firstname']
-            note_id = notes[0]['id']
-        else:
-            return False
-
-        cursor.prepare("""INSERT INTO transactions(date, note, category,
-            product, price_name,quantity, price, firstname, lastname,
-            liquid_quantity, percentage, deletable, note_id)
-            VALUES(:date, :note, :category, :product, :price_name, :quantity,
-            :price, :firstname, :lastname, :liquid_quantity,
-            :percentage, :deletable, :note_id)
-            """
-        )
-        now = datetime.datetime.now().isoformat()
-        cursor.bindValue(':date', now)
-        cursor.bindValue(':note', nickname)
-        cursor.bindValue(':category', category)
-        cursor.bindValue(':product', product)
-        cursor.bindValue(':price_name', price_name)
-        cursor.bindValue(':quantity', quantity)
-        cursor.bindValue(':price', price)
-        cursor.bindValue(':firstname', firstname)
-        cursor.bindValue(':lastname', lastname)
-        cursor.bindValue(':liquid_quantity', liquid_quantity)
-        cursor.bindValue(':percentage', percentage)
-        cursor.bindValue(':deletable', deletable)
-        cursor.bindValue(':note_id', note_id)
-        cursor.exec_()
-        asyncio.ensure_future(api.sde.send_history_lines([{"id": cursor.lastInsertId(), "date": now, "note": nickname, "category": category, "product": product, "price_name": price_name, "quantity": quantity, "price": price, "liquid_quantity": liquid_quantity, "percentage": percentage, "note_id": note_id}]))
-        api.redis.send_message("enibar-notes", [notes[0]['nickname']])
-        return True
-
-
 def log_transactions(transactions):
     """ Log multiple transactions
 

@@ -90,30 +90,30 @@ class StatsTests(basetest.BaseTest):
 
         # History
 
-        transactions.log_transaction(
-            "test1",
-            "a",
-            "b",
-            "c",
-            "1",
-            -1
-        )
-        transactions.log_transaction(
-            "test2",
-            "a",
-            "b",
-            "c",
-            "1",
-            -1
-        )
-        transactions.log_transaction(
-            "test1",
-            "d",
-            "e",
-            "f",
-            "1",
-            -2
-        )
+        transactions.log_transactions([{
+            'note': "test1",
+            'category': "a",
+            'product': "b",
+            'price_name': "c",
+            'quantity': 1,
+            'price': -1,
+        }])
+        transactions.log_transactions([{
+            'note': "test2",
+            'category': "a",
+            'product': "b",
+            'price_name': "c",
+            'quantity': 1,
+            'price': -1,
+        }])
+        transactions.log_transactions([{
+            'note': "test1",
+            'category': "d",
+            'product': "e",
+            'price_name': "f",
+            'quantity': 1,
+            'price': -2,
+        }])
 
     def test_get_stats(self):
         self.assertCountEqual(list(stats.get_notes_stats()),

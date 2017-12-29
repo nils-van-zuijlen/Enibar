@@ -54,14 +54,14 @@ class EmptyNoteWindow(QtWidgets.QDialog):
         to_add = float(self.to_add.text().replace(',', '.'))
         # See #96
         if 1000 > round(to_add, 2) > 0:
-            api.transactions.log_transaction(
-                self.selected_note,
-                "Note",
-                self.reason.text(),
-                "Solde",
-                1,
-                -to_add
-            )
+            api.transactions.log_transactions([{
+                'note': self.selected_note,
+                'category': "Note",
+                'product': self.reason.text(),
+                'price_name': "Solde",
+                'quantity': 1,
+                'price': -to_add,
+            }])
             super().accept()
         else:
             gui.utils.error("Erreur", "La valeur à enlever doit etre superieur\

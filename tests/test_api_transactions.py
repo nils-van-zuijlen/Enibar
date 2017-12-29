@@ -49,65 +49,6 @@ class TransactionsTest(basetest.BaseTest):
             True
         )
 
-    def test_log_transaction(self):
-        """ Testing log_transaction
-        """
-        self.assertTrue(transactions.log_transaction(
-            "test1",
-            "a",
-            "b",
-            "c",
-            "1",
-            -1
-        ))
-        self.assertTrue(transactions.log_transaction(
-            "test1",
-            "b",
-            "d",
-            "c",
-            "2",
-            -5
-        ))
-        self.assertTrue(transactions.log_transaction(
-            "test2",
-            "e",
-            "f",
-            "g",
-            "2",
-            5
-        ))
-        self.assertEqual(self.count_transactions(), 3)
-        self.assertDictListEqual(list(transactions.get()),
-            [{'product': 'b',
-              'lastname': 'test1',
-              'quantity': 1,
-              'firstname': 'test1',
-              'id': 1,
-              'note': 'test1',
-              'price': -1.0,
-              'category': 'a',
-              'price_name': 'c'},
-             {'product': 'd',
-              'lastname': 'test1',
-              'quantity': 2,
-              'firstname': 'test1',
-              'id': 2,
-              'note': 'test1',
-              'price': -5.0,
-              'category': 'b',
-              'price_name': 'c'},
-             {'product': 'f',
-              'lastname': 'test2',
-              'quantity': 2,
-              'firstname': 'test2',
-              'id': 3,
-              'note': 'test2',
-              'price': 5.0,
-              'category': 'e',
-              'price_name': 'g'}
-            ], ignore=["date", "percentage", "liquid_quantity"]
-        )
-
     def test_log_transactions(self):
         """ Testing log_transactions
         """
@@ -165,46 +106,47 @@ class TransactionsTest(basetest.BaseTest):
         """ Testing rollback_transaction
         """
         self.assertFalse(transactions.rollback_transaction(5))
-        self.assertTrue(transactions.log_transaction(
-            "test1",
-            "a",
-            "b",
-            "c",
-            "1",
-            -1
-        ))
-        self.assertTrue(transactions.log_transaction(
-            "test1",
-            "b",
-            "d",
-            "c",
-            5,
-            -5
-        ))
-        self.assertTrue(transactions.log_transaction(
-            "test2",
-            "e",
-            "f",
-            "g",
-            "2",
-            5
-        ))
-        self.assertTrue(transactions.log_transaction(
-            "test2",
-            "e",
-            "f",
-            "g",
-            1,
-            5
-        ))
-        self.assertTrue(transactions.log_transaction(
-            "test1",
-            "e",
-            "f",
-            "g",
-            1,
-            5,
-            False
+        self.assertTrue(transactions.log_transactions([{
+            'note': "test1",
+            'category': "a",
+            'product': "b",
+            'price_name': "c",
+            'quantity': 1,
+            'price': -1
+        }]))
+        self.assertTrue(transactions.log_transactions([{
+            'note': "test1",
+            'category': "b",
+            'product': "d",
+            'price_name': "c",
+            'quantity': 5,
+            'price': -5
+        }]))
+        self.assertTrue(transactions.log_transactions([{
+            'note': "test2",
+            'category': "e",
+            'product': "f",
+            'price_name': "g",
+            'quantity': 2,
+            'price': 5
+        }]))
+        self.assertTrue(transactions.log_transactions([{
+            'note': "test2",
+            'category': "e",
+            'product': "f",
+            'price_name': "g",
+            'quantity': 1,
+            'price': 5
+        }]))
+        self.assertTrue(transactions.log_transactions([{
+            'note': "test1",
+            'category': "e",
+            'product': "f",
+            'price_name': "g",
+            'quantity': 1,
+            'price': 5,
+            'deletable': False
+            }]
         ))
 
         self.assertEqual(self.count_transactions(), 5)
@@ -238,57 +180,57 @@ class TransactionsTest(basetest.BaseTest):
     def test_get_grouped_entries(self):
         """ Testing get_grouped_entries
         """
-        transactions.log_transaction(
-            "test1",
-            "a",
-            "b",
-            "c",
-            "1",
-            -1
-        )
-        transactions.log_transaction(
-            "test1",
-            "b",
-            "d",
-            "c",
-            5,
-            -5
-        )
-        transactions.log_transaction(
-            "test2",
-            "e",
-            "f",
-            "g",
-            "2",
-            5
-        )
+        transactions.log_transactions([{
+            'note': "test1",
+            'category': "a",
+            'product': "b",
+            'price_name': "c",
+            'quantity': 1,
+            'price': -1
+        }])
+        transactions.log_transactions([{
+            'note': "test1",
+            'category': "b",
+            'product': "d",
+            'price_name': "c",
+            'quantity': 5,
+            'price': -5
+        }])
+        transactions.log_transactions([{
+            'note': "test2",
+            'category': "e",
+            'product': "f",
+            'price_name': "g",
+            'quantity': 2,
+            'price': 5
+        }])
         self.assertEqual(list(transactions.get_grouped_entries("note", {'lastname': "test2"})), ['test2'])
         self.assertEqual(list(transactions.get_grouped_entries("note", {})), ['test1', 'test2'])
 
     def test_get_gt(self):
         """ Testing __gt """
-        transactions.log_transaction(
-            "test1",
-            "a",
-            "b",
-            "c",
-            "1",
-            -1
-        )
-        transactions.log_transaction(
-            "test1",
-            "b",
-            "d",
-            "c",
-            5,
-            -5
-        )
-        transactions.log_transaction(
-            "test2",
-            "e",
-            "f",
-            "g",
-            "2",
-            5
-        )
+        transactions.log_transactions([{
+            'note': "test1",
+            'category': "a",
+            'product': "b",
+            'price_name': "c",
+            'quantity': 1,
+            'price': -1
+        }])
+        transactions.log_transactions([{
+            'note': "test1",
+            'category': "b",
+            'product': "d",
+            'price_name': "c",
+            'quantity': 5,
+            'price': -5
+        }])
+        transactions.log_transactions([{
+            'note': "test2",
+            'category': "e",
+            'product': "f",
+            'price_name': "g",
+            'quantity': 2,
+            'price': 5
+        }])
         self.assertEqual(len(list(transactions.get(id__gt=1))), 2)
