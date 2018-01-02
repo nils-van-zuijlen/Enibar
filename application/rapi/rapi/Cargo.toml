@@ -9,9 +9,9 @@ crate-type = ["cdylib"]
 [dependencies]
 cpython={ git="https://github.com/dgrunwald/rust-cpython.git", features=["python3-sys"] }
 x11 = { version="2.15", features=["xlib"] }
-diesel = { version = "1.0.0-rc1", features = ["postgres", "chrono", "numeric"] }
+diesel = { version = "1", features = ["postgres", "chrono", "numeric"] }
 r2d2 = "0.8"
-r2d2-diesel = "1.0.0-rc1"
+r2d2-diesel = "1"
 lazy_static = "1"
 bcrypt = "0.1"
 error-chain = "0.11"
