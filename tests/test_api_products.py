@@ -1,5 +1,5 @@
-# copyright (c) 2014-2017 bastien orivel <b2orivel@enib.fr>
-# Copyright (C) 2014-2017 Arnaud Levaufre <a2levauf@enib.fr>
+# copyright (c) 2014-2018 bastien orivel <b2orivel@enib.fr>
+# Copyright (C) 2014-2018 Arnaud Levaufre <a2levauf@enib.fr>
 #
 # This file is part of Enibar.
 #
