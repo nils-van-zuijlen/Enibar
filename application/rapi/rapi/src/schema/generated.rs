@@ -24,15 +24,6 @@ table! {
         message -> Text,
         filter -> Int4,
         filter_value -> Text,
-        attachments -> Nullable<Array<Int4>>,
-    }
-}
-
-table! {
-    mails_attachment (id) {
-        id -> Int4,
-        name -> Nullable<Varchar>,
-        value -> Nullable<Bytea>,
     }
 }
 
@@ -71,6 +62,8 @@ table! {
         mails_inscription -> Bool,
         stats_inscription -> Bool,
         agios_inscription -> Bool,
+        tot_cons -> Numeric,
+        tot_refill -> Numeric,
     }
 }
 
@@ -164,7 +157,6 @@ allow_tables_to_appear_in_same_query!(
     admins,
     categories,
     mail_models,
-    mails_attachment,
     note_categories,
     note_categories_assoc,
     notes,

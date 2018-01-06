@@ -22,4 +22,6 @@ pub struct Note {
     pub mails_inscription: bool,
     pub stats_inscription: bool,
     pub agios_inscription: bool,
+    pub tot_cons: BigDecimal,
+    pub tot_refill: BigDecimal,
 }
