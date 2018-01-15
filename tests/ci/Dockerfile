@@ -8,7 +8,7 @@ RUN pacman -Syq --noconfirm \
     postgresql-libs \
     python \
     python-pip \
-    qt5 \
+    qt5-base \
     redis \
     rustup \
     xorg-server-xvfb
