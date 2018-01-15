@@ -103,5 +103,9 @@ build_ci_image:
     before_script:
         - echo "nop"
     script:
+        - mkdir -p application/rapi/target
+        - mkdir -p application/rapi/.cargo
         - cd tests/ci
         - docker build --no-cache -t enibar:ci .
+    cache:
+        policy: push
