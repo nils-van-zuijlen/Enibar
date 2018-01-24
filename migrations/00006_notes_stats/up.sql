@@ -11,7 +11,7 @@ BEGIN
         tot_refill=(CASE WHEN NEW.price > 0 THEN tot_refill + NEW.price ELSE tot_refill END)
     WHERE notes.firstname=NEW.firstname AND notes.lastname=NEW.lastname;
 
-	RETURN NEW;
+    RETURN NEW;
 END;
 $BODY$ LANGUAGE plpgsql;
 
@@ -24,7 +24,7 @@ BEGIN
         tot_cons=(CASE WHEN OLD.price < 0 THEN tot_cons - OLD.price ELSE tot_cons END),
         tot_refill=(CASE WHEN OLD.price > 0 THEN tot_refill - OLD.price ELSE tot_refill END)
     WHERE notes.firstname=OLD.firstname AND notes.lastname=OLD.lastname;
-	RETURN OLD;
+    RETURN OLD;
 END;
 $BODY$ LANGUAGE plpgsql;
 
@@ -41,7 +41,7 @@ BEGIN
         tot_refill=(CASE WHEN diff > 0 THEN tot_refill - diff ELSE tot_refill END)
     WHERE notes.firstname=NEW.firstname AND notes.lastname=NEW.lastname;
 
-	RETURN NEW;
+    RETURN NEW;
 END;
 $BODY$ LANGUAGE plpgsql;
 
