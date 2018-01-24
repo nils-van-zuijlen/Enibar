@@ -508,7 +508,7 @@ class Button(BaseProduct, QtWidgets.QPushButton):
 
         self.label_layout = QtWidgets.QGridLayout(self)
         if percentage:
-            self.label = QtWidgets.QLabel(f"{name} <span style=\"color: red; font-size: 7px\">{percentage} °</span>", self)
+            self.label = QtWidgets.QLabel(f"{name} <span style=\"color: red; font-size: 7px\">{percentage:.2f} °</span>", self)
         else:
             self.label = QtWidgets.QLabel(name, self)
 
@@ -572,7 +572,7 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
         self.setLayout(self.name_layout)
 
         if percentage:
-            self.name_label = QtWidgets.QLabel(f"{name} <span style=\"color: red; font-size: 7px\">{percentage} °</span>", self)
+            self.name_label = QtWidgets.QLabel(f"{name} <span style=\"color: red; font-size: 7px\">{percentage:.2f} °</span>", self)
         else:
             self.name_label = QtWidgets.QLabel(name)
         self.name_label.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
