@@ -15,3 +15,7 @@ pub struct NoteCategory {
 pub struct NewNoteCategory<'a> {
     #[validate(custom = "::validators::not_empty")] pub name: &'a str,
 }
+
+#[derive(Debug, Clone)]
+pub struct NoteCategorySql;
+
