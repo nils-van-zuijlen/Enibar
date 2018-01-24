@@ -33,76 +33,23 @@ import shutil
 import tempfile
 import rapi
 
-
-NOTE_FIELDS = ['id', 'nickname', 'lastname', 'firstname', 'mail', 'tel',
-               'birthdate', 'promo', 'note', 'photo_path', 'overdraft_date',
-               'ecocups', 'mails_inscription', 'stats_inscription', 'agios_inscription',
-               'tot_refill', 'tot_cons']
-
 NOTES_CACHE = {}
-NOTES_FIELDS_CACHE = {}
 
 
 def rebuild_cache():
     """ Build a cache with all notes inside. This improve greatly the perfs of
         get actions
     """
-    global NOTES_CACHE, NOTES_FIELDS_CACHE
-    NOTES_CACHE = {}
-    with Cursor() as cursor:
-        if cursor.exec_("SELECT * FROM notes"):
-            while cursor.next():
-                if NOTES_FIELDS_CACHE == {}:
-                    NOTES_FIELDS_CACHE = {field: cursor.indexOf(field) for field
-                                          in NOTE_FIELDS}
-                row = {field: cursor.value(NOTES_FIELDS_CACHE[field]) for field
-                       in NOTE_FIELDS}
-                row['categories'] = []
-                row['hidden'] = False
-                NOTES_CACHE[row['nickname']] = row
-    _build_categories()
-
-
-def _build_categories():
-    with Cursor() as cursor:
-        cursor.prepare("SELECT notes.id, notes.nickname, note_categories.name, note_categories.hidden FROM notes JOIN\
-            note_categories_assoc ON note_categories_assoc.note=notes.id JOIN\
-            note_categories ON note_categories_assoc.category=note_categories.id")
-        if cursor.exec_():
-            while cursor.next():
-                NOTES_CACHE[cursor.value('nickname')]["categories"].append(cursor.value('name'))
-                NOTES_CACHE[cursor.value('nickname')]['hidden'] |= cursor.value('hidden')
+    global NOTES_CACHE
+    NOTES_CACHE = rapi.notes.get_cache()
 
 
 def rebuild_note_cache(nick):
     """ Rebuild a row in the cache
     """
-    global NOTES_FIELDS_CACHE
-    with Cursor() as cursor:
-        cursor.prepare("SELECT * FROM notes WHERE nickname=:nick")
-        cursor.bindValue(":nick", nick)
-        if cursor.exec_():
-            while cursor.next():
-                if NOTES_FIELDS_CACHE == {}:
-                    NOTES_FIELDS_CACHE = {field: cursor.indexOf(field) for field
-                                          in NOTE_FIELDS}
-                row = {field: cursor.value(NOTES_FIELDS_CACHE[field]) for field
-                       in NOTE_FIELDS}
-                row['categories'] = []
-                row['hidden'] = False
-
-                NOTES_CACHE[row['nickname']] = row
-
-        cursor.prepare("SELECT notes.id, notes.nickname, note_categories.name, note_categories.hidden FROM notes JOIN\
-            note_categories_assoc ON note_categories_assoc.note=notes.id JOIN\
-            note_categories ON note_categories_assoc.category=note_categories.id\
-            WHERE notes.nickname=:nick")
-        cursor.bindValue(':nick', nick)
-
-        if cursor.exec_():
-            while cursor.next():
-                NOTES_CACHE[cursor.value('nickname')]["categories"].append(cursor.value('name'))
-                NOTES_CACHE[cursor.value('nickname')]['hidden'] |= cursor.value('hidden')
+    new = rapi.notes.get_note_cache(nick)
+    if new:
+        NOTES_CACHE[nick] = new
 
 
 def change_values(nick, *, do_not=False, **kwargs):

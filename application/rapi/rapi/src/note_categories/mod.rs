@@ -1,4 +1,5 @@
 pub mod models;
+mod diesel_impls;
 mod py;
 
 use self::py::*;

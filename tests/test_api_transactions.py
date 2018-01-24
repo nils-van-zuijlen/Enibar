@@ -146,8 +146,7 @@ class TransactionsTest(basetest.BaseTest):
             'quantity': 1,
             'price': 5,
             'deletable': False
-            }]
-        ))
+        }]))
 
         self.assertEqual(self.count_transactions(), 5)
         self.assertTrue(transactions.rollback_transaction(1))

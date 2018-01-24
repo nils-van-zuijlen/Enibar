@@ -1,5 +1,6 @@
 use schema::notes;
 use validator::Validate;
+use note_categories::models::NoteCategory;
 use BigDecimal;
 use ::NaiveDate;
 
@@ -18,10 +19,18 @@ pub struct Note {
     pub note: BigDecimal,
     pub overdraft_date: Option<NaiveDate>,
     pub ecocups: i32,
-    pub last_agio: Option<NaiveDate>,
+    //pub last_agio: Option<NaiveDate>,
     pub mails_inscription: bool,
     pub stats_inscription: bool,
     pub agios_inscription: bool,
     pub tot_cons: BigDecimal,
     pub tot_refill: BigDecimal,
 }
+
+#[derive(Queryable, Debug)]
+pub struct NoteCacheEntry {
+    pub note: Note,
+    pub categories: Vec<NoteCategory>,
+    pub hidden: bool,
+}
+

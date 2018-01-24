@@ -1,8 +1,8 @@
-use cpython::{ObjectProtocol, PyObject, PyString, Python, ToPyObject};
+use cpython::{ObjectProtocol, PyObject, Python, ToPyObject};
 use BigDecimal;
 use NaiveDate;
 use chrono::Datelike;
-use std::sync::{Once, ONCE_INIT};
+use num_traits::ToPrimitive;
 
 lazy_static! {
     pub static ref DATE: PyObject = {
@@ -12,24 +12,14 @@ lazy_static! {
         let date = datetime_module.get(py, "date").unwrap();
         date
     };
-    pub static ref DECIMAL: PyObject = {
-        let gil = Python::acquire_gil();
-        let py = gil.python();
-        let decimal_module = py.import("decimal").expect("Can't import decimal");
-        let decimal = decimal_module.get(py, "Decimal").unwrap();
-        decimal
-    };
 }
 
 impl ToPyObject for BigDecimal {
     type ObjectType = PyObject;
 
     fn to_py_object(&self, py: Python) -> Self::ObjectType {
-        let decimal = |object: &PyString| {
-            DECIMAL.call(py, (object,), None).unwrap()
-        };
 
-        return decimal(&format!("{}", self.0).into_py_object(py));
+        return self.0.to_f64().to_py_object(py)
     }
 }
 

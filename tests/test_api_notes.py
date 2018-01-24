@@ -105,7 +105,7 @@ class NotesTest(basetest.BaseTest):
                                  'birthdate': 1008111600,
                                  'promo': '1A',
                                  'note': 0.0,
-                                 'overdraft_date': PyQt5.QtCore.QDate(),
+                                 'overdraft_date': None,
                                  'ecocups': 0,
                                  'photo_path': 'coucou.jpg',
                                  'tot_cons': 0.0,
@@ -113,7 +113,7 @@ class NotesTest(basetest.BaseTest):
                                  'mails_inscription': False,
                                  'stats_inscription': True,
                                  'agios_inscription': True,
-                                 'hidden': 0,
+                                 'hidden': False,
                                  'categories': []})
         self.assertTrue(os.path.isfile("img/coucou.jpg"))
 
@@ -164,7 +164,7 @@ class NotesTest(basetest.BaseTest):
                            'birthdate': 1008111600,
                            'promo': '1A',
                            'note': 0.0,
-                           'overdraft_date': PyQt5.QtCore.QDate(),
+                           'overdraft_date': None,
                            'ecocups': 0,
                            'photo_path': '',
                            'tot_cons': 0.0,
@@ -172,7 +172,7 @@ class NotesTest(basetest.BaseTest):
                            'mails_inscription': True,
                            'stats_inscription': True,
                            'agios_inscription': True,
-                           'hidden': 0,
+                           'hidden': False,
                            'categories': []}, res)
 
     @freezegun.freeze_time("2014-12-24 06:00:00")
@@ -212,13 +212,13 @@ class NotesTest(basetest.BaseTest):
                                  'note': 0.0,
                                  'tot_cons': 0.0,
                                  'tot_refill': 0.0,
-                                 'overdraft_date': PyQt5.QtCore.QDate(),
+                                 'overdraft_date': None,
                                  'ecocups': 0,
                                  'photo_path': '',
                                  'mails_inscription': True,
                                  'stats_inscription': True,
                                  'agios_inscription': True,
-                                 'hidden': 0,
+                                 'hidden': False,
                                  'categories': []}])
 
     @freezegun.freeze_time("2014-12-24 06:00:00")
@@ -258,13 +258,13 @@ class NotesTest(basetest.BaseTest):
                                  'note': 0.0,
                                  'tot_cons': 0.0,
                                  'tot_refill': 0.0,
-                                 'overdraft_date': PyQt5.QtCore.QDate(),
+                                 'overdraft_date': None,
                                  'ecocups': 0,
                                  'photo_path': '',
                                  'mails_inscription': True,
                                  'stats_inscription': True,
                                  'agios_inscription': True,
-                                 'hidden': 0,
+                                 'hidden': False,
                                  'categories': []}])
 
     def test_export_csv(self):
@@ -393,7 +393,7 @@ class NotesTest(basetest.BaseTest):
         """
         self.add_note("test0")
         note = notes.get()[0]
-        self.assertEqual(note['overdraft_date'], PyQt5.QtCore.QDate())
+        self.assertEqual(note['overdraft_date'], None)
 
         self.add_transaction(["test0", ], -1)
         note = notes.get()[0]
@@ -402,7 +402,7 @@ class NotesTest(basetest.BaseTest):
 
         self.add_transaction(["test0", ], 1)
         note = notes.get()[0]
-        self.assertEqual(note['overdraft_date'], PyQt5.QtCore.QDate())
+        self.assertEqual(note['overdraft_date'], None)
 
     def test_unique_file_name(self):
         """ Testing get_unique_file_name
@@ -501,7 +501,7 @@ class NotesTest(basetest.BaseTest):
                                  'note': 1.0,
                                  'tot_cons': -9.0,
                                  'tot_refill': 10.0,
-                                 'overdraft_date': PyQt5.QtCore.QDate(),
+                                 'overdraft_date': None,
                                  'ecocups': 0,
                                  'photo_path': '',
                                  'mails_inscription': True,

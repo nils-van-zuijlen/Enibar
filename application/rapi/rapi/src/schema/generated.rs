@@ -58,7 +58,7 @@ table! {
         note -> Numeric,
         overdraft_date -> Nullable<Date>,
         ecocups -> Int4,
-        last_agio -> Nullable<Date>,
+        //last_agio -> Nullable<Date>,
         mails_inscription -> Bool,
         stats_inscription -> Bool,
         agios_inscription -> Bool,

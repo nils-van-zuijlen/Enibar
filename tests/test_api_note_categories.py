@@ -65,7 +65,7 @@ class NoteCategoriesTest(basetest.BaseTest):
         note_categories.add("test")
         note_categories.add("test2")
 
-        self.assertEqual(list(note_categories.get()), [{'name': 'test', 'hidden': 0, 'id': 1, 'protected': 0}, {'name': 'test2', 'hidden': 0, 'id': 2, 'protected': 0}])
+        self.assertEqual(list(note_categories.get()), [{'name': 'test', 'hidden': False, 'id': 1, 'protected': 0}, {'name': 'test2', 'hidden': False, 'id': 2, 'protected': 0}])
 
     def test_add_note_category(self):
         self.assertEqual(note_categories.add("test"), 1)
@@ -106,15 +106,15 @@ class NoteCategoriesTest(basetest.BaseTest):
     def test_rename_note_category(self):
         note_categories.add("test")
         note_categories.rename("test", "test_rename")
-        self.assertEqual(list(note_categories.get()), [{'name': 'test_rename', 'hidden': 0, 'id': 1, 'protected': 0}])
+        self.assertEqual(list(note_categories.get()), [{'name': 'test_rename', 'hidden': False, 'id': 1, 'protected': 0}])
 
     def test_set_hidden_note_category(self):
         note_categories.add("test")
-        self.assertEqual(list(note_categories.get()), [{'name': 'test', 'hidden': 0, 'id': 1, 'protected': 0}])
+        self.assertEqual(list(note_categories.get()), [{'name': 'test', 'hidden': False, 'id': 1, 'protected': 0}])
         note_categories.set_hidden(["test", ], True)
-        self.assertEqual(list(note_categories.get()), [{'name': 'test', 'hidden': 1, 'id': 1, 'protected': 0}])
+        self.assertEqual(list(note_categories.get()), [{'name': 'test', 'hidden': True, 'id': 1, 'protected': 0}])
         note_categories.set_hidden(["test", ], False)
-        self.assertEqual(list(note_categories.get()), [{'name': 'test', 'hidden': 0, 'id': 1, 'protected': 0}])
+        self.assertEqual(list(note_categories.get()), [{'name': 'test', 'hidden': False, 'id': 1, 'protected': 0}])
 
     def test_protected_categories(self):
         note_categories.add("test")
@@ -124,4 +124,4 @@ class NoteCategoriesTest(basetest.BaseTest):
         note_categories.delete(["test"])
         note_categories.set_hidden(["test"], True)
         note_categories.rename("test", "test2")
-        self.assertEqual(list(note_categories.get()), [{'name': 'test', 'hidden': 0, 'id': 1, 'protected': 1}])
+        self.assertEqual(list(note_categories.get()), [{'name': 'test', 'hidden': False, 'id': 1, 'protected': 1}])

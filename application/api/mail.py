@@ -171,7 +171,7 @@ def format_message(message, note):
     # Change all date to readable format
     note['birthdate'] = datetime.date.fromtimestamp(note['birthdate'])
     note['birthdate'] = note['birthdate'].strftime("%d/%m/%Y")
-    if note['overdraft_date'].isValid():
+    if note['overdraft_date'] and note['overdraft_date'].isValid():
         note['overdraft_date'] = note['overdraft_date'].toString("dd/MM/yyyy")
     else:
         note['overdraft_date'] = "Jamais"

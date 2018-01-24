@@ -363,6 +363,7 @@ version = "0.1.0"
 dependencies = [
  "bcrypt 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "bigdecimal 0.0.10 (registry+https://github.com/rust-lang/crates.io-index)",
+ "byteorder 1.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "chrono 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "cpython 0.1.0 (git+https://github.com/dgrunwald/rust-cpython.git)",
  "diesel 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",

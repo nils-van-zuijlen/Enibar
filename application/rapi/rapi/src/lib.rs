@@ -2,6 +2,7 @@
 
 extern crate bcrypt;
 extern crate bigdecimal;
+extern crate byteorder;
 extern crate chrono;
 #[macro_use]
 extern crate cpython;
