@@ -30,6 +30,7 @@ import api.base
 import rapi
 
 PRODUCT_FIELDS = ['id', 'name', 'category', 'percentage']
+PRODUCT_FIELDS_CACHE = {}
 
 
 def add(name, *, category_name=None, category_id=None, percentage=0):
@@ -113,9 +114,13 @@ def get(**filter_):
 
     :param dict filter_: filter to apply
     """
+    global PRODUCT_FIELDS_CACHE
+
     cursor = api.base.filtered_getter("products", filter_)
     while cursor.next():
-        yield {field: cursor.value(field) for field in
+        if PRODUCT_FIELDS_CACHE == {}:
+            PRODUCT_FIELDS_CACHE = {f: cursor.indexOf(f) for f in PRODUCT_FIELDS}
+        yield {field: cursor.value(PRODUCT_FIELDS_CACHE[field]) for field in
                PRODUCT_FIELDS}
 
 

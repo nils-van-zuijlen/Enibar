@@ -28,6 +28,10 @@ import api.notes
 import rapi
 
 
+NOTE_CATEGORY_FIELDS = ['id', 'name', 'hidden', 'protected']
+NOTE_CATEGORY_FIELDS_CACHE = {}
+
+
 def add(name):
     """ Add an empty note category
 
@@ -157,14 +161,14 @@ def get(**filter_):
 
     :param dict filter_: filter to apply
     """
+    global NOTE_CATEGORY_FIELDS_CACHE
+
     cursor = api.base.filtered_getter("note_categories", filter_)
     while cursor.next():
-        yield {
-            'id': cursor.value('id'),
-            'name': cursor.value('name'),
-            'hidden': cursor.value('hidden'),
-            'protected': cursor.value('protected'),
-        }
+        if NOTE_CATEGORY_FIELDS_CACHE == {}:
+            NOTE_CATEGORY_FIELDS_CACHE = {f: cursor.indexOf(f) for f in NOTE_CATEGORY_FIELDS}
+        yield {field: cursor.value(NOTE_CATEGORY_FIELDS_CACHE[field]) for field in
+               NOTE_CATEGORY_FIELDS}
 
 
 get_unique = api.base.make_get_unique(get)

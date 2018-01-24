@@ -29,6 +29,10 @@ import api.base
 import rapi
 
 
+PANEL_FIELDS = ['id', 'name', 'hidden']
+PANEL_FIELDS_CACHE = {}
+
+
 def add(name):
     """ Add a panel.
 
@@ -110,13 +114,14 @@ def get(**filter_):
 
     :param dict filter_: filter to apply
     """
+    global PANEL_FIELDS_CACHE
+
     cursor = api.base.filtered_getter("panels", filter_)
     while cursor.next():
-        yield {
-            'name': cursor.value('name'),
-            'hidden': cursor.value('hidden'),
-            'id': cursor.value('id'),
-        }
+        if PANEL_FIELDS_CACHE == {}:
+            PANEL_FIELDS_CACHE = {f: cursor.indexOf(f) for f in PANEL_FIELDS}
+        yield {field: cursor.value(PANEL_FIELDS_CACHE[field]) for field in
+               PANEL_FIELDS}
 
 
 def get_content(panel_id):

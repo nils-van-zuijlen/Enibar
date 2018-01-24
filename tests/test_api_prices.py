@@ -118,6 +118,7 @@ class PricesTest(basetest.BaseTest):
         self.assertIsNotNone(price_id)
 
         self.assertEqual(list(api.prices.get()), [{
+            'alcoholic': False,
             'id': price_id,
             'label': "Unité",
             'value': 0,
@@ -127,6 +128,7 @@ class PricesTest(basetest.BaseTest):
         api.prices.add(None, price_desc_id, 0)
         self.assertTrue(self.count_prices(), 2)
         self.assertEqual(list(api.prices.get(id=price_id)), [{
+            'alcoholic': False,
             'id': price_id,
             'label': "Unité",
             'value': 0,
@@ -143,6 +145,7 @@ class PricesTest(basetest.BaseTest):
         api.prices.add(pid, desc_id2, 0)
         self.assertIsNone(api.prices.get_unique(value=0))
         self.assertEqual(api.prices.get_unique(id=id1), {
+            'alcoholic': False,
             'id': id1,
             'label': "Unité",
             'value': 0,
@@ -183,10 +186,10 @@ class PricesTest(basetest.BaseTest):
         desc_id = api.prices.add_descriptor("Unité", self.cat_eat, 100)
         settings.ALCOHOL_MAJORATION = 0.0
         settings.refresh_cache()
-        self.assertEqual(list(api.prices.get()), [{'label': 'Unité', 'id': 1, 'product': 1, 'category': 1, 'value': 0.0}])
+        self.assertEqual(list(api.prices.get()), [{'label': 'Unité', 'id': 1, 'product': 1, 'category': 1, 'value': 0.0, 'alcoholic': True}])
         settings.ALCOHOL_MAJORATION = 5.0
         settings.refresh_cache()
-        self.assertEqual(list(api.prices.get()), [{'label': 'Unité', 'id': 1, 'product': 1, 'category': 1, 'value': 5.0}])
+        self.assertEqual(list(api.prices.get()), [{'label': 'Unité', 'id': 1, 'product': 1, 'category': 1, 'value': 5.0, 'alcoholic': True}])
         settings.ALCOHOL_MAJORATION = 0.0
         settings.refresh_cache()
 

@@ -29,6 +29,10 @@ import api.base
 import rapi
 
 
+CATEGORY_FIELDS_CACHE = {}
+CATEGORY_FIELDS = ['id', 'name', 'alcoholic', 'color']
+
+
 def add(name):
     """ Add category
 
@@ -79,14 +83,14 @@ def get(**filter_):
 
     :param dict filter_: filter to apply
     """
+    global CATEGORY_FIELDS_CACHE
+
     cursor = api.base.filtered_getter("categories", filter_)
     while cursor.next():
-        yield {
-            'id': cursor.value('id'),
-            'name': cursor.value('name'),
-            'alcoholic': cursor.value('alcoholic'),
-            'color': cursor.value('color'),
-        }
+        if CATEGORY_FIELDS_CACHE == {}:
+            CATEGORY_FIELDS_CACHE = {f: cursor.indexOf(f) for f in CATEGORY_FIELDS}
+        yield {field: cursor.value(CATEGORY_FIELDS_CACHE[field]) for field in
+               CATEGORY_FIELDS}
 
 
 get_unique = api.base.make_get_unique(get)

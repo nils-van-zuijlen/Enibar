@@ -30,6 +30,10 @@ import api.base
 import settings
 
 
+PRICE_FIELDS = ['id', 'label', 'value', 'product', 'category', 'alcoholic']
+PRICE_FIELDS_CACHE = {}
+
+
 def add_descriptor(name, category, quantity):
     """ Add price descriptor
 
@@ -159,6 +163,8 @@ def get(**kwargs):
 
     :param \*\*kwargs: filters to apply
     """
+    global PRICE_FIELDS_CACHE
+
     with Cursor() as cursor:
         filters = []
         for key in kwargs:
@@ -180,13 +186,12 @@ def get(**kwargs):
 
         if cursor.exec_():
             while cursor.next():
-                yield {
-                    'id': cursor.value('id'),
-                    'label': cursor.value('label'),
-                    'value': cursor.value('value') + settings.ALCOHOL_MAJORATION * cursor.value("alcoholic"),
-                    'product': cursor.value('product'),
-                    'category': cursor.value('category'),
-                }
+                if PRICE_FIELDS_CACHE == {}:
+                    PRICE_FIELDS_CACHE = {f: cursor.indexOf(f) for f in PRICE_FIELDS}
+                line = {field: cursor.value(PRICE_FIELDS_CACHE[field]) for field in
+                       PRICE_FIELDS}
+                line['value'] += settings.ALCOHOL_MAJORATION * line['alcoholic']
+                yield line
 
 
 def set_value(id_, value):
