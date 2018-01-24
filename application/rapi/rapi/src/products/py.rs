@@ -5,7 +5,6 @@ use BigDecimal;
 use bigdecimal;
 use std::str::FromStr;
 
-
 pub fn py_remove(py: Python, id: i32) -> PyResult<PyBool> {
     let conn = ::DB_POOL.get().unwrap();
 

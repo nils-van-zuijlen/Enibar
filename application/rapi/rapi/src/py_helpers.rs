@@ -18,8 +18,7 @@ impl ToPyObject for BigDecimal {
     type ObjectType = PyObject;
 
     fn to_py_object(&self, py: Python) -> Self::ObjectType {
-
-        return self.0.to_f64().to_py_object(py)
+        return self.0.to_f64().to_py_object(py);
     }
 }
 
@@ -27,9 +26,7 @@ impl ToPyObject for NaiveDate {
     type ObjectType = PyObject;
 
     fn to_py_object(&self, py: Python) -> Self::ObjectType {
-        let date = |yyyy: i32, mm: u32, dd: u32| {
-            DATE.call(py, (yyyy, mm, dd), None).unwrap()
-        };
+        let date = |yyyy: i32, mm: u32, dd: u32| DATE.call(py, (yyyy, mm, dd), None).unwrap();
 
         date(self.year(), self.month(), self.day()).into_py_object(py)
     }

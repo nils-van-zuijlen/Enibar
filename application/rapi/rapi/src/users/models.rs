@@ -12,7 +12,8 @@ pub struct NewUser<'a> {
 #[primary_key(login)]
 #[table_name = "admins"]
 pub struct User {
-    #[validate(custom = "::validators::not_empty")] pub login: String,
+    #[validate(custom = "::validators::not_empty")]
+    pub login: String,
     pub password: String,
     pub manage_notes: bool,
     pub manage_users: bool,

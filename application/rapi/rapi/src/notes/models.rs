@@ -2,7 +2,7 @@ use schema::notes;
 use validator::Validate;
 use note_categories::models::NoteCategory;
 use BigDecimal;
-use ::NaiveDate;
+use NaiveDate;
 
 #[derive(Debug, Queryable, AsChangeset, Identifiable, Model, Validate)]
 #[table_name = "notes"]
@@ -33,4 +33,3 @@ pub struct NoteCacheEntry {
     pub categories: Vec<NoteCategory>,
     pub hidden: bool,
 }
-

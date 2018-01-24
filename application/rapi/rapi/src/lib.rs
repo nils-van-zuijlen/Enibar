@@ -51,7 +51,6 @@ use redis::Commands;
 
 pub(crate) use diesel_helpers::*;
 
-
 lazy_static! {
     pub static ref DB_POOL: r2d2::Pool<ConnectionManager<PgConnection>> = {
         let manager = ConnectionManager::<PgConnection>::new(

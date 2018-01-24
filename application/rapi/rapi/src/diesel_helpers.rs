@@ -7,7 +7,6 @@ use std::ops::Deref;
 use std::error::Error;
 use std::io::Write;
 
-
 macro_rules! diesel_wrapper {
     ($sql_type: ident -> $rust_type: ident ($real_type: path)) => {
         #[derive(Debug, Clone)]
