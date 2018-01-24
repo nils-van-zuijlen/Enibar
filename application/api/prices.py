@@ -32,6 +32,8 @@ import settings
 
 PRICE_FIELDS = ['id', 'label', 'value', 'product', 'category', 'alcoholic']
 PRICE_FIELDS_CACHE = {}
+PRICE_DESCRIPTOR_FIELDS = ['id', 'label', 'category', 'quantity']
+PRICE_DESCRIPTOR_FIELDS_CACHE = {}
 
 
 def add_descriptor(name, category, quantity):
@@ -103,6 +105,7 @@ def get_descriptor(**kwargs):
 
     :param \*\*kwargs: filters to apply
     """
+    global PRICE_DESCRIPTOR_FIELDS_CACHE
     with Cursor() as cursor:
         request_filters = []
         for key in kwargs:
@@ -115,12 +118,11 @@ def get_descriptor(**kwargs):
             cursor.bindValue(":{}".format(key), arg)
         cursor.exec_()
         while cursor.next():
-            yield {
-                'id': cursor.value('id'),
-                'label': cursor.value('label'),
-                'category': cursor.value('category'),
-                'quantity': cursor.value('quantity'),
-            }
+            if PRICE_DESCRIPTOR_FIELDS_CACHE == {}:
+                PRICE_DESCRIPTOR_FIELDS_CACHE = {f: cursor.indexOf(f) for f in PRICE_DESCRIPTOR_FIELDS}
+            yield {field: cursor.value(PRICE_DESCRIPTOR_FIELDS_CACHE[field]) for field in
+                    PRICE_DESCRIPTOR_FIELDS}
+
 
 
 def add(product, price_description, value):
