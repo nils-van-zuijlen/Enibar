@@ -8,8 +8,8 @@ lazy_static! {
     pub static ref DATE: PyObject = {
         let gil = Python::acquire_gil();
         let py = gil.python();
-        let datetime_module = py.import("datetime").expect("Can't import datetime");
-        let date = datetime_module.get(py, "date").unwrap();
+        let datetime_module = py.import("PyQt5.QtCore").expect("Can't import datetime");
+        let date = datetime_module.get(py, "QDate").unwrap();
         date
     };
 }
