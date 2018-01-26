@@ -11,7 +11,8 @@ RUN pacman -Syq --noconfirm \
     qt5-base \
     redis \
     rustup \
-    xorg-server-xvfb
+    xorg-server-xvfb \
+    mpfr
 
 RUN rustup override set nightly
 
