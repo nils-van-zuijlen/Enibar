@@ -59,6 +59,7 @@ class NotesList(QtWidgets.QListWidget):
                 widget.setHidden(True)
                 return
             self.nb_shown += 1
+        self.sortItems(QtCore.Qt.DescendingOrder)
 
     def hide_unmatched_items(self, search_text):
         self.nb_shown = 0
