@@ -346,6 +346,7 @@ class MainWindow(QtWidgets.QMainWindow):
         """ Validate transaction if a note is currently selected. And give the
             focus back to the notes_list.
         """
+        api.redis.send_message('enibar-panels', {})
         if self.selected and self.product_list.products:
 
             note = api.notes.get(lambda x: x["nickname"] ==

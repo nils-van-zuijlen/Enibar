@@ -29,6 +29,7 @@ import api.panels
 import settings
 from .auth_prompt_window import ask_auth
 import api.redis
+import random
 
 
 def fail_callback_dummy():
@@ -297,10 +298,8 @@ class ProductsContainer(QtWidgets.QWidget):
         self.columns = [Column(), Column(), Column()]
 
         self.layout = QtWidgets.QHBoxLayout()
+        random.shuffle(self.columns)
         self.setLayout(self.layout)
-        for col in self.columns:
-            self.layout.addWidget(col)
-        self.layout.setContentsMargins(0, 0, 0, 0)
 
     def build(self):
         """ Build
@@ -328,6 +327,8 @@ class ProductsContainer(QtWidgets.QWidget):
         self.products = {}
         content = list(api.panels.get_content(panel_id=self.panel_id))
         content = sorted(content, key=lambda x: x['product_name'].lower())
+        random.shuffle(content)
+
         for product in content:
             cid = product['category_id']
             if cid in alcoholic_categories:
@@ -363,6 +364,7 @@ class ProductsContainer(QtWidgets.QWidget):
             self.products,
             key=lambda x: len(self.products[x]['products'])
         ))
+        indexes = self.products
         for cat in indexes:
             col = self.get_least_filled()
             if not self.products[cat]['products']:
@@ -370,6 +372,11 @@ class ProductsContainer(QtWidgets.QWidget):
             col.count += len(self.products[cat]['products'])
             col.layout.addWidget(self.products[cat]['widget'])
             self.products[cat]['widget'].finalise()
+
+        random.shuffle(self.columns)
+        for col in self.columns:
+            self.layout.addWidget(col)
+        self.layout.setContentsMargins(0, 0, 0, 0)
 
     @property
     def empty(self):
