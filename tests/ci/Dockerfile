@@ -1,6 +1,6 @@
 FROM base/archlinux:latest
 
-RUN pacman -Syq --noconfirm \
+RUN pacman -Syuq --noconfirm \
     gcc \
     libx11 \
     make \
