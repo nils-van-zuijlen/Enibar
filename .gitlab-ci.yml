@@ -10,11 +10,6 @@ services:
     - postgres:latest
     - redis:latest
 
-cache:
-    paths:
-        - application/rapi/target
-        - application/rapi/.cargo
-
 variables:
     DATABASE_HOST: postgres
     DATABASE_PORT: 5432
@@ -24,7 +19,7 @@ variables:
     POSTGRES_PASSWORD: postgres
     REDIS_HOST: redis
     PGPASSWORD: postgres
-    CARGO_INCREMENTAL: 1
+    CARGO_INCREMENTAL: 0
     CARGO_HOME: .cargo
     NOSE_NOCAPTURE: 1
     DISPLAY: ":1069"
@@ -48,8 +43,6 @@ api:
     script:
         - cd application
         - nosetests ../tests/*api*.py -v --with-coverage --cover-package=api
-    cache:
-        paths: []
 rapi:
     stage: test
     tags:
@@ -68,8 +61,6 @@ gui:
         - Xvfb $DISPLAY -screen 0 1600x1200x24+32 &
         - export DISPLAY=$DISPLAY
         - nosetests ../tests/*gui*.py -v --with-coverage --cover-package=gui
-    cache:
-        paths: []
 
 pep:
     stage: style
@@ -77,8 +68,6 @@ pep:
         - docker
     script:
         - pycodestyle --exclude=documentation,application/local_settings.py,application/rapi/.cargo,.enibar-venv,.ropeproject,utils --ignore=E722,E501,W391,E128,E124 application
-    cache:
-        paths: []
 
 rust:
     stage: build
@@ -92,8 +81,6 @@ rust:
         - cd application/rapi
         - cargo build --all --release
         - cp target/release/librapi.so ../rapi.so
-    cache:
-        policy: push
 
 build_ci_image:
     stage: preparation
