@@ -121,8 +121,7 @@ def get_descriptor(**kwargs):
             if PRICE_DESCRIPTOR_FIELDS_CACHE == {}:
                 PRICE_DESCRIPTOR_FIELDS_CACHE = {f: cursor.indexOf(f) for f in PRICE_DESCRIPTOR_FIELDS}
             yield {field: cursor.value(PRICE_DESCRIPTOR_FIELDS_CACHE[field]) for field in
-                    PRICE_DESCRIPTOR_FIELDS}
-
+                   PRICE_DESCRIPTOR_FIELDS}
 
 
 def add(product, price_description, value):
