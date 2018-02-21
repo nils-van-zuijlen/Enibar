@@ -123,14 +123,14 @@ dependencies = [
 
 [[package]]
 name = "diesel"
-version = "1.0.0"
+version = "1.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "bigdecimal 0.0.10 (registry+https://github.com/rust-lang/crates.io-index)",
  "bitflags 1.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "byteorder 1.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "chrono 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "diesel_derives 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "diesel_derives 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "num-bigint 0.1.41 (registry+https://github.com/rust-lang/crates.io-index)",
  "num-integer 0.1.35 (registry+https://github.com/rust-lang/crates.io-index)",
  "num-traits 0.1.41 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -139,7 +139,7 @@ dependencies = [
 
 [[package]]
 name = "diesel_derives"
-version = "1.0.0"
+version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "quote 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -344,7 +344,7 @@ name = "r2d2-diesel"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "diesel 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "diesel 1.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "r2d2 0.8.2 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -366,7 +366,7 @@ dependencies = [
  "byteorder 1.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "chrono 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "cpython 0.1.0 (git+https://github.com/dgrunwald/rust-cpython.git)",
- "diesel 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "diesel 1.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "error-chain 0.11.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "lazy_static 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "num-traits 0.1.41 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -648,8 +648,8 @@ dependencies = [
 "checksum chrono 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)" = "7c20ebe0b2b08b0aeddba49c609fe7957ba2e33449882cb186a180bc60682fa9"
 "checksum cpython 0.1.0 (git+https://github.com/dgrunwald/rust-cpython.git)" = "<none>"
 "checksum dbghelp-sys 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "97590ba53bcb8ac28279161ca943a924d1fd4a8fb3fa63302591647c4fc5b850"
-"checksum diesel 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)" = "de51f2e2321a7db9bdfd7e3457c6ce11dce5009cad7ff9ac25a04879239e5fe6"
-"checksum diesel_derives 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)" = "274aeed033dcd9e40f472cd282a3692512fef153283ec4c745873517d0e67f3f"
+"checksum diesel 1.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "925325c57038f2f14c0413bdf6a92ca72acff644959d0a1a9ebf8d19be7e9c01"
+"checksum diesel_derives 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "28e2b2605ac6a3b9a586383f5f8b2b5f1108f07a421ade965b266289d2805e79"
 "checksum dtoa 0.4.2 (registry+https://github.com/rust-lang/crates.io-index)" = "09c3753c3db574d215cba4ea76018483895d7bff25a31b49ba45db21c48e50ab"
 "checksum error-chain 0.11.0 (registry+https://github.com/rust-lang/crates.io-index)" = "ff511d5dc435d703f4971bc399647c9bc38e20cb41452e3b9feb4765419ed3f3"
 "checksum fuchsia-zircon 0.3.2 (registry+https://github.com/rust-lang/crates.io-index)" = "bd510087c325af53ba24f3be8f1c081b0982319adcb8b03cad764512923ccc19"

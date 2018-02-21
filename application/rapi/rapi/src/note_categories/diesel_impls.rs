@@ -1,8 +1,7 @@
 use byteorder::{NetworkEndian, ReadBytesExt};
-use diesel::Queryable;
 use diesel::pg::Pg;
-use diesel::row::Row;
-use diesel::types::*;
+use diesel::sql_types::*;
+use diesel::deserialize::FromSql;
 use std::error::Error;
 
 use super::models::{NoteCategory, NoteCategorySql};
@@ -10,25 +9,6 @@ use super::models::{NoteCategory, NoteCategorySql};
 impl HasSqlType<NoteCategorySql> for Pg {
     fn metadata(_lookup: &Self::MetadataLookup) -> Self::TypeMetadata {
         unreachable!()
-    }
-}
-
-impl NotNull for NoteCategorySql {}
-impl SingleValue for NoteCategorySql {}
-
-expression_impls!(NoteCategorySql -> NoteCategory);
-
-impl Queryable<NoteCategorySql, Pg> for NoteCategory {
-    type Row = NoteCategory;
-
-    fn build(row: Self::Row) -> Self {
-        row
-    }
-}
-
-impl FromSqlRow<NoteCategorySql, Pg> for NoteCategory {
-    fn build_from_row<T: Row<Pg>>(row: &mut T) -> Result<Self, Box<Error + Send + Sync>> {
-        FromSql::<NoteCategorySql, Pg>::from_sql(row.take())
     }
 }
 

@@ -1,5 +1,5 @@
 table! {
-    use diesel::types::*;
+    use diesel::sql_types::*;
     use note_categories::models::NoteCategorySql;
     notes_cache (id) {
         id -> Int8,

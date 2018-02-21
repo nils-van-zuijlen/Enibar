@@ -2,6 +2,8 @@ use schema::note_categories;
 use validator::Validate;
 
 #[derive(Debug, Queryable, AsChangeset, Identifiable, Model, Validate)]
+#[derive(AsExpression)]
+#[sql_type="NoteCategorySql"]
 #[table_name = "note_categories"]
 pub struct NoteCategory {
     pub id: i32,
@@ -19,4 +21,5 @@ pub struct NewNoteCategory<'a> {
 }
 
 #[derive(Debug, Clone)]
+#[derive(SqlType)]
 pub struct NoteCategorySql;
