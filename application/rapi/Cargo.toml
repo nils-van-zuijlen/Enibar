@@ -4,5 +4,3 @@ members = [
     "rapi_codegen"
 ]
 
-[patch.crates-io]
-metadeps = { git = "https://github.com/Eijebong/metadeps.git", branch = "bump_error_chain" }
