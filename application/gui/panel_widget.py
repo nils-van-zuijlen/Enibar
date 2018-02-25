@@ -24,11 +24,11 @@ Panels Widget for Main window
 """
 
 from PyQt5 import QtWidgets, QtCore, uic
-import collections
 import api.panels
 import settings
 from .auth_prompt_window import ask_auth
 import api.redis
+import rapi
 
 
 def fail_callback_dummy():
@@ -51,13 +51,13 @@ class Panels(QtWidgets.QTabWidget):
     def build(self):
         """ Build panels from panels found in database
         """
-        for panel in api.panels.get(hidden=False):
-            if settings.SHOWN_PANELS and not panel['name'] in settings.SHOWN_PANELS:
+        for name, panel in sorted(rapi.panels.get_all().items()):
+            if settings.SHOWN_PANELS and name not in settings.SHOWN_PANELS:
                 continue
-            widget = PanelTab(panel['id'], self.main_window)
+            widget = PanelTab(panel, self.main_window)
             if not widget.empty:
                 self.panels.append(widget)
-                self.addTab(widget, panel['name'])
+                self.addTab(widget, name)
 
     @ask_auth("manage_products", fail_callback=fail_callback_dummy)
     def change_alcohol(self, _):
@@ -88,13 +88,11 @@ class Panels(QtWidgets.QTabWidget):
 class PanelTab(QtWidgets.QWidget):
     """ Panel widget
     """
-    def __init__(self, panel_id, main_window):
+    def __init__(self, panel, main_window):
         super().__init__()
-        self.panel_id = panel_id
         self.main_window = main_window
         uic.loadUi('ui/panel_widget.ui', self)
-        self.scroll_area_content.panel_id = self.panel_id
-        self.scroll_area_content.build()
+        self.scroll_area_content.build(panel)
         self.connect_signals()
 
     @property
@@ -287,12 +285,9 @@ class ProductsContainer(QtWidgets.QWidget):
     This is the main product container. It's a scrollable area which contain
     columns to create a nice and optimised layout for displaying products in
     their categories.
-    before calling build one must set the panel_id attribute to the panel id
-    you want to build product container.
     """
     def __init__(self):
         super().__init__()
-        self.panel_id = None
         self.products = {}
         self.columns = [Column(), Column(), Column()]
 
@@ -302,60 +297,43 @@ class ProductsContainer(QtWidgets.QWidget):
             self.layout.addWidget(col)
         self.layout.setContentsMargins(0, 0, 0, 0)
 
-    def build(self):
+    def build(self, content):
         """ Build
         Build the product list with all categories and products of the given
         panel. All products of the panel are fetched from database and are
-        sorted in their respectives categories. Widgets used to insert
-        categores and products are built on the fly.  Then all categories are
-        sorted into columns in an optimised maner.
+        sorted in their respective categories. Widgets used to insert
+        categories and products are built on the fly.  Then all categories are
+        sorted into columns in an optimised manner.
         """
-        try:
-            if self.parent().parent().parent().main_window.\
-               hide_alcohol.isChecked():
-                alcoholic_categories = [item['id'] for item in
-                                        api.categories.get(alcoholic=True)]
-            else:
-                alcoholic_categories = []
-        except AttributeError:  # The first time, the menu does not exist...
-            alcoholic_categories = []
+        show_alcohols = not self.parent().parent().parent().main_window.hide_alcohol.isChecked()
 
-        if not self.panel_id:
-            raise Exception(
-                "{} attribute plane_id must not be None when "
-                "calling build method.".format(str(self))
-            )
         self.products = {}
-        content = list(api.panels.get_content(panel_id=self.panel_id))
-        content = sorted(content, key=lambda x: x['product_name'].lower())
-        for product in content:
-            cid = product['category_id']
-            if cid in alcoholic_categories:
+        for category_name, category in sorted(content.items()):
+            if not show_alcohols and category['alcoholic']:
                 continue
-            pid = product['product_id']
-            if cid not in self.products:
-                self.products[cid] = {
-                    'name': product['category_name'],
-                    'widget': CategoryContainer(product['category_name']),
-                    'products': {}
-                }
-            if pid not in self.products[cid]['products']:
-                prices = self.fetch_prices(pid)
-                price_sum = sum([price for _, price in prices.items()])
-                if not prices or not price_sum:
-                    continue
+            cid = category['category_id']
+
+            self.products[cid] = {
+                'name': category_name,
+                'widget': CategoryContainer(category_name, category['color']),
+                'products': {}
+            }
+
+            for product_name, product in category['products'].items():
+                pid = product['product_id']
+
                 widget = get_product_widget(
                     cid,
                     pid,
-                    product['product_name'],
-                    product['category_name'],
-                    prices,
-                    product['product_percentage']
+                    product_name,
+                    category_name,
+                    product['prices'],
+                    product['percentage']
                 )
                 self.products[cid]['products'][pid] = {
                     'widget': widget,
-                    'name': product['product_name'],
-                    'prices': prices,
+                    'name': product_name,
+                    'prices': product['prices'],
                 }
                 self.products[cid]['widget'].layout.addWidget(widget)
 
@@ -374,20 +352,6 @@ class ProductsContainer(QtWidgets.QWidget):
     @property
     def empty(self):
         return not bool(self.products)
-
-    @staticmethod
-    def fetch_prices(pid):
-        """ Fetch prices
-        Fetch prices of the given id
-
-        :param int pid: Product id
-        :return OrderedDict: prices
-        """
-        prices = collections.OrderedDict()
-        for price in api.prices.get(product=pid):
-            prices[price['label']] = price['value']
-
-        return prices
 
     def get_least_filled(self):
         """ Get least filled
@@ -424,18 +388,14 @@ class CategoryContainer(QtWidgets.QGroupBox):
     """ Catgory container
     QGroupBox which contain all products of a given category
     """
-    def __init__(self, category_name):
+    def __init__(self, category_name, category_color):
         super().__init__(category_name)
         self.layout = QtWidgets.QVBoxLayout()
         self.setLayout(self.layout)
         self.spacer = None
 
-        cat = api.categories.get_unique(name=category_name)
-        if not cat:
-            return
-
         self.setStyleSheet(
-            "QGroupBox{{background-color: {}}}".format(cat['color'])
+            "QGroupBox{{background-color: {}}}".format(category_color)
         )
 
     def finalise(self):
@@ -524,7 +484,7 @@ class Button(BaseProduct, QtWidgets.QPushButton):
         self.label_layout.addWidget(self.label, 0, 0)
 
         self.wheel_callback = None
-        self.price_name, self.price_value = tuple(iter(prices.items()))[0]
+        self.price_name, self.price_value = list(prices.items())[0]
         self.should_accept_adding_products = True
 
     def connect_mouse_wheel(self, func):
@@ -550,11 +510,11 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
     """ Combobox
     ComboBox used to display products which contain multiple prices. It allow
     to change list state when clicked and reset itself when it loses focus or
-    item is clicked so product name is allways displayed while you can still
+    item is clicked so product name is always displayed while you can still
     select a given price.
 
-    To avoir adding 2 products when we press on enter, we use the
-    should_accept_adding_products variable. It's True when whe wheel over
+    To avoid adding 2 products when we press on enter, we use the
+    should_accept_adding_products variable. It's True when we wheel over
     something or when we click it but not when we press enter.
     """
     def __init__(self, cid, pid, name, cat_name, prices, percentage=None):
@@ -579,8 +539,8 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
         self.name_layout.addWidget(self.name_label)
 
         self.product_view.addItem(self.name_item)
-        for price in prices:
-            widget = QtWidgets.QListWidgetItem(price)
+        for price_label in prices:
+            widget = QtWidgets.QListWidgetItem(price_label)
             widget.setTextAlignment(QtCore.Qt.AlignHCenter |
                 QtCore.Qt.AlignVCenter)
             widget.setSizeHint(QtCore.QSize(100, 35))
@@ -677,15 +637,10 @@ def get_product_widget(cid, pid, name, cat_name, prices, percentage=None):
     :param OrderedDict prices: Products prices.
     :return BaseProduct: Widget
     """
-    valid_prices = collections.OrderedDict()
-    for price, value in prices.items():
-        if value != 0:
-            valid_prices[price] = value
-
-    if len(valid_prices) == 1:
-        widget = Button(cid, pid, name, cat_name, valid_prices, percentage)
+    if len(prices) == 1:
+        widget = Button(cid, pid, name, cat_name, prices, percentage)
     else:
-        widget = ComboBox(cid, pid, name, cat_name, valid_prices, percentage)
+        widget = ComboBox(cid, pid, name, cat_name, prices, percentage)
 
     # Set attributes
     widget.setMinimumSize(QtCore.QSize(100, 35))

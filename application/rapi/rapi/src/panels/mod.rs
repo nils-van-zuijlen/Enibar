@@ -1,4 +1,5 @@
 pub mod models;
+mod diesel_impls;
 mod py;
 
 use cpython::{PyModule, Python};
@@ -8,7 +9,7 @@ use errors::ErrorKind::*;
 use validator::Validate;
 use self::models::*;
 use self::py::*;
-use schema::{categories, panel_content, panels, products};
+use schema::{categories, panel_content, panels, products, panels_content};
 use products::models::Product;
 
 impl Panel {
@@ -28,6 +29,10 @@ impl Panel {
             .filter(panels::name.eq(name))
             .first(conn)
             .map_err(|e| e.into())
+    }
+
+    pub fn get_all(conn: &PgConnection) -> Result<Vec<PanelContent>> {
+        panels_content::table.load::<PanelContent>(conn).map_err(|e| e.into())
     }
 
     // TODO: Remove this when it's not necessary anymore
@@ -95,6 +100,8 @@ pub fn as_module(py: Python) -> PyModule {
         py_fn!(py, py_remove_products(id: i32, product_ids: Vec<i32>)),
     );
     let _ = module.add(py, "get_content", py_fn!(py, py_get_content(id: i32)));
+    let _ = module.add(py, "get_all", py_fn!(py, py_get_all()));
 
     module
 }
+
