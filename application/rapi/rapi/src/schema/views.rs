@@ -24,3 +24,16 @@ table! {
         hidden -> Bool,
     }
 }
+
+table! {
+    use diesel::sql_types::*;
+    use panels::models::PanelProductsSql;
+    panels_content (panel_products) {
+        panel_name -> Varchar,
+        panel_products -> Array<PanelProductsSql>,
+        category_id -> Int4,
+        category_name -> Varchar,
+        category_alcoholic -> Bool,
+        category_color -> Varchar,
+    }
+}

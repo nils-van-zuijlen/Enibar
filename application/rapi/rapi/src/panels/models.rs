@@ -24,3 +24,25 @@ pub struct PanelItem {
     pub product: Product,
     pub category: Category,
 }
+
+#[derive(Debug, Clone)]
+#[derive(SqlType)]
+pub struct PanelProductsSql;
+
+#[derive(Debug)]
+pub struct PanelProduct {
+    pub product_id: i32,
+    pub product_name: String,
+    pub price_label: String,
+    pub price: ::BigDecimal,
+}
+
+#[derive(Queryable, Debug)]
+pub struct PanelContent {
+    pub panel_name: String,
+    pub products: Vec<PanelProduct>,
+    pub category_id: i32,
+    pub category_name: String,
+    pub category_alcoholic: bool,
+    pub category_color: String,
+}
