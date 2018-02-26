@@ -32,7 +32,7 @@ class SearchTest(basetest.BaseGuiTest):
         self.add_note("test1", "bcd", "fgh")
         self.add_note("test2", "rty", "jhg")
         self.main_win = gui.main_window.MainWindow()
-        self.search_window = gui.search_window.SearchWindow(self.main_win.menu_bar)
+        self.search_window = gui.search_window.SearchWindow(self.main_win.menu_bar, self.main_win.notes_list)
         self.hidden_category = self.add_hidden_notes_category("hidden")
 
     def test_search_by_firstname(self):
