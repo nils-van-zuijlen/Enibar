@@ -660,7 +660,7 @@ class MenuBar(QtWidgets.QMenuBar):
         """ Open a search window
         """
         self._close_window()
-        self.cur_window = SearchWindow(self)
+        self.cur_window = SearchWindow(self, self.parent().notes_list)
         self._connect_window()
 
     @ask_auth("manage_products")

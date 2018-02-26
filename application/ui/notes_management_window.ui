@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>814</height>
+    <height>838</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -54,7 +54,7 @@
      <item row="6" column="0">
       <widget class="QLabel" name="name_label">
        <property name="text">
-        <string>Nom:</string>
+        <string>&amp;Nom:</string>
        </property>
        <property name="buddy">
         <cstring>name_input</cstring>
@@ -87,7 +87,7 @@
      <item row="2" column="0" colspan="2">
       <widget class="QLabel" name="nickname_label">
        <property name="text">
-        <string>Surnom: </string>
+        <string>S&amp;urnom: </string>
        </property>
        <property name="buddy">
         <cstring>nickname_input</cstring>
@@ -107,7 +107,7 @@
      <item row="17" column="0" colspan="2">
       <widget class="QLabel" name="mail_label">
        <property name="text">
-        <string>Mail:</string>
+        <string>Mai&amp;l:</string>
        </property>
        <property name="buddy">
         <cstring>mail_input</cstring>
@@ -211,7 +211,7 @@
      <item row="20" column="0" colspan="2">
       <widget class="QLabel" name="phone_label">
        <property name="text">
-        <string>Téléphone:</string>
+        <string>&amp;Téléphone:</string>
        </property>
        <property name="buddy">
         <cstring>phone_input</cstring>
@@ -328,7 +328,7 @@
      <item row="8" column="0" colspan="2">
       <widget class="QLabel" name="birthdate_label">
        <property name="text">
-        <string>Date de naissance: </string>
+        <string>&amp;Date de naissance: </string>
        </property>
        <property name="buddy">
         <cstring>birthdate_input</cstring>
@@ -338,7 +338,7 @@
      <item row="4" column="0" colspan="2">
       <widget class="QLabel" name="first_name_label">
        <property name="text">
-        <string>Prénom: </string>
+        <string>Pr&amp;énom: </string>
        </property>
        <property name="buddy">
         <cstring>first_name_input</cstring>
@@ -591,5 +591,6 @@
   <slot>remove_category_fnc()</slot>
   <slot>cotiz_fnc()</slot>
   <slot>group_action_fnc()</slot>
+  <slot>trigger_search()</slot>
  </slots>
 </ui>

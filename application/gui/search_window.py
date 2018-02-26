@@ -32,9 +32,10 @@ import api.validator
 
 class SearchWindow(QtWidgets.QDialog):
     """ SearchWindow class """
-    def __init__(self, parent):
+    def __init__(self, parent, notes_list):
         super().__init__(parent)
         uic.loadUi('ui/search_window.ui', self)
+        self.notes_list = notes_list
         self.setWindowFlags(QtCore.Qt.Tool | QtCore.Qt.WindowStaysOnTopHint)
         self.name_input.set_validator(api.validator.NAME)
         self.firstname_input.set_validator(api.validator.NAME)
@@ -56,7 +57,6 @@ class SearchWindow(QtWidgets.QDialog):
                     return False
 
             return True
-        notes_list = self.parent().parent().notes_list
-        notes_list.current_filter = notes_filter
-        notes_list.refresh(api.notes.get(notes_list.current_filter))
+        self.notes_list.current_filter = notes_filter
+        self.notes_list.refresh(api.notes.get(self.notes_list.current_filter))
 

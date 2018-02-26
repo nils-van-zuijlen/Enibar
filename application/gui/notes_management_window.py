@@ -27,6 +27,7 @@ ManageNotes Window
 from PyQt5 import QtWidgets, QtCore, QtGui, uic
 
 from gui.input_widget import Input
+from gui.search_window import SearchWindow
 import api.notes
 import api.validator
 import api.note_categories
@@ -44,6 +45,9 @@ class NotesManagementWindow(QtWidgets.QDialog):
 
         self.main_window = main_window
         self.performer = performer
+
+        self.shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+F"), self)
+        self.shortcut.activated.connect(self.trigger_search)
 
         # Add validators on inputs.
         self.nickname_input.set_validator(api.validator.NAME)
@@ -65,6 +69,10 @@ class NotesManagementWindow(QtWidgets.QDialog):
         self.note_list.refresh(api.notes.get())
         self.note_list.setFocus(True)
         self.show()
+
+    def trigger_search(self):
+        self.cur_window = SearchWindow(self, self.note_list)
+        self.cur_window.finished.connect(lambda: self.note_list.refresh(api.notes.get()))
 
     def redis_handle(self, channel, message):
         if channel == 'enibar-notes-mgnt':
