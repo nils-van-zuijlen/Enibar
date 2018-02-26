@@ -164,3 +164,6 @@ async def ping_sql(app):
             cursor.prepare("SELECT 1")
             cursor.exec_()
 
+
+# Open the database connection as soon as possible
+Database()

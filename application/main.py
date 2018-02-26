@@ -22,8 +22,8 @@ Main file of the Application
 import asyncio
 import aioredis
 import api.redis
-import api.sde
 from database import ping_sql
+import api.sde
 import datetime
 import quamash
 import sys
