@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>550</width>
-    <height>584</height>
+    <width>554</width>
+    <height>603</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -57,6 +57,9 @@
      </property>
      <property name="pixmap">
       <pixmap>../heroes.png</pixmap>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>
