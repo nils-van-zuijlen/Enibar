@@ -127,7 +127,7 @@ def rollback_transaction(id_, full=False):
             asyncio.ensure_future(task)
             api.redis.send_message("enibar-notes", [note['nickname']])
             return True
-
+        task.close()
     return False
 
 
