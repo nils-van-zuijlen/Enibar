@@ -66,7 +66,6 @@ class Panels(QtWidgets.QTabWidget):
         """
         def callback():
             api.redis.send_message("enibar-alcohol", "")
-            self.rebuild()
         api.redis.set_key("alcohol", str(int(not self.parent().parent().hide_alcohol.isChecked())), callback)
 
     def rebuild(self):
