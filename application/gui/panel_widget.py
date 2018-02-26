@@ -210,7 +210,7 @@ class ProductList(QtWidgets.QTreeWidget):
         """
         name = "{} ({}) - {}".format(product_name, price_name, category_name)
         for i, product in enumerate(self.products):
-            if product['name'] == name and product['deletable']:
+            if product['name'] == name:
                 if product['count'] > 1:
                     product['price'] -= price
                     product['price'] = product['price']
@@ -220,6 +220,14 @@ class ProductList(QtWidgets.QTreeWidget):
                 else:
                     self.takeTopLevelItem(i)
                     del self.products[i]
+
+                if product['product'] == settings.ECOCUP_NAME and product['category'] == settings.ECOCUP_CATEGORY:
+                    if product['price_name'] == settings.ECOCUP_PRICE_TYPES['take']:
+                        self.parent().parent().parent().eco_diff -= 1
+                    else:
+                        self.parent().parent().parent().eco_diff += 1
+                    self.parent().parent().parent().refresh_ecocup_button()
+                break
 
         self.update_total()
 
