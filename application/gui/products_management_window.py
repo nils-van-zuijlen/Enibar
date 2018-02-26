@@ -475,7 +475,7 @@ class ConsumptionList(QtWidgets.QTreeWidget):
         """
         cat_widget = QtWidgets.QTreeWidgetItem(self, [name])
         self.categories.append(cat_widget)
-        for prod in api.products.get(category=id_):
+        for prod in sorted(api.products.get(category=id_), key=lambda x: x['name']):
             self.add_product(prod['name'], name, prod['percentage'])
 
 
