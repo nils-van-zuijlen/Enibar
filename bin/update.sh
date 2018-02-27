@@ -64,12 +64,7 @@ cp -R /usr/lib/python3.6/site-packages/sip.so $VENV/lib/python3.6/site-packages/
 
 cd $APP_DIR
 
-cd rapi
-rustup override set nightly
-rustup update
-cargo build --release
-cd ..
-cp rapi/target/release/librapi.so rapi.so
+wget "https://git.bananium.fr/enib/enibar/-/jobs/artifacts/master/raw/application/rapi.so?job=rust" -O rapi.so
 cd ../bin
 
 ./migrations.py apply
