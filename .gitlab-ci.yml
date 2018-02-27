@@ -75,7 +75,7 @@ rust:
     tags:
         - docker
     artifacts:
-        expire_in: 1h
+        expire_in: 1w
         paths:
             - application/rapi.so
     script:
