@@ -29,6 +29,7 @@ import settings
 from .auth_prompt_window import ask_auth
 import api.redis
 import rapi
+import operator
 
 
 def fail_callback_dummy():
@@ -546,7 +547,8 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
         self.name_layout.addWidget(self.name_label)
 
         self.product_view.addItem(self.name_item)
-        for price_label in prices:
+
+        for price_label in sorted(prices, key=operator.itemgetter(1)):
             widget = QtWidgets.QListWidgetItem(price_label)
             widget.setTextAlignment(QtCore.Qt.AlignHCenter |
                 QtCore.Qt.AlignVCenter)
