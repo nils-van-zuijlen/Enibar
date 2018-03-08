@@ -120,8 +120,6 @@ class MainWindow(QtWidgets.QMainWindow):
             for note in message:
                 api.notes.rebuild_note_cache(note)
             await api.sde.send_notes(message)
-            if self.selected:
-                self._note_refresh(self.notes_list.currentRow())
             self.rebuild_notes_list()
         elif channel == 'enibar-delete':
             for note in message:
