@@ -177,7 +177,7 @@ class NotesManagementWindow(QtWidgets.QDialog):
         if not image.isNull():
             image = image.scaled(QtCore.QSize(120, 160), 1)
         self.photo.setPixmap(image)
-        self.notes_infos.setText('Note: ' + str(note['note']) + ' €')
+        self.notes_infos.setText('Note: ' + str(round(note['note'], 2)) + ' €')
         if note['note'] < 0:
             self.notes_infos.setStyleSheet("color: red;")
         else:
