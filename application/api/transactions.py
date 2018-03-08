@@ -33,7 +33,7 @@ import api.sde
 import datetime
 
 
-def log_transactions(transactions):
+def log_transactions(transactions, do_not=False):
     """ Log multiple transactions
 
     :param list transactions:
@@ -82,7 +82,8 @@ def log_transactions(transactions):
 
         database.commit()
         asyncio.ensure_future(api.sde.send_history_lines(transactions))
-        api.redis.send_message("enibar-notes", list(set(x['note'] for x in transactions)))
+        if not do_not:
+            api.redis.send_message("enibar-notes", list(set(x['note'] for x in transactions)))
         return True
 
 
