@@ -192,6 +192,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # We need that beaucause of #114
         self.take_ecocup_btn.setEnabled(True)
 
+        selected_history = [int(w.data(4, 0)) for w in self.note_history.selectedItems()]
         self.note_history.clear()
         if index >= 0:
             self.selected = QtWidgets.QListWidgetItem(self.notes_list.item(index))
@@ -231,13 +232,16 @@ class MainWindow(QtWidgets.QMainWindow):
             )
             self.note_history.addTopLevelItem(widget)
 
+            if product['id'] in selected_history:
+                widget.setSelected(True)
+
         def keyPressEvent(obj, event):
             if event.key() == QtCore.Qt.Key_Delete:
-                items = obj.selectedItems()
-                selected_index = self.notes_list.currentRow()
 
                 @ask_auth("manage_notes")
-                def del_line(items):
+                def del_line(obj):
+                    items = obj.selectedItems()
+                    selected_index = self.notes_list.currentRow()
                     for item in items:
                         if not api.transactions.rollback_transaction(item.text(4), full=True):
                             gui.utils.error(
@@ -250,7 +254,7 @@ class MainWindow(QtWidgets.QMainWindow):
                                 )
                             )
                     self._note_refresh(selected_index)
-                del_line(items)
+                del_line(obj)
             obj.__class__.keyPressEvent(obj, event)
 
         self.note_history.keyPressEvent = partial(keyPressEvent, self.note_history)
