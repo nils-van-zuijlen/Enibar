@@ -4,7 +4,7 @@ error_chain!{
     foreign_links {
         DieselError(::diesel::result::Error);
         BcryptError(::bcrypt::BcryptError);
-        R2d2Error(::r2d2::Error);
+        R2d2Error(::diesel::r2d2::Error);
     }
 
     errors {

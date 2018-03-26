@@ -13,8 +13,6 @@ extern crate error_chain;
 #[macro_use]
 extern crate lazy_static;
 extern crate num_traits;
-extern crate r2d2;
-extern crate r2d2_diesel;
 #[macro_use]
 extern crate rapi_codegen;
 extern crate redis;
@@ -45,14 +43,14 @@ mod tests;
 
 use cpython::Python;
 use diesel::PgConnection;
-use r2d2_diesel::ConnectionManager;
+use diesel::r2d2::ConnectionManager;
 use std::env;
 use redis::Commands;
 
 pub(crate) use diesel_helpers::*;
 
 lazy_static! {
-    pub static ref DB_POOL: r2d2::Pool<ConnectionManager<PgConnection>> = {
+    pub static ref DB_POOL: diesel::r2d2::Pool<ConnectionManager<PgConnection>> = {
         let manager = ConnectionManager::<PgConnection>::new(
             match env::var("DATABASE_URL") {
                 Ok(val) => val,
@@ -73,7 +71,7 @@ lazy_static! {
             }
         );
 
-        r2d2::Pool::builder().build(manager).expect("Failed to connect to psql")
+        diesel::r2d2::Pool::builder().build(manager).expect("Failed to connect to psql")
     };
 }
 
