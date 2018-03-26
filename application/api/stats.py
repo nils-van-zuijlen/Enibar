@@ -25,12 +25,16 @@ This api provides some neat stats.
 
 from database import Cursor
 
+STATS_FIELDS = ['nickname', 'product', 'price_name', 'price', 'category', 'quantity']
+STATS_FIELDS_CACHE = {}
+
 
 def get_notes_stats():
     """ Yield dicts representing stats.
 
         {'nickname', 'product', 'price_name', 'price', 'category', 'quantity'}
     """
+    global STATS_FIELDS_CACHE
     with Cursor() as cursor:
         cursor.prepare("SELECT notes.nickname AS nickname,\
                         transactions.product AS product,\
@@ -48,15 +52,10 @@ def get_notes_stats():
                         transactions.quantity, transactions.category")
         cursor.exec_()
         while cursor.next():
+            if not STATS_FIELDS_CACHE:
+                STATS_FIELDS_CACHE = {field: cursor.indexOf(field) for field in STATS_FIELDS}
 
-            yield {field: cursor.value(field) for field in (
-                'nickname',
-                'product',
-                'price_name',
-                'price',
-                'category',
-                'quantity')
-            }
+            yield {field: cursor.value(STATS_FIELDS_CACHE[field]) for field in STATS_FIELDS}
 
 
 def get_red_sum():
