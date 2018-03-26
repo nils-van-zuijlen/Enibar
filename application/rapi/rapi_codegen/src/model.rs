@@ -3,9 +3,10 @@ use quote::Tokens;
 
 pub fn derive_model(item: syn::DeriveInput) -> Tokens {
     let name = item.ident.clone();
-    let fields: Vec<syn::Ident> = match item.body {
-        syn::Body::Enum(..) => panic!("#[derive{Model})] cannot be used with enums"),
-        syn::Body::Struct(ref body) => body.fields()
+    let fields: Vec<syn::Ident> = match item.data {
+        syn::Data::Enum(..) => panic!("#[derive{Model})] cannot be used with enums"),
+        syn::Data::Union(..) => panic!("#[derive{Model})] cannot be used with unions"),
+        syn::Data::Struct(ref body) => body.fields
             .iter()
             .map(|f| f.ident.clone().unwrap())
             .collect(),

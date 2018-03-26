@@ -8,3 +8,7 @@ members = [
 lto = true
 codegen-units = 1
 
+
+[patch.crates-io]
+diesel = { git = "https://github.com/diesel-rs/diesel.git", features = ["32-columns-tables"] }
+diesel_derives = { git = "https://github.com/diesel-rs/diesel.git" }

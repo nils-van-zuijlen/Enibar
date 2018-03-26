@@ -2,7 +2,6 @@ use diesel::pg::Pg;
 use diesel::sql_types::*;
 use diesel::serialize::{self, ToSql};
 use diesel::deserialize::{self, FromSql};
-use diesel::row::Row;
 use bigdecimal;
 use chrono;
 use std::ops::Deref;

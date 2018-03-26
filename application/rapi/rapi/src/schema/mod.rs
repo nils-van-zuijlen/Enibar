@@ -3,5 +3,4 @@ mod views;
 
 pub use self::generated::*;
 pub use self::views::*;
-use diesel;
 
