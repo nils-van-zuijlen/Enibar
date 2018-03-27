@@ -79,9 +79,8 @@ rust:
         paths:
             - application/rapi.so
     script:
-        - cd application/rapi
         - cargo build --all --release
-        - cp target/release/librapi.so ../rapi.so
+        - cp target/release/librapi.so application/rapi.so
 
 build_ci_image:
     stage: preparation

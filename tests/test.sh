@@ -71,10 +71,9 @@ if [[ $TEST -eq 1 ]]; then
     sleep 5
     createdb -U $DATABASE_USER -h $DATABASE_HOST -p $DATABASE_PORT enibar
 
-    cd $APPLICATION_DIR/rapi
     cargo build --all --release || exit 1
-    cp target/release/librapi.so ../rapi.so
-    cd ../../bin
+    cp target/release/librapi.so application/rapi.so
+    cd bin
 
     if [[ -e "$APPLICATION_DIR/local_settings.py" ]]; then
         mv $APPLICATION_DIR/local_settings.py $APPLICATION_DIR/local_settings.py.bak

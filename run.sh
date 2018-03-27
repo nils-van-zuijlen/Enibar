@@ -51,10 +51,10 @@ cd $DIR/application
 
 if [[ $DEV == 1 ]]; then
     rustup override set nightly
-    cd rapi
-    cargo build || exit
     cd ..
-    cp rapi/target/debug/librapi.so rapi.so
+    cargo build || exit
+    cd application
+    cp target/debug/librapi.so application/rapi.so
 fi
 
 if [[ ! -e "local_settings.py" ]]; then
