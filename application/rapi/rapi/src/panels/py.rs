@@ -123,14 +123,15 @@ pub fn py_get_content(py: Python, id: i32) -> PyResult<PyList> {
 
 pub fn py_get_all(py: Python) -> PyResult<PyDict> {
     let conn = ::DB_POOL.get().unwrap();
+    let panels = Panel::get_all(&*conn).unwrap();
     let mut m = HashMap::new();
 
-    for entry in Panel::get_all(&*conn).unwrap() { // TODO
-        let mut panel = m.entry(entry.panel_name).or_insert(HashMap::new());
-        let mut cat = panel.entry(entry.category_name).or_insert(
+    for ref entry in &panels {
+        let mut panel = m.entry(&entry.panel_name).or_insert_with(HashMap::new);
+        let mut cat = panel.entry(&entry.category_name).or_insert_with( ||
             dict!(py, { "category_id" => entry.category_id,
                         "alcoholic" => entry.category_alcoholic,
-                        "color" => entry.category_color }).unwrap()
+                        "color" => &entry.category_color }).unwrap()
         );
 
         let mut products = match cat.get_item(py, "products") {
@@ -138,7 +139,7 @@ pub fn py_get_all(py: Python) -> PyResult<PyDict> {
             None => PyDict::new(py),
         };
         cat.set_item(py, "products", &products)?;
-        for line in entry.products {
+        for line in &entry.products {
             let prod = match products.get_item(py, &line.product_name) {
                 Some(c) => PyDict::downcast_from(py, c).unwrap(),
                 None => PyDict::new(py),
@@ -149,10 +150,10 @@ pub fn py_get_all(py: Python) -> PyResult<PyDict> {
                 None => PyDict::new(py),
             };
 
-            prices.set_item(py, line.price_label, line.price)?;
+            prices.set_item(py, &line.price_label, &line.price)?;
             prod.set_item(py, "prices", prices)?;
-            prod.set_item(py, "product_id", line.product_id)?;
-            prod.set_item(py, "percentage", line.percentage)?;
+            prod.set_item(py, "product_id", &line.product_id)?;
+            prod.set_item(py, "percentage", &line.percentage)?;
             products.set_item(py, &line.product_name, prod)?;
         }
     }
