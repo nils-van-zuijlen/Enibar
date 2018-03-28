@@ -37,9 +37,10 @@ macro_rules! dict {
     ($py: ident, { $($key: expr => $value: expr),+ }) => {
         {
         let d = ::cpython::PyDict::new($py);
-        $(d.set_item($py, $key, $value)?;)+
+        $(d.set_item($py, $key, $value).unwrap();)+
         let ret: ::cpython::PyResult<::cpython::PyDict> = Ok(d);
         ret
         }
     }
 }
+
