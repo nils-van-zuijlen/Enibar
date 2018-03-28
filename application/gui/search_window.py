@@ -47,7 +47,7 @@ class SearchWindow(QtWidgets.QDialog):
         def notes_filter(note):
             """ Filter function to apply to a NotesList
             """
-            if note["hidden"]:
+            if not self.notes_list.findItems(note['nickname'], QtCore.Qt.MatchExactly):
                 return False
             if self.name_input.valid:
                 if self.name_input.text().lower() not in note["lastname"].lower():
