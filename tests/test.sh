@@ -57,6 +57,7 @@ while true ; do
 	esac
 done
 
+cd ..
 if [[ $TEST -eq 1 ]]; then
 	# -- BACKUP --
     killall -u $USER -q -9 postgres Xvfb
@@ -71,7 +72,7 @@ if [[ $TEST -eq 1 ]]; then
     sleep 5
     createdb -U $DATABASE_USER -h $DATABASE_HOST -p $DATABASE_PORT enibar
 
-    cargo build --all --release || exit 1
+    CARGO_INCREMENTAL=0 cargo build --all --release || exit 1
     cp target/release/librapi.so application/rapi.so
     cd bin
 
@@ -100,7 +101,7 @@ if [[ $TEST -eq 1 ]]; then
     fi
 
     if [[ $GUI == 1 ]]; then
-	    nosetests ../tests/*gui*.py -v --with-coverage --cover-package=gui || TEST_FAILED=1
+	    nosetests ../tests/*gui*.py -v --with-coverage --cover-package=gui test_search_by|| TEST_FAILED=1
     fi
 
     if [[ $RUST == 1 ]]; then
