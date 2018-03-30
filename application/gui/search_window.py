@@ -36,6 +36,7 @@ class SearchWindow(QtWidgets.QDialog):
         super().__init__(parent)
         uic.loadUi('ui/search_window.ui', self)
         self.notes_list = notes_list
+        self.original_notes = [notes_list.item(i).text() for i in range(notes_list.count())]
         self.setWindowFlags(QtCore.Qt.Tool | QtCore.Qt.WindowStaysOnTopHint)
         self.name_input.set_validator(api.validator.NAME)
         self.firstname_input.set_validator(api.validator.NAME)
@@ -47,7 +48,7 @@ class SearchWindow(QtWidgets.QDialog):
         def notes_filter(note):
             """ Filter function to apply to a NotesList
             """
-            if not self.notes_list.findItems(note['nickname'], QtCore.Qt.MatchExactly):
+            if note['nickname'] not in self.original_notes:
                 return False
             if self.name_input.valid:
                 if self.name_input.text().lower() not in note["lastname"].lower():

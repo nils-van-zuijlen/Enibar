@@ -34,6 +34,7 @@ class SearchTest(basetest.BaseGuiTest):
         self.main_win = gui.main_window.MainWindow()
         self.search_window = gui.search_window.SearchWindow(self.main_win.menu_bar, self.main_win.notes_list)
         self.hidden_category = self.add_hidden_notes_category("hidden")
+        self.main_win.notes_list.build(api.notes.get(lambda x: not x['hidden']))
 
     def test_search_by_firstname(self):
         """ Testing search by firstname
@@ -42,7 +43,11 @@ class SearchTest(basetest.BaseGuiTest):
         self.assertEqual(self.get_items(self.main_win.notes_list), ['test', 'test1'])
         self.search_window.firstname_input.setText("jh")
         self.assertEqual(self.get_items(self.main_win.notes_list), ['test2'])
+
+        self.search_window.close()
         api.note_categories.add_notes(["test2"], "hidden")
+        self.main_win.notes_list.refresh(api.notes.get(lambda x: not x['hidden']))
+        self.search_window = gui.search_window.SearchWindow(self.main_win.menu_bar, self.main_win.notes_list)
         self.search_window.firstname_input.setText("jhg")
         self.assertEqual(self.get_items(self.main_win.notes_list), [])
 
