@@ -214,7 +214,7 @@ except ModuleNotFoundError:
         import gui.utils
         from PyQt5 import QtWidgets
         tmp = QtWidgets.QApplication(sys.argv)
-        gui.utils.error("Error", "Can't find local_settngs.py\nRun ./bin/setup.py")
+        gui.utils.error("Error", "Can't find local_settings.py\nRun ./bin/setup.py")
         sys.exit(5)
 
 CACHED_SETTINGS = {}
