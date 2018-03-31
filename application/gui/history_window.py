@@ -128,19 +128,13 @@ class HistoryWindow(QtWidgets.QDialog):
                 transactions_left = {key: value for key, value in transactions_left.items() if value[row].startswith(filters[row])}
 
         current_cat = self.cb_category.currentText()
+        values = {}
         for row, combobox in self.cbs.items():
             combobox.clear()
             combobox.addItem("")
-            values = set()
-            for data in transactions_left.values():
-                if data[row] and not (row == 'product' and data['category'] == 'Note' and current_cat != 'Note'):
-                    for row_, filt in filters.items():
-                        if row != row_ and data[row_] != filt:
-                            break
-                    else:
-                        values.add(data[row])
+            values = api.transactions.get_possible_filter_values(row, filters)
+            combobox.addItems(list(values))
 
-            combobox.addItems(list(sorted(values)))
             if row in filters:
                 index = combobox.findText(filters[row])
                 if index:
@@ -184,39 +178,40 @@ class HistoryWindow(QtWidgets.QDialog):
         created to allow fast advanced filtering.
         """
         transactions = list(api.transactions.get(id__gt=self.last_id))
-        length, count = len(transactions), 0
+        length = len(transactions)
         self.progressbar.setFormat("Chargement de l'historique %p%")
         self.progressbar.reset()
         self.progressbar.setRange(0, 20)
-        for trans in transactions:
-            count += 1
+        for count, trans in enumerate(transactions):
             if count % 1000:
                 self.progressbar.setValue(int(count / length * 20))
-            if trans['id'] not in self.transactions:
-                if trans['price'] >= 0:
-                    credit = round(trans['price'], 2)
-                    debit = "-"
-                else:
-                    credit = "-"
-                    debit = round(-trans['price'], 2)
-                self.transactions[trans['id']] = {
-                    'note': trans['note'],
-                    'lastname': trans['lastname'],
-                    'firstname': trans['firstname'],
-                    'price': trans['price'],
-                    'price_name': trans['price_name'],
-                    'date': trans['date'],
-                    'product': trans['product'],
-                    'category': trans['category'],
-                    'quantity': trans['quantity'],
-                    'credit': credit,
-                    'debit': debit,
-                    'widget': None,
-                    'id': trans['id'],
-                    'show': False,
-                }
+
+            if trans['price'] >= 0:
+                credit = round(trans['price'], 2)
+                debit = "-"
+            else:
+                credit = "-"
+                debit = round(-trans['price'], 2)
+
+            self.transactions[trans['id']] = {
+                'note': trans['note'],
+                'lastname': trans['lastname'],
+                'firstname': trans['firstname'],
+                'price': trans['price'],
+                'price_name': trans['price_name'],
+                'date': trans['date'],
+                'product': trans['product'],
+                'category': trans['category'],
+                'quantity': trans['quantity'],
+                'credit': credit,
+                'debit': debit,
+                'widget': None,
+                'id': trans['id'],
+                'show': False,
+            }
             self.last_id = trans['id']
         self.progressbar.setFormat("Terminé")
+        self.progressbar.setValue(20)
 
     def update_summary(self):
         """ Update debit, credit and Total on the window
@@ -225,12 +220,12 @@ class HistoryWindow(QtWidgets.QDialog):
         credited = 0
         debited = 0
 
-        for _, transaction in self.transactions.items():
+        for transaction in self.transactions.values():
             if transaction['show']:
-                price = float(transaction['price'])
+                price = transaction['price']
                 if price >= 0:
                     credited += price
-                if price < 0:
+                else:
                     debited += price
                 quantity += transaction['quantity']
 
@@ -253,7 +248,7 @@ class HistoryWindow(QtWidgets.QDialog):
                 price = self.transactions[int(widget.text(8))]['price']
                 if price >= 0:
                     credited += price
-                if price < 0:
+                else:
                     debited += price
                 quantity += self.transactions[int(widget.text(8))]['quantity']
 
@@ -281,24 +276,21 @@ class HistoryWindow(QtWidgets.QDialog):
         self.progressbar.setFormat("Application des filtres %p%")
         length = len(self.transactions)
         self.progressbar.setRange(0, 20)
-        count = 0
         self.transaction_list.clear()
         start_date = self.datetime_from.dateTime()
         end_date = self.datetime_to.dateTime()
 
-        for id_, transaction in self.transactions.items():
-            show = True
-            count += 1
+        for count, (id_, transaction) in enumerate(self.transactions.items()):
             self.progressbar.setValue(int(count / length * 20))
             if not start_date <= self.transactions[id_]['date'] <= end_date:
-                show = False
+                transaction['show'] = False
+                continue
 
             for index, regex in filter_.items():
                 if regex and regex != transaction[index]:
-                    show = False
+                    transaction['show'] = False
                     break
-            transaction['show'] = show
-            if show:
+            else:
                 widget = TreeWidget(self.transaction_list, (
                     transaction['date'].toString("yyyy/MM/dd HH:mm:ss"),
                     transaction['note'],
@@ -311,9 +303,10 @@ class HistoryWindow(QtWidgets.QDialog):
                     str(transaction['id'])
                 ))
                 transaction['widget'] = widget
+                transaction['show'] = True
 
         self.progressbar.setFormat("Terminé")
-        self.progressbar.setValue(100)
+        self.progressbar.setValue(20)
         self.update_summary()
 
     @ask_auth("manage_notes")
