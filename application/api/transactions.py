@@ -132,32 +132,41 @@ def rollback_transaction(id_, full=False):
     return False
 
 
-def get_grouped_entries(col, filters):
-    """ Get grouped entries to list all distinct value for given column when
-    row validate filters if any.
+FILTER_FIELDS_CACHE ={}
+
+
+def get_possible_filter_values(col, filters):
+    """ Get all the possible values for a filter given all other applied filters
 
     :param str col: db column name
-    :param dict filters: A dict giving carresponding value to columns
+    :param dict filters: A dict giving corresponding value to filters
     """
     if not filters:
         sqlfilters = []
     else:
         sqlfilters = [c + "=:" + c for c in filters if c != col]
 
+    if col == 'product' and filters.get('category', '') != "Note":
+        sqlfilters.append("category != 'Note'")
+
     with Cursor() as cursor:
         cursor.prepare("""
-            SELECT {c} FROM transactions
+            SELECT DISTINCT {c} FROM transactions
             {w} {filters}
-            GROUP BY {c}
             ORDER BY {c}
             """.format(c=col, w="WHERE" * bool(sqlfilters),
                 filters=' AND '.join(sqlfilters))
         )
         for key, value in filters.items():
             cursor.bindValue(":{}".format(key), value)
+
         cursor.exec_()
+
+        if col not in FILTER_FIELDS_CACHE:
+            FILTER_FIELDS_CACHE[col] = cursor.indexOf(col)
+
         while cursor.next():
-            yield cursor.value(col)
+            yield cursor.value(FILTER_FIELDS_CACHE[col])
 
 
 TRANSACTS_FIELDS_CACHE = {}
@@ -172,10 +181,12 @@ def get(max_=None, reverse=False, **filter_):
     """
     global TRANSACTS_FIELDS_CACHE
     cursor = api.base.filtered_getter("transactions", filter_, max_=max_, reverse=reverse)
+
+    if TRANSACTS_FIELDS_CACHE == {}:
+        TRANSACTS_FIELDS_CACHE = {field: cursor.indexOf(field) for field
+                                  in TRANSACT_FIELDS}
+
     while cursor.next():
-        if TRANSACTS_FIELDS_CACHE == {}:
-            TRANSACTS_FIELDS_CACHE = {field: cursor.indexOf(field) for field
-                                      in TRANSACT_FIELDS}
         yield {field: cursor.value(TRANSACTS_FIELDS_CACHE[field]) for field
                in TRANSACT_FIELDS}
 
