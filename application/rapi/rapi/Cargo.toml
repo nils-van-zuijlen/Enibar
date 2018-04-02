@@ -17,7 +17,7 @@ redis = "0.8"
 rapi_codegen = { path = "../rapi_codegen" }
 validator = "0.6"
 validator_derive = "0.6"
-bigdecimal = "0.0.10"
+bigdecimal = "0.0.11"
 num-traits = "0.2"
 chrono = "0.4"
 byteorder = "1"
