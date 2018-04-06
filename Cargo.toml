@@ -2,7 +2,8 @@
 members = [
     "application/rapi/rapi",
     "application/rapi/rapi_codegen",
-    "application/rapi/rapi_py"
+    "application/rapi/rapi_py",
+    "application/rgui"
 ]
 
 [profile.release]
@@ -13,3 +14,8 @@ codegen-units = 1
 [patch.crates-io]
 diesel = { git = "https://github.com/diesel-rs/diesel.git", features = ["32-columns-tables", "unstable"] }
 diesel_derives = { git = "https://github.com/diesel-rs/diesel.git", features = ["unstable"] }
+relm = { path = "../relm" }
+relm-attributes = { path = "../relm/relm-attributes" }
+relm-derive = { path = "../relm/relm-derive" }
+relm-gen-widget = { path = "../relm/relm-gen-widget" }
+relm-test = { path = "../relm/relm-test" }

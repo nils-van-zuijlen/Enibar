@@ -1,7 +1,9 @@
 pub mod models;
 mod py;
 
-use self::models::*;
+pub use self::models::User;
+use self::models::NewUser;
+
 use bcrypt::{hash, verify, DEFAULT_COST};
 use cpython::{PyDict, PyModule, Python};
 use diesel::prelude::*;
