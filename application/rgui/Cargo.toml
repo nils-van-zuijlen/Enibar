@@ -1,0 +1,17 @@
+[package]
+name = "rgui"
+version = "0.1.0"
+authors = ["Bastien Orivel <eijebong@bananium.fr>"]
+
+[dependencies]
+relm = { version = "0.14", features = [] }
+relm-derive = { version = "0.14", features = [] }
+relm-gen-widget = { version = "0.14", features = [] }
+relm-test = "0.14"
+gtk = "0.4"
+gdk = "0.8"
+rapi = { path = "../rapi/rapi" }
+
+[dev-dependencies]
+diesel = "1"
+rapi = { path = "../rapi/rapi", features = ["test"] }

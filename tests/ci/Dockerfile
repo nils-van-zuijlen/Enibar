@@ -12,7 +12,10 @@ RUN pacman -Syuq --noconfirm \
     redis \
     rustup \
     xorg-server-xvfb \
-    mpfr
+    mpfr \
+    i3 \
+    cairo \
+    gtk3
 
 RUN rustup override set nightly
 

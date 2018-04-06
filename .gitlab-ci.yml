@@ -49,8 +49,20 @@ rapi:
     tags:
         - docker
     script:
-        - cd application/rapi
-        - cargo test --all
+        - cargo test -p rapi --release
+
+rgui:
+    stage: test
+    tags:
+        - docker
+    script:
+        - Xvfb $DISPLAY -screen 0 1600x1200x24+32 &
+        - export DISPLAY=$DISPLAY
+        - mkdir -p ~/.config/i3
+        - touch ~/.config/i3/config
+        - i3 &
+        - cargo test -p rgui --release
+
 gui:
     stage: test
     tags:

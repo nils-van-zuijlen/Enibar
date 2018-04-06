@@ -1,7 +1,9 @@
 pub mod models;
 mod py;
 
-use self::models::*;
+pub use self::models::User;
+use self::models::NewUser;
+
 use bcrypt::{hash, verify, DEFAULT_COST};
 use cpython::{PyDict, PyModule, Python};
 use diesel::prelude::*;
@@ -21,7 +23,7 @@ impl User {
             )));
         }
 
-        let hash = if cfg!(test) {
+        let hash = if cfg!(test) || cfg!(feature = "test") {
             hash(password, 4)?
         } else {
             match env::var("BCRYPT_COST"){
@@ -48,7 +50,7 @@ impl User {
 
     /// Change the password of the user
     pub fn change_password(self, conn: &PgConnection, new_password: &str) -> Result<User> {
-        let hash = if cfg!(test) {
+        let hash = if cfg!(test) || cfg!(feature = "test") {
             hash(new_password, 4)?
         } else {
             match env::var("BCRYPT_COST"){
