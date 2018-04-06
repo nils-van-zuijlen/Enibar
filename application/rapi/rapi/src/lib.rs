@@ -71,7 +71,9 @@ lazy_static! {
             }
         );
 
-        diesel::r2d2::Pool::builder().build(manager).expect("Failed to connect to psql")
+        let max_size = if cfg!(feature = "test") { 1 } else { 10 };
+
+        diesel::r2d2::Pool::builder().max_size(max_size).build(manager).expect("Failed to connect to psql")
     };
 }
 
