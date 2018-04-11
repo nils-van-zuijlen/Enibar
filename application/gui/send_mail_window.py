@@ -56,7 +56,7 @@ class SendMailWindow(QtWidgets.QMainWindow):
             self.filter_input.text()
         )
         for recipient in recipients:
-            if recipient['hidden'] or recipient['promo'] == "Prof":
+            if recipient['hidden']:
                 continue
             sent = api.mail.send_mail(
                 recipient['mail'],
