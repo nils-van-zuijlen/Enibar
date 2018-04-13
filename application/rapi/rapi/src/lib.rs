@@ -23,18 +23,18 @@ extern crate x11;
 
 #[macro_use]
 mod py_helpers;
-mod categories;
+pub mod categories;
 mod errors;
-mod utils;
-mod users;
-mod schema;
-mod model;
+pub mod utils;
+pub mod users;
+pub mod schema;
+pub mod model;
 mod validators;
-mod note_categories;
-mod panels;
-mod products;
+pub mod note_categories;
+pub mod panels;
+pub mod products;
 mod diesel_helpers;
-mod notes;
+pub mod notes;
 
 pub use model::Model;
 
@@ -75,13 +75,3 @@ lazy_static! {
     };
 }
 
-py_module_initializer!(rapi, initrapi, PyInit_rapi, |py, m| {
-    m.add(py, "utils", utils::as_module(py))?;
-    m.add(py, "users", users::as_module(py))?;
-    m.add(py, "categories", categories::as_module(py))?;
-    m.add(py, "note_categories", note_categories::as_module(py))?;
-    m.add(py, "panels", panels::as_module(py))?;
-    m.add(py, "products", products::as_module(py))?;
-    m.add(py, "notes", notes::as_module(py))?;
-    Ok(())
-});

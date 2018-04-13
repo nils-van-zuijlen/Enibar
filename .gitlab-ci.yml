@@ -80,7 +80,7 @@ rust:
             - application/rapi.so
     script:
         - cargo build --all --release
-        - cp target/release/librapi.so application/rapi.so
+        - cp target/release/librapi_py.so application/rapi.so
 
 build_ci_image:
     stage: preparation

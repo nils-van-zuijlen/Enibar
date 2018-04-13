@@ -54,7 +54,7 @@ if [[ $DEV == 1 ]]; then
     cd ..
     cargo build || exit
     cd application
-    cp target/debug/librapi.so application/rapi.so
+    cp target/debug/librapi_py.so application/rapi.so
 fi
 
 if [[ ! -e "local_settings.py" ]]; then

@@ -393,6 +393,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "rapi_py"
+version = "0.1.0"
+dependencies = [
+ "cpython 0.2.0 (git+https://github.com/dgrunwald/rust-cpython.git)",
+ "rapi 0.1.0",
+]
+
+[[package]]
 name = "redis"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"

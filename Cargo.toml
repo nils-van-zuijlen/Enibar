@@ -1,7 +1,8 @@
 [workspace]
 members = [
     "application/rapi/rapi",
-    "application/rapi/rapi_codegen"
+    "application/rapi/rapi_codegen",
+    "application/rapi/rapi_py"
 ]
 
 [profile.release]
