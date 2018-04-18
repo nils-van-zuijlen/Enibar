@@ -121,6 +121,7 @@ if [[ $TEST -eq 1 ]]; then
     rm -Rf /tmp/postgres_enibar
 fi
 
+cd $(dirname $0)
 cd $APPLICATION_DIR
 rm -f img/coucou.jpg
 
