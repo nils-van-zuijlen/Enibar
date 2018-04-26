@@ -41,11 +41,15 @@ relm_widget! {
         }
 
         fn update(&mut self, event: WinMsg) {
+            println!("{:?}", ::std::mem::discriminant(&event));
             match event {
                 Cancel | Quit => gtk::main_quit(),
                 Valid => {
+                    self.model.ok = true;
+                    eprintln!("COUCOUCOUCOU");
                     let conn = rapi::DB_POOL.get().unwrap();
                     let user = User::get(&*conn, &self.model.username);
+                    eprintln!("{:?}", user);
                     if let Ok(user) = user {
                         self.model.ok = user.is_authorized(&self.model.password).unwrap_or(false);
                     }

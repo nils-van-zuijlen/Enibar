@@ -14,8 +14,7 @@ codegen-units = 1
 [patch.crates-io]
 diesel = { git = "https://github.com/diesel-rs/diesel.git", features = ["32-columns-tables", "unstable"] }
 diesel_derives = { git = "https://github.com/diesel-rs/diesel.git", features = ["unstable"] }
-relm = { path = "../relm" }
-relm-attributes = { path = "../relm/relm-attributes" }
-relm-derive = { path = "../relm/relm-derive" }
-relm-gen-widget = { path = "../relm/relm-gen-widget" }
-relm-test = { path = "../relm/relm-test" }
+relm-test = { git = "https://github.com/antoyo/relm/" }
+relm-core = { git = "https://github.com/antoyo/relm/" }
+relm = { git = "https://github.com/antoyo/relm/" }
+relm-gen-widget = { git = "https://github.com/antoyo/relm/" }
