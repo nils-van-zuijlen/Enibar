@@ -28,6 +28,7 @@ according to the things in its inputs.
 
 from PyQt5 import QtWidgets, uic, QtCore
 import api.validator
+from unidecode import unidecode
 
 
 class SearchWindow(QtWidgets.QDialog):
@@ -51,10 +52,10 @@ class SearchWindow(QtWidgets.QDialog):
             if note['nickname'] not in self.original_notes:
                 return False
             if self.name_input.valid:
-                if self.name_input.text().lower() not in note["lastname"].lower():
+                if unidecode(self.name_input.text()).lower() not in unidecode(note["lastname"]).lower():
                     return False
             if self.firstname_input.valid:
-                if self.firstname_input.text().lower() not in note["firstname"].lower():
+                if unidecode(self.firstname_input.text()).lower() not in unidecode(note["firstname"]).lower():
                     return False
 
             return True

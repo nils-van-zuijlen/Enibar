@@ -29,7 +29,8 @@ RUN pip install \
     pycodestyle \
     redis==2.10.6 \
     requests==2.18.4 \
-    sqlparse==0.2.4
+    sqlparse==0.2.4 \
+    unidecode==1.0.22
 
 ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
