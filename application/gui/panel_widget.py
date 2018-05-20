@@ -327,7 +327,7 @@ class ProductsContainer(QtWidgets.QWidget):
                 'products': {}
             }
 
-            for product_name, product in category['products'].items():
+            for product_name, product in sorted(category['products'].items(), key=lambda x: x[0].replace('&', '')):
                 pid = product['product_id']
 
                 widget = get_product_widget(
