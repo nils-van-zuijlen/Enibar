@@ -14,7 +14,7 @@ RUN pacman -Syuq --noconfirm \
     xorg-server-xvfb \
     mpfr
 
-RUN rustup override set nightly
+RUN rustup override set nightly-2018-05-15
 
 RUN pip install \
     PyQt5 \
