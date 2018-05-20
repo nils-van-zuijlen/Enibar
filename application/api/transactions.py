@@ -132,7 +132,7 @@ def rollback_transaction(id_, full=False):
     return False
 
 
-FILTER_FIELDS_CACHE ={}
+FILTER_FIELDS_CACHE = {}
 
 
 def get_possible_filter_values(col, filters):

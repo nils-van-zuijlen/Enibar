@@ -129,7 +129,7 @@ rm -f img/coucou.jpg
 
 if [[ $PEP == 1 ]]; then
 	# Pep8 Validation
-	pycodestyle --exclude=documentation,.enibar-venv,.ropeproject,utils --ignore=E722,E501,W391,E128,E124 ../ || TEST_FAILED=1
+	pycodestyle --exclude=documentation,.enibar-venv,.ropeproject,utils --ignore=E722,E501,W391,E128,E124,W605,W504 ../ || TEST_FAILED=1
 fi
 
 exit $TEST_FAILED
