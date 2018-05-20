@@ -286,8 +286,8 @@ class HistoryWindow(QtWidgets.QDialog):
                 transaction['show'] = False
                 continue
 
-            for index, regex in filter_.items():
-                if regex and regex != transaction[index]:
+            for filter_name, filter_value in filter_.items():
+                if filter_value and filter_value.lower() != transaction[filter_name].lower():
                     transaction['show'] = False
                     break
             else:
