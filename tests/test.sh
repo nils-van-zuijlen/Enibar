@@ -25,8 +25,9 @@ export DATABASE_HOST="127.0.0.1"
 export DATABASE_PORT=2356
 export DATABASE_USER="enibar"
 export DATABASE_URL="postgres://$DATABASE_USER@$DATABASE_HOST:$DATABASE_PORT/enibar"
-cd $(dirname $0)
-APPLICATION_DIR="../application"
+pushd $(dirname $0)
+pushd ..
+APPLICATION_DIR="application"
 
 TEMP=`getopt -o agrp --long api,gui,rust,pep,no-vd -- "$@"`
 eval set -- "$TEMP"
@@ -57,7 +58,6 @@ while true ; do
 	esac
 done
 
-cd ..
 if [[ $TEST -eq 1 ]]; then
 	# -- BACKUP --
     killall -u $USER -q -9 postgres Xvfb
@@ -74,16 +74,13 @@ if [[ $TEST -eq 1 ]]; then
 
     CARGO_INCREMENTAL=0 cargo build --all --release || exit 1
     cp target/release/librapi_py.so application/rapi.so
-    cd bin
 
     if [[ -e "$APPLICATION_DIR/local_settings.py" ]]; then
         mv $APPLICATION_DIR/local_settings.py $APPLICATION_DIR/local_settings.py.bak
     fi
     echo -e "DEBUG=False\nIMG_BASE_DIR='img/'\nMAX_HISTORY=5\nREDIS_HOST='127.0.0.1'\nREDIS_PASSWORD=None" > $APPLICATION_DIR/local_settings.py
 
-    ./migrations.py apply
-
-    cd $APPLICATION_DIR
+    ./bin/migrations.py apply
 
     if [[ $USE_VD == 1 ]]; then
         SCREEN=$(( ( RANDOM % 1000 )  + 1000 ))
@@ -91,6 +88,8 @@ if [[ $TEST -eq 1 ]]; then
         XVFB=$!
         export DISPLAY=:$SCREEN
     fi
+
+    pushd $APPLICATION_DIR
 
     echo "Starting tests"
 	rm -f .coverage
@@ -105,9 +104,11 @@ if [[ $TEST -eq 1 ]]; then
     fi
 
     if [[ $RUST == 1 ]]; then
-        cd $APPLICATION_DIR/rapi
+        pushd rapi
+        pwd
+        rustc -vV
         cargo test --all || TEST_FAILED=1
-        cd ..
+        popd
     fi
 
     if [[ $USE_VD == 1 ]]; then
@@ -119,10 +120,11 @@ if [[ $TEST -eq 1 ]]; then
     fi
     sleep 2
     rm -Rf /tmp/postgres_enibar
+    popd
 fi
 
-cd $(dirname $0)
-cd $APPLICATION_DIR
+pwd
+pushd $APPLICATION_DIR
 rm -f img/coucou.jpg
 
 if [[ $PEP == 1 ]]; then

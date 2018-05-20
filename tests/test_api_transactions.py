@@ -203,8 +203,8 @@ class TransactionsTest(basetest.BaseTest):
             'quantity': 2,
             'price': 5
         }])
-        self.assertEqual(list(transactions.get_grouped_entries("note", {'lastname': "test2"})), ['test2'])
-        self.assertEqual(list(transactions.get_grouped_entries("note", {})), ['test1', 'test2'])
+        self.assertEqual(list(transactions.get_possible_filter_values("note", {'lastname': "test2"})), ['test2'])
+        self.assertEqual(list(transactions.get_possible_filter_values("note", {})), ['test1', 'test2'])
 
     def test_get_gt(self):
         """ Testing __gt """
