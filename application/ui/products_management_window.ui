@@ -17,7 +17,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Gestion consommations</string>
+   <string notr="true">Gestion consommations</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
@@ -39,7 +39,7 @@
      </property>
      <widget class="QWidget" name="tab_manage_consumptions">
       <attribute name="title">
-       <string>Gestion de consommations</string>
+       <string notr="true">Gestion de consommations</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="5" column="0">
@@ -67,7 +67,7 @@
        <item row="6" column="3">
         <widget class="QPushButton" name="input_product_save">
          <property name="text">
-          <string>Sauvegarder</string>
+          <string notr="true">Sauvegarder</string>
          </property>
         </widget>
        </item>
@@ -110,14 +110,14 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Ajouter</string>
+             <string notr="true">Ajouter</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="button_product_del">
             <property name="text">
-             <string>Supprimer</string>
+             <string notr="true">Supprimer</string>
             </property>
            </widget>
           </item>
@@ -161,7 +161,7 @@
          </attribute>
          <column>
           <property name="text">
-           <string>Produits</string>
+           <string notr="true">Produits</string>
           </property>
          </column>
         </widget>
@@ -175,7 +175,7 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Prix des consommations sélectionnées</string>
+          <string notr="true">Prix des consommations sélectionnées</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <property name="spacing">
@@ -212,7 +212,7 @@
        <item row="0" column="3">
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string>Nom / Degré d'alcool</string>
+          <string notr="true">Nom / Degré d'alcool</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_5">
           <item row="0" column="0">
@@ -245,7 +245,7 @@
      </widget>
      <widget class="QWidget" name="tab_manage_categories">
       <attribute name="title">
-       <string>Gestion des catégories</string>
+       <string notr="true">Gestion des catégories</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="2" column="2">
@@ -257,7 +257,7 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Couleur</string>
+          <string notr="true">Couleur</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
           <item row="0" column="0">
@@ -266,7 +266,7 @@
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>changer la couleur</string>
+             <string notr="true">changer la couleur</string>
             </property>
            </widget>
           </item>
@@ -279,7 +279,7 @@
           <bool>false</bool>
          </property>
          <property name="text">
-          <string>Ajouter un prix</string>
+          <string notr="true">Ajouter un prix</string>
          </property>
         </widget>
        </item>
@@ -343,7 +343,7 @@
              </size>
             </property>
             <property name="text">
-             <string>Ajouter</string>
+             <string notr="true">Ajouter</string>
             </property>
            </widget>
           </item>
@@ -377,7 +377,7 @@
              <cursorShape>ArrowCursor</cursorShape>
             </property>
             <property name="text">
-             <string>Supprimer</string>
+             <string notr="true">Supprimer</string>
             </property>
            </widget>
           </item>
@@ -415,7 +415,7 @@
        <item row="0" column="2">
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
-          <string>Nom</string>
+          <string notr="true">Nom</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_6">
           <item row="0" column="0">
@@ -434,7 +434,7 @@
           <bool>false</bool>
          </property>
          <property name="text">
-          <string>Sauvegarder la catégorie</string>
+          <string notr="true">Sauvegarder la catégorie</string>
          </property>
         </widget>
        </item>
@@ -447,7 +447,7 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Type</string>
+          <string notr="true">Type</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <property name="spacing">
@@ -471,7 +471,7 @@
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>Alcoolisé</string>
+             <string notr="true">Alcoolisé</string>
             </property>
            </widget>
           </item>
@@ -518,7 +518,7 @@
           </size>
          </property>
          <property name="title">
-          <string>Libellé des prix</string>
+          <string notr="true">Libellé des prix</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <property name="spacing">
@@ -559,7 +559,7 @@
    <item row="1" column="0">
     <widget class="QPushButton" name="panels_management_btn">
      <property name="text">
-      <string>Gerer les panels</string>
+      <string notr="true">Gerer les panels</string>
      </property>
     </widget>
    </item>

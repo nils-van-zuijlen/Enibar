@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>A propos</string>
+   <string notr="true">A propos</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
@@ -24,7 +24,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Copyright © 2014-2018 </string>
+        <string notr="true">Copyright © 2014-2018 </string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -34,7 +34,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="img">
        <property name="text">
-        <string/>
+        <string notr="true"/>
        </property>
        <property name="pixmap">
         <pixmap>../enibar.jpg</pixmap>
@@ -68,7 +68,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Orivel Bastien, Levaufre Arnaud</string>
+        <string notr="true">Orivel Bastien, Levaufre Arnaud</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -83,7 +83,7 @@
         </font>
        </property>
        <property name="text">
-        <string>ENIBAR 0.1</string>
+        <string notr="true">ENIBAR 0.1</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -93,7 +93,7 @@
      <item row="6" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>This program is under the GPLv3 license</string>
+        <string notr="true">This program is under the GPLv3 license</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>

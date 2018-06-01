@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string notr="true">Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
@@ -26,27 +26,27 @@
        </property>
        <item>
         <property name="text">
-         <string>Tout</string>
+         <string notr="true">Tout</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Montrés</string>
+         <string notr="true">Montrés</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Cachés</string>
+         <string notr="true">Cachés</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Dont la note &gt;</string>
+         <string notr="true">Dont la note &gt;</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Dont la note &lt;</string>
+         <string notr="true">Dont la note &lt;</string>
         </property>
        </item>
       </widget>
@@ -70,7 +70,7 @@
         <string/>
        </property>
        <property name="placeholderText">
-        <string>Recherche</string>
+        <string notr="true">Recherche</string>
        </property>
       </widget>
      </item>

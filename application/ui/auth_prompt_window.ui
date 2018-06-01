@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Demande d'autorisation</string>
+   <string notr="true">Demande d'autorisation</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
@@ -22,21 +22,21 @@
         <bool>false</bool>
        </property>
        <property name="text">
-        <string>Login</string>
+        <string notr="true">Login</string>
        </property>
       </widget>
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="login_label">
        <property name="text">
-        <string>Login:</string>
+        <string notr="true">Login:</string>
        </property>
       </widget>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="pass_label">
        <property name="text">
-        <string>Password:</string>
+        <string notr="true">Password:</string>
        </property>
        <property name="buddy">
         <cstring>pass_input</cstring>
@@ -59,7 +59,7 @@
      <item row="5" column="1">
       <widget class="QPushButton" name="cancel_button">
        <property name="text">
-        <string>Annuler</string>
+        <string notr="true">Annuler</string>
        </property>
       </widget>
      </item>

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Statistiques</string>
+   <string notr="true">Statistiques</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
@@ -19,7 +19,7 @@
      <item row="3" column="0">
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>Vert - rouge</string>
+        <string notr="true">Vert - rouge</string>
        </property>
       </widget>
      </item>
@@ -29,7 +29,7 @@
         <string notr="true">color:red</string>
        </property>
        <property name="text">
-        <string>TextLabel</string>
+        <string notr="true">TextLabel</string>
        </property>
       </widget>
      </item>
@@ -46,12 +46,12 @@
        </property>
        <column>
         <property name="text">
-         <string>Surnom</string>
+         <string notr="true">Surnom</string>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>Note</string>
+         <string notr="true">Note</string>
         </property>
        </column>
       </widget>
@@ -59,7 +59,7 @@
      <item row="2" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Total des notes dans le vert:</string>
+        <string notr="true">Total des notes dans le vert:</string>
        </property>
       </widget>
      </item>
@@ -69,42 +69,42 @@
         <string notr="true">color:green</string>
        </property>
        <property name="text">
-        <string>TextLabel</string>
+        <string notr="true">TextLabel</string>
        </property>
       </widget>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Total des notes dans le rouge:</string>
+        <string notr="true">Total des notes dans le rouge:</string>
        </property>
       </widget>
      </item>
      <item row="3" column="1">
       <widget class="QLabel" name="total_label">
        <property name="text">
-        <string>TextLabel</string>
+        <string notr="true">TextLabel</string>
        </property>
       </widget>
      </item>
      <item row="0" column="0" colspan="2">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Les statistiques sont calculées sans les notes dont les stats sont desactivées.</string>
+        <string notr="true">Les statistiques sont calculées sans les notes dont les stats sont desactivées.</string>
        </property>
       </widget>
      </item>
      <item row="4" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>Nombre d'écocups sur les notes</string>
+        <string notr="true">Nombre d'écocups sur les notes</string>
        </property>
       </widget>
      </item>
      <item row="4" column="1">
       <widget class="QLabel" name="ecocups_nb_label">
        <property name="text">
-        <string>TextLabel</string>
+        <string notr="true">TextLabel</string>
        </property>
       </widget>
      </item>

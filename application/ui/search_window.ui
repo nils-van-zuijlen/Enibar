@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Recherche</string>
+   <string notr="true">Recherche</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="1">
     <widget class="QLabel" name="firstname_label">
      <property name="text">
-      <string>Prénom</string>
+      <string notr="true">Prénom</string>
      </property>
     </widget>
    </item>
@@ -30,14 +30,14 @@
    <item row="2" column="1">
     <widget class="QLabel" name="name_label">
      <property name="text">
-      <string>Nom</string>
+      <string notr="true">Nom</string>
      </property>
     </widget>
    </item>
    <item row="3" column="1" colspan="2">
     <widget class="QPushButton" name="pushButton">
      <property name="text">
-      <string>Terminé</string>
+      <string notr="true">Terminé</string>
      </property>
     </widget>
    </item>

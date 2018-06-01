@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Gestion panels</string>
+   <string notr="true">Gestion panels</string>
   </property>
   <property name="whatsThis">
    <string/>
@@ -35,14 +35,14 @@
      <item>
       <widget class="QPushButton" name="move_right">
        <property name="text">
-        <string>&gt;&gt;&gt;&gt;</string>
+        <string notr="true">&gt;&gt;&gt;&gt;</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="move_left">
        <property name="text">
-        <string>&lt;&lt;&lt;&lt;</string>
+        <string notr="true">&lt;&lt;&lt;&lt;</string>
        </property>
       </widget>
      </item>
@@ -92,7 +92,7 @@
    <item row="4" column="2">
     <widget class="QPushButton" name="products_management_button">
      <property name="text">
-      <string>Gerer les produits</string>
+      <string notr="true">Gerer les produits</string>
      </property>
     </widget>
    </item>
@@ -130,7 +130,7 @@
      </attribute>
      <column>
       <property name="text">
-       <string>Consommations</string>
+       <string notr="true">Consommations</string>
       </property>
      </column>
     </widget>
@@ -176,7 +176,7 @@
      </property>
      <column>
       <property name="text">
-       <string>Consomations affichés pour le panel</string>
+       <string notr="true">Consomations affichés pour le panel</string>
       </property>
      </column>
     </widget>
@@ -187,7 +187,7 @@
       <bool>false</bool>
      </property>
      <property name="text">
-      <string>Panel caché</string>
+      <string notr="true">Panel caché</string>
      </property>
     </widget>
    </item>
@@ -224,14 +224,14 @@
          <bool>false</bool>
         </property>
         <property name="text">
-         <string>Ajouter</string>
+         <string notr="true">Ajouter</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="delete_button">
         <property name="text">
-         <string>Supprimer</string>
+         <string notr="true">Supprimer</string>
         </property>
        </widget>
       </item>

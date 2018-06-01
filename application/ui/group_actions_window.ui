@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Actions en masse</string>
+   <string notr="true">Actions en masse</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="1" column="0">
@@ -27,13 +27,13 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Export</string>
+          <string notr="true">Export</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_5">
           <item row="0" column="0">
            <widget class="QPushButton" name="export_csv_button">
             <property name="text">
-             <string>Export CSV</string>
+             <string notr="true">Export CSV</string>
             </property>
             <property name="autoDefault">
              <bool>false</bool>
@@ -52,14 +52,14 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Consommations</string>
+          <string notr="true">Consommations</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
           <item row="0" column="1" colspan="2">
            <widget class="UniqueConsumptionList" name="product_list">
             <column>
              <property name="text">
-              <string>Produits</string>
+              <string notr="true">Produits</string>
              </property>
             </column>
            </widget>
@@ -70,14 +70,14 @@
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>Valider</string>
+             <string notr="true">Valider</string>
             </property>
            </widget>
           </item>
           <item row="2" column="1" colspan="2">
            <widget class="QPushButton" name="refill_button">
             <property name="text">
-             <string>Recharger</string>
+             <string notr="true">Recharger</string>
             </property>
             <property name="autoDefault">
              <bool>false</bool>
@@ -94,7 +94,7 @@
           <item row="3" column="1" colspan="2">
            <widget class="QPushButton" name="take_button">
             <property name="text">
-             <string>Prendre</string>
+             <string notr="true">Prendre</string>
             </property>
             <property name="autoDefault">
              <bool>false</bool>
@@ -115,7 +115,7 @@
         </sizepolicy>
        </property>
        <property name="title">
-        <string>Notes sélectionnées</string>
+        <string notr="true">Notes sélectionnées</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_6">
         <item row="0" column="0">
@@ -128,12 +128,12 @@
           </property>
           <column>
            <property name="text">
-            <string>Note</string>
+            <string notr="true">Note</string>
            </property>
           </column>
           <column>
            <property name="text">
-            <string>Quantité</string>
+            <string notr="true">Quantité</string>
            </property>
           </column>
          </widget>
@@ -146,7 +146,7 @@
    <item row="2" column="0">
     <widget class="QPushButton" name="notes_management_button">
      <property name="text">
-      <string>Gerer les notes</string>
+      <string notr="true">Gerer les notes</string>
      </property>
     </widget>
    </item>

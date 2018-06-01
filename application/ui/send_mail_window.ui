@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Envoi direct</string>
+   <string notr="true">Envoi direct</string>
   </property>
   <widget class="QWidget" name="main_layout">
    <layout class="QGridLayout" name="gridLayout">
@@ -24,7 +24,7 @@
     <item row="0" column="0">
      <widget class="QLabel" name="destinateur_label">
       <property name="text">
-       <string>Expéditeur</string>
+       <string notr="true">Expéditeur</string>
       </property>
      </widget>
     </item>
@@ -35,22 +35,22 @@
      <widget class="MailFilterSelector" name="filter_selector">
       <item>
        <property name="text">
-        <string>Toutes les notes</string>
+        <string notr="true">Toutes les notes</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Notes suivantes</string>
+        <string notr="true">Notes suivantes</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Notes supérieures au montant</string>
+        <string notr="true">Notes supérieures au montant</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Notes inférieures au montant</string>
+        <string notr="true">Notes inférieures au montant</string>
        </property>
       </item>
      </widget>
@@ -78,7 +78,7 @@
     <item row="2" column="0">
      <widget class="QLabel" name="subject_label">
       <property name="text">
-       <string>Objet</string>
+       <string notr="true">Objet</string>
       </property>
      </widget>
     </item>
@@ -98,7 +98,7 @@
     <item row="4" column="3" colspan="2">
      <widget class="QPushButton" name="send_button">
       <property name="text">
-       <string>Envoyer</string>
+       <string notr="true">Envoyer</string>
       </property>
      </widget>
     </item>
@@ -118,7 +118,7 @@
    </property>
    <widget class="QMenu" name="menuFichier">
     <property name="title">
-     <string>Fichier</string>
+     <string notr="true">Fichier</string>
     </property>
     <addaction name="new_model_btn"/>
     <addaction name="open_model_btn"/>
@@ -129,31 +129,31 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="save_model_btn">
    <property name="text">
-    <string>Sauvegarder en tant que model</string>
+    <string notr="true">Sauvegarder en tant que model</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+S</string>
+    <string notr="true">Ctrl+S</string>
    </property>
   </action>
   <action name="actionCharger">
    <property name="text">
-    <string>Charger</string>
+    <string notr="true">Charger</string>
    </property>
   </action>
   <action name="open_model_btn">
    <property name="text">
-    <string>Ouvrir un model</string>
+    <string notr="true">Ouvrir un model</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+O</string>
+    <string notr="true">Ctrl+O</string>
    </property>
   </action>
   <action name="new_model_btn">
    <property name="text">
-    <string>Nouveau model</string>
+    <string notr="true">Nouveau model</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+N</string>
+    <string notr="true">Ctrl+N</string>
    </property>
   </action>
  </widget>

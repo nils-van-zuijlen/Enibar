@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string notr="true">Dialog</string>
   </property>
   <widget class="QLineEdit" name="content_input">
    <property name="geometry">
@@ -33,7 +33,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Valider</string>
+    <string notr="true">Valider</string>
    </property>
   </widget>
  </widget>
