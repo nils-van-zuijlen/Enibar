@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Statistiques</string>
+   <string notr="true">Statistiques</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="2" column="0">
@@ -28,32 +28,32 @@
      </property>
      <column>
       <property name="text">
-       <string>Nom</string>
+       <string notr="true">Nom</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Nombre</string>
+       <string notr="true">Nombre</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Total crédit</string>
+       <string notr="true">Total crédit</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>% crédit</string>
+       <string notr="true">% crédit</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Total débit</string>
+       <string notr="true">Total débit</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>% debit</string>
+       <string notr="true">% debit</string>
       </property>
      </column>
     </widget>
@@ -64,7 +64,7 @@
       <bool>false</bool>
      </property>
      <property name="text">
-      <string>Details</string>
+      <string notr="true">Details</string>
      </property>
     </widget>
    </item>

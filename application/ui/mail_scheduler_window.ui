@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Planificateur de mails</string>
+   <string notr="true">Planificateur de mails</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -24,7 +24,7 @@
        <bool>false</bool>
       </property>
       <property name="title">
-       <string>Filtres</string>
+       <string notr="true">Filtres</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="0" column="0">
@@ -37,22 +37,22 @@
          </property>
          <item>
           <property name="text">
-           <string>Toutes les notes</string>
+           <string notr="true">Toutes les notes</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Notes suivantes</string>
+           <string notr="true">Notes suivantes</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Notes au montant supérieur à</string>
+           <string notr="true">Notes au montant supérieur à</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Notes au montant inférieur à</string>
+           <string notr="true">Notes au montant inférieur à</string>
           </property>
          </item>
         </widget>
@@ -79,13 +79,13 @@
        <bool>false</bool>
       </property>
       <property name="title">
-       <string>Description</string>
+       <string notr="true">Description</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_6">
        <item row="0" column="0">
         <widget class="QLabel" name="name_label">
          <property name="text">
-          <string>Nom</string>
+          <string notr="true">Nom</string>
          </property>
         </widget>
        </item>
@@ -105,7 +105,7 @@
        <bool>false</bool>
       </property>
       <property name="title">
-       <string>Planification</string>
+       <string notr="true">Planification</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="0" column="1">
@@ -121,7 +121,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="schedule_label">
          <property name="text">
-          <string>Envoi tous les </string>
+          <string notr="true">Envoi tous les </string>
          </property>
         </widget>
        </item>
@@ -129,17 +129,17 @@
         <widget class="QComboBox" name="schedule_interval_unit">
          <item>
           <property name="text">
-           <string>Jours</string>
+           <string notr="true">Jours</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Semaines</string>
+           <string notr="true">Semaines</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Mois</string>
+           <string notr="true">Mois</string>
           </property>
          </item>
         </widget>
@@ -148,42 +148,42 @@
         <widget class="QComboBox" name="schedule_day">
          <item>
           <property name="text">
-           <string>Quelque soit le jour</string>
+           <string notr="true">Quelque soit le jour</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Le lundi</string>
+           <string notr="true">Le lundi</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Le mardi</string>
+           <string notr="true">Le mardi</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Le mercredi</string>
+           <string notr="true">Le mercredi</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Le jeudi</string>
+           <string notr="true">Le jeudi</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Le vendredi</string>
+           <string notr="true">Le vendredi</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Le samedi</string>
+           <string notr="true">Le samedi</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Le dimanche</string>
+           <string notr="true">Le dimanche</string>
           </property>
          </item>
         </widget>
@@ -197,7 +197,7 @@
        <bool>false</bool>
       </property>
       <property name="title">
-       <string>Message</string>
+       <string notr="true">Message</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="1" colspan="2">
@@ -229,7 +229,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Expéditeur</string>
+          <string notr="true">Expéditeur</string>
          </property>
         </widget>
        </item>
@@ -242,7 +242,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Objet</string>
+          <string notr="true">Objet</string>
          </property>
         </widget>
        </item>
@@ -258,13 +258,13 @@
        <bool>false</bool>
       </property>
       <property name="title">
-       <string>Status</string>
+       <string notr="true">Status</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_5">
        <item row="0" column="0">
         <widget class="QCheckBox" name="active_checkbox">
          <property name="text">
-          <string>Activé</string>
+          <string notr="true">Activé</string>
          </property>
         </widget>
        </item>
@@ -306,14 +306,14 @@
    </property>
    <widget class="QMenu" name="menuFichier">
     <property name="title">
-     <string>&amp;Fichier</string>
+     <string notr="true">&amp;Fichier</string>
     </property>
     <addaction name="new_mail"/>
     <addaction name="save_scheduled_mail"/>
    </widget>
    <widget class="QMenu" name="menuModel">
     <property name="title">
-     <string>&amp;Modele</string>
+     <string notr="true">&amp;Modele</string>
     </property>
     <addaction name="save_model"/>
     <addaction name="load_model"/>
@@ -324,34 +324,34 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="new_mail">
    <property name="text">
-    <string>Nouveau</string>
+    <string notr="true">Nouveau</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+N</string>
+    <string notr="true">Ctrl+N</string>
    </property>
   </action>
   <action name="save_model">
    <property name="text">
-    <string>Enregistrer en temps que modele</string>
+    <string notr="true">Enregistrer en temps que modele</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+S</string>
+    <string notr="true">Ctrl+Shift+S</string>
    </property>
   </action>
   <action name="load_model">
    <property name="text">
-    <string>Charger le modele</string>
+    <string notr="true">Charger le modele</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+O</string>
+    <string notr="true">Ctrl+Shift+O</string>
    </property>
   </action>
   <action name="save_scheduled_mail">
    <property name="text">
-    <string>Sauvegarder</string>
+    <string notr="true">Sauvegarder</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+S</string>
+    <string notr="true">Ctrl+S</string>
    </property>
   </action>
  </widget>

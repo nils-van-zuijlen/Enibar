@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string notr="true">Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="5" column="1" rowspan="2">
@@ -23,7 +23,7 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Selectionné</string>
+      <string notr="true">Selectionné</string>
      </property>
      <layout class="QFormLayout" name="formLayout_2">
       <item row="1" column="0">
@@ -34,14 +34,14 @@
          </font>
         </property>
         <property name="text">
-         <string>Crédité</string>
+         <string notr="true">Crédité</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
        <widget class="QLabel" name="selected_credited">
         <property name="text">
-         <string>0.00 €</string>
+         <string notr="true">0.00 €</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -51,14 +51,14 @@
       <item row="2" column="0">
        <widget class="QLabel" name="label_selected_debited">
         <property name="text">
-         <string>Débité</string>
+         <string notr="true">Débité</string>
         </property>
        </widget>
       </item>
       <item row="2" column="1">
        <widget class="QLabel" name="selected_debited">
         <property name="text">
-         <string>0.00 €</string>
+         <string notr="true">0.00 €</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -75,7 +75,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Solde</string>
+         <string notr="true">Solde</string>
         </property>
        </widget>
       </item>
@@ -89,7 +89,7 @@
          </font>
         </property>
         <property name="text">
-         <string>0.00 €</string>
+         <string notr="true">0.00 €</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -99,14 +99,14 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label_selected_quantity">
         <property name="text">
-         <string>Quantité</string>
+         <string notr="true">Quantité</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
        <widget class="QLabel" name="selected_quantity">
         <property name="text">
-         <string>0</string>
+         <string notr="true">0</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -137,7 +137,7 @@
          <enum>Qt::NoFocus</enum>
         </property>
         <property name="text">
-         <string>&amp;Filtres</string>
+         <string notr="true">&amp;Filtres</string>
         </property>
         <property name="checkable">
          <bool>true</bool>
@@ -159,7 +159,7 @@
          <enum>Qt::NoFocus</enum>
         </property>
         <property name="text">
-         <string>&amp;Rafraîchir</string>
+         <string notr="true">&amp;Rafraîchir</string>
         </property>
        </widget>
       </item>
@@ -175,7 +175,7 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Affiché</string>
+      <string notr="true">Affiché</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
       <property name="fieldGrowthPolicy">
@@ -189,7 +189,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Crédité</string>
+         <string notr="true">Crédité</string>
         </property>
        </widget>
       </item>
@@ -201,7 +201,7 @@
          </font>
         </property>
         <property name="text">
-         <string>0.00 €</string>
+         <string notr="true">0.00 €</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -216,7 +216,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Débité</string>
+         <string notr="true">Débité</string>
         </property>
        </widget>
       </item>
@@ -228,7 +228,7 @@
          </font>
         </property>
         <property name="text">
-         <string>0.00 €</string>
+         <string notr="true">0.00 €</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -245,7 +245,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Solde</string>
+         <string notr="true">Solde</string>
         </property>
        </widget>
       </item>
@@ -259,7 +259,7 @@
          </font>
         </property>
         <property name="text">
-         <string>0.00 €</string>
+         <string notr="true">0.00 €</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -269,14 +269,14 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label_quantity">
         <property name="text">
-         <string>Quantité</string>
+         <string notr="true">Quantité</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
        <widget class="QLabel" name="quantity">
         <property name="text">
-         <string>0</string>
+         <string notr="true">0</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -308,28 +308,28 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Surnom</string>
+         <string notr="true">Surnom</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Nom</string>
+         <string notr="true">Nom</string>
         </property>
        </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Prenom</string>
+         <string notr="true">Prenom</string>
         </property>
        </widget>
       </item>
       <item row="4" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>Produit</string>
+         <string notr="true">Produit</string>
         </property>
        </widget>
       </item>
@@ -394,7 +394,7 @@
          <enum>Qt::NoFocus</enum>
         </property>
         <property name="text">
-         <string>RàZ</string>
+         <string notr="true">RàZ</string>
         </property>
        </widget>
       </item>
@@ -416,7 +416,7 @@
          <enum>Qt::NoFocus</enum>
         </property>
         <property name="text">
-         <string>RàZ</string>
+         <string notr="true">RàZ</string>
         </property>
        </widget>
       </item>
@@ -438,7 +438,7 @@
          <enum>Qt::NoFocus</enum>
         </property>
         <property name="text">
-         <string>RàZ</string>
+         <string notr="true">RàZ</string>
         </property>
        </widget>
       </item>
@@ -460,7 +460,7 @@
          <enum>Qt::NoFocus</enum>
         </property>
         <property name="text">
-         <string>RàZ</string>
+         <string notr="true">RàZ</string>
         </property>
        </widget>
       </item>
@@ -482,14 +482,14 @@
          <enum>Qt::NoFocus</enum>
         </property>
         <property name="text">
-         <string>RàZ</string>
+         <string notr="true">RàZ</string>
         </property>
        </widget>
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Catégorie</string>
+         <string notr="true">Catégorie</string>
         </property>
        </widget>
       </item>
@@ -512,7 +512,7 @@
    <item row="5" column="2" rowspan="3">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Action</string>
+      <string notr="true">Action</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
@@ -521,7 +521,7 @@
          <enum>Qt::NoFocus</enum>
         </property>
         <property name="text">
-         <string>&amp;Export CSV</string>
+         <string notr="true">&amp;Export CSV</string>
         </property>
        </widget>
       </item>
@@ -531,7 +531,7 @@
          <enum>Qt::NoFocus</enum>
         </property>
         <property name="text">
-         <string>Supprimer</string>
+         <string notr="true">Supprimer</string>
         </property>
        </widget>
       </item>
@@ -541,7 +541,7 @@
          <enum>Qt::NoFocus</enum>
         </property>
         <property name="text">
-         <string>Supprimer ligne</string>
+         <string notr="true">Supprimer ligne</string>
         </property>
        </widget>
       </item>
@@ -564,47 +564,47 @@
      </property>
      <column>
       <property name="text">
-       <string>Date</string>
+       <string notr="true">Date</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Note</string>
+       <string notr="true">Note</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Categorie</string>
+       <string notr="true">Categorie</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Consomation</string>
+       <string notr="true">Consomation</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Type</string>
+       <string notr="true">Type</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Quantité</string>
+       <string notr="true">Quantité</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Credit</string>
+       <string notr="true">Credit</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Debit</string>
+       <string notr="true">Debit</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Id</string>
+       <string notr="true">Id</string>
       </property>
      </column>
     </widget>

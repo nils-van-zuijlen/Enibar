@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Note categories</string>
+   <string notr="true">Note categories</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
@@ -23,7 +23,7 @@
        </property>
        <widget class="QWidget" name="note_categories_tab">
         <attribute name="title">
-         <string>Catégories</string>
+         <string notr="true">Catégories</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_3">
          <item row="1" column="1">
@@ -37,7 +37,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Cacher &gt;</string>
+              <string notr="true">Cacher &gt;</string>
              </property>
             </widget>
            </item>
@@ -88,7 +88,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>&lt; Montrer</string>
+              <string notr="true">&lt; Montrer</string>
              </property>
             </widget>
            </item>
@@ -111,7 +111,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Ajouter</string>
+              <string notr="true">Ajouter</string>
              </property>
             </widget>
            </item>
@@ -124,7 +124,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Supprimer</string>
+              <string notr="true">Supprimer</string>
              </property>
             </widget>
            </item>
@@ -172,7 +172,7 @@
        </widget>
        <widget class="QWidget" name="notes_tab">
         <attribute name="title">
-         <string>Notes</string>
+         <string notr="true">Notes</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_6">
          <item row="1" column="0">
@@ -206,14 +206,14 @@
            <item row="1" column="1">
             <widget class="QPushButton" name="add_notes_in_category_btn">
              <property name="text">
-              <string>Ajouter &gt;&gt;&gt;</string>
+              <string notr="true">Ajouter &gt;&gt;&gt;</string>
              </property>
             </widget>
            </item>
            <item row="2" column="1">
             <widget class="QPushButton" name="remove_notes_from_category_btn">
              <property name="text">
-              <string>&lt;&lt;&lt; Enlever</string>
+              <string notr="true">&lt;&lt;&lt; Enlever</string>
              </property>
             </widget>
            </item>

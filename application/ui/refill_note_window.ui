@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Recharger une note</string>
+   <string notr="true">Recharger une note</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="4" column="0" colspan="2">
@@ -22,7 +22,7 @@
         <bool>false</bool>
        </property>
        <property name="text">
-        <string>Valider</string>
+        <string notr="true">Valider</string>
        </property>
        <property name="autoDefault">
         <bool>false</bool>
@@ -35,7 +35,7 @@
      <item row="0" column="3">
       <widget class="QPushButton" name="cancel_button">
        <property name="text">
-        <string>Annuler</string>
+        <string notr="true">Annuler</string>
        </property>
        <property name="autoDefault">
         <bool>false</bool>
@@ -49,14 +49,14 @@
      <item row="0" column="0">
       <widget class="Input" name="to_add">
        <property name="placeholderText">
-        <string>Montant</string>
+        <string notr="true">Montant</string>
        </property>
       </widget>
      </item>
      <item row="1" column="0">
       <widget class="Input" name="reason">
        <property name="placeholderText">
-        <string>Raison (peut rester vide)</string>
+        <string notr="true">Raison (peut rester vide)</string>
        </property>
       </widget>
      </item>

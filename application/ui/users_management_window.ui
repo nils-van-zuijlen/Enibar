@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Gestion utilisateurs</string>
+   <string notr="true">Gestion utilisateurs</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="3" column="2">
     <widget class="QCheckBox" name="manage_products">
      <property name="text">
-      <string>Gérer les consomations</string>
+      <string notr="true">Gérer les consomations</string>
      </property>
     </widget>
    </item>
@@ -37,14 +37,14 @@
       </font>
      </property>
      <property name="text">
-      <string>Droits de l'utilsateur</string>
+      <string notr="true">Droits de l'utilsateur</string>
      </property>
     </widget>
    </item>
    <item row="5" column="1">
     <widget class="QPushButton" name="delete_button">
      <property name="text">
-      <string>Supprimer</string>
+      <string notr="true">Supprimer</string>
      </property>
     </widget>
    </item>
@@ -54,21 +54,21 @@
    <item row="2" column="2">
     <widget class="QCheckBox" name="manage_users">
      <property name="text">
-      <string>Gérer les utilisateurs</string>
+      <string notr="true">Gérer les utilisateurs</string>
      </property>
     </widget>
    </item>
    <item row="5" column="0">
     <widget class="QPushButton" name="add_button">
      <property name="text">
-      <string>Ajouter</string>
+      <string notr="true">Ajouter</string>
      </property>
     </widget>
    </item>
    <item row="1" column="2">
     <widget class="QCheckBox" name="manage_notes">
      <property name="text">
-      <string>Gérer les notes</string>
+      <string notr="true">Gérer les notes</string>
      </property>
     </widget>
    </item>

@@ -14,13 +14,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Paramètres</string>
+   <string notr="true">Paramètres</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_13">
    <item row="1" column="0" colspan="2">
     <widget class="QGroupBox" name="web_groupbox">
      <property name="title">
-      <string>Web sync</string>
+      <string notr="true">Web sync</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_8">
       <item row="0" column="0">
@@ -28,7 +28,7 @@
         <item row="0" column="0">
          <widget class="QLabel" name="web_url_label">
           <property name="text">
-           <string>URL</string>
+           <string notr="true">URL</string>
           </property>
          </widget>
         </item>
@@ -56,7 +56,7 @@
         <item row="2" column="0">
          <widget class="QLabel" name="web_use_proxy_label">
           <property name="text">
-           <string>Use proxy</string>
+           <string notr="true">Use proxy</string>
           </property>
          </widget>
         </item>
@@ -66,7 +66,7 @@
         <item row="1" column="0">
          <widget class="QLabel" name="web_key_label">
           <property name="text">
-           <string>Secret key</string>
+           <string notr="true">Secret key</string>
           </property>
          </widget>
         </item>
@@ -76,7 +76,7 @@
         <item row="4" column="0">
          <widget class="QLabel" name="web_proxy_url_label">
           <property name="text">
-           <string>Proxy URL</string>
+           <string notr="true">Proxy URL</string>
           </property>
          </widget>
         </item>
@@ -88,7 +88,7 @@
    <item row="2" column="0" colspan="2">
     <widget class="QGroupBox" name="cotiz_groupbox">
      <property name="title">
-      <string>Cotiz</string>
+      <string notr="true">Cotiz</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_7">
       <item row="0" column="0">
@@ -96,14 +96,14 @@
         <item row="0" column="0">
          <widget class="QLabel" name="cotiz_noncotiz_name_label">
           <property name="text">
-           <string>Non cotiz category name</string>
+           <string notr="true">Non cotiz category name</string>
           </property>
          </widget>
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="cotiz_price_label">
           <property name="text">
-           <string>Cotiz price</string>
+           <string notr="true">Cotiz price</string>
           </property>
          </widget>
         </item>
@@ -121,7 +121,7 @@
    <item row="3" column="0" colspan="2">
     <widget class="QGroupBox" name="ecocups_groupbox">
      <property name="title">
-      <string>Ecocups</string>
+      <string notr="true">Ecocups</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_9">
       <item row="0" column="1">
@@ -129,7 +129,7 @@
         <item row="0" column="0">
          <widget class="QLabel" name="ecocups_price_label">
           <property name="text">
-           <string>Ecocup price</string>
+           <string notr="true">Ecocup price</string>
           </property>
          </widget>
         </item>
@@ -139,28 +139,28 @@
         <item row="3" column="0">
          <widget class="QLabel" name="ecocups_buy_label">
           <property name="text">
-           <string>Ecocup buy</string>
+           <string notr="true">Ecocup buy</string>
           </property>
          </widget>
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="ecocups_category_label">
           <property name="text">
-           <string>Ecocup Category</string>
+           <string notr="true">Ecocup Category</string>
           </property>
          </widget>
         </item>
         <item row="4" column="0">
          <widget class="QLabel" name="ecocups_name_label">
           <property name="text">
-           <string>Ecocup name</string>
+           <string notr="true">Ecocup name</string>
           </property>
          </widget>
         </item>
         <item row="3" column="2">
          <widget class="QLabel" name="ecocups_repay_label">
           <property name="text">
-           <string>Ecocup give back</string>
+           <string notr="true">Ecocup give back</string>
           </property>
          </widget>
         </item>
@@ -184,7 +184,7 @@
    <item row="4" column="0" colspan="2">
     <widget class="QGroupBox" name="mails_groupbox">
      <property name="title">
-      <string>Mails</string>
+      <string notr="true">Mails</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_11">
       <item row="0" column="0">
@@ -192,14 +192,14 @@
         <item row="1" column="0">
          <widget class="QLabel" name="smtp_server_port_label">
           <property name="text">
-           <string>SMTP server port</string>
+           <string notr="true">SMTP server port</string>
           </property>
          </widget>
         </item>
         <item row="0" column="0">
          <widget class="QLabel" name="smtp_server_address_label">
           <property name="text">
-           <string>SMTP server address</string>
+           <string notr="true">SMTP server address</string>
           </property>
          </widget>
         </item>
@@ -217,7 +217,7 @@
    <item row="5" column="0" colspan="2">
     <widget class="QGroupBox" name="agio_groupbox">
      <property name="title">
-      <string>Agios</string>
+      <string notr="true">Agios</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_10">
       <item row="0" column="0">
@@ -225,21 +225,21 @@
         <item row="0" column="0">
          <widget class="QLabel" name="agio_threshold_label">
           <property name="text">
-           <string>AGIO threshold</string>
+           <string notr="true">AGIO threshold</string>
           </property>
          </widget>
         </item>
         <item row="3" column="0">
          <widget class="QLabel" name="agio_percent_label">
           <property name="text">
-           <string>AGIO percent</string>
+           <string notr="true">AGIO percent</string>
           </property>
          </widget>
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="agio_every_label">
           <property name="text">
-           <string>AGIO every</string>
+           <string notr="true">AGIO every</string>
           </property>
          </widget>
         </item>
@@ -260,7 +260,7 @@
    <item row="6" column="0" colspan="2">
     <widget class="QGroupBox" name="diverse_groupbox">
      <property name="title">
-      <string>Divers</string>
+      <string notr="true">Divers</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_12">
       <item row="0" column="0">
@@ -268,7 +268,7 @@
         <item row="0" column="0">
          <widget class="QLabel" name="majoration_label">
           <property name="text">
-           <string>Majoration alcools</string>
+           <string notr="true">Majoration alcools</string>
           </property>
          </widget>
         </item>
@@ -283,7 +283,7 @@
    <item row="8" column="0" colspan="2">
     <widget class="QPushButton" name="save_button">
      <property name="text">
-      <string>Sauvegarder</string>
+      <string notr="true">Sauvegarder</string>
      </property>
     </widget>
    </item>

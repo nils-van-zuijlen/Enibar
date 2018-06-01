@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Gestion notes</string>
+   <string notr="true">Gestion notes</string>
   </property>
   <property name="modal">
    <bool>true</bool>
@@ -25,7 +25,7 @@
      <item>
       <widget class="QPushButton" name="add_button">
        <property name="text">
-        <string>Ajouter</string>
+        <string notr="true">Ajouter</string>
        </property>
       </widget>
      </item>
@@ -35,7 +35,7 @@
         <bool>false</bool>
        </property>
        <property name="text">
-        <string>Supprimer</string>
+        <string notr="true">Supprimer</string>
        </property>
       </widget>
      </item>
@@ -51,7 +51,7 @@
    <item row="5" column="1" colspan="2">
     <widget class="QPushButton" name="group_action_button">
      <property name="text">
-      <string>Faire des actions sur plusieurs notes</string>
+      <string notr="true">Faire des actions sur plusieurs notes</string>
      </property>
     </widget>
    </item>
@@ -60,7 +60,7 @@
      <item row="6" column="0">
       <widget class="QLabel" name="name_label">
        <property name="text">
-        <string>&amp;Nom:</string>
+        <string notr="true">&amp;Nom:</string>
        </property>
        <property name="buddy">
         <cstring>name_input</cstring>
@@ -83,7 +83,7 @@
         <bool>false</bool>
        </property>
        <property name="text">
-        <string>Sauvegarder</string>
+        <string notr="true">Sauvegarder</string>
        </property>
        <property name="default">
         <bool>true</bool>
@@ -93,7 +93,7 @@
      <item row="2" column="0" colspan="2">
       <widget class="QLabel" name="nickname_label">
        <property name="text">
-        <string>S&amp;urnom: </string>
+        <string notr="true">S&amp;urnom: </string>
        </property>
        <property name="buddy">
         <cstring>nickname_input</cstring>
@@ -103,7 +103,7 @@
      <item row="15" column="0" colspan="3">
       <widget class="QLabel" name="promo_label">
        <property name="text">
-        <string>Promo:</string>
+        <string notr="true">Promo:</string>
        </property>
        <property name="buddy">
         <cstring>promo_input</cstring>
@@ -113,7 +113,7 @@
      <item row="17" column="0" colspan="2">
       <widget class="QLabel" name="mail_label">
        <property name="text">
-        <string>Mai&amp;l:</string>
+        <string notr="true">Mai&amp;l:</string>
        </property>
        <property name="buddy">
         <cstring>mail_input</cstring>
@@ -123,7 +123,7 @@
      <item row="22" column="0" colspan="3">
       <widget class="QLabel" name="photo_label">
        <property name="text">
-        <string>Photo:</string>
+        <string notr="true">Photo:</string>
        </property>
        <property name="buddy">
         <cstring>photo_button</cstring>
@@ -133,7 +133,7 @@
      <item row="33" column="0">
       <widget class="QPushButton" name="cancel_button">
        <property name="text">
-        <string>Annuler</string>
+        <string notr="true">Annuler</string>
        </property>
       </widget>
      </item>
@@ -177,14 +177,14 @@
         <bool>false</bool>
        </property>
        <property name="text">
-        <string>Modifier la photo</string>
+        <string notr="true">Modifier la photo</string>
        </property>
       </widget>
      </item>
      <item row="27" column="0" colspan="3">
       <widget class="QPushButton" name="cotiz_button">
        <property name="text">
-        <string>Cotiz</string>
+        <string notr="true">Cotiz</string>
        </property>
       </widget>
      </item>
@@ -210,14 +210,14 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Ajouter à la catégorie</string>
+        <string notr="true">Ajouter à la catégorie</string>
        </property>
       </widget>
      </item>
      <item row="20" column="0" colspan="2">
       <widget class="QLabel" name="phone_label">
        <property name="text">
-        <string>&amp;Téléphone:</string>
+        <string notr="true">&amp;Téléphone:</string>
        </property>
        <property name="buddy">
         <cstring>phone_input</cstring>
@@ -256,7 +256,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Enlever de la catégorie</string>
+        <string notr="true">Enlever de la catégorie</string>
        </property>
       </widget>
      </item>
@@ -274,52 +274,52 @@
        </property>
        <item>
         <property name="text">
-         <string>1A</string>
+         <string notr="true">1A</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>2A</string>
+         <string notr="true">2A</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>3A</string>
+         <string notr="true">3A</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>3S</string>
+         <string notr="true">3S</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>4A</string>
+         <string notr="true">4A</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>5A</string>
+         <string notr="true">5A</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Externe</string>
+         <string notr="true">Externe</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>ESIAB</string>
+         <string notr="true">ESIAB</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Prof</string>
+         <string notr="true">Prof</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Ancien</string>
+         <string notr="true">Ancien</string>
         </property>
        </item>
       </widget>
@@ -334,7 +334,7 @@
      <item row="8" column="0" colspan="2">
       <widget class="QLabel" name="birthdate_label">
        <property name="text">
-        <string>&amp;Date de naissance: </string>
+        <string notr="true">&amp;Date de naissance: </string>
        </property>
        <property name="buddy">
         <cstring>birthdate_input</cstring>
@@ -344,7 +344,7 @@
      <item row="4" column="0" colspan="2">
       <widget class="QLabel" name="first_name_label">
        <property name="text">
-        <string>Pr&amp;énom: </string>
+        <string notr="true">Pr&amp;énom: </string>
        </property>
        <property name="buddy">
         <cstring>first_name_input</cstring>
@@ -356,7 +356,7 @@
        <item>
         <widget class="QCheckBox" name="mails_checkbox">
          <property name="text">
-          <string>Mails</string>
+          <string notr="true">Mails</string>
          </property>
          <property name="checked">
           <bool>true</bool>
@@ -366,7 +366,7 @@
        <item>
         <widget class="QCheckBox" name="stats_checkbox">
          <property name="text">
-          <string>Stats</string>
+          <string notr="true">Stats</string>
          </property>
          <property name="checked">
           <bool>true</bool>
@@ -376,7 +376,7 @@
        <item>
         <widget class="QCheckBox" name="agios_checkbox">
          <property name="text">
-          <string>Agios</string>
+          <string notr="true">Agios</string>
          </property>
          <property name="checked">
           <bool>true</bool>

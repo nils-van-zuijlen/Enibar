@@ -20,7 +20,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Enibar</string>
+   <string notr="true">Enibar</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_3">
@@ -98,17 +98,17 @@
          </attribute>
          <column>
           <property name="text">
-           <string>Nbr</string>
+           <string notr="true">Nbr</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string>Conso</string>
+           <string notr="true">Conso</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string>Prix</string>
+           <string notr="true">Prix</string>
           </property>
          </column>
         </widget>
@@ -138,7 +138,7 @@
           <string notr="true">padding:0.75em</string>
          </property>
          <property name="text">
-          <string>0.00 €</string>
+          <string notr="true">0.00 €</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -185,7 +185,7 @@
              <string notr="true">padding:0.75em;background-color:green;color:white</string>
             </property>
             <property name="text">
-             <string>Valider</string>
+             <string notr="true">Valider</string>
             </property>
            </widget>
           </item>
@@ -208,7 +208,7 @@
              <string notr="true">padding: 0.75em; background-color:red;color:white;</string>
             </property>
             <property name="text">
-             <string>Annuler</string>
+             <string notr="true">Annuler</string>
             </property>
            </widget>
           </item>
@@ -224,7 +224,7 @@
           </size>
          </property>
          <property name="title">
-          <string>Ecocups</string>
+          <string notr="true">Ecocups</string>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_4">
           <property name="leftMargin">
@@ -242,7 +242,7 @@
           <item>
            <widget class="QPushButton" name="repay_ecocup_btn">
             <property name="text">
-             <string>Rendre</string>
+             <string notr="true">Rendre</string>
             </property>
            </widget>
           </item>
@@ -255,7 +255,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Prendre</string>
+             <string notr="true">Prendre</string>
             </property>
            </widget>
           </item>
@@ -368,7 +368,7 @@
              <enum>QFrame::Plain</enum>
             </property>
             <property name="text">
-             <string>email@enib.fr</string>
+             <string notr="true">email@enib.fr</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -390,7 +390,7 @@
              </font>
             </property>
             <property name="text">
-             <string>Rouge depuis:</string>
+             <string notr="true">Rouge depuis:</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -406,7 +406,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Promo</string>
+             <string notr="true">Promo</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -422,7 +422,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>+336 00 00 00 00</string>
+             <string notr="true">+336 00 00 00 00</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -444,7 +444,7 @@
              </font>
             </property>
             <property name="text">
-             <string>Total rechargé:</string>
+             <string notr="true">Total rechargé:</string>
             </property>
             <property name="margin">
              <number>0</number>
@@ -467,7 +467,7 @@
              </font>
             </property>
             <property name="text">
-             <string>Surnom - Prénom nom</string>
+             <string notr="true">Surnom - Prénom nom</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -483,7 +483,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>00/00/00</string>
+             <string notr="true">00/00/00</string>
             </property>
            </widget>
           </item>
@@ -503,7 +503,7 @@
              </font>
             </property>
             <property name="text">
-             <string>0.0 €</string>
+             <string notr="true">0.0 €</string>
             </property>
             <property name="margin">
              <number>0</number>
@@ -526,7 +526,7 @@
              </font>
             </property>
             <property name="text">
-             <string>0.0 €</string>
+             <string notr="true">0.0 €</string>
             </property>
             <property name="margin">
              <number>0</number>
@@ -548,7 +548,7 @@
              </font>
             </property>
             <property name="text">
-             <string>Total consommé:</string>
+             <string notr="true">Total consommé:</string>
             </property>
             <property name="margin">
              <number>0</number>
@@ -605,12 +605,12 @@
             </property>
             <column>
              <property name="text">
-              <string>Date</string>
+              <string notr="true">Date</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Quantité</string>
+              <string notr="true">Quantité</string>
              </property>
              <property name="textAlignment">
               <set>AlignLeading|AlignVCenter</set>
@@ -618,12 +618,12 @@
             </column>
             <column>
              <property name="text">
-              <string>Conso</string>
+              <string notr="true">Conso</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Prix</string>
+              <string notr="true">Prix</string>
              </property>
             </column>
            </widget>
@@ -683,7 +683,7 @@
              </font>
             </property>
             <property name="text">
-             <string>0.00 €</string>
+             <string notr="true">0.00 €</string>
             </property>
            </widget>
           </item>
@@ -706,7 +706,7 @@
    </property>
    <widget class="QMenu" name="administration">
     <property name="title">
-     <string>&amp;Administration</string>
+     <string notr="true">&amp;Administration</string>
     </property>
     <addaction name="user_managment"/>
     <addaction name="change_password"/>
@@ -720,11 +720,11 @@
    </widget>
    <widget class="QMenu" name="menuNotes">
     <property name="title">
-     <string>&amp;Notes</string>
+     <string notr="true">&amp;Notes</string>
     </property>
     <widget class="QMenu" name="menuExporter_les_notes">
      <property name="title">
-      <string>&amp;Exporter les notes</string>
+      <string notr="true">&amp;Exporter les notes</string>
      </property>
      <addaction name="export_with_profs"/>
      <addaction name="export_without_profs"/>
@@ -743,18 +743,18 @@
    </widget>
    <widget class="QMenu" name="menu_Panels">
     <property name="title">
-     <string>&amp;Panels</string>
+     <string notr="true">&amp;Panels</string>
     </property>
     <addaction name="panel_managment"/>
     <addaction name="refresh_panels"/>
    </widget>
    <widget class="QMenu" name="menuAutre">
     <property name="title">
-     <string>Au&amp;tre</string>
+     <string notr="true">Au&amp;tre</string>
     </property>
     <widget class="QMenu" name="menu_Statistiques">
      <property name="title">
-      <string>&amp;Statistiques</string>
+      <string notr="true">&amp;Statistiques</string>
      </property>
      <addaction name="stats_by_note"/>
      <addaction name="stats_by_category"/>
@@ -767,7 +767,7 @@
    </widget>
    <widget class="QMenu" name="menuMails">
     <property name="title">
-     <string>&amp;Mails</string>
+     <string notr="true">&amp;Mails</string>
     </property>
     <addaction name="send_mail"/>
     <addaction name="mail_scheduler"/>
@@ -783,48 +783,48 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Gerer les &amp;utilisateurs</string>
+    <string notr="true">Gerer les &amp;utilisateurs</string>
    </property>
   </action>
   <action name="products_managment">
    <property name="text">
-    <string>Gerer les &amp;consomations</string>
+    <string notr="true">Gerer les &amp;consomations</string>
    </property>
   </action>
   <action name="manage_notes">
    <property name="text">
-    <string>Gerer les &amp;notes</string>
+    <string notr="true">Gerer les &amp;notes</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+G</string>
+    <string notr="true">Ctrl+G</string>
    </property>
   </action>
   <action name="export_with_profs">
    <property name="text">
-    <string>A&amp;vec profs</string>
+    <string notr="true">A&amp;vec profs</string>
    </property>
   </action>
   <action name="export_without_profs">
    <property name="text">
-    <string>Sa&amp;ns profs</string>
+    <string notr="true">Sa&amp;ns profs</string>
    </property>
   </action>
   <action name="change_password">
    <property name="text">
-    <string>Changer mon &amp;mot de passe</string>
+    <string notr="true">Changer mon &amp;mot de passe</string>
    </property>
   </action>
   <action name="panel_managment">
    <property name="text">
-    <string>&amp;Gerer les panels</string>
+    <string notr="true">&amp;Gerer les panels</string>
    </property>
   </action>
   <action name="notes_action">
    <property name="text">
-    <string>&amp;Faire des actions sur plusieurs notes</string>
+    <string notr="true">&amp;Faire des actions sur plusieurs notes</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+P</string>
+    <string notr="true">Ctrl+P</string>
    </property>
   </action>
   <action name="refill_note">
@@ -832,10 +832,10 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>&amp;Recharger</string>
+    <string notr="true">&amp;Recharger</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+R</string>
+    <string notr="true">Ctrl+R</string>
    </property>
   </action>
   <action name="hide_alcohol">
@@ -846,25 +846,25 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Cacher les &amp;boissons alcolisées</string>
+    <string notr="true">Cacher les &amp;boissons alcolisées</string>
    </property>
   </action>
   <action name="take_ecocup">
    <property name="text">
-    <string>&amp;Prendre</string>
+    <string notr="true">&amp;Prendre</string>
    </property>
   </action>
   <action name="repay_ecocup">
    <property name="text">
-    <string>&amp;Rembourser</string>
+    <string notr="true">&amp;Rembourser</string>
    </property>
   </action>
   <action name="transaction_history">
    <property name="text">
-    <string>Consulter l'&amp;historique des transactions</string>
+    <string notr="true">Consulter l'&amp;historique des transactions</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+H</string>
+    <string notr="true">Ctrl+H</string>
    </property>
   </action>
   <action name="empty_note">
@@ -872,78 +872,78 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Prendre &amp;sur une note</string>
+    <string notr="true">Prendre &amp;sur une note</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+T</string>
+    <string notr="true">Ctrl+T</string>
    </property>
   </action>
   <action name="refresh_panels">
    <property name="text">
-    <string>&amp;Raffraichir les panels</string>
+    <string notr="true">&amp;Raffraichir les panels</string>
    </property>
   </action>
   <action name="find">
    <property name="text">
-    <string>Recherche</string>
+    <string notr="true">Recherche</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+F</string>
+    <string notr="true">Ctrl+F</string>
    </property>
   </action>
   <action name="about">
    <property name="text">
-    <string>&amp;A propos</string>
+    <string notr="true">&amp;A propos</string>
    </property>
   </action>
   <action name="import_csv">
    <property name="text">
-    <string>&amp;Importer un fichier CSV</string>
+    <string notr="true">&amp;Importer un fichier CSV</string>
    </property>
   </action>
   <action name="stats_by_note">
    <property name="text">
-    <string>Par note</string>
+    <string notr="true">Par note</string>
    </property>
   </action>
   <action name="stats_by_category">
    <property name="text">
-    <string>Par catégorie</string>
+    <string notr="true">Par catégorie</string>
    </property>
   </action>
   <action name="send_mail">
    <property name="text">
-    <string>&amp;Envoi direct</string>
+    <string notr="true">&amp;Envoi direct</string>
    </property>
   </action>
   <action name="mail_scheduler">
    <property name="text">
-    <string>&amp;Planificateur d'envoi</string>
+    <string notr="true">&amp;Planificateur d'envoi</string>
    </property>
   </action>
   <action name="mail_manage_models">
    <property name="text">
-    <string>Gestion des &amp;models</string>
+    <string notr="true">Gestion des &amp;models</string>
    </property>
   </action>
   <action name="help">
    <property name="text">
-    <string>Aide</string>
+    <string notr="true">Aide</string>
    </property>
   </action>
   <action name="settings">
    <property name="text">
-    <string>Pa&amp;ramètres</string>
+    <string notr="true">Pa&amp;ramètres</string>
    </property>
   </action>
   <action name="note_categories_management">
    <property name="text">
-    <string>Gerer les categories</string>
+    <string notr="true">Gerer les categories</string>
    </property>
   </action>
   <action name="stats_admin">
    <property name="text">
-    <string>Stats admin</string>
+    <string notr="true">Stats admin</string>
    </property>
   </action>
  </widget>

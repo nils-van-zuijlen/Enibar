@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Récapitulatif des envois</string>
+   <string notr="true">Récapitulatif des envois</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
@@ -33,17 +33,17 @@
      </attribute>
      <column>
       <property name="text">
-       <string>Surnom</string>
+       <string notr="true">Surnom</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Adresse mail</string>
+       <string notr="true">Adresse mail</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Status</string>
+       <string notr="true">Status</string>
       </property>
      </column>
     </widget>

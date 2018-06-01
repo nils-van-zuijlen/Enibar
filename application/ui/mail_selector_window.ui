@@ -11,20 +11,20 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Selecteur de notes</string>
+   <string notr="true">Selecteur de notes</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="2">
     <widget class="QPushButton" name="pushButton">
      <property name="text">
-      <string>Valider</string>
+      <string notr="true">Valider</string>
      </property>
     </widget>
    </item>
    <item row="1" column="1">
     <widget class="QPushButton" name="pushButton_2">
      <property name="text">
-      <string>Annuler</string>
+      <string notr="true">Annuler</string>
      </property>
     </widget>
    </item>
@@ -54,22 +54,22 @@
      </property>
      <column>
       <property name="text">
-       <string>Surnom</string>
+       <string notr="true">Surnom</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Mail</string>
+       <string notr="true">Mail</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Prenom</string>
+       <string notr="true">Prenom</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Nom</string>
+       <string notr="true">Nom</string>
       </property>
      </column>
     </widget>

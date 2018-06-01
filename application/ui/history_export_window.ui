@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string notr="true">Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="0">
@@ -27,13 +27,13 @@
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Colonnes à exporter</string>
+      <string notr="true">Colonnes à exporter</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <widget class="QCheckBox" name="date">
         <property name="text">
-         <string>Date</string>
+         <string notr="true">Date</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -43,7 +43,7 @@
       <item>
        <widget class="QCheckBox" name="nickname">
         <property name="text">
-         <string>Surnom</string>
+         <string notr="true">Surnom</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -53,7 +53,7 @@
       <item>
        <widget class="QCheckBox" name="lastname">
         <property name="text">
-         <string>Nom</string>
+         <string notr="true">Nom</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -63,7 +63,7 @@
       <item>
        <widget class="QCheckBox" name="firstname">
         <property name="text">
-         <string>Prénom</string>
+         <string notr="true">Prénom</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -73,7 +73,7 @@
       <item>
        <widget class="QCheckBox" name="category">
         <property name="text">
-         <string>Catégorie</string>
+         <string notr="true">Catégorie</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -83,7 +83,7 @@
       <item>
        <widget class="QCheckBox" name="product">
         <property name="text">
-         <string>Produit</string>
+         <string notr="true">Produit</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -93,7 +93,7 @@
       <item>
        <widget class="QCheckBox" name="quantity">
         <property name="text">
-         <string>Quantité</string>
+         <string notr="true">Quantité</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -103,7 +103,7 @@
       <item>
        <widget class="QCheckBox" name="price">
         <property name="text">
-         <string>Prix</string>
+         <string notr="true">Prix</string>
         </property>
         <property name="checked">
          <bool>true</bool>

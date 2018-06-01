@@ -11,20 +11,20 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Sauvegarde du model</string>
+   <string notr="true">Sauvegarde du model</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="2" column="2">
     <widget class="QPushButton" name="pushButton">
      <property name="text">
-      <string>Sauvegarder</string>
+      <string notr="true">Sauvegarder</string>
      </property>
     </widget>
    </item>
    <item row="2" column="1">
     <widget class="QPushButton" name="pushButton_2">
      <property name="text">
-      <string>Anuler</string>
+      <string notr="true">Anuler</string>
      </property>
     </widget>
    </item>
@@ -47,7 +47,7 @@
    <item row="0" column="0" colspan="3">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Nom du model.</string>
+      <string notr="true">Nom du model.</string>
      </property>
     </widget>
    </item>
