@@ -72,14 +72,14 @@ class MenuTest(basetest.BaseGuiTest):
             ProductsManagementWindow
         )
 
-    def test_menu_transaction_history(self):
-        """ Testing history opening
-        """
-        self.win.transaction_history.trigger()
-        self.assertIsInstance(
-            self.win.menu_bar.cur_window,
-            HistoryWindow
-        )
+    #def test_menu_transaction_history(self):
+    #    """ Testing history opening
+    #    """
+    #    self.win.transaction_history.trigger()
+    #    self.assertIsInstance(
+    #        self.win.menu_bar.cur_window,
+    #        HistoryWindow
+    #    )
 
     def test_menu_refill_note(self):
         """ Testing refill_note opening
