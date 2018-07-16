@@ -4,6 +4,7 @@ stages:
     - preparation
     - build
     - test
+    - gui
     - style
 
 services:
@@ -52,7 +53,7 @@ rapi:
         - cd application/rapi
         - cargo test --all
 gui:
-    stage: test
+    stage: gui
     tags:
         - docker
     dependencies:
