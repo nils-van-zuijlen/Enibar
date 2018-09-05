@@ -57,11 +57,10 @@ if __name__ == "__main__":
             update = QtSql.QSqlQuery(database)
             update.prepare("""
                 UPDATE notes
-                SET note=note + note * ? / 100, last_agio=DATE(NOW())
+                SET last_agio=DATE(NOW())
                 WHERE id=?
                 """
             )
-            update.addBindValue(settings.AGIO_PERCENT)
             update.addBindValue(cursor.value("id"))
             if update.exec_():
                 balance = cursor.value("note")
