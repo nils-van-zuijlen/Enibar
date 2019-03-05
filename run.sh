@@ -21,7 +21,7 @@ python3 -c 'import sys;(print("Python 3.4 or newer is required") and exit(1)) if
 VENV=".enibar-venv"
 DIR=$(dirname "$0")
 DEBUG=0
-DEV=0
+DEV=1
 
 TEMP=`getopt -o d --long dev -- "$@"`
 eval set -- "$TEMP"
@@ -53,8 +53,8 @@ if [[ $DEV == 1 ]]; then
     rustup override set nightly
     cd ..
     cargo build || exit
-    cd application
     cp target/debug/librapi_py.so application/rapi.so
+    cd application
 fi
 
 if [[ ! -e "local_settings.py" ]]; then
