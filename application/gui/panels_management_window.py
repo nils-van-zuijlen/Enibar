@@ -299,4 +299,3 @@ class PanelConsumptionList(PanelList):
         """
         self.clean()
         self.build(paid)
-

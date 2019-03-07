@@ -8,7 +8,8 @@ from PyQt5 import QtWidgets
 
 
 connection = None
-blocking_connection = redis.StrictRedis(host=settings.REDIS_HOST, port=6379, db=0, password=settings.REDIS_PASSWORD)
+blocking_connection = redis.StrictRedis(host=settings.REDIS_HOST, port=6379, db=0,
+                                        password=settings.REDIS_PASSWORD)
 
 try:
     blocking_connection.ping()
@@ -26,7 +27,8 @@ PING_TIME = 10
 
 async def connect():
     global connection
-    connection = await aioredis.create_redis_pool((settings.REDIS_HOST, 6379), maxsize=10, password=settings.REDIS_PASSWORD)
+    connection = await aioredis.create_redis_pool((settings.REDIS_HOST, 6379), maxsize=10,
+                                                  password=settings.REDIS_PASSWORD)
 
 
 def send_message(channel, message):
@@ -103,4 +105,3 @@ def _renew_lock(lock_name, ttl):
 def _renew_locks():
     for lock, ttl in LOCKS.items():
         _renew_lock(lock, ttl)
-

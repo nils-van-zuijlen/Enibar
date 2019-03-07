@@ -43,4 +43,3 @@ class AdminStatsWindow(QtWidgets.QDialog):
         for note, value in api.stats.get_red_notes():
             QtWidgets.QTreeWidgetItem(self.red_notes, [note, "{:.2f}".format(value)])
         self.show()
-

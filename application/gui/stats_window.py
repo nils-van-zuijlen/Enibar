@@ -85,8 +85,8 @@ class StatsWindow(QtWidgets.QDialog):
         for line in api.stats.get_notes_stats():
             if category_filter and line['category'] != category_filter:
                 continue
-            pid = "%s - (%s) [%s €]" % (line['product'], line['price_name'],
-                abs(line['price']))
+            pid = "{} - ({}) [{} €]".format(line['product'], line['price_name'],
+                                            abs(line['price']))
 
             self.prices[line['category']][pid] = line['price']
             cat = self.stats_cache[line['category']]
@@ -114,11 +114,11 @@ class StatsWindow(QtWidgets.QDialog):
                 key,
                 str(int(self.total_cache[key]['qt'])),
                 str(round(self.total_cache[key]['credit'], 2)),
-                str(round((self.total_cache[key]['credit'] * 100) /
-                    self.tot_credit, 2) if self.tot_credit else "0"),
+                str(round((self.total_cache[key]['credit'] * 100) / self.tot_credit, 2)
+                    if self.tot_credit else "0"),
                 str(round(self.total_cache[key]['debit'], 2)),
-                str(round((self.total_cache[key]['debit'] * 100) /
-                    self.tot_debit, 2) if self.tot_debit else "0")]
+                str(round((self.total_cache[key]['debit'] * 100) / self.tot_debit, 2)
+                    if self.tot_debit else "0")]
             )
             for name, product in value.items():
                 tot_product_debit = 0
@@ -135,9 +135,11 @@ class StatsWindow(QtWidgets.QDialog):
                     name,
                     str(int(tot_product_qt)),
                     str(round(tot_product_credit, 2)),
-                    str(round((tot_product_credit * 100) / self.total_cache[key]['credit'], 2) if self.total_cache[key]['credit'] else "0"),
+                    str(round((tot_product_credit * 100) / self.total_cache[key]['credit'], 2)  # noqa:E501
+                        if self.total_cache[key]['credit'] else "0"),
                     str(round(tot_product_debit, 2)),
-                    str(round((tot_product_debit * 100) / self.total_cache[key]['debit'], 2) if self.total_cache[key]['debit'] else "0")]
+                    str(round((tot_product_debit * 100) / self.total_cache[key]['debit'], 2)  # noqa:E501
+                        if self.total_cache[key]['debit'] else "0")]
                 )
                 self.note_widgets.append(w1)
                 for note, qt in product.items():
@@ -146,9 +148,11 @@ class StatsWindow(QtWidgets.QDialog):
                         note,
                         str(int(qt)),
                         str(round(product_price, 2)) if product_price > 0 else "0",
-                        str(round((product_price * 100) / tot_product_credit, 2) if (tot_product_credit and product_price > 0) else "0"),
+                        str(round((product_price * 100) / tot_product_credit, 2)
+                            if (tot_product_credit and product_price > 0) else "0"),
                         str(round(product_price, 2)) if product_price < 0 else "0",
-                        str(round((product_price * 100) / tot_product_debit, 2) if (tot_product_debit and product_price < 0) else "0")]
+                        str(round((product_price * 100) / tot_product_debit, 2)
+                            if (tot_product_debit and product_price < 0) else "0")]
                     )
                     self.note_widgets.append(w2)
             self.note_widgets.append(w)
@@ -165,8 +169,8 @@ class StatsWindow(QtWidgets.QDialog):
         for line in api.stats.get_notes_stats():
             if note_filter and line['nickname'] != note_filter:
                 continue
-            pid = "%s - (%s) [%s €]" % (line['product'], line['price_name'],
-                abs(line['price']))
+            pid = "{} - ({}) [{} €]".format(line['product'], line['price_name'],
+                                            abs(line['price']))
 
             self.prices[line['category']][pid] = line['price']
             note = self.stats_cache[line['nickname']]
@@ -216,9 +220,11 @@ class StatsWindow(QtWidgets.QDialog):
                     category,
                     str(tot_cat_nb),
                     str(round(tot_cat_credit, 2)),
-                    str(round((tot_cat_credit * 100) / self.total_cache[key]['credit'], 2) if self.total_cache[key]['credit'] else "0"),
+                    str(round((tot_cat_credit * 100) / self.total_cache[key]['credit'], 2)
+                        if self.total_cache[key]['credit'] else "0"),
                     str(round(tot_cat_debit, 2)),
-                    str(round((tot_cat_debit * 100) / self.total_cache[key]['debit'], 2) if self.total_cache[key]['debit'] else "0")]
+                    str(round((tot_cat_debit * 100) / self.total_cache[key]['debit'], 2)
+                        if self.total_cache[key]['debit'] else "0")]
                 )
                 for name, qt in products.items():
                     product_price = self.prices[category][name] * qt
@@ -226,9 +232,11 @@ class StatsWindow(QtWidgets.QDialog):
                         name,
                         str(int(qt)),
                         str(round(product_price, 2)) if product_price > 0 else "0",
-                        str(round((product_price * 100) / tot_cat_credit, 2) if (tot_cat_credit and product_price > 0) else "0"),
+                        str(round((product_price * 100) / tot_cat_credit, 2)
+                            if (tot_cat_credit and product_price > 0) else "0"),
                         str(round(product_price, 2)) if product_price < 0 else "0",
-                        str(round((product_price * 100) / tot_cat_debit, 2) if (tot_cat_debit and product_price < 0) else "0")]
+                        str(round((product_price * 100) / tot_cat_debit, 2)
+                            if (tot_cat_debit and product_price < 0) else "0")]
                     )
                     self.note_widgets.append(w3)
                 self.note_widgets.append(w2)
@@ -249,8 +257,7 @@ class StatsWindow(QtWidgets.QDialog):
             elif not selected.child(0).childCount():
                 if self.note_mode:  # Category
                     self.win = StatsWindow(by_note=False,
-                                           cat_filter=selected.text(0)
-                    )
+                                           cat_filter=selected.text(0))
             else:
                 if self.note_mode:
                     self.win = StatsWindow(note_filter=selected.text(0))
@@ -263,10 +270,9 @@ class StatsWindow(QtWidgets.QDialog):
             self.details_button.setEnabled(False)
         selected = selected[0]
         if selected and ((not selected.childCount() and not self.note_mode) or
-                (selected.child(0) and
-                 (not selected.child(0).childCount() and self.note_mode)) or
-                selected.child(0) and selected.child(0).childCount()):
+           (selected.child(0) and
+            (not selected.child(0).childCount() and self.note_mode)) or
+           selected.child(0) and selected.child(0).childCount()):
             self.details_button.setEnabled(True)
         else:
             self.details_button.setEnabled(False)
-

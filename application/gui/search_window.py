@@ -52,7 +52,7 @@ class SearchWindow(QtWidgets.QDialog):
             if note['nickname'] not in self.original_notes:
                 return False
             if self.name_input.valid:
-                if unidecode(self.name_input.text()).lower() not in unidecode(note["lastname"]).lower():
+                if (unidecode(self.name_input.text()).lower() not in unidecode(note["lastname"]).lower()):
                     return False
             if self.firstname_input.valid:
                 if unidecode(self.firstname_input.text()).lower() not in unidecode(note["firstname"]).lower():
@@ -61,4 +61,3 @@ class SearchWindow(QtWidgets.QDialog):
             return True
         self.notes_list.current_filter = notes_filter
         self.notes_list.refresh(api.notes.get(self.notes_list.current_filter))
-

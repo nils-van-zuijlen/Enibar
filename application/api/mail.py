@@ -213,7 +213,8 @@ def save_model(name, subject, message, filter_, filter_value):
         return False
 
     with Cursor() as cursor:
-        cursor.prepare("""
+        cursor.prepare(
+            """
             INSERT INTO mail_models(name, subject, message, filter, filter_value)
             VALUES (:name, :subject, :message, :filter, :filter_value)
             ON CONFLICT (name) DO UPDATE SET subject=:subject, message=:message,
@@ -264,8 +265,8 @@ def get_scheduled_mails(**filter_):
         }
 
 
-def save_scheduled_mails(name, active, sched_int, sched_unit, sched_day,
-        filter_, filter_val, subject, sender, message, last_sent):
+def save_scheduled_mails(name, active, sched_int, sched_unit, sched_day, filter_, filter_val,
+                         subject, sender, message, last_sent):
     """ Save scheduled mail
 
     :param str name: Scheduled mail name
@@ -288,7 +289,8 @@ def save_scheduled_mails(name, active, sched_int, sched_unit, sched_day,
         return False
 
     with Cursor() as cursor:
-        cursor.prepare("""
+        cursor.prepare(
+            """
             INSERT INTO scheduled_mails(name, active, schedule_interval,
                 schedule_day, filter, filter_value, subject, sender, message,
                 schedule_unit, last_sent)
@@ -327,7 +329,8 @@ def rename_scheduled_mail(name, newname):
     :return bool: Operation success
     """
     with Cursor() as cursor:
-        cursor.prepare("""
+        cursor.prepare(
+            """
             UPDATE scheduled_mails
             SET name=:newname
             WHERE name=:name
@@ -354,4 +357,3 @@ def delete_scheduled_mail(name):
 
 get_unique_model = api.base.make_get_unique(get_models)
 get_unique_scheduled_mails = api.base.make_get_unique(get_scheduled_mails)
-

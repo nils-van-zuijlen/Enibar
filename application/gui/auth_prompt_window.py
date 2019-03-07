@@ -95,10 +95,9 @@ class AuthPromptWindow(QtWidgets.QDialog):
         """ Called when "Login" is clicked """
         self.user = self.login_input.currentText()
         if api.users.is_authorized(self.user,
-                               self.pass_input.text()):
+                                   self.pass_input.text()):
             self.is_authorized = True
         else:
             self.show_error = True
             self.is_authorized = False
         return super().accept()
-

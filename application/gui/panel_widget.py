@@ -67,7 +67,9 @@ class Panels(QtWidgets.QTabWidget):
         """
         def callback():
             api.redis.send_message("enibar-alcohol", "")
-        api.redis.set_key("alcohol", str(int(not self.parent().parent().hide_alcohol.isChecked())), callback)
+        api.redis.set_key("alcohol",
+                          str(int(not self.parent().parent().hide_alcohol.isChecked())),
+                          callback)
 
     def rebuild(self):
         """ Clear panels and build them back
@@ -222,7 +224,8 @@ class ProductList(QtWidgets.QTreeWidget):
                     self.takeTopLevelItem(i)
                     del self.products[i]
 
-                if product['product'] == settings.ECOCUP_NAME and product['category'] == settings.ECOCUP_CATEGORY:
+                if product['product'] == settings.ECOCUP_NAME and \
+                   product['category'] == settings.ECOCUP_CATEGORY:
                     if product['price_name'] == settings.ECOCUP_PRICE_TYPES['take']:
                         self.parent().parent().parent().eco_diff -= 1
                     else:
@@ -327,7 +330,9 @@ class ProductsContainer(QtWidgets.QWidget):
                 'products': {}
             }
 
-            for product_name, product in sorted(category['products'].items(), key=lambda x: x[0].replace('&', '')):
+            for product_name, product in sorted(
+                    category['products'].items(),
+                    key=lambda x: x[0].replace('&', '')):
                 pid = product['product_id']
 
                 widget = get_product_widget(
@@ -476,7 +481,9 @@ class Button(BaseProduct, QtWidgets.QPushButton):
 
         self.label_layout = QtWidgets.QGridLayout(self)
         if percentage:
-            self.label = QtWidgets.QLabel(f"{name} <span style=\"color: red; font-size: 7px\">{percentage:.2f} °</span>", self)
+            self.label = QtWidgets.QLabel(
+                f"{name} <span style=\"color: red; font-size: 7px\">{percentage:.2f} °</span>",
+                self)
         else:
             self.label = QtWidgets.QLabel(name, self)
 
@@ -540,7 +547,9 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
         self.setLayout(self.name_layout)
 
         if percentage:
-            self.name_label = QtWidgets.QLabel(f"{name} <span style=\"color: red; font-size: 7px\">{percentage:.2f} °</span>", self)
+            self.name_label = QtWidgets.QLabel(
+                f"{name} <span style=\"color: red; font-size: 7px\">{percentage:.2f} °</span>",
+                self)
         else:
             self.name_label = QtWidgets.QLabel(name)
         self.name_label.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
@@ -551,7 +560,7 @@ class ComboBox(BaseProduct, QtWidgets.QComboBox):
         for price_label in sorted(prices, key=operator.itemgetter(1)):
             widget = QtWidgets.QListWidgetItem(price_label)
             widget.setTextAlignment(QtCore.Qt.AlignHCenter |
-                QtCore.Qt.AlignVCenter)
+                                    QtCore.Qt.AlignVCenter)
             widget.setSizeHint(QtCore.QSize(100, 35))
             self.product_view.addItem(widget)
 
@@ -654,4 +663,3 @@ def get_product_widget(cid, pid, name, cat_name, prices, percentage=None):
     # Set attributes
     widget.setMinimumSize(QtCore.QSize(100, 35))
     return widget
-

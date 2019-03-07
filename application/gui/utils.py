@@ -45,4 +45,3 @@ def valid(title, message=""):
     err.setInformativeText(message)
     err.setIcon(QtWidgets.QMessageBox.Information)
     err.exec_()
-

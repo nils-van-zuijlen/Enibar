@@ -14,4 +14,3 @@ def play(action, **kwargs):
         'params': kwargs,
     }
     api.redis.send_message('enibar-soundsystem', message)
-

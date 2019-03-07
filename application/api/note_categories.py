@@ -146,13 +146,16 @@ def set_hidden(category_names, hidden):
     :param bool hidden: The new state.
     """
     with Cursor() as cursor:
-        cursor.prepare("UPDATE note_categories SET hidden=:hidden WHERE name=:name AND protected=FALSE")
+        cursor.prepare(
+            "UPDATE note_categories SET hidden=:hidden WHERE name=:name AND protected=FALSE"
+        )
 
         cursor.bindValue(":name", category_names)
         cursor.bindValue(":hidden", [hidden, ] * len(category_names))
 
         cursor.execBatch()
-    notes = api.notes.get(lambda x: any(category_name in x["categories"] for category_name in category_names))
+    notes = api.notes.get(
+        lambda x: any(category_name in x["categories"] for category_name in category_names))
     api.redis.send_message("enibar-notes", [note['nickname'] for note in notes])
 
 
@@ -172,4 +175,3 @@ def get(**filter_):
 
 
 get_unique = api.base.make_get_unique(get)
-

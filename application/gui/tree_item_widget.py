@@ -43,4 +43,3 @@ class TreeWidget(QtWidgets.QTreeWidgetItem):
             return float(self.text(column)) < float(other.text(column))
         except:
             return super().__lt__(other)
-

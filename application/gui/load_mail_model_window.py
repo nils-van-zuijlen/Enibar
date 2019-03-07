@@ -53,4 +53,3 @@ class LoadMailModelWindow(QtWidgets.QDialog):
                 return
             if api.mail.delete_model(item.text()):
                 self.model_list.takeItem(self.model_list.row(item))
-

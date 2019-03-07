@@ -23,8 +23,6 @@ Panels
 
 """
 
-from PyQt5 import QtSql
-from database import Cursor, Database
 import api.base
 import rapi
 
@@ -133,4 +131,3 @@ def get_content(panel_id):
 
 
 get_unique = api.base.make_get_unique(get)
-

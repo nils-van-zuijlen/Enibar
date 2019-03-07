@@ -84,4 +84,3 @@ class NotesList(QtWidgets.QListWidget):
             self.setCurrentItem(new_selection)
         except IndexError:
             self.setCurrentRow(0)
-

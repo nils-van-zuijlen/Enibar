@@ -71,7 +71,7 @@ class SendMailWindow(QtWidgets.QMainWindow):
                 'status': "Envoyé" if sent else "Echec de l'envoi"
             })
 
-        popup = SendMailRecapWindow(self, mails)
+        SendMailRecapWindow(self, mails)  # popup
 
     def new_model(self):
         """ New mail model
@@ -116,4 +116,3 @@ class SendMailWindow(QtWidgets.QMainWindow):
             self.message_input.setText(model_data['message'])
             self.filter_selector.setCurrentIndex(model_data['filter'])
             self.filter_input.setText(model_data['filter_value'])
-

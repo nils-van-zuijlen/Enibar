@@ -43,7 +43,8 @@ if __name__ == "__main__":
         SELECT id, nickname, note FROM notes WHERE
             NOT EXISTS(
                 SELECT note, category FROM note_categories_assoc JOIN note_categories
-                ON note_categories.hidden=TRUE AND note_categories.id=category WHERE note=notes.id
+                ON note_categories.hidden=TRUE AND note_categories.id=category
+                WHERE note=notes.id
             )
             AND overdraft_date < (DATE(NOW()) - INTERVAL '%s DAYS')
             AND agios_inscription=TRUE
@@ -59,8 +60,8 @@ if __name__ == "__main__":
                 UPDATE notes
                 SET last_agio=DATE(NOW())
                 WHERE id=?
-                """
-            )
+                """)
+
             update.addBindValue(cursor.value("id"))
             if update.exec_():
                 balance = cursor.value("note")

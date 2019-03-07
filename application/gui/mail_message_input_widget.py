@@ -92,7 +92,8 @@ class MailMessageInput(QtWidgets.QTextEdit):
         hasModifier = (event.modifiers() != QtCore.Qt.NoModifier) and not ctrlOrShift
         completionPrefix = self.text_under_cursor()
 
-        if event.key() != QtCore.Qt.Key_Tab and (hasModifier or event.text() or event.text()[len(event.text()) - 1:] in eow):
+        if event.key() != QtCore.Qt.Key_Tab and (hasModifier or event.text() or
+           event.text()[len(event.text()) - 1:] in eow):
             self.completer.popup().hide()
             return
 
@@ -103,6 +104,6 @@ class MailMessageInput(QtWidgets.QTextEdit):
             )
 
         cr = self.cursorRect()
-        cr.setWidth(self.completer.popup().sizeHintForColumn(0) + self.completer.popup().verticalScrollBar().sizeHint().width())
+        cr.setWidth(self.completer.popup().sizeHintForColumn(0) +
+                    self.completer.popup().verticalScrollBar().sizeHint().width())
         self.completer.complete(cr)
-

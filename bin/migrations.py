@@ -1,6 +1,5 @@
 #!/bin/env python3
 
-import argparse
 import os
 import sqlparse
 import sys
@@ -9,8 +8,7 @@ from PyQt5 import QtSql
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append("../application")
 
-import database  # nopep8
-import settings  # nopep8
+import database  # noqa:E402
 
 
 def create_migrations_table():
@@ -152,4 +150,3 @@ if __name__ == "__main__":
         apply_migrations()
     elif sys.argv[1] == 'rollback':
         rollback_migrations()
-

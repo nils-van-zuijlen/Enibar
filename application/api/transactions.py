@@ -115,11 +115,14 @@ def rollback_transaction(id_, full=False):
             price = trans['price'] / quantity
             cursor.bindValue(':price', trans['price'] - price)
             cursor.bindValue(':id', trans['id'])
-            task = api.sde.send_history_lines([{"id": trans["id"], "price": trans["price"] - price, "quantity": quantity - 1}])
+            task = api.sde.send_history_lines([{
+                "id": trans["id"],
+                "price": trans["price"] - price,
+                "quantity": quantity - 1}])
         else:
             task = api.sde.send_history_deletion([trans['id']])
             cursor.prepare("DELETE FROM transactions WHERE id=:id "
-                "AND deletable=TRUE")
+                           "AND deletable=TRUE")
             cursor.bindValue(':id', trans['id'])
             price = trans['price']
 
@@ -150,12 +153,13 @@ def get_possible_filter_values(col, filters):
         sqlfilters.append("category != 'Note'")
 
     with Cursor() as cursor:
-        cursor.prepare("""
+        cursor.prepare(
+            """
             SELECT DISTINCT {c} FROM transactions
             {w} {filters}
             ORDER BY {c}
             """.format(c=col, w="WHERE" * bool(sqlfilters),
-                filters=' AND '.join(sqlfilters))
+                       filters=' AND '.join(sqlfilters))
         )
         for key, value in filters.items():
             cursor.bindValue(":{}".format(key), value)

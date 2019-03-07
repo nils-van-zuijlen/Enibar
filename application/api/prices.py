@@ -119,7 +119,8 @@ def get_descriptor(**kwargs):
         cursor.exec_()
         while cursor.next():
             if PRICE_DESCRIPTOR_FIELDS_CACHE == {}:
-                PRICE_DESCRIPTOR_FIELDS_CACHE = {f: cursor.indexOf(f) for f in PRICE_DESCRIPTOR_FIELDS}
+                PRICE_DESCRIPTOR_FIELDS_CACHE = {f: cursor.indexOf(f) for f in
+                                                 PRICE_DESCRIPTOR_FIELDS}
             yield {field: cursor.value(PRICE_DESCRIPTOR_FIELDS_CACHE[field]) for field in
                    PRICE_DESCRIPTOR_FIELDS}
 
@@ -190,7 +191,7 @@ def get(**kwargs):
                 if PRICE_FIELDS_CACHE == {}:
                     PRICE_FIELDS_CACHE = {f: cursor.indexOf(f) for f in PRICE_FIELDS}
                 line = {field: cursor.value(PRICE_FIELDS_CACHE[field]) for field in
-                       PRICE_FIELDS}
+                        PRICE_FIELDS}
                 line['value'] += settings.ALCOHOL_MAJORATION * line['alcoholic']
                 yield line
 
@@ -232,4 +233,3 @@ def set_multiple_values(prices):
 
 get_unique = api.base.make_get_unique(get)
 get_unique_descriptor = api.base.make_get_unique(get_descriptor)
-

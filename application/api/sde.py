@@ -15,8 +15,13 @@ class QueueProcessingException(Exception):
 
 async def send_notes(notes):
     for note in api.notes.get(lambda n: n['nickname'] in notes):
-        req = {"token": settings.AUTH_SDE_TOKEN, "type": "note", "id": note["id"], "nickname": note["nickname"],
-            "mail": note["mail"], "note": note["note"]}
+        req = {
+            "token": settings.AUTH_SDE_TOKEN,
+            "type": "note",
+            "id": note["id"],
+            "nickname": note["nickname"],
+            "mail": note["mail"],
+            "note": note["note"]}
         with await api.redis.connection as redis:
             await redis.rpush(QUEUE_NAME, json.dumps(req))
 
@@ -72,12 +77,15 @@ async def _process_queue_item(item):
         proxy = None
     if type_.endswith('-delete'):
         async with aiohttp.ClientSession() as session:
-            async with session.delete(settings.WEB_URL + type_[:-7], data=json.dumps(parsed_item), proxy=proxy) as req:
+            async with session.delete(settings.WEB_URL + type_[:-7],
+                                      data=json.dumps(parsed_item),
+                                      proxy=proxy) as req:
                 if req.status != 200:
                     raise QueueProcessingException(req.status)
     else:
         async with aiohttp.ClientSession() as session:
-            async with session.put(settings.WEB_URL + type_, data=json.dumps(parsed_item), proxy=proxy) as req:
+            async with session.put(settings.WEB_URL + type_,
+                                   data=json.dumps(parsed_item),
+                                   proxy=proxy) as req:
                 if req.status != 200:
                     raise QueueProcessingException(req.status)
-

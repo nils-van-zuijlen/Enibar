@@ -24,7 +24,7 @@ Products
 """
 
 from PyQt5 import QtSql
-from database import Cursor, Database, SqlQuery
+from database import Database, SqlQuery
 import api.categories
 import api.base
 import rapi

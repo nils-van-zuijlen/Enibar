@@ -1,10 +1,10 @@
 import sys
 sys.path.append("../../application")
 
-import api.notes
-import api.sde
-import api.redis
-import asyncio
+import api.notes  # noqa:E402
+import api.sde  # noqa:E402
+import api.redis  # noqa:E402
+import asyncio  # noqa:E402
 
 
 loop = asyncio.get_event_loop()
@@ -17,11 +17,13 @@ loop.run_until_complete(task)
 
 transactions = []
 for trans in api.transactions.get():
-    note = api.notes.get(lambda x: x['firstname'] == trans['firstname'] and x['lastname'] == trans['lastname'])
+    note = api.notes.get(
+        lambda x: x['firstname'] == trans['firstname'] and x['lastname'] == trans['lastname'])
     if not note:
         continue
 
-    transaction = {'id': trans['id'],
+    transaction = {
+        'id': trans['id'],
         'date': trans['date'].toPyDateTime().isoformat(),
         'category': trans['category'],
         'note': note[0]['nickname'],
@@ -36,4 +38,3 @@ for trans in api.transactions.get():
 
 task2 = asyncio.ensure_future(api.sde.send_history_lines(transactions))
 loop.run_until_complete(task2)
-

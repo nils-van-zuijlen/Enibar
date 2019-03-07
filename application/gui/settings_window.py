@@ -105,7 +105,9 @@ class SettingsWindow(QtWidgets.QDialog):
 
         settings.ECOCUP_PRICE = float(self.ecocups_price_input.text())
         settings.ECOCUP_CATEGORY = self.ecocups_category_input.text()
-        settings.ECOCUP_PRICE_TYPES = json.dumps({'take': self.ecocups_buy_input.text(), 'repay': self.ecocups_repay_input.text()})
+        settings.ECOCUP_PRICE_TYPES = json.dumps({
+            'take': self.ecocups_buy_input.text(),
+            'repay': self.ecocups_repay_input.text()})
         settings.ECOCUP_NAME = self.ecocups_name_input.text()
 
         settings.SMTP_SERVER_ADDR = self.smtp_server_address_input.text()

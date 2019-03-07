@@ -74,13 +74,13 @@ class HistoryWindow(QtWidgets.QDialog):
 
             self.filter.hide()
             self.transactions = {}
-            self.cbs = collections.OrderedDict(
-                [('note', self.cb_nickname),
+            self.cbs = collections.OrderedDict([
+                ('note', self.cb_nickname),
                 ('lastname', self.cb_lastname),
                 ('firstname', self.cb_firstname),
                 ('category', self.cb_category),
-                ('product', self.cb_product), ]
-            )
+                ('product', self.cb_product),
+            ])
             self.last_id = 0
 
         self.show()
@@ -125,9 +125,9 @@ class HistoryWindow(QtWidgets.QDialog):
         for row, combobox in self.cbs.items():
             if combobox.currentText():
                 filters[row] = combobox.currentText()
-                transactions_left = {key: value for key, value in transactions_left.items() if value[row].startswith(filters[row])}
+                transactions_left = {key: value for key, value in transactions_left.items()
+                                     if value[row].startswith(filters[row])}
 
-        current_cat = self.cb_category.currentText()
         values = {}
         for row, combobox in self.cbs.items():
             combobox.clear()
@@ -454,4 +454,3 @@ class ExportWindow(QtWidgets.QDialog):
         except PermissionError:
             gui.utils.error("Erreur", "Impossible d'écrire ici")
         self.close()
-

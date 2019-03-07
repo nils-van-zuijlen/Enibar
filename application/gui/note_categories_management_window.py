@@ -35,8 +35,10 @@ class NoteCategoriesManagementWindow(QtWidgets.QDialog):
         super().__init__()
         uic.loadUi('ui/note_categories_management_window.ui', self)
         self._populate_lists()
-        self.notes_not_in_category_list.set_custom_filter(lambda x: self.current_category not in x["categories"])
-        self.notes_in_category_list.set_custom_filter(lambda x: self.current_category in x["categories"])
+        self.notes_not_in_category_list.set_custom_filter(
+            lambda x: self.current_category not in x["categories"])
+        self.notes_in_category_list.set_custom_filter(
+            lambda x: self.current_category in x["categories"])
         self.show_note_category_button.setEnabled(False)
         self.hide_note_category_button.setEnabled(False)
         self.delete_note_category_button.setEnabled(True)
@@ -118,18 +120,23 @@ class NoteCategoriesManagementWindow(QtWidgets.QDialog):
 
     def dropdown_item_changed_fnc(self, item):
         self.current_category = item
-        self.notes_not_in_category_list.set_custom_filter(lambda x: self.current_category not in x["categories"])
-        self.notes_in_category_list.set_custom_filter(lambda x: self.current_category in x["categories"])
+        self.notes_not_in_category_list.set_custom_filter(
+            lambda x: self.current_category not in x["categories"])
+        self.notes_in_category_list.set_custom_filter(
+            lambda x: self.current_category in x["categories"])
 
     def add_notes_in_category_fnc(self):
         notes = [w.text() for w in self.notes_not_in_category_list.selectedItems()]
         api.note_categories.add_notes(notes, self.current_category)
-        self.notes_not_in_category_list.set_custom_filter(lambda x: self.current_category not in x["categories"])
-        self.notes_in_category_list.set_custom_filter(lambda x: self.current_category in x["categories"])
+        self.notes_not_in_category_list.set_custom_filter(
+            lambda x: self.current_category not in x["categories"])
+        self.notes_in_category_list.set_custom_filter(
+            lambda x: self.current_category in x["categories"])
 
     def remove_notes_from_category_fnc(self):
         notes = [w.text() for w in self.notes_in_category_list.selectedItems()]
         api.note_categories.remove_notes(notes, self.current_category)
-        self.notes_not_in_category_list.set_custom_filter(lambda x: self.current_category not in x["categories"])
-        self.notes_in_category_list.set_custom_filter(lambda x: self.current_category in x["categories"])
-
+        self.notes_not_in_category_list.set_custom_filter(
+            lambda x: self.current_category not in x["categories"])
+        self.notes_in_category_list.set_custom_filter(
+            lambda x: self.current_category in x["categories"])

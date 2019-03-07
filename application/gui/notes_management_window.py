@@ -144,14 +144,14 @@ class NotesManagementWindow(QtWidgets.QDialog):
             birthdate = datetime.datetime.strptime(self.birthdate_input.text(),
                                                    "%d/%m/%Y").timestamp()
             if not api.notes.change_values(self.current_nickname,
-                                    tel=self.phone_input.text(),
-                                    mail=self.mail_input.text(),
-                                    birthdate=birthdate,
-                                    promo=self.promo_input.currentText(),
-                                    nickname=self.nickname_input.text(),
-                                    stats_inscription=self.stats_checkbox.isChecked(),
-                                    mails_inscription=self.mails_checkbox.isChecked(),
-                                    agios_inscription=self.agios_checkbox.isChecked()):
+                                           tel=self.phone_input.text(),
+                                           mail=self.mail_input.text(),
+                                           birthdate=birthdate,
+                                           promo=self.promo_input.currentText(),
+                                           nickname=self.nickname_input.text(),
+                                           stats_inscription=self.stats_checkbox.isChecked(),
+                                           mails_inscription=self.mails_checkbox.isChecked(),
+                                           agios_inscription=self.agios_checkbox.isChecked()):
                 gui.utils.error("Erreur", "Impossible de modifier la note.")
                 return
             if self.photo_selected:
@@ -324,13 +324,12 @@ class NotesManagementWindow(QtWidgets.QDialog):
         transactions = []
         if api.note_categories.remove_notes([self.current_nickname], "Non Cotiz"):
             transactions.append({'note': self.current_nickname,
-                             'category': "Note",
-                             'product': "cotiz",
-                             'price_name': "Solde",
-                             'quantity': 1,
-                             'price': -settings.COTIZ_PRICE,
-                            }
-            )
+                                 'category': "Note",
+                                 'product': "cotiz",
+                                 'price_name': "Solde",
+                                 'quantity': 1,
+                                 'price': -settings.COTIZ_PRICE,
+                                 })
             api.transactions.log_transactions(transactions)
         self.on_note_selected(self.current_shown)
 
@@ -358,4 +357,3 @@ class ManageNotesList(gui.notes_list_widget.NotesList):
             self.setCurrentItem(new_selection)
         except IndexError:
             self.setCurrentRow(0)
-

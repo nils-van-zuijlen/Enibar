@@ -88,4 +88,3 @@ class MailFilterInput(QtWidgets.QLineEdit):
         if popup.exec_():
             mails = popup.get_mail_list()
             self.setText(','.join(mails))
-

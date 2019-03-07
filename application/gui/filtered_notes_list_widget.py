@@ -43,11 +43,13 @@ class FilteredNotesListWidget(QtWidgets.QWidget):
 
     def set_filter(self, filter_):
         self.note_list.current_filter = filter_
-        self.note_list.rebuild(api.notes.get(lambda x: self.note_list.custom_filter(x) and self.note_list.current_filter(x)))
+        self.note_list.rebuild(api.notes.get(
+            lambda x: self.note_list.custom_filter(x) and self.note_list.current_filter(x)))
 
     def set_custom_filter(self, filter_):
         self.note_list.custom_filter = filter_
-        self.note_list.rebuild(api.notes.get(lambda x: self.note_list.custom_filter(x) and self.note_list.current_filter(x)))
+        self.note_list.rebuild(api.notes.get(
+            lambda x: self.note_list.custom_filter(x) and self.note_list.current_filter(x)))
 
     def filter_combobox_change(self, id_):
         """ Called when the filter combobox is changed
@@ -71,7 +73,8 @@ class FilteredNotesListWidget(QtWidgets.QWidget):
             self.filter_input.setText("0")
             self.note_list.current_filter = lambda x: x['note'] < 0 and\
                 x['hidden'] == 0
-        self.note_list.rebuild(api.notes.get(lambda x: self.note_list.custom_filter(x) and self.note_list.current_filter(x)))
+        self.note_list.rebuild(api.notes.get(
+            lambda x: self.note_list.custom_filter(x) and self.note_list.current_filter(x)))
 
     def filter_input_changed(self, event):
         """ Called when the filter input is changed
@@ -82,11 +85,13 @@ class FilteredNotesListWidget(QtWidgets.QWidget):
             if self.filter_combobox.currentIndex() == 3:
                 self.note_list.current_filter = lambda x: x['note'] >\
                     float(text) and x['hidden'] == 0
-                self.note_list.rebuild(api.notes.get(lambda x: self.note_list.custom_filter(x) and self.note_list.current_filter(x)))
+                self.note_list.rebuild(api.notes.get(
+                    lambda x: self.note_list.custom_filter(x) and self.note_list.current_filter(x)))
             elif self.filter_combobox.currentIndex() == 4:
                 self.note_list.current_filter = lambda x: x['note'] <\
                     float(text) and x['hidden'] == 0
-                self.note_list.rebuild(api.notes.get(lambda x: self.note_list.custom_filter(x) and self.note_list.current_filter(x)))
+                self.note_list.rebuild(api.notes.get(
+                    lambda x: self.note_list.custom_filter(x) and self.note_list.current_filter(x)))
         except ValueError:
             self.note_list.clear()
 
@@ -108,4 +113,3 @@ class FilteredNotesListWidget(QtWidgets.QWidget):
         if self.note_list.nb_shown == 1:
             item = self.note_list.itemAt(1, 1)  # Hideous hack to get the first visible item
             self.note_list.setCurrentItem(item, QtCore.QItemSelectionModel.Toggle)
-

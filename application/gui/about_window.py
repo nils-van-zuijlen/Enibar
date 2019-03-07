@@ -34,4 +34,3 @@ class AboutWindow(QtWidgets.QDialog):
         super().__init__()
         uic.loadUi('ui/about_window.ui', self)
         self.show()
-

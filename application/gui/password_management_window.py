@@ -53,4 +53,3 @@ class PasswordManagementWindow(QtWidgets.QDialog):
         else:
             gui.utils.error("Erreur", "L'authentification a échouée.")
         super().accept()
-

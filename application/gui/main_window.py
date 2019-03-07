@@ -213,21 +213,23 @@ class MainWindow(QtWidgets.QMainWindow):
         )
         if infos:
             infos = infos[0]
-        note_hist = api.transactions.get(note=self.selected.text(), reverse=True, max_=settings.MAX_HISTORY)
+        note_hist = api.transactions.get(
+            note=self.selected.text(),
+            reverse=True,
+            max_=settings.MAX_HISTORY)
 
         # Construct the note history
         for product in note_hist:
             name = "{} ({}) - {}".format(product['product'],
                                          product['price_name'],
                                          product['category'])
-            widget = QtWidgets.QTreeWidgetItem(
-                [product['date'].toString("yyyy/MM/dd HH:mm:ss"),
-                 str(product['quantity']),
-                 name,
-                 str(-product['price']),
-                 str(product["id"])
-                ]
-            )
+            widget = QtWidgets.QTreeWidgetItem([
+                product['date'].toString("yyyy/MM/dd HH:mm:ss"),
+                str(product['quantity']),
+                name,
+                str(-product['price']),
+                str(product["id"])
+            ])
             self.note_history.addTopLevelItem(widget)
 
             if product['id'] in selected_history:
@@ -351,7 +353,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.selected and self.product_list.products:
 
             note = api.notes.get(lambda x: x["nickname"] ==
-                self.selected_nickname)[0]
+                                 self.selected_nickname)[0]
             if note['ecocups'] < -self.eco_diff:
                 gui.utils.error("Erreur", "Verifiez le nombre d'écocups.")
                 return
@@ -449,16 +451,16 @@ class MenuBar(QtWidgets.QMenuBar):
         if api.redis.lock(key, 10):
             return True
         gui.utils.error(
-            "Déjà utilsé",
+            "Déjà utilisé",
             ("Cette fonctionnalitée est déjà utilisée sur un autre"
-            "instance. Si ce n'est pas le cas, attendez 10 secondes et"
-            "réessayez")
+             "instance. Si ce n'est pas le cas, attendez 10 secondes et"
+             "réessayez")
         )
         return False
 
     @ask_auth("manage_users")
     def user_managment_fnc(self, _):
-        """ Call user managment window """
+        """ Call user management window """
         if self.try_locking("user_management"):
             self._close_window()
             self.cur_window = UsersManagementWindow()
@@ -466,7 +468,7 @@ class MenuBar(QtWidgets.QMenuBar):
 
     @ask_auth("manage_products")
     def consumption_managment_fnc(self, _):
-        """ Call consumption managment window """
+        """ Call consumption management window """
         if self.try_locking("products_management"):
             self._close_window()
             self.cur_window = ProductsManagementWindow(self)
@@ -474,7 +476,7 @@ class MenuBar(QtWidgets.QMenuBar):
             self._connect_window("products_management")
 
     def consumption_management_fnc_no_auth(self):
-        """ Call consumption managment window
+        """ Call consumption management window
             BE CAREFUL: ONLY CALL THIS FUNCTION FROM TRUSTED FONCTIONS.
             THERE IS NO AUTHENTIFICATION REQUIRED FOR THIS ONE.
         """
@@ -511,7 +513,7 @@ class MenuBar(QtWidgets.QMenuBar):
         self.export(api.notes.get(lambda x: x["promo"] != "Prof"))
 
     def change_password_fnc(self, _):
-        """ Open a PasswordManagment window
+        """ Open a PasswordManagement window
         """
         self._close_window()
         self.cur_window = PasswordManagementWindow()
@@ -519,7 +521,7 @@ class MenuBar(QtWidgets.QMenuBar):
 
     @ask_auth("manage_products")
     def panel_managment_fnc(self, _):
-        """ Open a PanelManagment window
+        """ Open a PanelManagement window
         """
         if self.try_locking("products_management"):
             self._close_window()
@@ -528,7 +530,7 @@ class MenuBar(QtWidgets.QMenuBar):
             self._connect_window("products_management")
 
     def panel_managment_fnc_no_auth(self):
-        """ Open a PanelManagment window.
+        """ Open a PanelManagement window.
             BE CAREFUL: ONLY CALL THIS FUNCTION FROM TRUSTED FONCTIONS.
             THERE IS NO AUTHENTIFICATION REQUIRED FOR THIS ONE.
         """
@@ -720,7 +722,7 @@ class MenuBar(QtWidgets.QMenuBar):
             self._connect_window("notes_management")
 
     def event(self, event):
-        """ Rewrite the event loop. Used to handle the  \n key
+        """ Rewrite the event loop. Used to handle the \n key
             If the \n key is pressed, call self.penrent.validate_transaction.
         """
         if isinstance(event, QtGui.QKeyEvent):

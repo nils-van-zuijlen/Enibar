@@ -22,10 +22,9 @@ Notes
 
 """
 
-from PyQt5 import QtSql
 import api.transactions
 import api.redis
-from database import Cursor, Database
+from database import Cursor
 import datetime
 import os.path
 import settings
@@ -272,4 +271,3 @@ def import_csv(notes, reason, amount, *, do_not=False):
 
 
 rebuild_cache()
-

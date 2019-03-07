@@ -47,7 +47,7 @@ class CsvImportWindow(QtWidgets.QDialog):
         self.reason.setValidator(api.validator.NAME)
         self.recap.header().setStretchLastSection(False)
         self.recap.header().setSectionResizeMode(1,
-            QtWidgets.QHeaderView.Stretch)
+                                                 QtWidgets.QHeaderView.Stretch)
         try:
             self._build_recap()
         except KeyError:
@@ -74,16 +74,12 @@ class CsvImportWindow(QtWidgets.QDialog):
                 if note:
                     QtWidgets.QTreeWidgetItem(
                         self.recap,
-                        (note,
-                         mail
-                        )
+                        (note, mail)
                     )
                 else:
                     w = QtWidgets.QTreeWidgetItem(
                         self.recap,
-                        ("[{} {}]".format(line["Nom"], line["Prénom"]),
-                         mail
-                        )
+                        ("[{} {}]".format(line["Nom"], line["Prénom"]), mail)
                     )
                     for i in range(2):
                         w.setBackground(i, QtCore.Qt.red)
@@ -107,4 +103,3 @@ class CsvImportWindow(QtWidgets.QDialog):
         else:
             gui.utils.error("Erreur", "Verifiez le montant")
             self.validated = False
-

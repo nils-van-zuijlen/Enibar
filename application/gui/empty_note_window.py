@@ -74,4 +74,3 @@ class EmptyNoteWindow(QtWidgets.QDialog):
             self.valid_button.setEnabled(True)
         else:
             self.valid_button.setEnabled(False)
-

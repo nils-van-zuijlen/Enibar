@@ -39,4 +39,3 @@ class ValidationWindow(QtWidgets.QDialog):
         """ Called when "Valider" is clicked """
         self.is_ok = True
         return super().accept()
-

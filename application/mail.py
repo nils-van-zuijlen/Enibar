@@ -46,15 +46,13 @@ def send_scheduled_mails():
             SELECT * FROM scheduled_mails
             WHERE active is TRUE
             AND (schedule_day = (EXTRACT(DOW FROM NOW()) + 1) OR schedule_day = 0)
-            """
-        )
+            """)
 
         cursor.exec_()
         now = QtCore.QDate.currentDate()
         while cursor.next():
             unit = cursor.value('schedule_unit')
             interval = cursor.value('schedule_interval')
-            mail_data = {}
 
             # Exlude mail when it's too soon to send them
             if cursor.value('last_sent').isValid():
@@ -95,8 +93,8 @@ def send_scheduled_mails():
                 update_cursor.prepare("""
                     UPDATE scheduled_mails SET last_sent=DATE(NOW())
                     WHERE name=:name
-                    """
-                )
+                    """)
+
                 update_cursor.bindValue(":name", cursor.value('name'))
                 update_cursor.exec_()
                 if update_cursor.lastError().isValid():

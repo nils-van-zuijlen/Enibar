@@ -68,4 +68,3 @@ def filtered_getter(table, filter_, reverse=False, max_=None, order_by="id"):
             cursor.bindValue(":{}".format(key), arg)
         if cursor.exec_():
             return cursor
-

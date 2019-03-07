@@ -34,4 +34,3 @@ class HelpWindow(QtWidgets.QDialog):
         super().__init__()
         uic.loadUi('ui/help_window.ui', self)
         self.show()
-

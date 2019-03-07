@@ -17,7 +17,9 @@ else:
 last_updated = api.redis.get_key_blocking('photos_last_update')
 
 if last_updated != b'None':
-    photos = requests.get(settings.WEB_URL + "photos", params={'last_updated': last_updated}, proxies=proxies).json()
+    photos = requests.get(settings.WEB_URL + "photos",
+                          params={'last_updated': last_updated},
+                          proxies=proxies).json()
 else:
     photos = requests.get(settings.WEB_URL + "photos", proxies=proxies).json()
 
@@ -33,9 +35,9 @@ for mail, photo in photos.items():
             img_path = os.path.join(settings.IMG_BASE_DIR, note['mail'] + ext)
             with open(img_path, 'wb') as fd:
                 fd.write(data)
-            api.notes.change_values(note['nickname'], do_not=True, photo_path=note['mail'] + ext)
+            api.notes.change_values(note['nickname'], do_not=True,
+                                    photo_path=note['mail'] + ext)
             break
 
 last_updated = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%dT%H:%M:%S")
 api.redis.set_key_blocking('photos_last_update', last_updated)
-

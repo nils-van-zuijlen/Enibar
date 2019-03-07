@@ -138,7 +138,7 @@ class UserList(QtWidgets.QListWidget):
         # Remove deleted users
         for widget in self.widgets:
             if widget.text() not in user_list:
-                item = self.takeItem(self.row(widget))
+                item = self.takeItem(self.row(widget))  # noqa: F841
                 self.widgets.pop(self.widgets.index(widget))
                 del item
 
@@ -180,4 +180,3 @@ class AddUserPrompt(QtWidgets.QDialog):
         else:
             gui.utils.error("Impossible d'ajouter cet utilisateur.",
                             "Le nom d'utilisateur est peut être déjà pris.")
-

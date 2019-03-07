@@ -65,7 +65,8 @@ class MailSchedulerWindow(QtWidgets.QMainWindow):
             self.name_input.setText(mail['name'])
             self.active_checkbox.setChecked(mail['active'])
             self.schedule_interval.setValue(mail['schedule_interval'])
-            self.schedule_interval_unit.setCurrentIndex(api.mail.INTERVAL_UNITS.index(mail['schedule_unit']))
+            self.schedule_interval_unit.setCurrentIndex(
+                api.mail.INTERVAL_UNITS.index(mail['schedule_unit']))
             self.schedule_day.setCurrentIndex(mail['schedule_day'])
             self.filter_selector.setCurrentIndex(mail['filter'])
             self.filter_input.setText(mail['filter_value'])
@@ -191,4 +192,3 @@ class ScheduledMailsList(QtWidgets.QListWidget):
             )
         else:
             super().keyPressEvent(event)
-

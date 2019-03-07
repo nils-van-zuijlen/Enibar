@@ -99,4 +99,3 @@ class Input(QtWidgets.QLineEdit):
                             padding:2px;}")
         self.shadow.setColor(QtGui.QColor(255, 0, 0))
         self.setGraphicsEffect(self.shadow)
-

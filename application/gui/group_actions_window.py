@@ -127,14 +127,14 @@ class GroupActionsWindow(QtWidgets.QDialog):
                 transactions = []
                 for note, coeff in notes.items():
                     price = get_coeffed_price(to_add, coeff)
-                    transactions.append({'note': note,
-                                         'category': "Note",
-                                         'product': get_coeffed_reason(reason, coeff),
-                                         'price_name': "Solde",
-                                         'quantity': get_coeffed_quantity(1, coeff),
-                                         'price': -price
-                                        }
-                    )
+                    transactions.append({
+                        'note': note,
+                        'category': "Note",
+                        'product': get_coeffed_reason(reason, coeff),
+                        'price_name': "Solde",
+                        'quantity': get_coeffed_quantity(1, coeff),
+                        'price': -price
+                    })
                 api.transactions.log_transactions(transactions)
             self._multiple_action(take)
 
@@ -158,14 +158,16 @@ class GroupActionsWindow(QtWidgets.QDialog):
                 transactions = []
                 for note, coeff in notes.items():
                     price = get_coeffed_price(to_add, coeff)
-                    transactions.append({'note': note,
-                                         'category': "Note",
-                                         'product': get_coeffed_reason('{} {}'.format(self.performer, "[{}]".format(reason) if reason else ""), coeff),
-                                         'price_name': "Rechargement",
-                                         'quantity': get_coeffed_quantity(1, coeff),
-                                         'price': price
-                                        }
-                    )
+                    transactions.append({
+                        'note': note,
+                        'category': "Note",
+                        'product': get_coeffed_reason(
+                            '{} {}'.format(self.performer, "[{}]".format(reason) if reason else ""),
+                            coeff),
+                        'price_name': "Rechargement",
+                        'quantity': get_coeffed_quantity(1, coeff),
+                        'price': price
+                    })
                 api.transactions.log_transactions(transactions)
             self._multiple_action(refill)
 
@@ -219,7 +221,8 @@ class GroupActionsWindow(QtWidgets.QDialog):
         if path:
             try:
                 with open(path, "w") as save_file:
-                    save_file.write(self._multiple_action(api.notes.export_by_nick, with_coeffs=False))
+                    save_file.write(self._multiple_action(api.notes.export_by_nick,
+                                                          with_coeffs=False))
             except PermissionError:
                 error("Erreur", "Impossible d'écrire ici")
 
@@ -370,4 +373,3 @@ class UniqueConsumptionList(ConsumptionList):
                     cb_box.setEnabled(True)
                     valid_button.setEnabled(True)
                     cb_box.addItem(price['label'])
-
