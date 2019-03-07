@@ -26,3 +26,10 @@ You should have rustup installed on the PCs you want to install the client.
 - Run the `bin/setup.py` script and answer the prompts. If it is the first time you run it, you shall configure the postgres database py answering `y` when prompted.
 - Run `bin/migrations.py`. You must run it at every update you make to the software. You cannot run it too many times, it will only do the needed work.
 - To run the software, just run the `run.sh` script. It takes care of everything, even the venv.
+
+### IMPORTANT
+
+You should not allow modification to the software for any user.
+Some files are highly sensitive as they may disable all password verification.
+A good value for the rights is rwxr-xr-x for the executables and rw-r--r-- for the other files.
+They normally have these rights. Please ensure that the owner of the files is a well protected account.
