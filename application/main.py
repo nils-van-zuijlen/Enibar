@@ -25,7 +25,7 @@ import api.redis
 from database import ping_sql
 import api.sde
 import datetime
-import quamash
+import asyncqt
 import sys
 import gui.main_window
 import gui.utils
@@ -85,7 +85,8 @@ t = Tee("error", "a")
 async def install_redis_handle(app):
     global SUB
     while True:
-        SUB = await aioredis.create_redis((settings.REDIS_HOST, 6379), password=settings.REDIS_PASSWORD)
+        SUB = await aioredis.create_redis((settings.REDIS_HOST, 6379),
+                                          password=settings.REDIS_PASSWORD)
         res = await SUB.psubscribe("enibar-*")
         subscriber = res[0]
 
@@ -97,7 +98,7 @@ async def install_redis_handle(app):
 
 if __name__ == "__main__":
     APP = QtWidgets.QApplication(sys.argv)
-    LOOP = quamash.QEventLoop(APP)
+    LOOP = asyncqt.QEventLoop(APP)
     TASKS = []
     asyncio.set_event_loop(LOOP)
 
@@ -118,5 +119,3 @@ if __name__ == "__main__":
             LOOP.run_until_complete(SUB.quit())
             api.redis.connection.close()
             LOOP.run_until_complete(api.redis.connection.wait_closed())
-
-
